@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="OlwJxO" name="WaveX" projectType="guiapp" version="1.0.0"
+              bundleIdentifier="de.pueski.WaveX" includeBinaryInAppConfig="1"
+              jucerVersion="4.3.0" companyName="pueski.de" companyWebsite="www.pueski.de">
+  <MAINGROUP id="oMZ4Yu" name="WaveX">
+    <GROUP id="{4EC8E705-56D1-3A9F-9C5F-6B92CD6412F1}" name="Source">
+      <FILE id="fZD9h4" name="Track.cpp" compile="1" resource="0" file="Source/Track.cpp"/>
+      <FILE id="D6ze9Z" name="Track.h" compile="0" resource="0" file="Source/Track.h"/>
+      <FILE id="eqweyi" name="CustomLookAndFeel.cpp" compile="1" resource="0"
+            file="Source/CustomLookAndFeel.cpp"/>
+      <FILE id="TUUqVU" name="CustomLookAndFeel.h" compile="0" resource="0"
+            file="Source/CustomLookAndFeel.h"/>
+      <FILE id="pTCHo3" name="TimeLine.cpp" compile="1" resource="0" file="Source/TimeLine.cpp"/>
+      <FILE id="jwjM4l" name="TimeLine.h" compile="0" resource="0" file="Source/TimeLine.h"/>
+      <FILE id="NLXUko" name="WaveSelector.cpp" compile="1" resource="0"
+            file="Source/WaveSelector.cpp"/>
+      <FILE id="Ym2ilz" name="WaveSelector.h" compile="0" resource="0" file="Source/WaveSelector.h"/>
+      <FILE id="GCrTcW" name="MasterChannelPanel.cpp" compile="1" resource="0"
+            file="Source/MasterChannelPanel.cpp"/>
+      <FILE id="QdxXmZ" name="MasterChannelPanel.h" compile="0" resource="0"
+            file="Source/MasterChannelPanel.h"/>
+      <FILE id="C73fzP" name="TransportPanel.cpp" compile="1" resource="0"
+            file="Source/TransportPanel.cpp"/>
+      <FILE id="JrlRtk" name="TransportPanel.h" compile="0" resource="0"
+            file="Source/TransportPanel.h"/>
+      <FILE id="eBDgTg" name="AppWindowComponent.cpp" compile="1" resource="0"
+            file="Source/AppWindowComponent.cpp"/>
+      <FILE id="nABgQI" name="AppWindowComponent.h" compile="0" resource="0"
+            file="Source/AppWindowComponent.h"/>
+      <FILE id="UCX2Se" name="PositionMarker.cpp" compile="1" resource="0"
+            file="Source/PositionMarker.cpp"/>
+      <FILE id="RTkmEH" name="PositionMarker.h" compile="0" resource="0"
+            file="Source/PositionMarker.h"/>
+      <FILE id="sXcfYa" name="WaveNavigator.cpp" compile="1" resource="0"
+            file="Source/WaveNavigator.cpp"/>
+      <FILE id="gmYtQk" name="WaveNavigator.h" compile="0" resource="0" file="Source/WaveNavigator.h"/>
+      <FILE id="AUy7xn" name="MainComponent.cpp" compile="1" resource="0"
+            file="Source/MainComponent.cpp"/>
+      <FILE id="ei4XjV" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX" vst3Folder="">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="WaveX"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="WaveX"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_video" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../Downloads/JUCE/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+    <VS2015 targetFolder="Builds/VisualStudio2015">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="1" optimisation="1" targetName="WaveX"/>
+        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="0" optimisation="3" targetName="WaveX"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="../../../vst/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../vst/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../vst/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../vst/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../vst/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../vst/JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../vst/JUCE/modules"/>
+        <MODULEPATH id="juce_video" path="../../../vst/JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../../vst/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../../vst/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../vst/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../vst/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../vst/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../vst/JUCE/modules"/>
+      </MODULEPATHS>
+    </VS2015>
+    <LINUX_MAKE targetFolder="Builds/LinuxMakefile">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="WaveX"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="WaveX"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="../../../vst/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../vst/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../vst/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../vst/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../vst/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../vst/JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../vst/JUCE/modules"/>
+        <MODULEPATH id="juce_video" path="../../../vst/JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../../vst/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../vst/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../vst/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../vst/JUCE/modules"/>
+      </MODULEPATHS>
+    </LINUX_MAKE>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_cryptography" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_video" showAllCode="1" useLocalCopy="0"/>
+  </MODULES>
+  <JUCEOPTIONS JUCE_USE_MP3AUDIOFORMAT="enabled" JUCE_PLUGINHOST_AU="enabled"/>
+</JUCERPROJECT>

@@ -1,0 +1,107 @@
+/*
+  ==============================================================================
+
+  This is an automatically generated GUI class created by the Projucer!
+
+  Be careful when adding custom code to these files, as only the code within
+  the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
+  and re-saved.
+
+  Created with Projucer version: 4.3.0
+
+  ------------------------------------------------------------------------------
+
+  The Projucer is part of the JUCE library - "Jules' Utility Class Extensions"
+  Copyright (c) 2015 - ROLI Ltd.
+
+  ==============================================================================
+*/
+
+#ifndef __JUCE_HEADER_F8A62509C3ECE492__
+#define __JUCE_HEADER_F8A62509C3ECE492__
+
+//[Headers]     -- You can add your own extra header files here --
+#include "../JuceLibraryCode/JuceHeader.h"
+#include "MainComponent.cpp"
+#include "CustomLookAndFeel.h"
+//[/Headers]
+
+
+
+//==============================================================================
+/**
+                                                                    //[Comments]
+    An auto-generated component, created by the Projucer.
+
+    Describe your class and how it works here!
+                                                                    //[/Comments]
+*/
+class MasterChannelPanel  : public Component,
+                            public Timer,
+                            public ChangeListener,
+                            public SliderListener,
+                            public ButtonListener
+{
+public:
+    //==============================================================================
+    MasterChannelPanel (MainContentComponent* mcc);
+    ~MasterChannelPanel();
+
+    //==============================================================================
+    //[UserMethods]     -- You can add your own custom methods in this section.
+
+    enum MeterMode {
+        RMS,
+        MAGNITUDE
+    };
+
+    void mouseDown (const MouseEvent& e) override;
+    void mouseDrag (const MouseEvent& e) override;
+    void timerCallback() override;
+    virtual void changeListenerCallback(ChangeBroadcaster * source) override;
+    //[/UserMethods]
+
+    void paint (Graphics& g) override;
+    void resized() override;
+    void sliderValueChanged (Slider* sliderThatWasMoved) override;
+    void buttonClicked (Button* buttonThatWasClicked) override;
+
+    // Binary resources:
+    static const char* peaks_png;
+    static const int peaks_pngSize;
+
+
+private:
+    //[UserVariables]   -- You can add your own custom variables in this section.
+
+    ScopedPointer<DropShadow> ds;
+    ScopedPointer<DropShadower> d;
+    MainContentComponent* mcc;
+    ComponentDragger dragger;
+    MeterMode mode;
+    bool link;
+    ScopedPointer<CustomLookAndFeel> clf;
+    //[/UserVariables]
+
+    //==============================================================================
+    ScopedPointer<Slider> vuSliderLeft;
+    ScopedPointer<Slider> vuSliderRight;
+    ScopedPointer<Slider> leftVolumeSlider;
+    ScopedPointer<Slider> rightVolumeSlider;
+    ScopedPointer<Label> levelLabel;
+    ScopedPointer<Label> leftLabel;
+    ScopedPointer<Label> rightLabel;
+    ScopedPointer<ToggleButton> modeToggleButtonRMS;
+    ScopedPointer<ToggleButton> modeToggleButtonPeak;
+    ScopedPointer<ToggleButton> linkButton;
+    Image cachedImage_peaks_png_1;
+
+
+    //==============================================================================
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MasterChannelPanel)
+};
+
+//[EndFile] You can add extra defines here...
+//[/EndFile]
+
+#endif   // __JUCE_HEADER_F8A62509C3ECE492__
