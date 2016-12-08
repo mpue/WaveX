@@ -43,7 +43,7 @@ public:
         this->marker->setBounds(0, 0, getWidth(), getHeight());
 
 		this->timeLine->setSize(getWidth(), 25);
-		this->timeLine->setBounds(0, 0, getWidth(), 25);
+		this->timeLine->setBounds(0, 50, getWidth(), 25);
 		
         addAndMakeVisible(navigator);
 		addChildComponent(timeLine);
@@ -179,7 +179,7 @@ public:
         this->marker->setBounds(0, 0, getWidth(), getHeight());
 
 		this->timeLine->setSize(getWidth(),25);
-		this->timeLine->setBounds(0, 0, getWidth(), 25);
+		this->timeLine->setBounds(0, 25, getWidth(), 25);
 
 	}
 
@@ -257,6 +257,7 @@ private:
 		if (index == 0) {
 			menu.addItem(1, "Add track", true, false, nullptr);
 			menu.addItem(2, "Play/Stop", true, false, nullptr);
+			menu.addItem(7, "Settings", true, false, nullptr);
 			menu.addItem(3, "Exit", true, false, nullptr);
 		}
         else if (index == 1) {
@@ -331,6 +332,26 @@ private:
             // setSize(navigator->getMaxLength() * this->zoom, getHeight());
             navigator->setZoom(zoom);
         }
+		else if (menuItemID == 7) {
+
+			AudioDeviceSelectorComponent* selector = new AudioDeviceSelectorComponent(deviceManager, 2, 2, 2, 2, true, true, true, false);
+
+			DialogWindow::LaunchOptions launchOptions;
+			launchOptions.dialogTitle = ("Audio Settings");
+			launchOptions.escapeKeyTriggersCloseButton = true;
+			launchOptions.resizable = true;
+			launchOptions.useNativeTitleBar = true;
+			launchOptions.useBottomRightCornerResizer = true;
+			launchOptions.componentToCentreAround = this;
+			launchOptions.content.setOwned(selector);
+			launchOptions.content->setSize(640, 600);
+			launchOptions.launchAsync();
+
+			
+				
+
+
+		}
 	}
 
 	virtual void changeListenerCallback(ChangeBroadcaster * source) override

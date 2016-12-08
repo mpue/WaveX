@@ -41,13 +41,16 @@ AppWindowComponent::AppWindowComponent()
 #endif
     
     Rectangle<int> area(getLocalBounds());
-    // this->menu->setBounds(area.removeFromTop(LookAndFeel::getDefaultLookAndFeel().getDefaultMenuBarHeight()));
-    
+
     setSize(r.getWidth(), r.getHeight());
     setBounds(0,50,r.getWidth(),r.getHeight());
+
+    this->menu->setBounds(0,0,getWidth(),25);
+	this->menu->setSize(getWidth(), 25);
     
     addAndMakeVisible(menu);
     addAndMakeVisible(viewport);
+	menu->toFront(true);
     
     addMouseListener(this,true);
     
