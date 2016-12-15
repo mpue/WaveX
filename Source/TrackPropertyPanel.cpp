@@ -92,7 +92,7 @@ TrackPropertyPanel::TrackPropertyPanel ()
     //[UserPreSize]
     //[/UserPreSize]
 
-    setSize (150, 400);
+    setSize (150, 200);
 
 
     //[Constructor] You can add your own custom stuff here..
@@ -223,7 +223,7 @@ BEGIN_JUCER_METADATA
 <JUCER_COMPONENT documentType="Component" className="TrackPropertyPanel" componentName=""
                  parentClasses="public Component" constructorParams="" variableInitialisers=""
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="0" initialWidth="150" initialHeight="400">
+                 fixedSize="0" initialWidth="150" initialHeight="200">
   <BACKGROUND backgroundColour="ffffffff">
     <RECT pos="0 0 150 200" fill="solid: ffbababa" hasStroke="1" stroke="2, mitered, butt"
           strokeColour="solid: ffa0a0a0"/>
