@@ -133,7 +133,5 @@ void AppWindowComponent::mouseDrag (const MouseEvent& event) {
     
 }
 
-void AppWindowComponent::setLevel(double level) {
 
-}
 

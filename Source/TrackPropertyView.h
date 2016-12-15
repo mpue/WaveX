@@ -38,7 +38,8 @@
                                                                     //[/Comments]
 */
 class TrackPropertyView  : public Component,
-                           public ChangeListener
+                           public ChangeListener,
+                           public Timer
 {
 public:
     //==============================================================================
@@ -49,11 +50,12 @@ public:
     //[UserMethods]     -- You can add your own custom methods in this section.
     virtual void changeListenerCallback (ChangeBroadcaster* source) override;
     void addTrack(Track* track);
+    void timerCallback() override;
     //[/UserMethods]
 
     void paint (Graphics& g) override;
     void resized() override;
-
+    Track* getTrack(int i);
 
 
 private:

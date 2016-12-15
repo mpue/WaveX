@@ -52,8 +52,18 @@ Track::~Track()
 {
     delete this->thumbnailCache;
     delete this->thumbnail;
-    this->readerSource->releaseResources();
-    this->readerSource = nullptr;
+    delete this->audioBuffer;
+    // this->readerSource->releaseResources();
+    // this->readerSource = nullptr;
+}
+
+int Track::getNumSamples() {
+    return audioBuffer->getNumSamples();
+}
+
+
+const float* Track::getReadBuffer(int channel) {
+    return audioBuffer->getReadPointer(channel);
 }
 
 AudioSampleBuffer* Track::getBuffer() {
@@ -65,15 +75,15 @@ AudioTransportSource* Track::getSource() {
 }
 
 void Track::setGain(float gain) {
-    // this->source->setGain(gain);
+    this->gain = gain;
 }
 
 void Track::setVolume(float volume) {
-    this->volume = volume;
+    this->volume = volume * gain;
 }
 
 float Track::getVolume() {
-    return volume;
+    return volume * gain;
 }
 
 void Track::setZoom(float zoom) {

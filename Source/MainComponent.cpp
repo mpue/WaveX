@@ -68,7 +68,7 @@ public:
     ~MainContentComponent()
     {
         for (int i = 0; i < navigator->getTracks().size();i++) {
-            navigator->getTracks().at(i)->getSource()->stop();
+            navigator->getTracks().at(i)->getBuffer()->clear();
         }
         
         shutdownAudio();
@@ -95,8 +95,9 @@ public:
 
         // For more details, see the help for AudioProcessor::prepareToPlay()
         this->sampleRate = sampleRate;
+        this->buffersize = samplesPerBlockExpected;
+        
         navigator->getMixerSource()->prepareToPlay(samplesPerBlockExpected, sampleRate);
-		Logger::getCurrentLogger()->writeToLog("prepareToPlay");
 
     }
 
@@ -130,15 +131,18 @@ public:
          
         if (navigator->isPlaying()) {
             for (int i = 0; i < navigator->getTracks().size();i++) {
-                const float* trackBufferL = navigator->getTracks().at(i)->getBuffer()->getReadPointer(0);
-                const float* trackBufferR = navigator->getTracks().at(i)->getBuffer()->getReadPointer(1);
-                for (int j = numSamples; j < numSamples + 512 && j < navigator->getTracks().at(i)->getBuffer()->getNumSamples();j++) {
-                    bufferToFill.buffer->addSample(0, j%512, trackBufferL[j] * leftVolume * navigator->getTracks().at(i)->getVolume());
-                    bufferToFill.buffer->addSample(1, j%512, trackBufferR[j] * rightVolume * navigator->getTracks().at(i)->getVolume());
+                const float* trackBufferL = navigator->getTracks().at(i)->getReadBuffer(0);
+                const float* trackBufferR = navigator->getTracks().at(i)->getReadBuffer(1);
+                for (int j = numSamples; j < numSamples + this->buffersize && j < navigator->getTracks().at(i)->getBuffer()->getNumSamples();j++) {
+                    bufferToFill.buffer->addSample(0, j%this->buffersize, trackBufferL[j] * leftVolume * navigator->getTracks().at(i)->getVolume());
+                    bufferToFill.buffer->addSample(1, j%this->buffersize, trackBufferR[j] * rightVolume * navigator->getTracks().at(i)->getVolume());
+
                 }
-                
+                navigator->getTracks().at(i)->magnitudeLeft = bufferToFill.buffer->getMagnitude(0, bufferToFill.startSample, bufferToFill.numSamples);
+                navigator->getTracks().at(i)->magnitudeRight = bufferToFill.buffer->getMagnitude(1, bufferToFill.startSample, bufferToFill.numSamples);
             }
-            numSamples += 512;
+            numSamples += this->buffersize;
+            navigator->setPosition(numSamples / this->sampleRate);
         }
         
         /*
@@ -147,7 +151,7 @@ public:
             rightOut[sample] = rightIn[sample] * rightVolume;
         }
          */
-        navigator->setPosition(numSamples / this->sampleRate);
+        
         
         this->rmsLeft = bufferToFill.buffer->getRMSLevel(0, bufferToFill.startSample, bufferToFill.numSamples);
         this->rmsRight = bufferToFill.buffer->getRMSLevel(1, bufferToFill.startSample, bufferToFill.numSamples);
@@ -214,7 +218,7 @@ public:
         }
     }
     
-    void setPosition(int sample) {
+    void setPosition(long sample) {
         this->numSamples = sample;
     }
     
@@ -266,8 +270,10 @@ private:
     ScopedPointer<PositionMarker> marker;
 	ScopedPointer<TimeLine> timeLine;
 
-    int numSamples = 0;
+    long numSamples = 0;
     double sampleRate = 0;
+    
+    int buffersize = 0;
     
     bool ctrlPressed;
     bool leftShiftPressed;
@@ -364,6 +370,11 @@ private:
 	{
 		if (source == navigator)
 		{
+            // we need to snap the position on a multiple of the block size, to prevent the buffer being accessed in a odd way
+            // because this leads to a broken audio stream
+            
+            this->numSamples = navigator->getPosition() * this->sampleRate - ((long)(navigator->getPosition() * this->sampleRate) % this->buffersize) ;
+        
 			this->zoom = navigator->getZoom();
 			int newWidth = navigator->getMaxLength() * this->zoom;
             setSize(newWidth, getHeight());

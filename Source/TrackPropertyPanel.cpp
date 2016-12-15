@@ -53,11 +53,11 @@ TrackPropertyPanel::TrackPropertyPanel ()
     recordButton->addListener (this);
 
     addAndMakeVisible (volumeViewSlider = new Slider ("volumeViewSlider"));
-    volumeViewSlider->setRange (0, 2, 0.1);
+    volumeViewSlider->setRange (0, 1.5, 0.01);
     volumeViewSlider->setSliderStyle (Slider::LinearBarVertical);
     volumeViewSlider->setTextBoxStyle (Slider::NoTextBox, true, 80, 20);
     volumeViewSlider->setColour (Slider::backgroundColourId, Colour (0xff747373));
-    volumeViewSlider->setColour (Slider::thumbColourId, Colours::steelblue);
+    volumeViewSlider->setColour (Slider::thumbColourId, Colour (0xff1997ff));
     volumeViewSlider->addListener (this);
 
     addAndMakeVisible (volumeSlider = new Slider ("volumeSlider"));
@@ -98,6 +98,8 @@ TrackPropertyPanel::TrackPropertyPanel ()
 
 
     //[Constructor] You can add your own custom stuff here..
+    // clf = new CustomLookAndFeel();
+    // volumeViewSlider->setLookAndFeel(clf);
     //[/Constructor]
 }
 
@@ -170,7 +172,7 @@ void TrackPropertyPanel::buttonClicked (Button* buttonThatWasClicked)
             track->setGain(0);
         }
         else {
-            track->setGain(track->getVolume());
+            track->setGain(1);
         }
         //[/UserButtonCode_muteButton]
     }
@@ -228,6 +230,15 @@ void TrackPropertyPanel::setTrack(Track *track) {
     this->volumeSlider->setValue(1.0);
 }
 
+Track* TrackPropertyPanel::getTrack() {
+    return this->track;
+}
+
+void TrackPropertyPanel::update() {
+    this->volumeViewSlider->setValue(track->magnitudeLeft);
+}
+
+
 //[/MiscUserCode]
 
 
@@ -264,7 +275,7 @@ BEGIN_JUCER_METADATA
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
   <SLIDER name="volumeViewSlider" id="a57be949a5f89bda" memberName="volumeViewSlider"
           virtualName="" explicitFocusOrder="0" pos="101 32 8 120" bkgcol="ff747373"
-          thumbcol="ff4682b4" min="0" max="2" int="0.10000000000000000555"
+          thumbcol="ff1997ff" min="0" max="1.5" int="0.010000000000000000208"
           style="LinearBarVertical" textBoxPos="NoTextBox" textBoxEditable="0"
           textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="volumeSlider" id="6d202def05db2b28" memberName="volumeSlider"

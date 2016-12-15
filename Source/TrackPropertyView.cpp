@@ -41,6 +41,7 @@ TrackPropertyView::TrackPropertyView ()
 
 
     //[Constructor] You can add your own custom stuff here..
+    startTimer(70);
     //[/Constructor]
 }
 
@@ -85,6 +86,11 @@ void TrackPropertyView::resized()
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 
+Track* TrackPropertyView::getTrack(int i) {
+    return this->trackProperties.at(i)->getTrack();
+    
+}
+
 void TrackPropertyView::addTrack(Track* track)
 {
 	TrackPropertyPanel* panel = new TrackPropertyPanel();
@@ -110,6 +116,13 @@ void TrackPropertyView::changeListenerCallback (ChangeBroadcaster* source) {
 
 }
 
+void TrackPropertyView::timerCallback() {
+    for (int i = 0;  i < this->trackProperties.size();i++) {
+        this->trackProperties.at(i)->update();
+    }
+}
+
+
 //[/MiscUserCode]
 
 
@@ -123,9 +136,10 @@ void TrackPropertyView::changeListenerCallback (ChangeBroadcaster* source) {
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="TrackPropertyView" componentName=""
-                 parentClasses="public Component, public ChangeListener" constructorParams=""
-                 variableInitialisers="" snapPixels="8" snapActive="1" snapShown="1"
-                 overlayOpacity="0.330" fixedSize="0" initialWidth="600" initialHeight="400">
+                 parentClasses="public Component, public ChangeListener, public Timer"
+                 constructorParams="" variableInitialisers="" snapPixels="8" snapActive="1"
+                 snapShown="1" overlayOpacity="0.330" fixedSize="0" initialWidth="600"
+                 initialHeight="400">
   <BACKGROUND backgroundColour="ff454545"/>
 </JUCER_COMPONENT>
 

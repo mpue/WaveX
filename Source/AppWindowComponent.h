@@ -52,7 +52,7 @@ private:
 
     int offsetBottom;
     
-    void setLevel(double level);
+
 };
 
 

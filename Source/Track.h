@@ -33,6 +33,10 @@ public:
     void setVolume(float volume);
     float getVolume();
     AudioSampleBuffer* getBuffer();
+    const float* getReadBuffer(int channel);
+    int getNumSamples();
+    double magnitudeLeft = 0;
+    double magnitudeRight = 0;
     
 private:
     AudioSampleBuffer* audioBuffer;
@@ -46,6 +50,7 @@ private:
     float zoom;
     String name;
     float volume;
+    float gain = 1;
     virtual void changeListenerCallback(ChangeBroadcaster * source) override;
     void paintIfNoFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds);
     void paintIfFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds);

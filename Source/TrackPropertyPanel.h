@@ -23,6 +23,7 @@
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "Track.h"
+#include "CustomLookAndFeel.h""
 //[/Headers]
 
 
@@ -48,6 +49,8 @@ public:
     //[UserMethods]     -- You can add your own custom methods in this section.
     void setName(juce::String name );
     void setTrack(Track* track);
+    Track* getTrack();
+    void update();
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -60,6 +63,7 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     Track* track;
+    CustomLookAndFeel* clf;
     //[/UserVariables]
 
     //==============================================================================
