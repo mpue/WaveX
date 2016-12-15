@@ -182,6 +182,7 @@ void TransportPanel::buttonClicked (Button* buttonThatWasClicked)
         mode = BACK;
         mcc->getNavigator()->setPosition(0);
         mcc->getMarker()->setPosition(0);
+        mcc->setPosition(0);
 
         //[/UserButtonCode_backButton]
     }
@@ -191,6 +192,7 @@ void TransportPanel::buttonClicked (Button* buttonThatWasClicked)
         mode = END;
         mcc->getNavigator()->setPosition(mcc->getNavigator()->getMaxLength());
         mcc->getMarker()->setPosition(mcc->getNavigator()->getMaxLength());
+        mcc->setPosition(mcc->getNavigator()->getMaxLength() * 44100);
         //[/UserButtonCode_endButton]
     }
     else if (buttonThatWasClicked == pauseButton)

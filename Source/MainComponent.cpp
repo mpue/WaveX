@@ -94,7 +94,7 @@ public:
         // but be careful - it will be called on the audio thread, not the GUI thread.
 
         // For more details, see the help for AudioProcessor::prepareToPlay()
-        
+        this->sampleRate = sampleRate;
         navigator->getMixerSource()->prepareToPlay(samplesPerBlockExpected, sampleRate);
 		Logger::getCurrentLogger()->writeToLog("prepareToPlay");
 
@@ -117,24 +117,43 @@ public:
         */
 
         
-		navigator->getMixerSource()->getNextAudioBlock(bufferToFill);
+		// navigator->getMixerSource()->getNextAudioBlock(bufferToFill);
+        
+
+        /*
+        float* leftIn = (float*)bufferToFill.buffer->getReadPointer(0);
+        float* rightIn = (float*)bufferToFill.buffer->getReadPointer(1);
+        
+        float* const leftOut = bufferToFill.buffer->getWritePointer(0);
+        float* const rightOut = bufferToFill.buffer->getWritePointer(1);
+        */
+         
+        if (navigator->isPlaying()) {
+            for (int i = 0; i < navigator->getTracks().size();i++) {
+                const float* trackBufferL = navigator->getTracks().at(i)->getBuffer()->getReadPointer(0);
+                const float* trackBufferR = navigator->getTracks().at(i)->getBuffer()->getReadPointer(1);
+                for (int j = numSamples; j < numSamples + 512 && j < navigator->getTracks().at(i)->getBuffer()->getNumSamples();j++) {
+                    bufferToFill.buffer->addSample(0, j%512, trackBufferL[j] * leftVolume * navigator->getTracks().at(i)->getVolume());
+                    bufferToFill.buffer->addSample(1, j%512, trackBufferR[j] * rightVolume * navigator->getTracks().at(i)->getVolume());
+                }
+                
+            }
+            numSamples += 512;
+        }
+        
+        /*
+        for (int sample = 0; sample < bufferToFill.buffer->getNumSamples(); ++sample) {
+            leftOut[sample] = leftIn[sample] * leftVolume;
+            rightOut[sample] = rightIn[sample] * rightVolume;
+        }
+         */
+        navigator->setPosition(numSamples / this->sampleRate);
         
         this->rmsLeft = bufferToFill.buffer->getRMSLevel(0, bufferToFill.startSample, bufferToFill.numSamples);
         this->rmsRight = bufferToFill.buffer->getRMSLevel(1, bufferToFill.startSample, bufferToFill.numSamples);
         
         this->magnitudeLeft = bufferToFill.buffer->getMagnitude(0, bufferToFill.startSample, bufferToFill.numSamples);
         this->magnitudeRight = bufferToFill.buffer->getMagnitude(1, bufferToFill.startSample, bufferToFill.numSamples);
-        
-        float* leftIn = (float*)bufferToFill.buffer->getReadPointer(0);
-        float* rightIn = (float*)bufferToFill.buffer->getReadPointer(1);
-        
-        float* const leftOut = bufferToFill.buffer->getWritePointer(0);
-        float* const rightOut = bufferToFill.buffer->getWritePointer(1);
-        
-        for (int sample = 0; sample < bufferToFill.buffer->getNumSamples(); ++sample) {
-            leftOut[sample] = leftIn[sample] * leftVolume;
-            rightOut[sample] = rightIn[sample] * rightVolume;
-        }
         
         
     }
@@ -195,6 +214,10 @@ public:
         }
     }
     
+    void setPosition(int sample) {
+        this->numSamples = sample;
+    }
+    
     TrackNavigator* getNavigator() {
         return this->navigator;
     }
@@ -243,6 +266,9 @@ private:
     ScopedPointer<PositionMarker> marker;
 	ScopedPointer<TimeLine> timeLine;
 
+    int numSamples = 0;
+    double sampleRate = 0;
+    
     bool ctrlPressed;
     bool leftShiftPressed;
     double rmsLeft;

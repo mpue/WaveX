@@ -59,7 +59,7 @@ private:
 
     ScopedPointer<MixerAudioSource> mixerSource;
     
-    bool playing;
+    bool playing = false;
     double position;
     float zoom;
     

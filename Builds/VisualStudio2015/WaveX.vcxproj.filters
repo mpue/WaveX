@@ -5,6 +5,9 @@
     <Filter Include="WaveX">
       <UniqueIdentifier>{00C53569-0FBB-AB09-00E4-FC2192E52CE6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="WaveX\Resources">
+      <UniqueIdentifier>{F20808AA-46DD-9644-9A96-037B9AB3B6CD}</UniqueIdentifier>
+    </Filter>
     <Filter Include="WaveX\Source">
       <UniqueIdentifier>{07503C86-7209-8659-F842-53F09E5A33C9}</UniqueIdentifier>
     </Filter>
@@ -367,7 +370,34 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\AppWindowComponent.cpp">
+      <Filter>WaveX\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CustomLookAndFeel.cpp">
+      <Filter>WaveX\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Main.cpp">
+      <Filter>WaveX\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\MainComponent.cpp">
+      <Filter>WaveX\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\MasterChannelPanel.cpp">
+      <Filter>WaveX\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\PositionMarker.cpp">
+      <Filter>WaveX\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TimeLine.cpp">
+      <Filter>WaveX\Source</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ToolbarPanel.cpp">
+      <Filter>WaveX\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Track.cpp">
+      <Filter>WaveX\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TrackNavigator.cpp">
       <Filter>WaveX\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\TrackPropertyPanel.cpp">
@@ -376,37 +406,10 @@
     <ClCompile Include="..\..\Source\TrackPropertyView.cpp">
       <Filter>WaveX\Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\TrackNavigator.cpp">
-      <Filter>WaveX\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Track.cpp">
-      <Filter>WaveX\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\CustomLookAndFeel.cpp">
-      <Filter>WaveX\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\TimeLine.cpp">
-      <Filter>WaveX\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\WaveSelector.cpp">
-      <Filter>WaveX\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\MasterChannelPanel.cpp">
-      <Filter>WaveX\Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\TransportPanel.cpp">
       <Filter>WaveX\Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\AppWindowComponent.cpp">
-      <Filter>WaveX\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\PositionMarker.cpp">
-      <Filter>WaveX\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\MainComponent.cpp">
-      <Filter>WaveX\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Main.cpp">
+    <ClCompile Include="..\..\Source\WaveSelector.cpp">
       <Filter>WaveX\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\vst\JUCE\modules\juce_audio_basics\buffers\juce_AudioChannelSet.cpp">
@@ -2092,6 +2095,9 @@
     <ClCompile Include="..\..\..\..\JUCE\modules\juce_video\juce_video.mm">
       <Filter>Juce Modules\juce_video</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\JuceLibraryCode\BinaryData.cpp">
+      <Filter>Juce Library Code</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\juce_audio_basics.cpp">
       <Filter>Juce Library Code</Filter>
     </ClCompile>
@@ -2136,7 +2142,31 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\AppViewPort.h">
+      <Filter>WaveX\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\AppWindowComponent.h">
+      <Filter>WaveX\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CustomLookAndFeel.h">
+      <Filter>WaveX\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\MasterChannelPanel.h">
+      <Filter>WaveX\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\PositionMarker.h">
+      <Filter>WaveX\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TimeLine.h">
+      <Filter>WaveX\Source</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\ToolbarPanel.h">
+      <Filter>WaveX\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Track.h">
+      <Filter>WaveX\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TrackNavigator.h">
       <Filter>WaveX\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\TrackPropertyPanel.h">
@@ -2145,34 +2175,10 @@
     <ClInclude Include="..\..\Source\TrackPropertyView.h">
       <Filter>WaveX\Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\TrackNavigator.h">
-      <Filter>WaveX\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\AppViewPort.h">
-      <Filter>WaveX\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Track.h">
-      <Filter>WaveX\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\CustomLookAndFeel.h">
-      <Filter>WaveX\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\TimeLine.h">
-      <Filter>WaveX\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\WaveSelector.h">
-      <Filter>WaveX\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\MasterChannelPanel.h">
-      <Filter>WaveX\Source</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\TransportPanel.h">
       <Filter>WaveX\Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\AppWindowComponent.h">
-      <Filter>WaveX\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\PositionMarker.h">
+    <ClInclude Include="..\..\Source\WaveSelector.h">
       <Filter>WaveX\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\vst\JUCE\modules\juce_audio_basics\buffers\juce_AudioChannelSet.h">
@@ -4005,11 +4011,20 @@
     <ClInclude Include="..\..\JuceLibraryCode\AppConfig.h">
       <Filter>Juce Library Code</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\JuceLibraryCode\BinaryData.h">
+      <Filter>Juce Library Code</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h">
       <Filter>Juce Library Code</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\..\..\Downloads\iconic_1-1-1_audio-spectrum_32_0_000000_none.png">
+      <Filter>WaveX\Resources</Filter>
+    </None>
+    <None Include="..\..\..\..\..\Downloads\iconic_1-1-1_audio-spectrum_128_0_000000_none.png">
+      <Filter>WaveX\Resources</Filter>
+    </None>
     <None Include="..\..\..\..\JUCE\modules\juce_audio_formats\codecs\flac\Flac Licence.txt">
       <Filter>Juce Modules\juce_audio_formats\codecs\flac</Filter>
     </None>

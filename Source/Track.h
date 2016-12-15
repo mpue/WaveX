@@ -32,8 +32,10 @@ public:
     void setGain(float gain);
     void setVolume(float volume);
     float getVolume();
+    AudioSampleBuffer* getBuffer();
     
 private:
+    AudioSampleBuffer* audioBuffer;
     AudioFormatManager manager;
     AudioThumbnail* thumbnail;
     AudioThumbnailCache* thumbnailCache;

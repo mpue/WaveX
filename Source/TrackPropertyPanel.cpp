@@ -57,19 +57,21 @@ TrackPropertyPanel::TrackPropertyPanel ()
     volumeViewSlider->setSliderStyle (Slider::LinearBarVertical);
     volumeViewSlider->setTextBoxStyle (Slider::NoTextBox, true, 80, 20);
     volumeViewSlider->setColour (Slider::backgroundColourId, Colour (0xff747373));
-    volumeViewSlider->setColour (Slider::thumbColourId, Colour (0xff22fd2d));
+    volumeViewSlider->setColour (Slider::thumbColourId, Colours::steelblue);
     volumeViewSlider->addListener (this);
 
     addAndMakeVisible (volumeSlider = new Slider ("volumeSlider"));
     volumeSlider->setRange (0, 1, 0.01);
     volumeSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     volumeSlider->setTextBoxStyle (Slider::NoTextBox, true, 80, 20);
+    volumeSlider->setColour (Slider::rotarySliderFillColourId, Colours::steelblue);
     volumeSlider->addListener (this);
 
     addAndMakeVisible (balanceSlider = new Slider ("balanceSlider"));
     balanceSlider->setRange (-1, 1, 0.1);
     balanceSlider->setSliderStyle (Slider::RotaryVerticalDrag);
     balanceSlider->setTextBoxStyle (Slider::NoTextBox, true, 80, 20);
+    balanceSlider->setColour (Slider::rotarySliderFillColourId, Colours::steelblue);
     balanceSlider->addListener (this);
 
     addAndMakeVisible (label2 = new Label ("new label",
@@ -262,17 +264,17 @@ BEGIN_JUCER_METADATA
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
   <SLIDER name="volumeViewSlider" id="a57be949a5f89bda" memberName="volumeViewSlider"
           virtualName="" explicitFocusOrder="0" pos="101 32 8 120" bkgcol="ff747373"
-          thumbcol="ff22fd2d" min="0" max="2" int="0.10000000000000000555"
+          thumbcol="ff4682b4" min="0" max="2" int="0.10000000000000000555"
           style="LinearBarVertical" textBoxPos="NoTextBox" textBoxEditable="0"
           textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="volumeSlider" id="6d202def05db2b28" memberName="volumeSlider"
-          virtualName="" explicitFocusOrder="0" pos="32 48 32 32" min="0"
-          max="1" int="0.010000000000000000208" style="RotaryVerticalDrag"
+          virtualName="" explicitFocusOrder="0" pos="32 48 32 32" rotarysliderfill="ff4682b4"
+          min="0" max="1" int="0.010000000000000000208" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="0" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="balanceSlider" id="b241de49a09df77c" memberName="balanceSlider"
-          virtualName="" explicitFocusOrder="0" pos="32 96 32 32" min="-1"
-          max="1" int="0.10000000000000000555" style="RotaryVerticalDrag"
+          virtualName="" explicitFocusOrder="0" pos="32 96 32 32" rotarysliderfill="ff4682b4"
+          min="-1" max="1" int="0.10000000000000000555" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="0" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <LABEL name="new label" id="85ebf37b370066e6" memberName="label2" virtualName=""

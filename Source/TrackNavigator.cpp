@@ -66,18 +66,20 @@ void TrackNavigator::setZoom(float zoom) {
 }
 
 double TrackNavigator::getPosition() {
-    
+    /*
     if (tracks.size() > 0) {
         position = tracks.at(0)->getSource()->getCurrentPosition();
     }
-    
+    */
     return position;
 }
 
 void TrackNavigator::setPosition(double position) {
+    /*
     for (int i = 0; i < tracks.size();i++) {
         tracks.at(i)->getSource()->setPosition(position);
     }
+     */
     this->position = position;
 }
 
@@ -86,9 +88,11 @@ double TrackNavigator::getMaxLength() {
     
     for (int i = 0; i < tracks.size();i++) {
         
-        AudioTransportSource* source = tracks.at(i)->getSource();        
-        double len = source->getLengthInSeconds();
+        //AudioTransportSource* source = tracks.at(i)->getSource();
+        // double len = source->getLengthInSeconds();
 
+        double len = tracks.at(i)->getThumbnail()->getTotalLength();
+        
         if (len > maxlen) {
             maxlen = len;
         }
@@ -99,7 +103,7 @@ double TrackNavigator::getMaxLength() {
 
 void TrackNavigator::setPlaying(bool playing) {
     this->playing = playing;
-    
+    /*
     for (int i = 0; i < tracks.size();i++) {
         if (playing) {
             tracks.at(i)->getSource()->start();
@@ -108,6 +112,7 @@ void TrackNavigator::setPlaying(bool playing) {
             tracks.at(i)->getSource()->stop();
         }
     }
+     */
 }
 
 MixerAudioSource* TrackNavigator::getMixerSource() {
@@ -139,7 +144,7 @@ void TrackNavigator::addTrack(File file, TimeSliceThread* thread) {
 	this->marker->setLength(getMaxLength());
     this->selector->setSize(getWidth(), getHeight() / tracks.size());
     this->selector->setBounds(0, 0, getWidth(), getHeight() / tracks.size());
-    this->mixerSource->addInputSource(track->getSource(), true);
+    // this->mixerSource->addInputSource(track->getSource(), true);
     repaint();
 	sendChangeMessage();    
 }

@@ -21,19 +21,31 @@ Track::Track(File file, TimeSliceThread* thread)
     this->thumbnailCache = new AudioThumbnailCache(1);
     this->thumbnail = new AudioThumbnail(512, manager, *this->thumbnailCache);
     this->thumbnail->addChangeListener(this);
-    this->thumbnail->setSource(new FileInputSource(file));
-    this->source = new AudioTransportSource();
+    // this->thumbnail->setSource(new FileInputSource(file));
+    
+    audioBuffer = new AudioSampleBuffer(2, reader->lengthInSamples);
+    reader->read(audioBuffer, 0, reader->lengthInSamples, 0, true, true);
+    //
 
+    this->thumbnail->reset(2, 44100);
+    this->thumbnail->addBlock(0, *audioBuffer, 0,reader->lengthInSamples);
+    
+    /*
+    this->source = new AudioTransportSource();
     this->source->setSource(afr,
                               0,                   // tells it to buffer this many samples ahead
                               thread,                 // this is the background thread to use for reading-ahead
                               reader->sampleRate);     // allows for sample rate correction
     
     this->readerSource = afr.release();
+    */
+     
     this->name = file.getFileNameWithoutExtension();
     this->zoom = 20;
     setSize(this->thumbnail->getTotalLength() * this->zoom, 200);
     this->volume = 1;
+    
+
 }
 
 Track::~Track()
@@ -44,12 +56,16 @@ Track::~Track()
     this->readerSource = nullptr;
 }
 
+AudioSampleBuffer* Track::getBuffer() {
+    return audioBuffer;
+}
+
 AudioTransportSource* Track::getSource() {
     return this->source;
 }
 
 void Track::setGain(float gain) {
-    this->source->setGain(gain);
+    // this->source->setGain(gain);
 }
 
 void Track::setVolume(float volume) {
