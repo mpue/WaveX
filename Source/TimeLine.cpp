@@ -33,18 +33,17 @@ void TimeLine::paint (Graphics& g)
 
 		double stepSize = getWidth() / this->length;
 
-
 		for (int second = 1; second < this->length;second++) {
 			
 			if (second % 5 == 0) {
-				g.drawLine(stepSize * second, 0, stepSize * second, getHeight() / 2);
+				g.drawLine(stepSize * second + offset, 0, stepSize * second + offset, getHeight() / 2);
 			}
 			else {
-				g.drawLine(stepSize * second, 0, stepSize * second, getHeight() / 3);
+				g.drawLine(stepSize * second + offset, 0, stepSize * second + offset, getHeight() / 3);
 			}
 
 			if (second % 10 == 0 && second > 0) {
-				g.drawText(secondsToTime(second), stepSize * (second - 1), 15,30,10, juce::Justification::bottomRight, false);
+				g.drawText(secondsToTime(second), stepSize * (second - 1) + offset, 15,30,10, juce::Justification::bottomRight, false);
 			}
 		}
 
@@ -94,4 +93,10 @@ String TimeLine::secondsToTime(int seconds)
 	out << sec;
 
 	return String(out.str());
+}
+
+void TimeLine::setOffset(int offset)
+{
+	this->offset = offset;
+	repaint();
 }

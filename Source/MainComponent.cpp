@@ -11,7 +11,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include <iostream>
-#include "WaveNavigator.h"
+#include "TrackNavigator.h"
 #include "PositionMarker.h"
 #include "WaveSelector.h"
 #include "TimeLine.h"
@@ -26,35 +26,24 @@ class MainContentComponent : public AudioAppComponent, public MenuBarModel, publ
 {
 public:
     //==============================================================================
-    MainContentComponent() : thread("main")
-    {
-		
+    MainContentComponent(TimeLine* timeLine) : thread("main")
+    {		
         this->zoom = 21.0f;
-    
 
-        this->marker = new PositionMarker(600);
-        this->navigator = new WaveNavigator(marker);
-		this->timeLine = new TimeLine(600);
+		this->timeLine = timeLine;
+
+		this->marker = new PositionMarker(600);
+        this->navigator = new TrackNavigator(marker);
 
         this->navigator->setSize(getWidth(), getHeight());
-        this->navigator->setBounds(0, 50, getWidth(), getHeight());
+        this->navigator->setBounds(0, 0, getWidth(), getHeight());
         
         this->marker->setSize(getWidth(), getHeight());
         this->marker->setBounds(0, 0, getWidth(), getHeight());
-
-		this->timeLine->setSize(getWidth(), 25);
-		this->timeLine->setBounds(0, 50, getWidth(), 25);
 		
         addAndMakeVisible(navigator);
-		addChildComponent(timeLine);
+		// addChildComponent(timeLine);
 		addAndMakeVisible(marker);
-
-        /*
-		this->transportSource.addChangeListener(this);
-		this->transportSource.addChangeListener(this->timeLine);
-        this->transportSource.addChangeListener(this->marker);
-		this->addChangeListener(marker);
-        */
         
         navigator->addChangeListener(this);
 		setWantsKeyboardFocus(true);
@@ -169,17 +158,13 @@ public:
      
     void resized() override
 	{
+		/*
+		Logger::getCurrentLogger()->writeToLog(String(getParentWidth()));
+
 		Rectangle<int> area(getLocalBounds());
         marker->setDrawingBounds(0,0,getWidth(),getHeight() - 80);
         
-        this->navigator->setSize(getWidth(), getHeight() - 80);
-        this->navigator->setBounds(0, 50, getWidth(), getHeight() - 58);
-        
-        this->marker->setSize(getWidth(), getHeight());
-        this->marker->setBounds(0, 0, getWidth(), getHeight());
-
-		this->timeLine->setSize(getWidth(),25);
-		this->timeLine->setBounds(0, 25, getWidth(), 25);
+		*/
 
 	}
 
@@ -210,7 +195,7 @@ public:
         }
     }
     
-    WaveNavigator* getNavigator() {
+    TrackNavigator* getNavigator() {
         return this->navigator;
     }
     
@@ -225,7 +210,7 @@ private:
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainContentComponent)
 
 	TimeSliceThread thread;
-    ScopedPointer<WaveNavigator> navigator;
+    ScopedPointer<TrackNavigator> navigator;
     ScopedPointer<PositionMarker> marker;
 	ScopedPointer<TimeLine> timeLine;
 
@@ -278,19 +263,10 @@ private:
 
 			if (chooser.browseForFileToOpen())
 			{
-				File file = chooser.getResult();
-            
-                navigator->addTrack(file, &thread);
-                setSize(navigator->getMaxLength() * this->zoom, getHeight());
-                // this->navigator->setSize(getWidth(), getHeight());
-                // this->navigator->setBounds(0, 50, getWidth(), getHeight());
-                this->navigator->repaint();
-                this->marker->setDrawingBounds(0,0,getWidth(),getHeight());
-                this->marker->setSize(getWidth(), getHeight());
-                this->marker->setLength(navigator->getMaxLength());
-                this->timeLine->setLength(navigator->getMaxLength());
-                this->timeLine->setSize(navigator->getWidth(), 25);
-                this->timeLine->setVisible(true);
+				File file = chooser.getResult();            
+                navigator->addTrack(file, &thread);				
+
+                // setSize(navigator->getMaxLength() * this->zoom, getHeight());
 			}
 
 		}
@@ -320,7 +296,7 @@ private:
             }
             
             this->zoom += 10;
-            //setSize(navigator->getMaxLength() * this->zoom, getHeight());
+            // setSize(navigator->getMaxLength() * this->zoom, getHeight());
             navigator->setZoom(zoom);
         }
         else if(menuItemID == 6) {
@@ -329,6 +305,7 @@ private:
             }
             if (this->zoom - 10 >= 1)
             this->zoom -= 10;
+
             // setSize(navigator->getMaxLength() * this->zoom, getHeight());
             navigator->setZoom(zoom);
         }
@@ -347,10 +324,6 @@ private:
 			launchOptions.content->setSize(640, 600);
 			launchOptions.launchAsync();
 
-			
-				
-
-
 		}
 	}
 
@@ -358,9 +331,14 @@ private:
 	{
 		if (source == navigator)
 		{
-            setSize(navigator->getMaxLength() * this->zoom, getHeight());
-            this->marker->setDrawingBounds(0,0,navigator->getWidth(),getHeight());
-            this->marker->setSize(navigator->getWidth(), getHeight());
+			this->zoom = navigator->getZoom();
+			int newWidth = navigator->getMaxLength() * this->zoom;
+            setSize(newWidth, getHeight());
+			this->timeLine->setLength(navigator->getMaxLength());
+			this->timeLine->setSize(navigator->getMaxLength() * zoom, 25);
+			this->marker->setDrawingBounds(0,0,navigator->getWidth(),getHeight());
+			this->marker->setSize(navigator->getWidth(), getHeight());
+			repaint();
 		}
         
 	}

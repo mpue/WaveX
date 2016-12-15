@@ -57,6 +57,9 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS := \
+  $(JUCE_OBJDIR)/TrackPropertyPanel_23c5992d.o \
+  $(JUCE_OBJDIR)/TrackPropertyView_42f565e6.o \
+  $(JUCE_OBJDIR)/TrackNavigator_897222d5.o \
   $(JUCE_OBJDIR)/Track_c9ac1f2c.o \
   $(JUCE_OBJDIR)/CustomLookAndFeel_ab3d772e.o \
   $(JUCE_OBJDIR)/TimeLine_e3c86a6a.o \
@@ -65,7 +68,6 @@ OBJECTS := \
   $(JUCE_OBJDIR)/TransportPanel_18909a64.o \
   $(JUCE_OBJDIR)/AppWindowComponent_c01bc215.o \
   $(JUCE_OBJDIR)/PositionMarker_20eac8cc.o \
-  $(JUCE_OBJDIR)/WaveNavigator_1707fbf.o \
   $(JUCE_OBJDIR)/MainComponent_a6ffb4a5.o \
   $(JUCE_OBJDIR)/Main_90ebc5c2.o \
   $(JUCE_OBJDIR)/juce_audio_basics_6b797ca1.o \
@@ -103,6 +105,21 @@ clean:
 strip:
 	@echo Stripping WaveX
 	-@$(STRIP) --strip-unneeded $(JUCE_OUTDIR)/$(TARGET)
+
+$(JUCE_OBJDIR)/TrackPropertyPanel_23c5992d.o: ../../Source/TrackPropertyPanel.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling TrackPropertyPanel.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/TrackPropertyView_42f565e6.o: ../../Source/TrackPropertyView.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling TrackPropertyView.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/TrackNavigator_897222d5.o: ../../Source/TrackNavigator.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling TrackNavigator.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/Track_c9ac1f2c.o: ../../Source/Track.cpp
 	-@mkdir -p $(JUCE_OBJDIR)
@@ -142,11 +159,6 @@ $(JUCE_OBJDIR)/AppWindowComponent_c01bc215.o: ../../Source/AppWindowComponent.cp
 $(JUCE_OBJDIR)/PositionMarker_20eac8cc.o: ../../Source/PositionMarker.cpp
 	-@mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling PositionMarker.cpp"
-	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/WaveNavigator_1707fbf.o: ../../Source/WaveNavigator.cpp
-	-@mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling WaveNavigator.cpp"
 	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/MainComponent_a6ffb4a5.o: ../../Source/MainComponent.cpp

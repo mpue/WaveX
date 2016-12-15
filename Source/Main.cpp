@@ -77,7 +77,8 @@ public:
             
             Rectangle<int> r = Desktop::getInstance().getDisplays().getMainDisplay().userArea;
             
-            centreWithSize (r.getWidth(), r.getHeight() - 25);
+            // centreWithSize (r.getWidth(), r.getHeight() - 25);
+			centreWithSize(1024,768);
             setVisible (true);
             
         }

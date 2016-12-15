@@ -63,6 +63,7 @@ AudioTransportSource* Track::getSource() {
 void Track::setZoom(float zoom) {
     this->zoom = zoom;
     setSize(this->thumbnail->getTotalLength() * this->zoom, 200);
+	setBounds(0,0,this->thumbnail->getTotalLength() * this->zoom, 200);
     this->thumbnailBounds->setSize(this->thumbnail->getTotalLength() * this->zoom, 200);
     repaint();
 }

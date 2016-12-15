@@ -130,7 +130,7 @@ MasterChannelPanel::MasterChannelPanel (MainContentComponent* mcc)
 
     vuSliderLeft->setLookAndFeel(clf);
     vuSliderRight->setLookAndFeel(clf);
-    
+
     //[/Constructor]
 }
 
@@ -149,7 +149,7 @@ MasterChannelPanel::~MasterChannelPanel()
     modeToggleButtonRMS = nullptr;
     modeToggleButtonPeak = nullptr;
     linkButton = nullptr;
-    clf = nullptr;
+
 
     //[Destructor]. You can add your own custom destruction code here..
     d = nullptr;

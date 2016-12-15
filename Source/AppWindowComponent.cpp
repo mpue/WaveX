@@ -19,18 +19,24 @@ AppWindowComponent::AppWindowComponent()
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
     
-    this->offsetBottom = 0;
+    this->offsetBottom = 50;
     
     Rectangle<int> r = Desktop::getInstance().getDisplays().getMainDisplay().userArea;
     
-    viewport = new Viewport();
-    viewport->setBounds(0,1,r.getWidth(),r.getHeight() - this->offsetBottom);
+    viewport = new AppViewPort();
+    viewport->setBounds(150,50,r.getWidth(),r.getHeight() - this->offsetBottom);
     viewport->setSize(r.getWidth(), r.getHeight() - this->offsetBottom);
     
-    mcc = new MainContentComponent();
+	this->timeLine = new TimeLine(600);
+	this->timeLine->setSize(getWidth(), 25);
+	this->timeLine->setBounds(150, 25, r.getWidth(), 25);
+
+	viewport->setTimeLine(this->timeLine);
+
+    mcc = new MainContentComponent(timeLine);
     mcc->setSize(r.getWidth(), r.getHeight() - this->offsetBottom - 50);
     viewport->setViewedComponent(mcc);
-    
+
     this->menu = new MenuBarComponent();
     
 #if JUCE_MAC
@@ -43,13 +49,24 @@ AppWindowComponent::AppWindowComponent()
     Rectangle<int> area(getLocalBounds());
 
     setSize(r.getWidth(), r.getHeight());
-    setBounds(0,50,r.getWidth(),r.getHeight());
+    setBounds(0,0,r.getWidth(),r.getHeight());
 
     this->menu->setBounds(0,0,getWidth(),25);
 	this->menu->setSize(getWidth(), 25);
     
+	this->trackProperties = new TrackPropertyView();
+	this->trackProperties->setBounds(0, 50, 150, r.getHeight() - this->offsetBottom - 50);
+
     addAndMakeVisible(menu);
+	addAndMakeVisible(timeLine);
     addAndMakeVisible(viewport);
+	addAndMakeVisible(trackProperties);
+
+	for (int i = 0; i < 3;i++)
+		trackProperties->addTrack();
+
+	trackProperties->repaint();
+
 	menu->toFront(true);
     
     addMouseListener(this,true);
@@ -75,6 +92,7 @@ AppWindowComponent::~AppWindowComponent()
     viewport = nullptr;
     masterPanel = nullptr;
     transport = nullptr;
+
 }
 
 void AppWindowComponent::paint (Graphics& g)
@@ -89,7 +107,7 @@ void AppWindowComponent::resized()
     Rectangle<int> area(getLocalBounds());
     // this->menu->setBounds(area.removeFromTop(LookAndFeel::getDefaultLookAndFeel().getDefaultMenuBarHeight()));
     viewport->setSize(getWidth(), getHeight() - this->offsetBottom);
-    viewport->setBounds(getX(), getY()  ,getWidth(),getHeight() - this->offsetBottom);
+    // viewport->setBounds(getX(), getY()  ,getWidth(),getHeight() - this->offsetBottom);
 
 }
 

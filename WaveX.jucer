@@ -5,6 +5,19 @@
               jucerVersion="4.3.0" companyName="pueski.de" companyWebsite="www.pueski.de">
   <MAINGROUP id="oMZ4Yu" name="WaveX">
     <GROUP id="{4EC8E705-56D1-3A9F-9C5F-6B92CD6412F1}" name="Source">
+      <FILE id="bxh5a1" name="TrackPropertyPanel.cpp" compile="1" resource="0"
+            file="Source/TrackPropertyPanel.cpp"/>
+      <FILE id="syCPcL" name="TrackPropertyPanel.h" compile="0" resource="0"
+            file="Source/TrackPropertyPanel.h"/>
+      <FILE id="rdSi3X" name="TrackPropertyView.cpp" compile="1" resource="0"
+            file="Source/TrackPropertyView.cpp"/>
+      <FILE id="Y8VraN" name="TrackPropertyView.h" compile="0" resource="0"
+            file="Source/TrackPropertyView.h"/>
+      <FILE id="HdLg7o" name="TrackNavigator.cpp" compile="1" resource="0"
+            file="Source/TrackNavigator.cpp"/>
+      <FILE id="dgyuAJ" name="TrackNavigator.h" compile="0" resource="0"
+            file="Source/TrackNavigator.h"/>
+      <FILE id="SsoNTP" name="AppViewPort.h" compile="0" resource="0" file="Source/AppViewPort.h"/>
       <FILE id="fZD9h4" name="Track.cpp" compile="1" resource="0" file="Source/Track.cpp"/>
       <FILE id="D6ze9Z" name="Track.h" compile="0" resource="0" file="Source/Track.h"/>
       <FILE id="eqweyi" name="CustomLookAndFeel.cpp" compile="1" resource="0"
@@ -32,9 +45,6 @@
             file="Source/PositionMarker.cpp"/>
       <FILE id="RTkmEH" name="PositionMarker.h" compile="0" resource="0"
             file="Source/PositionMarker.h"/>
-      <FILE id="sXcfYa" name="WaveNavigator.cpp" compile="1" resource="0"
-            file="Source/WaveNavigator.cpp"/>
-      <FILE id="gmYtQk" name="WaveNavigator.h" compile="0" resource="0" file="Source/WaveNavigator.h"/>
       <FILE id="AUy7xn" name="MainComponent.cpp" compile="1" resource="0"
             file="Source/MainComponent.cpp"/>
       <FILE id="ei4XjV" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
@@ -80,8 +90,8 @@
         <MODULEPATH id="juce_cryptography" path="..\..\JUCE\modules"/>
         <MODULEPATH id="juce_video" path="..\..\JUCE\modules"/>
         <MODULEPATH id="juce_opengl" path="..\..\JUCE\modules"/>
-        <MODULEPATH id="juce_audio_basics" path="..\..\JUCE\modules"/>
-        <MODULEPATH id="juce_audio_devices" path="..\..\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_basics" path="..\..\..\vst\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_devices" path="..\..\..\vst\JUCE\modules"/>
         <MODULEPATH id="juce_audio_formats" path="..\..\JUCE\modules"/>
         <MODULEPATH id="juce_audio_processors" path="..\..\JUCE\modules"/>
         <MODULEPATH id="juce_audio_utils" path="..\..\JUCE\modules"/>
@@ -126,6 +136,5 @@
     <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_video" showAllCode="1" useLocalCopy="0"/>
   </MODULES>
-  <JUCEOPTIONS JUCE_USE_MP3AUDIOFORMAT="enabled" JUCE_PLUGINHOST_AU="enabled"
-               JUCE_ASIO="enabled"/>
+  <JUCEOPTIONS JUCE_USE_MP3AUDIOFORMAT="enabled" JUCE_PLUGINHOST_AU="enabled"/>
 </JUCERPROJECT>

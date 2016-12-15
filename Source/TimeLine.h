@@ -27,11 +27,12 @@ public:
     void resized() override;
     void setLength(double length);
 	static String secondsToTime(int seconds);
+	void setOffset(int offset);
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TimeLine)
 	virtual void changeListenerCallback(ChangeBroadcaster * source) override;
 	double length;
-
+	int offset = 0;
 
 
 };

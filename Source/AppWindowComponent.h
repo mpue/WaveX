@@ -15,6 +15,9 @@
 #include "MainComponent.cpp"
 #include "TransportPanel.h"
 #include "MasterChannelPanel.h"
+#include "TimeLine.h"
+#include "AppViewPort.h"
+#include "TrackPropertyView.h"
 
 
 //==============================================================================
@@ -33,9 +36,11 @@ private:
     
     ScopedPointer<MasterChannelPanel> masterPanel;
     ScopedPointer<MenuBarComponent> menu;
-    ScopedPointer<Viewport> viewport;
+    ScopedPointer<AppViewPort> viewport;
     ScopedPointer<MainContentComponent> mcc;
     ScopedPointer<TransportPanel> transport;
+	ScopedPointer<TrackPropertyView> trackProperties;
+	TimeLine* timeLine;
 
     int dragstartX;
     

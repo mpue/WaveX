@@ -19,7 +19,6 @@ PositionMarker::PositionMarker(double lengthInSeconds)
     // startTimer(100);
 	this->audioPosition = 0;
 	this->drawPosition = 0;
-	this->length = 0;
 }
 
 PositionMarker::~PositionMarker()
