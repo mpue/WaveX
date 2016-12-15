@@ -24,6 +24,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "TrackPropertyPanel.h"
 #include <vector>
+#include "Track.h"
 //[/Headers]
 
 
@@ -36,7 +37,8 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class TrackPropertyView  : public Component
+class TrackPropertyView  : public Component,
+                           public ChangeListener
 {
 public:
     //==============================================================================
@@ -45,12 +47,13 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
+    virtual void changeListenerCallback (ChangeBroadcaster* source) override;
+    void addTrack(Track* track);
     //[/UserMethods]
 
     void paint (Graphics& g) override;
     void resized() override;
 
-	void addTrack();
 
 
 private:

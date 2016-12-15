@@ -75,10 +75,10 @@ TransportPanel::TransportPanel (MainContentComponent* mcc)
                             Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (timeLabel = new Label ("timeLabel",
                                               TRANS("00:00:00\n")));
-    timeLabel->setFont (Font (35.00f, Font::plain));
+    timeLabel->setFont (Font (24.00f, Font::plain));
     timeLabel->setJustificationType (Justification::centred);
     timeLabel->setEditable (false, false, false);
-    timeLabel->setColour (Label::backgroundColourId, Colours::black);
+    timeLabel->setColour (Label::backgroundColourId, Colour (0xff0c0b0b));
     timeLabel->setColour (Label::textColourId, Colours::white);
     timeLabel->setColour (Label::outlineColourId, Colours::white);
     timeLabel->setColour (TextEditor::textColourId, Colours::black);
@@ -89,15 +89,17 @@ TransportPanel::TransportPanel (MainContentComponent* mcc)
     setSize (250, 60);
     //[/UserPreSize]
 
-    setSize (420, 60);
+    setSize (420, 40);
 
 
     //[Constructor] You can add your own custom stuff here..
     mode = STOP;
 
+    /*
 	ds = new DropShadow(Colour::fromFloatRGBA(0, 0, 0, 0.5), 3, Point<int>(3, 3));
 	d = new DropShadower(*ds);
 	d->setOwner(this);
+    */
 
     startTimer(100);
     //[/Constructor]
@@ -130,12 +132,11 @@ void TransportPanel::paint (Graphics& g)
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (Colours::grey);
-
     //[UserPaint] Add your own custom painting code here..
-
+    /*
     g.setColour (Colours::darkgrey);
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
+     */
     //[/UserPaint]
 }
 
@@ -144,12 +145,12 @@ void TransportPanel::resized()
     //[UserPreResize] Add your own custom resize code here..
     //[/UserPreResize]
 
-    stopButton->setBounds (64, 16, 32, 32);
-    playButton->setBounds (112, 16, 32, 32);
-    backButton->setBounds (16, 16, 32, 32);
-    endButton->setBounds (200, 16, 32, 32);
-    pauseButton->setBounds (152, 16, 32, 32);
-    timeLabel->setBounds (248, 12, 160, 40);
+    stopButton->setBounds (42, 14, 24, 24);
+    playButton->setBounds (74, 14, 24, 24);
+    backButton->setBounds (10, 14, 24, 24);
+    endButton->setBounds (130, 14, 24, 24);
+    pauseButton->setBounds (98, 14, 24, 24);
+    timeLabel->setBounds (162, 8, 112, 32);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -254,44 +255,44 @@ BEGIN_JUCER_METADATA
                  parentClasses="public Component, public ChangeListener, public Timer"
                  constructorParams="MainContentComponent* mcc" variableInitialisers=""
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="0" initialWidth="420" initialHeight="60">
-  <BACKGROUND backgroundColour="ff808080"/>
+                 fixedSize="0" initialWidth="420" initialHeight="40">
+  <BACKGROUND backgroundColour="808080"/>
   <IMAGEBUTTON name="stopButton" id="4cd37851bb11a613" memberName="stopButton"
-               virtualName="" explicitFocusOrder="0" pos="64 16 32 32" buttonText="Stop"
+               virtualName="" explicitFocusOrder="0" pos="42 14 24 24" buttonText="Stop"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
                resourceNormal="fontawesome_470_stop_32_0_000000_none_png" opacityNormal="1"
                colourNormal="0" resourceOver="" opacityOver="1" colourOver="0"
                resourceDown="" opacityDown="1" colourDown="0"/>
   <IMAGEBUTTON name="playButton" id="c8555f308f9d15ec" memberName="playButton"
-               virtualName="" explicitFocusOrder="0" pos="112 16 32 32" buttonText="Play"
+               virtualName="" explicitFocusOrder="0" pos="74 14 24 24" buttonText="Play"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
                resourceNormal="fontawesome_470_play_32_0_000000_none_png" opacityNormal="1"
                colourNormal="0" resourceOver="" opacityOver="1" colourOver="0"
                resourceDown="" opacityDown="1" colourDown="0"/>
   <IMAGEBUTTON name="backButton" id="c457ade9e0c0c98f" memberName="backButton"
-               virtualName="" explicitFocusOrder="0" pos="16 16 32 32" buttonText="Back"
+               virtualName="" explicitFocusOrder="0" pos="10 14 24 24" buttonText="Back"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
                resourceNormal="ionicons_201_iosskipbackward_32_0_000000_none_png"
                opacityNormal="1" colourNormal="0" resourceOver="" opacityOver="1"
                colourOver="0" resourceDown="" opacityDown="1" colourDown="0"/>
   <IMAGEBUTTON name="endButton" id="b649d3250331ad42" memberName="endButton"
-               virtualName="" explicitFocusOrder="0" pos="200 16 32 32" buttonText="End"
+               virtualName="" explicitFocusOrder="0" pos="130 14 24 24" buttonText="End"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
                resourceNormal="ionicons_201_iosskipforward_32_0_000000_none_png"
                opacityNormal="1" colourNormal="0" resourceOver="" opacityOver="1"
                colourOver="0" resourceDown="" opacityDown="1" colourDown="0"/>
   <IMAGEBUTTON name="pauseButton" id="bc895af41d57982" memberName="pauseButton"
-               virtualName="" explicitFocusOrder="0" pos="152 16 32 32" buttonText="Pause"
+               virtualName="" explicitFocusOrder="0" pos="98 14 24 24" buttonText="Pause"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
                resourceNormal="fontawesome_470_pause_32_0_000000_none_png" opacityNormal="1"
                colourNormal="0" resourceOver="" opacityOver="1" colourOver="0"
                resourceDown="" opacityDown="1" colourDown="0"/>
   <LABEL name="timeLabel" id="4b26497a62774d79" memberName="timeLabel"
-         virtualName="" explicitFocusOrder="0" pos="248 12 160 40" bkgCol="ff000000"
+         virtualName="" explicitFocusOrder="0" pos="162 8 112 32" bkgCol="ff0c0b0b"
          textCol="ffffffff" outlineCol="ffffffff" edTextCol="ff000000"
          edBkgCol="0" labelText="00:00:00&#10;" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="35" bold="0" italic="0" justification="36"/>
+         fontsize="24" bold="0" italic="0" justification="36"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

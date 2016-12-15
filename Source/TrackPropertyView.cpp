@@ -18,6 +18,7 @@
 */
 
 //[Headers] You can add your own extra header files here...
+#include "TrackNavigator.h"
 //[/Headers]
 
 #include "TrackPropertyView.h"
@@ -39,7 +40,7 @@ TrackPropertyView::TrackPropertyView ()
     setSize (600, 400);
 
 
-    //[Constructor] You can add your own custom stuff here..	
+    //[Constructor] You can add your own custom stuff here..
     //[/Constructor]
 }
 
@@ -51,6 +52,11 @@ TrackPropertyView::~TrackPropertyView()
 
 
     //[Destructor]. You can add your own custom destruction code here..
+
+    for(std::vector<TrackPropertyPanel*>::iterator it = trackProperties.begin(); it != trackProperties.end();it++) {
+        delete *it;
+    }
+
     //[/Destructor]
 }
 
@@ -60,7 +66,7 @@ void TrackPropertyView::paint (Graphics& g)
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (Colour (0xff80a599));
+    g.fillAll (Colour (0xff454545));
 
     //[UserPaint] Add your own custom painting code here..
     //[/UserPaint]
@@ -75,14 +81,33 @@ void TrackPropertyView::resized()
     //[/UserResized]
 }
 
+
+
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 
-void TrackPropertyView::addTrack()
+void TrackPropertyView::addTrack(Track* track)
 {
 	TrackPropertyPanel* panel = new TrackPropertyPanel();
+    panel->setName(track->getName());
 	panel->setBounds(0, trackProperties.size() * 200, 150, 200);
+    panel->setTrack(track);
 	addAndMakeVisible(panel);
 	trackProperties.push_back(panel);
+}
+
+void TrackPropertyView::changeListenerCallback (ChangeBroadcaster* source) {
+
+    if (TrackNavigator* tn = dynamic_cast<TrackNavigator*>(source)){
+
+        int i = tn->getTracks().size() - 1;
+
+        while (tn->getTracks().size() > trackProperties.size()) {
+            addTrack(tn->getTracks().at(i--));
+        }
+
+    }
+
+
 }
 
 //[/MiscUserCode]
@@ -98,10 +123,10 @@ void TrackPropertyView::addTrack()
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="TrackPropertyView" componentName=""
-                 parentClasses="public Component" constructorParams="" variableInitialisers=""
-                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="0" initialWidth="600" initialHeight="400">
-  <BACKGROUND backgroundColour="ff80a599"/>
+                 parentClasses="public Component, public ChangeListener" constructorParams=""
+                 variableInitialisers="" snapPixels="8" snapActive="1" snapShown="1"
+                 overlayOpacity="0.330" fixedSize="0" initialWidth="600" initialHeight="400">
+  <BACKGROUND backgroundColour="ff454545"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

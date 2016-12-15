@@ -18,7 +18,7 @@
 #include "TimeLine.h"
 #include "AppViewPort.h"
 #include "TrackPropertyView.h"
-
+#include "ToolbarPanel.h"
 
 //==============================================================================
 /*
@@ -40,6 +40,7 @@ private:
     ScopedPointer<MainContentComponent> mcc;
     ScopedPointer<TransportPanel> transport;
 	ScopedPointer<TrackPropertyView> trackProperties;
+    ScopedPointer<ToolbarPanel> toolbar;
 	TimeLine* timeLine;
 
     int dragstartX;

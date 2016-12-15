@@ -30,34 +30,34 @@ Track::Track(File file, TimeSliceThread* thread)
                               reader->sampleRate);     // allows for sample rate correction
     
     this->readerSource = afr.release();
+    this->name = file.getFileNameWithoutExtension();
     this->zoom = 20;
     setSize(this->thumbnail->getTotalLength() * this->zoom, 200);
-
+    this->volume = 1;
 }
 
 Track::~Track()
 {
-    /*
-    this->thumbnailCache = nullptr;
-    this->thumbnail = nullptr;
-    this->readerSource->releaseResources();
-    this->source = nullptr;
-    this->readerSource = nullptr;
-    this->reader = nullptr;
-    */
     delete this->thumbnailCache;
     delete this->thumbnail;
     this->readerSource->releaseResources();
     this->readerSource = nullptr;
-    // delete this->source;
-    // delete this->reader;
-    // delete this->readerSource;
-   
-    
 }
 
 AudioTransportSource* Track::getSource() {
     return this->source;
+}
+
+void Track::setGain(float gain) {
+    this->source->setGain(gain);
+}
+
+void Track::setVolume(float volume) {
+    this->volume = volume;
+}
+
+float Track::getVolume() {
+    return volume;
 }
 
 void Track::setZoom(float zoom) {
@@ -93,7 +93,7 @@ void Track::paintIfNoFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBoun
 void Track::paintIfFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds)
 {
     
-    g.setColour(Colours::darkorange);
+    g.setColour(Colours::steelblue);
     g.fillRect(thumbnailBounds);
     
     g.setColour(Colours::white);
@@ -122,5 +122,8 @@ void Track::changeListenerCallback(ChangeBroadcaster * source)
     if (source == this->thumbnail) {
         repaint();
     }
-    
+}
+
+String Track::getName(){
+    return this->name;
 }

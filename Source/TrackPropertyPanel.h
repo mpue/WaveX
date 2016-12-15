@@ -22,6 +22,7 @@
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "Track.h"
 //[/Headers]
 
 
@@ -45,6 +46,8 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
+    void setName(juce::String name );
+    void setTrack(Track* track);
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -56,15 +59,16 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
+    Track* track;
     //[/UserVariables]
 
     //==============================================================================
-    ScopedPointer<Label> label;
+    ScopedPointer<Label> nameLabel;
     ScopedPointer<ToggleButton> muteButton;
     ScopedPointer<ToggleButton> soloButton;
     ScopedPointer<ToggleButton> recordButton;
-    ScopedPointer<Slider> slider;
-    ScopedPointer<Slider> slider2;
+    ScopedPointer<Slider> volumeViewSlider;
+    ScopedPointer<Slider> volumeSlider;
     ScopedPointer<Slider> balanceSlider;
     ScopedPointer<Label> label2;
     ScopedPointer<Label> label3;

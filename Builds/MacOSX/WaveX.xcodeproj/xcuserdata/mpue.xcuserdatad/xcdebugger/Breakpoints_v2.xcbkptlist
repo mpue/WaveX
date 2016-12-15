@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../Source/MainComponent.cpp"
-            timestampString = "502843226.317145"
+            timestampString = "503513209.832846"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "345"
-            endingLineNumber = "345"
+            startingLineNumber = "350"
+            endingLineNumber = "350"
             landmarkName = "changeListenerCallback(ChangeBroadcaster * source)"
             landmarkType = "7">
          </BreakpointContent>
@@ -80,22 +80,6 @@
             startingLineNumber = "119"
             endingLineNumber = "119"
             landmarkName = "WaveNavigator::addTrack(File file, TimeSliceThread* thread)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../../Source/Track.cpp"
-            timestampString = "502822352.355675"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
-            landmarkName = "Track::~Track()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

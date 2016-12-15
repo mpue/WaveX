@@ -5,6 +5,9 @@
               jucerVersion="4.3.0" companyName="pueski.de" companyWebsite="www.pueski.de">
   <MAINGROUP id="oMZ4Yu" name="WaveX">
     <GROUP id="{4EC8E705-56D1-3A9F-9C5F-6B92CD6412F1}" name="Source">
+      <FILE id="kJmpPP" name="ToolbarPanel.cpp" compile="1" resource="0"
+            file="Source/ToolbarPanel.cpp"/>
+      <FILE id="UCNDEJ" name="ToolbarPanel.h" compile="0" resource="0" file="Source/ToolbarPanel.h"/>
       <FILE id="bxh5a1" name="TrackPropertyPanel.cpp" compile="1" resource="0"
             file="Source/TrackPropertyPanel.cpp"/>
       <FILE id="syCPcL" name="TrackPropertyPanel.h" compile="0" resource="0"

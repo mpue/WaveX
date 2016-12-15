@@ -32,13 +32,13 @@ TrackPropertyPanel::TrackPropertyPanel ()
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
 
-    addAndMakeVisible (label = new Label ("new label",
-                                          TRANS("Name")));
-    label->setFont (Font (15.00f, Font::plain));
-    label->setJustificationType (Justification::centred);
-    label->setEditable (false, false, false);
-    label->setColour (TextEditor::textColourId, Colours::black);
-    label->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+    addAndMakeVisible (nameLabel = new Label ("nameLabel",
+                                              TRANS("Name")));
+    nameLabel->setFont (Font (15.00f, Font::plain));
+    nameLabel->setJustificationType (Justification::centredLeft);
+    nameLabel->setEditable (false, false, false);
+    nameLabel->setColour (TextEditor::textColourId, Colours::black);
+    nameLabel->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
     addAndMakeVisible (muteButton = new ToggleButton ("muteButton"));
     muteButton->setButtonText (TRANS("M"));
@@ -52,19 +52,19 @@ TrackPropertyPanel::TrackPropertyPanel ()
     recordButton->setButtonText (TRANS("R"));
     recordButton->addListener (this);
 
-    addAndMakeVisible (slider = new Slider ("new slider"));
-    slider->setRange (0, 2, 0.1);
-    slider->setSliderStyle (Slider::LinearBarVertical);
-    slider->setTextBoxStyle (Slider::NoTextBox, true, 80, 20);
-    slider->setColour (Slider::backgroundColourId, Colour (0xff747373));
-    slider->setColour (Slider::thumbColourId, Colour (0xff22fd2d));
-    slider->addListener (this);
+    addAndMakeVisible (volumeViewSlider = new Slider ("volumeViewSlider"));
+    volumeViewSlider->setRange (0, 2, 0.1);
+    volumeViewSlider->setSliderStyle (Slider::LinearBarVertical);
+    volumeViewSlider->setTextBoxStyle (Slider::NoTextBox, true, 80, 20);
+    volumeViewSlider->setColour (Slider::backgroundColourId, Colour (0xff747373));
+    volumeViewSlider->setColour (Slider::thumbColourId, Colour (0xff22fd2d));
+    volumeViewSlider->addListener (this);
 
-    addAndMakeVisible (slider2 = new Slider ("new slider"));
-    slider2->setRange (0, 10, 0);
-    slider2->setSliderStyle (Slider::RotaryVerticalDrag);
-    slider2->setTextBoxStyle (Slider::NoTextBox, true, 80, 20);
-    slider2->addListener (this);
+    addAndMakeVisible (volumeSlider = new Slider ("volumeSlider"));
+    volumeSlider->setRange (0, 1, 0.01);
+    volumeSlider->setSliderStyle (Slider::RotaryVerticalDrag);
+    volumeSlider->setTextBoxStyle (Slider::NoTextBox, true, 80, 20);
+    volumeSlider->addListener (this);
 
     addAndMakeVisible (balanceSlider = new Slider ("balanceSlider"));
     balanceSlider->setRange (-1, 1, 0.1);
@@ -104,12 +104,12 @@ TrackPropertyPanel::~TrackPropertyPanel()
     //[Destructor_pre]. You can add your own custom destruction code here..
     //[/Destructor_pre]
 
-    label = nullptr;
+    nameLabel = nullptr;
     muteButton = nullptr;
     soloButton = nullptr;
     recordButton = nullptr;
-    slider = nullptr;
-    slider2 = nullptr;
+    volumeViewSlider = nullptr;
+    volumeSlider = nullptr;
     balanceSlider = nullptr;
     label2 = nullptr;
     label3 = nullptr;
@@ -142,12 +142,12 @@ void TrackPropertyPanel::resized()
     //[UserPreResize] Add your own custom resize code here..
     //[/UserPreResize]
 
-    label->setBounds (8, 8, 136, 24);
+    nameLabel->setBounds (8, 8, 136, 24);
     muteButton->setBounds (16, 160, 39, 24);
     soloButton->setBounds (56, 160, 39, 24);
     recordButton->setBounds (96, 160, 39, 24);
-    slider->setBounds (101, 32, 8, 120);
-    slider2->setBounds (32, 48, 32, 32);
+    volumeViewSlider->setBounds (101, 32, 8, 120);
+    volumeSlider->setBounds (32, 48, 32, 32);
     balanceSlider->setBounds (32, 96, 32, 32);
     label2->setBounds (24, 80, 55, 16);
     label3->setBounds (32, 128, 32, 16);
@@ -163,6 +163,13 @@ void TrackPropertyPanel::buttonClicked (Button* buttonThatWasClicked)
     if (buttonThatWasClicked == muteButton)
     {
         //[UserButtonCode_muteButton] -- add your button handler code here..
+
+        if (muteButton->getToggleState()) {
+            track->setGain(0);
+        }
+        else {
+            track->setGain(track->getVolume());
+        }
         //[/UserButtonCode_muteButton]
     }
     else if (buttonThatWasClicked == soloButton)
@@ -185,15 +192,17 @@ void TrackPropertyPanel::sliderValueChanged (Slider* sliderThatWasMoved)
     //[UsersliderValueChanged_Pre]
     //[/UsersliderValueChanged_Pre]
 
-    if (sliderThatWasMoved == slider)
+    if (sliderThatWasMoved == volumeViewSlider)
     {
-        //[UserSliderCode_slider] -- add your slider handling code here..
-        //[/UserSliderCode_slider]
+        //[UserSliderCode_volumeViewSlider] -- add your slider handling code here..
+        //[/UserSliderCode_volumeViewSlider]
     }
-    else if (sliderThatWasMoved == slider2)
+    else if (sliderThatWasMoved == volumeSlider)
     {
-        //[UserSliderCode_slider2] -- add your slider handling code here..
-        //[/UserSliderCode_slider2]
+        //[UserSliderCode_volumeSlider] -- add your slider handling code here..
+        track->setVolume(volumeSlider->getValue());
+        track->setGain(volumeSlider->getValue());
+        //[/UserSliderCode_volumeSlider]
     }
     else if (sliderThatWasMoved == balanceSlider)
     {
@@ -208,6 +217,15 @@ void TrackPropertyPanel::sliderValueChanged (Slider* sliderThatWasMoved)
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
+void TrackPropertyPanel::setName(juce::String name ) {
+    this->nameLabel->setText(name, juce::NotificationType::dontSendNotification);
+}
+
+void TrackPropertyPanel::setTrack(Track *track) {
+    this->track = track;
+    this->volumeSlider->setValue(1.0);
+}
+
 //[/MiscUserCode]
 
 
@@ -228,11 +246,11 @@ BEGIN_JUCER_METADATA
     <RECT pos="0 0 150 200" fill="solid: ffbababa" hasStroke="1" stroke="2, mitered, butt"
           strokeColour="solid: ffa0a0a0"/>
   </BACKGROUND>
-  <LABEL name="new label" id="e816bfe76d3f902e" memberName="label" virtualName=""
-         explicitFocusOrder="0" pos="8 8 136 24" edTextCol="ff000000"
+  <LABEL name="nameLabel" id="e816bfe76d3f902e" memberName="nameLabel"
+         virtualName="" explicitFocusOrder="0" pos="8 8 136 24" edTextCol="ff000000"
          edBkgCol="0" labelText="Name" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15"
-         bold="0" italic="0" justification="36"/>
+         bold="0" italic="0" justification="33"/>
   <TOGGLEBUTTON name="muteButton" id="7dab003004fb0c0e" memberName="muteButton"
                 virtualName="" explicitFocusOrder="0" pos="16 160 39 24" buttonText="M"
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
@@ -242,16 +260,16 @@ BEGIN_JUCER_METADATA
   <TOGGLEBUTTON name="recordButton" id="92ee3c4a2e2d50e8" memberName="recordButton"
                 virtualName="" explicitFocusOrder="0" pos="96 160 39 24" buttonText="R"
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
-  <SLIDER name="new slider" id="a57be949a5f89bda" memberName="slider" virtualName=""
-          explicitFocusOrder="0" pos="101 32 8 120" bkgcol="ff747373" thumbcol="ff22fd2d"
-          min="0" max="2" int="0.10000000000000000555" style="LinearBarVertical"
+  <SLIDER name="volumeViewSlider" id="a57be949a5f89bda" memberName="volumeViewSlider"
+          virtualName="" explicitFocusOrder="0" pos="101 32 8 120" bkgcol="ff747373"
+          thumbcol="ff22fd2d" min="0" max="2" int="0.10000000000000000555"
+          style="LinearBarVertical" textBoxPos="NoTextBox" textBoxEditable="0"
+          textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
+  <SLIDER name="volumeSlider" id="6d202def05db2b28" memberName="volumeSlider"
+          virtualName="" explicitFocusOrder="0" pos="32 48 32 32" min="0"
+          max="1" int="0.010000000000000000208" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="0" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>
-  <SLIDER name="new slider" id="6d202def05db2b28" memberName="slider2"
-          virtualName="" explicitFocusOrder="0" pos="32 48 32 32" min="0"
-          max="10" int="0" style="RotaryVerticalDrag" textBoxPos="NoTextBox"
-          textBoxEditable="0" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
-          needsCallback="1"/>
   <SLIDER name="balanceSlider" id="b241de49a09df77c" memberName="balanceSlider"
           virtualName="" explicitFocusOrder="0" pos="32 96 32 32" min="-1"
           max="1" int="0.10000000000000000555" style="RotaryVerticalDrag"

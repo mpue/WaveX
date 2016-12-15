@@ -44,7 +44,7 @@ TrackNavigator::~TrackNavigator()
 void TrackNavigator::paint (Graphics& g)
 {
 
-    g.fillAll (Colours::skyblue);
+    g.fillAll (Colours::darkgrey);
     
     
     for(int i = 0; i < tracks.size();i++) {

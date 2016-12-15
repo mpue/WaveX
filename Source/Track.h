@@ -28,6 +28,10 @@ public:
     AudioTransportSource* getSource();
     void setThumbnailBounds(Rectangle<int>* bounds);
     void setZoom(float zoom);
+    String getName();
+    void setGain(float gain);
+    void setVolume(float volume);
+    float getVolume();
     
 private:
     AudioFormatManager manager;
@@ -38,7 +42,8 @@ private:
     AudioTransportSource* source;
     Rectangle<int>* thumbnailBounds;
     float zoom;
-    
+    String name;
+    float volume;
     virtual void changeListenerCallback(ChangeBroadcaster * source) override;
     void paintIfNoFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds);
     void paintIfFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds);

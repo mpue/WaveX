@@ -152,7 +152,7 @@ public:
     void paint (Graphics& g) override
     {
         // (Our component is opaque, so we must completely fill the background with a solid colour)
-        g.fillAll (Colours::darkgrey);
+        g.fillAll (Colours::grey);
 
     }
      
@@ -201,6 +201,35 @@ public:
     
     PositionMarker* getMarker() {
         return this->marker;
+    }
+    
+    void addTrack() {
+        FileChooser chooser("Select a file to add...",
+                            File::nonexistent,
+                            "*.*");
+        
+        if (chooser.browseForFileToOpen())
+        {
+            File file = chooser.getResult();
+            navigator->addTrack(file, &thread);
+            
+            // setSize(navigator->getMaxLength() * this->zoom, getHeight());
+        }
+    }
+    
+    void openSettings() {
+        AudioDeviceSelectorComponent* selector = new AudioDeviceSelectorComponent(deviceManager, 2, 2, 2, 2, true, true, true, false);
+        
+        DialogWindow::LaunchOptions launchOptions;
+        launchOptions.dialogTitle = ("Audio Settings");
+        launchOptions.escapeKeyTriggersCloseButton = true;
+        launchOptions.resizable = true;
+        launchOptions.useNativeTitleBar = true;
+        launchOptions.useBottomRightCornerResizer = true;
+        launchOptions.componentToCentreAround = this->getParentComponent()->getParentComponent()->getParentComponent();
+        launchOptions.content.setOwned(selector);
+        launchOptions.content->setSize(600, 580);
+        launchOptions.launchAsync();
     }
     
 private:
@@ -253,22 +282,13 @@ private:
         
 		return menu;
 	}
+    
 
+    
 	virtual void menuItemSelected(int menuItemID, int topLevelMenuIndex) override
 	{
 		if (menuItemID == 1) {
-			FileChooser chooser("Select a file to play...",
-				File::nonexistent,
-				"*.*");
-
-			if (chooser.browseForFileToOpen())
-			{
-				File file = chooser.getResult();            
-                navigator->addTrack(file, &thread);				
-
-                // setSize(navigator->getMaxLength() * this->zoom, getHeight());
-			}
-
+            addTrack();
 		}
 		else if (menuItemID == 2) {
 			if (navigator->isPlaying())
@@ -310,20 +330,7 @@ private:
             navigator->setZoom(zoom);
         }
 		else if (menuItemID == 7) {
-
-			AudioDeviceSelectorComponent* selector = new AudioDeviceSelectorComponent(deviceManager, 2, 2, 2, 2, true, true, true, false);
-
-			DialogWindow::LaunchOptions launchOptions;
-			launchOptions.dialogTitle = ("Audio Settings");
-			launchOptions.escapeKeyTriggersCloseButton = true;
-			launchOptions.resizable = true;
-			launchOptions.useNativeTitleBar = true;
-			launchOptions.useBottomRightCornerResizer = true;
-			launchOptions.componentToCentreAround = this;
-			launchOptions.content.setOwned(selector);
-			launchOptions.content->setSize(640, 600);
-			launchOptions.launchAsync();
-
+            openSettings();
 		}
 	}
 

@@ -19,17 +19,17 @@ AppWindowComponent::AppWindowComponent()
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
     
-    this->offsetBottom = 50;
+    this->offsetBottom = 75;
     
     Rectangle<int> r = Desktop::getInstance().getDisplays().getMainDisplay().userArea;
     
     viewport = new AppViewPort();
-    viewport->setBounds(150,50,r.getWidth(),r.getHeight() - this->offsetBottom);
-    viewport->setSize(r.getWidth(), r.getHeight() - this->offsetBottom);
+    viewport->setBounds(150,75,r.getWidth() - 150,r.getHeight() - this->offsetBottom);
+    viewport->setSize(r.getWidth() - 150, r.getHeight() - this->offsetBottom);
     
 	this->timeLine = new TimeLine(600);
 	this->timeLine->setSize(getWidth(), 25);
-	this->timeLine->setBounds(150, 25, r.getWidth(), 25);
+	this->timeLine->setBounds(150, 50, r.getWidth(), 25);
 
 	viewport->setTimeLine(this->timeLine);
 
@@ -55,17 +55,14 @@ AppWindowComponent::AppWindowComponent()
 	this->menu->setSize(getWidth(), 25);
     
 	this->trackProperties = new TrackPropertyView();
-	this->trackProperties->setBounds(0, 50, 150, r.getHeight() - this->offsetBottom - 50);
+	this->trackProperties->setBounds(0, 75, 150, r.getHeight() - this->offsetBottom - 50);
 
-    addAndMakeVisible(menu);
+    // addAndMakeVisible(menu);
 	addAndMakeVisible(timeLine);
     addAndMakeVisible(viewport);
 	addAndMakeVisible(trackProperties);
 
-	for (int i = 0; i < 3;i++)
-		trackProperties->addTrack();
-
-	trackProperties->repaint();
+    mcc->getNavigator()->addChangeListener(this->trackProperties);
 
 	menu->toFront(true);
     
@@ -77,8 +74,15 @@ AppWindowComponent::AppWindowComponent()
     addAndMakeVisible(masterPanel);
 
     this->transport = new TransportPanel(mcc);
+    this->transport->setBounds(350,0,320,50);
+    
+    this->toolbar = new ToolbarPanel(mcc);
+    this->toolbar->setBounds(150, 0, 200, 50);
+    
     addAndMakeVisible(transport);
-    transport->setTopLeftPosition(50, r.getHeight() - (this->transport->getHeight() + 50));
+    addAndMakeVisible(toolbar);
+    
+    // transport->setTopLeftPosition(50, r.getHeight() - (this->transport->getHeight() + 50));
 
 }
 
@@ -92,6 +96,7 @@ AppWindowComponent::~AppWindowComponent()
     viewport = nullptr;
     masterPanel = nullptr;
     transport = nullptr;
+    toolbar = nullptr;
 
 }
 

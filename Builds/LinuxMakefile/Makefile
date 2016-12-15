@@ -57,6 +57,7 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS := \
+  $(JUCE_OBJDIR)/ToolbarPanel_8e4ee752.o \
   $(JUCE_OBJDIR)/TrackPropertyPanel_23c5992d.o \
   $(JUCE_OBJDIR)/TrackPropertyView_42f565e6.o \
   $(JUCE_OBJDIR)/TrackNavigator_897222d5.o \
@@ -105,6 +106,11 @@ clean:
 strip:
 	@echo Stripping WaveX
 	-@$(STRIP) --strip-unneeded $(JUCE_OUTDIR)/$(TARGET)
+
+$(JUCE_OBJDIR)/ToolbarPanel_8e4ee752.o: ../../Source/ToolbarPanel.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ToolbarPanel.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/TrackPropertyPanel_23c5992d.o: ../../Source/TrackPropertyPanel.cpp
 	-@mkdir -p $(JUCE_OBJDIR)
