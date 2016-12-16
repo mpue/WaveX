@@ -73,6 +73,14 @@ ToolbarPanel::ToolbarPanel (MainContentComponent* mcc)
                                ImageCache::getFromMemory (ionicons_201_settings_24_0_000000_none_png, ionicons_201_settings_24_0_000000_none_pngSize), 1.000f, Colour (0x00000000),
                                Image(), 1.000f, Colour (0x00000000),
                                Image(), 1.000f, Colour (0x00000000));
+    addAndMakeVisible (importAudioButton = new ImageButton ("importAudioButton"));
+    importAudioButton->setButtonText (TRANS("new button"));
+    importAudioButton->addListener (this);
+
+    importAudioButton->setImages (false, true, true,
+                                  ImageCache::getFromMemory (fontawesome_470_fileaudioo_32_0_000000_none_png, fontawesome_470_fileaudioo_32_0_000000_none_pngSize), 1.000f, Colour (0x00000000),
+                                  Image(), 1.000f, Colour (0x00000000),
+                                  Image(), 1.000f, Colour (0x00000000));
 
     //[UserPreSize]
     //[/UserPreSize]
@@ -94,6 +102,7 @@ ToolbarPanel::~ToolbarPanel()
     copyButton = nullptr;
     editButton = nullptr;
     settingsButton = nullptr;
+    importAudioButton = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -120,6 +129,7 @@ void ToolbarPanel::resized()
     copyButton->setBounds (72, 14, 24, 24);
     editButton->setBounds (104, 14, 24, 24);
     settingsButton->setBounds (136, 14, 24, 24);
+    importAudioButton->setBounds (168, 14, 24, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -155,6 +165,12 @@ void ToolbarPanel::buttonClicked (Button* buttonThatWasClicked)
         //[UserButtonCode_settingsButton] -- add your button handler code here..
         mcc->openSettings();
         //[/UserButtonCode_settingsButton]
+    }
+    else if (buttonThatWasClicked == importAudioButton)
+    {
+        //[UserButtonCode_importAudioButton] -- add your button handler code here..
+        mcc->importAudio();
+        //[/UserButtonCode_importAudioButton]
     }
 
     //[UserbuttonClicked_Post]
@@ -211,6 +227,12 @@ BEGIN_JUCER_METADATA
                resourceNormal="ionicons_201_settings_24_0_000000_none_png" opacityNormal="1"
                colourNormal="0" resourceOver="" opacityOver="1" colourOver="0"
                resourceDown="" opacityDown="1" colourDown="0"/>
+  <IMAGEBUTTON name="importAudioButton" id="1584ca1f93618745" memberName="importAudioButton"
+               virtualName="" explicitFocusOrder="0" pos="168 14 24 24" buttonText="new button"
+               connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
+               resourceNormal="fontawesome_470_fileaudioo_32_0_000000_none_png"
+               opacityNormal="1" colourNormal="0" resourceOver="" opacityOver="1"
+               colourOver="0" resourceDown="" opacityDown="1" colourDown="0"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA
@@ -283,6 +305,21 @@ static const unsigned char resource_ToolbarPanel_ionicons_201_settings_24_0_0000
 
 const char* ToolbarPanel::ionicons_201_settings_24_0_000000_none_png = (const char*) resource_ToolbarPanel_ionicons_201_settings_24_0_000000_none_png;
 const int ToolbarPanel::ionicons_201_settings_24_0_000000_none_pngSize = 725;
+
+// JUCER_RESOURCE: fontawesome_470_fileaudioo_32_0_000000_none_png, 622, "../Resources/font-awesome_4-7-0_file-audio-o_32_0_000000_none.png"
+static const unsigned char resource_ToolbarPanel_fontawesome_470_fileaudioo_32_0_000000_none_png[] = { 137,80,78,71,13,10,26,10,0,0,0,13,73,72,68,82,0,0,0,32,0,0,0,32,8,3,0,0,0,68,164,138,198,0,0,0,216,
+80,76,84,69,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,87,240,186,90,0,0,0,71,116,82,78,83,0,1,2,3,4,5,6,7,8,11,14,19,20,21,23,30,33,34,38,44,48,49,50,51,52,54,56,66,71,78,81,84,86,87,92,94,99,102,103,109,123,128,
+130,133,140,146,148,170,178,180,181,183,185,188,192,193,197,199,204,206,213,222,224,226,233,235,239,241,243,249,253,144,85,102,127,0,0,0,254,73,68,65,84,56,141,157,211,89,83,194,48,24,133,225,67,91,163,
+113,195,189,138,10,138,251,142,34,138,11,17,215,247,255,255,35,47,90,181,83,210,232,120,110,114,145,103,50,249,78,38,146,90,148,243,188,83,83,33,111,35,0,58,81,1,128,41,122,65,234,184,140,66,192,88,71,
+55,10,1,89,199,117,28,2,178,142,94,28,2,178,142,155,40,4,100,29,251,85,96,198,24,99,76,202,171,31,12,127,234,48,94,176,50,252,5,148,47,243,15,176,254,94,175,0,249,27,238,242,20,123,193,106,62,86,60,96,
+219,7,82,144,166,6,45,169,193,75,109,20,44,3,210,34,204,41,130,233,18,56,203,230,150,244,200,133,116,69,163,4,186,223,224,0,164,83,54,43,193,30,72,231,108,84,130,91,122,210,61,75,37,176,208,108,246,1,
+105,30,82,141,131,29,157,34,233,131,84,231,72,106,243,224,235,33,185,35,107,115,242,131,53,111,147,99,237,108,61,164,19,126,172,217,227,137,48,248,202,159,129,239,111,230,73,36,73,91,149,251,39,249,81,
+177,241,39,145,164,79,235,206,92,240,55,73,238,144,0,0,0,0,73,69,78,68,174,66,96,130,0,0};
+
+const char* ToolbarPanel::fontawesome_470_fileaudioo_32_0_000000_none_png = (const char*) resource_ToolbarPanel_fontawesome_470_fileaudioo_32_0_000000_none_png;
+const int ToolbarPanel::fontawesome_470_fileaudioo_32_0_000000_none_pngSize = 622;
 
 
 //[EndFile] You can add extra defines here...

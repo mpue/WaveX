@@ -15,6 +15,7 @@
 #include "WaveSelector.h"
 #include "PositionMarker.h"
 #include "Track.h"
+#include "DragConstrainer.h"
 #include <vector>
 
 //==============================================================================
@@ -46,6 +47,8 @@ public:
     void setZoom(float zoom);
     
 private:
+    ComponentDragger dragger;
+    DragConstrainer constrainer;
 
     Track* currentTrack = NULL;
     AudioFormatManager manager;

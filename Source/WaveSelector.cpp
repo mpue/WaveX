@@ -17,6 +17,7 @@ WaveSelector::WaveSelector()
 {
 	this->selectionStart = 0;
 	this->selectionEnd = 0;
+    setInterceptsMouseClicks(false, false);
 }
 
 WaveSelector::~WaveSelector()

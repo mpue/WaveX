@@ -73,6 +73,7 @@ OBJECTS := \
   $(JUCE_OBJDIR)/TrackPropertyView_42f565e6.o \
   $(JUCE_OBJDIR)/TransportPanel_18909a64.o \
   $(JUCE_OBJDIR)/WaveSelector_5f1b5681.o \
+  $(JUCE_OBJDIR)/BinaryData_ce4232d4.o \
   $(JUCE_OBJDIR)/juce_audio_basics_6b797ca1.o \
   $(JUCE_OBJDIR)/juce_audio_devices_a742c38b.o \
   $(JUCE_OBJDIR)/juce_audio_formats_5a29c68a.o \
@@ -187,6 +188,11 @@ $(JUCE_OBJDIR)/TransportPanel_18909a64.o: ../../Source/TransportPanel.cpp
 $(JUCE_OBJDIR)/WaveSelector_5f1b5681.o: ../../Source/WaveSelector.cpp
 	-@mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling WaveSelector.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/BinaryData_ce4232d4.o: ../../JuceLibraryCode/BinaryData.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling BinaryData.cpp"
 	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/juce_audio_basics_6b797ca1.o: ../../JuceLibraryCode/juce_audio_basics.cpp

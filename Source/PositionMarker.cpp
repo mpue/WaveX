@@ -19,6 +19,7 @@ PositionMarker::PositionMarker(double lengthInSeconds)
     // startTimer(100);
 	this->audioPosition = 0;
 	this->drawPosition = 0;
+    setInterceptsMouseClicks(false, false);
 }
 
 PositionMarker::~PositionMarker()
@@ -55,6 +56,15 @@ void PositionMarker::setPosition(double position) {
 
     this->audioPosition = position;
     repaint();
+}
+
+double PositionMarker::getDrawPosition() {
+    this->drawPosition = (audioPosition / length) * this->width + this->x;
+    return drawPosition;
+}
+
+double PositionMarker::getPosition() {
+    return audioPosition;
 }
 
 void PositionMarker::timerCallback() {

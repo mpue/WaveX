@@ -26,6 +26,9 @@ public:
     void resized() override;
     void setLength(double lengthInSeconds);
     void setPosition(double position);
+    double getPosition();
+    double getDrawPosition();
+    
     void setDrawingBounds(int x, int y, int width, int height);
     void setPlaying(bool playing);
 	virtual void changeListenerCallback(ChangeBroadcaster * source) override;

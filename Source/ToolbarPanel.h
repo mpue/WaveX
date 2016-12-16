@@ -62,6 +62,8 @@ public:
     static const int ionicons_201_androidaddcircle_24_0_000000_none_pngSize;
     static const char* ionicons_201_settings_24_0_000000_none_png;
     static const int ionicons_201_settings_24_0_000000_none_pngSize;
+    static const char* fontawesome_470_fileaudioo_32_0_000000_none_png;
+    static const int fontawesome_470_fileaudioo_32_0_000000_none_pngSize;
 
 
 private:
@@ -75,6 +77,7 @@ private:
     ScopedPointer<ImageButton> copyButton;
     ScopedPointer<ImageButton> editButton;
     ScopedPointer<ImageButton> settingsButton;
+    ScopedPointer<ImageButton> importAudioButton;
 
 
     //==============================================================================

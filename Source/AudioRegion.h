@@ -43,6 +43,7 @@ public:
     double magnitudeRight = 0;
 
 private:
+
     AudioSampleBuffer* audioBuffer;
     AudioThumbnail* thumbnail;
     AudioThumbnailCache* thumbnailCache;

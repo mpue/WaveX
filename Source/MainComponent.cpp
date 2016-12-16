@@ -107,6 +107,7 @@ public:
 
     void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill) override
     {
+        //bufferToFill.clearActiveBufferRegion();
          
         if (navigator->isPlaying()) {
             for (int i = 0; i < navigator->getTracks().size();i++) {
@@ -195,11 +196,7 @@ public:
         return this->marker;
     }
     
-    void addTrack() {
-
-		navigator->addTrack(this->sampleRate);
-
-		/*
+    void importAudio() {
         FileChooser chooser("Select a file to add...",
                             File::nonexistent,
                             "*.*");
@@ -207,10 +204,17 @@ public:
         if (chooser.browseForFileToOpen())
         {
             File file = chooser.getResult();
-
+            navigator->getCurrentTrack()->addRegion(file, this->sampleRate);
             
-            // setSize(navigator->getMaxLength() * this->zoom, getHeight());
         }
+    }
+    
+    void addTrack() {
+
+		navigator->addTrack(this->sampleRate);
+
+		/*
+
 		*/
     }
     

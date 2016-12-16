@@ -4,7 +4,24 @@
               bundleIdentifier="de.pueski.WaveX" includeBinaryInAppConfig="1"
               jucerVersion="4.3.0" companyName="pueski.de" companyWebsite="www.pueski.de">
   <MAINGROUP id="oMZ4Yu" name="WaveX">
-    <GROUP id="{5BB27121-C9C8-56C1-0BC5-68883A472AD8}" name="Resources"/>
+    <GROUP id="{5BB27121-C9C8-56C1-0BC5-68883A472AD8}" name="Resources">
+      <FILE id="x8j2Oy" name="font-awesome_4-7-0_copy_24_0_000000_none.png"
+            compile="0" resource="1" file="Resources/font-awesome_4-7-0_copy_24_0_000000_none.png"/>
+      <FILE id="fAiRiR" name="font-awesome_4-7-0_file-audio-o_32_0_000000_none.png"
+            compile="0" resource="1" file="Resources/font-awesome_4-7-0_file-audio-o_32_0_000000_none.png"/>
+      <FILE id="sCU1d4" name="font-awesome_4-7-0_pencil_24_0_000000_none.png"
+            compile="0" resource="1" file="Resources/font-awesome_4-7-0_pencil_24_0_000000_none.png"/>
+      <FILE id="TGdhNR" name="iconic_1-1-1_audio-spectrum_32_0_000000_none.png"
+            compile="0" resource="1" file="Resources/iconic_1-1-1_audio-spectrum_32_0_000000_none.png"/>
+      <FILE id="zaLFOJ" name="iconic_1-1-1_audio-spectrum_128_0_000000_none.png"
+            compile="0" resource="1" file="Resources/iconic_1-1-1_audio-spectrum_128_0_000000_none.png"/>
+      <FILE id="kfYiGm" name="ionicons_2-0-1_android-add-circle_24_0_000000_none.png"
+            compile="0" resource="1" file="Resources/ionicons_2-0-1_android-add-circle_24_0_000000_none.png"/>
+      <FILE id="RnUJq1" name="ionicons_2-0-1_android-remove-circle_24_0_000000_none.png"
+            compile="0" resource="1" file="Resources/ionicons_2-0-1_android-remove-circle_24_0_000000_none.png"/>
+      <FILE id="VNMA0B" name="ionicons_2-0-1_settings_24_0_000000_none.png"
+            compile="0" resource="1" file="Resources/ionicons_2-0-1_settings_24_0_000000_none.png"/>
+    </GROUP>
     <GROUP id="{4EC8E705-56D1-3A9F-9C5F-6B92CD6412F1}" name="Source">
       <FILE id="SsoNTP" name="AppViewPort.h" compile="0" resource="0" file="Source/AppViewPort.h"/>
       <FILE id="eBDgTg" name="AppWindowComponent.cpp" compile="1" resource="0"
@@ -17,6 +34,8 @@
             file="Source/CustomLookAndFeel.cpp"/>
       <FILE id="TUUqVU" name="CustomLookAndFeel.h" compile="0" resource="0"
             file="Source/CustomLookAndFeel.h"/>
+      <FILE id="pfyDAQ" name="DragConstrainer.h" compile="0" resource="0"
+            file="Source/DragConstrainer.h"/>
       <FILE id="ZCmUWv" name="InfoPanel.cpp" compile="1" resource="0" file="Source/InfoPanel.cpp"/>
       <FILE id="k6GD1T" name="InfoPanel.h" compile="0" resource="0" file="Source/InfoPanel.h"/>
       <FILE id="ei4XjV" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>

@@ -19,6 +19,7 @@ Track::Track(double sampleRate)
 	this->audioBuffer = new AudioSampleBuffer();
 	this->maxLength = 600;
 	this->name = "empty Track";
+    this->volume = 1;
 }
 
 Track::~Track()
@@ -41,7 +42,8 @@ void Track::addRegion(File file, double sampleRate) {
 	this->regions.push_back(region);
 	this->currentRegion = region;
 
-
+    this->currentRegion->toFront(true);
+    addAndMakeVisible(region);
 	repaint();
 }
 
@@ -72,10 +74,7 @@ float Track::getVolume()
 
 const float * Track::getReadBuffer(int channel)
 {
-	
-
-
-	return nullptr;
+	return this->currentRegion->getBuffer()->getReadPointer(channel);
 }
 
 int Track::getNumSamples()
@@ -107,11 +106,12 @@ void Track::paint (Graphics& g)
 		g.setColour(Colours::lightgrey);
 	}
 	
-	g.fillRect(getBounds().getX(),getBounds().getY(),getBounds().getWidth(),getBounds().getHeight()-1);
-
+    g.fillAll();
+    /*
 	for (int i = 0; i < regions.size();i++) {
 		regions.at(i)->paint(g);	
 	}
+     */
 }
 
 void Track::resized()
@@ -131,5 +131,5 @@ int Track::getOffset()
 
 AudioSampleBuffer * Track::getBuffer()
 {
-	return audioBuffer;
+	return this->currentRegion->getBuffer();
 }
