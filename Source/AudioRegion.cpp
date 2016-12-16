@@ -14,6 +14,9 @@
 //==============================================================================
 AudioRegion::AudioRegion(File file, AudioFormatManager& manager, double sampleRate)
 {
+    resizerR = new ResizableEdgeComponent(this,nullptr,ResizableEdgeComponent::rightEdge);
+    resizerL = new ResizableEdgeComponent(this,nullptr,ResizableEdgeComponent::leftEdge);
+
 	this->sampleRate = sampleRate;
 
     AudioFormatReader* reader = manager.createReaderFor(file);
@@ -36,6 +39,9 @@ AudioRegion::AudioRegion(File file, AudioFormatManager& manager, double sampleRa
     setSize(this->thumbnail->getTotalLength() * this->zoom, 200);
     this->volume = 1;
 	this->offset = 0;
+    
+    addAndMakeVisible(resizerL);
+    addAndMakeVisible(resizerR);
 }
 
 AudioRegion::~AudioRegion()
@@ -43,6 +49,8 @@ AudioRegion::~AudioRegion()
     delete this->thumbnailCache;
     delete this->thumbnail;
     delete this->audioBuffer;
+    delete this->resizerL;
+    delete this->resizerR;
 }
 
 int AudioRegion::getNumSamples() {
@@ -111,7 +119,14 @@ float AudioRegion::getVolume() {
 void AudioRegion::setZoom(float zoom) {
     this->zoom = zoom;
     setSize(this->thumbnail->getTotalLength() * this->zoom, 200);
-	setBounds(0,0,this->thumbnail->getTotalLength() * this->zoom, 200);
+    
+    resizerR->setSize(5, getHeight());
+    resizerR->setTopLeftPosition(getWidth() - 5, 0);
+    
+    resizerL->setSize(5, getHeight());
+    resizerL->setTopLeftPosition(0, 0);
+    
+    setBounds(0,0,this->thumbnail->getTotalLength() * this->zoom, 200);
     this->thumbnailBounds->setSize(this->thumbnail->getTotalLength() * this->zoom, 200);
     repaint();
 }
@@ -165,6 +180,12 @@ void AudioRegion::paintIfFileLoaded(Graphics& g, const Rectangle<int>& thumbnail
 
 void AudioRegion::resized()
 {
+    if (this->thumbnail->getNumChannels() > 0) {
+        // resizer->setSize(5, getHeight());
+        resizerR->setTopLeftPosition(getWidth() - 5, 0);
+        resizerL->setTopLeftPosition(0, 0);
+    }
+
 }
 
 AudioThumbnail* AudioRegion::getThumbnail() {

@@ -21,6 +21,7 @@ Track::Track(double sampleRate)
 	this->maxLength = 600;
 	this->name = "empty Track";
     this->volume = 1;
+    
 }
 
 Track::~Track()
@@ -82,7 +83,13 @@ float Track::getVolume()
 
 const float Track::getSample(int channel, long sample) {
     
-
+    for (std::vector<AudioRegion*>::iterator it = regions.begin(); it != regions.end(); ++it) {
+        AudioRegion* r = *it;
+        if (sample >= r->getSampleOffset() && sample < (r->getSampleOffset() + r->getBuffer()->getNumSamples())) {
+            currentRegion = r;
+            break;
+        }
+    }
     
     // sample index is not within sample range of current region
     if (sample < currentRegion->getSampleOffset() || sample >= (currentRegion->getSampleOffset() + currentRegion->getBuffer()->getNumSamples())) {

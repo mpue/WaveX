@@ -49,7 +49,7 @@ public:
 private:
     ComponentDragger dragger;
     DragConstrainer constrainer;
-
+    
     Track* currentTrack = NULL;
     AudioFormatManager manager;
     PositionMarker* marker;

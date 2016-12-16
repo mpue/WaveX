@@ -16,7 +16,7 @@
 //==============================================================================
 /*
 */
-class AudioRegion : public Component, public ChangeListener
+class AudioRegion : public Component,  public ChangeListener
 {
 public:
     AudioRegion(File file, AudioFormatManager& manager,double sampleRate);
@@ -67,6 +67,8 @@ private:
     virtual void changeListenerCallback(ChangeBroadcaster * source) override;
     void paintIfNoFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds);
     void paintIfFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds);
+    ResizableEdgeComponent* resizerR;
+    ResizableEdgeComponent* resizerL;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioRegion)
 };

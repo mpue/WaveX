@@ -67,6 +67,7 @@ private:
 	int offset = 0;
 	AudioSampleBuffer* audioBuffer;
 
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Track)
 };
 
