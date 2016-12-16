@@ -12,7 +12,6 @@
 #include "AppWindowComponent.h"
 #include "MainComponent.cpp"
 
-
 //==============================================================================
 AppWindowComponent::AppWindowComponent()
 {
@@ -33,7 +32,10 @@ AppWindowComponent::AppWindowComponent()
 
 	viewport->setTimeLine(this->timeLine);
 
-    mcc = new MainContentComponent(timeLine);
+	this->trackProperties = new TrackPropertyView();
+	this->trackProperties->setBounds(0, 75, 150, r.getHeight() - this->offsetBottom - 50);
+
+    mcc = new MainContentComponent(timeLine, trackProperties);
     mcc->setSize(r.getWidth(), r.getHeight() - this->offsetBottom - 50);
     viewport->setViewedComponent(mcc);
 
@@ -54,8 +56,7 @@ AppWindowComponent::AppWindowComponent()
     this->menu->setBounds(0,0,getWidth(),25);
 	this->menu->setSize(getWidth(), 25);
     
-	this->trackProperties = new TrackPropertyView();
-	this->trackProperties->setBounds(0, 75, 150, r.getHeight() - this->offsetBottom - 50);
+	this->viewport->setPropertyView(this->trackProperties);
 
     // addAndMakeVisible(menu);
 	addAndMakeVisible(timeLine);
@@ -79,8 +80,12 @@ AppWindowComponent::AppWindowComponent()
     this->toolbar = new ToolbarPanel(mcc);
     this->toolbar->setBounds(150, 0, 200, 50);
     
+	this->infoPanel = new InfoPanel();
+	this->infoPanel->setBounds(0, 0, 150, 75);
+
     addAndMakeVisible(transport);
     addAndMakeVisible(toolbar);
+	addAndMakeVisible(infoPanel);
     
     // transport->setTopLeftPosition(50, r.getHeight() - (this->transport->getHeight() + 50));
 
@@ -97,7 +102,8 @@ AppWindowComponent::~AppWindowComponent()
     masterPanel = nullptr;
     transport = nullptr;
     toolbar = nullptr;
-
+	infoPanel = nullptr;
+	delete trackProperties;
 }
 
 void AppWindowComponent::paint (Graphics& g)
@@ -111,7 +117,7 @@ void AppWindowComponent::resized()
     // components that your component contains..
     Rectangle<int> area(getLocalBounds());
     // this->menu->setBounds(area.removeFromTop(LookAndFeel::getDefaultLookAndFeel().getDefaultMenuBarHeight()));
-    viewport->setSize(getWidth(), getHeight() - this->offsetBottom);
+    viewport->setSize(getWidth() - 150, getHeight() - this->offsetBottom);
     // viewport->setBounds(getX(), getY()  ,getWidth(),getHeight() - this->offsetBottom);
 
 }

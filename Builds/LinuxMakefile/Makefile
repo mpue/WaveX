@@ -58,7 +58,9 @@ endif
 
 OBJECTS := \
   $(JUCE_OBJDIR)/AppWindowComponent_c01bc215.o \
+  $(JUCE_OBJDIR)/AudioRegion_46364bcb.o \
   $(JUCE_OBJDIR)/CustomLookAndFeel_ab3d772e.o \
+  $(JUCE_OBJDIR)/InfoPanel_a131c57.o \
   $(JUCE_OBJDIR)/Main_90ebc5c2.o \
   $(JUCE_OBJDIR)/MainComponent_a6ffb4a5.o \
   $(JUCE_OBJDIR)/MasterChannelPanel_b4b7ea4c.o \
@@ -71,7 +73,6 @@ OBJECTS := \
   $(JUCE_OBJDIR)/TrackPropertyView_42f565e6.o \
   $(JUCE_OBJDIR)/TransportPanel_18909a64.o \
   $(JUCE_OBJDIR)/WaveSelector_5f1b5681.o \
-  $(JUCE_OBJDIR)/BinaryData_ce4232d4.o \
   $(JUCE_OBJDIR)/juce_audio_basics_6b797ca1.o \
   $(JUCE_OBJDIR)/juce_audio_devices_a742c38b.o \
   $(JUCE_OBJDIR)/juce_audio_formats_5a29c68a.o \
@@ -113,9 +114,19 @@ $(JUCE_OBJDIR)/AppWindowComponent_c01bc215.o: ../../Source/AppWindowComponent.cp
 	@echo "Compiling AppWindowComponent.cpp"
 	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
+$(JUCE_OBJDIR)/AudioRegion_46364bcb.o: ../../Source/AudioRegion.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling AudioRegion.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
 $(JUCE_OBJDIR)/CustomLookAndFeel_ab3d772e.o: ../../Source/CustomLookAndFeel.cpp
 	-@mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling CustomLookAndFeel.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/InfoPanel_a131c57.o: ../../Source/InfoPanel.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling InfoPanel.cpp"
 	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/Main_90ebc5c2.o: ../../Source/Main.cpp
@@ -176,11 +187,6 @@ $(JUCE_OBJDIR)/TransportPanel_18909a64.o: ../../Source/TransportPanel.cpp
 $(JUCE_OBJDIR)/WaveSelector_5f1b5681.o: ../../Source/WaveSelector.cpp
 	-@mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling WaveSelector.cpp"
-	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/BinaryData_ce4232d4.o: ../../JuceLibraryCode/BinaryData.cpp
-	-@mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling BinaryData.cpp"
 	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/juce_audio_basics_6b797ca1.o: ../../JuceLibraryCode/juce_audio_basics.cpp

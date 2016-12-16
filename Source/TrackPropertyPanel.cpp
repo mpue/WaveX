@@ -18,6 +18,7 @@
 */
 
 //[Headers] You can add your own extra header files here...
+
 //[/Headers]
 
 #include "TrackPropertyPanel.h"
@@ -36,9 +37,10 @@ TrackPropertyPanel::TrackPropertyPanel ()
                                               TRANS("Name")));
     nameLabel->setFont (Font (15.00f, Font::plain));
     nameLabel->setJustificationType (Justification::centredLeft);
-    nameLabel->setEditable (false, false, false);
+    nameLabel->setEditable (false, true, false);
     nameLabel->setColour (TextEditor::textColourId, Colours::black);
     nameLabel->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+    nameLabel->addListener (this);
 
     addAndMakeVisible (muteButton = new ToggleButton ("muteButton"));
     muteButton->setButtonText (TRANS("M"));
@@ -131,13 +133,20 @@ void TrackPropertyPanel::paint (Graphics& g)
 
     g.fillAll (Colours::white);
 
-    g.setColour (Colour (0xffbababa));
-    g.fillRect (0, 0, 150, 200);
-
-    g.setColour (Colour (0xffa0a0a0));
-    g.drawRect (0, 0, 150, 200, 2);
-
     //[UserPaint] Add your own custom painting code here..
+
+	if (selected) {
+		g.setColour(Colour(0xffa0a0a0).brighter());
+		g.fillRect(0, 0, 150, 200);
+	}
+	else {
+		g.setColour(Colour(0xffa0a0a0));
+		g.fillRect(0, 0, 150, 200);
+	}
+
+	g.setColour(Colours::darkgrey);
+	g.drawLine(0, 200, 150, 200,0.5);
+
     //[/UserPaint]
 }
 
@@ -157,6 +166,21 @@ void TrackPropertyPanel::resized()
     label3->setBounds (32, 128, 32, 16);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
+}
+
+void TrackPropertyPanel::labelTextChanged (Label* labelThatHasChanged)
+{
+    //[UserlabelTextChanged_Pre]
+    //[/UserlabelTextChanged_Pre]
+
+    if (labelThatHasChanged == nameLabel)
+    {
+        //[UserLabelCode_nameLabel] -- add your label text handling code here..
+        //[/UserLabelCode_nameLabel]
+    }
+
+    //[UserlabelTextChanged_Post]
+    //[/UserlabelTextChanged_Post]
 }
 
 void TrackPropertyPanel::buttonClicked (Button* buttonThatWasClicked)
@@ -236,7 +260,21 @@ Track* TrackPropertyPanel::getTrack() {
 
 void TrackPropertyPanel::update() {
     this->volumeViewSlider->setValue(track->magnitudeLeft);
+	if (this->selected != track->isSelected()) {
+		this->selected = track->isSelected();
+		repaint();
+	}
+
 }
+
+void TrackPropertyPanel::setSelected(bool selected)
+{
+	this->selected = selected;
+	track->setSelected(this->selected);
+	repaint();
+}
+
+
 
 
 //[/MiscUserCode]
@@ -255,13 +293,10 @@ BEGIN_JUCER_METADATA
                  parentClasses="public Component" constructorParams="" variableInitialisers=""
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="0" initialWidth="150" initialHeight="200">
-  <BACKGROUND backgroundColour="ffffffff">
-    <RECT pos="0 0 150 200" fill="solid: ffbababa" hasStroke="1" stroke="2, mitered, butt"
-          strokeColour="solid: ffa0a0a0"/>
-  </BACKGROUND>
+  <BACKGROUND backgroundColour="ffffffff"/>
   <LABEL name="nameLabel" id="e816bfe76d3f902e" memberName="nameLabel"
          virtualName="" explicitFocusOrder="0" pos="8 8 136 24" edTextCol="ff000000"
-         edBkgCol="0" labelText="Name" editableSingleClick="0" editableDoubleClick="0"
+         edBkgCol="0" labelText="Name" editableSingleClick="0" editableDoubleClick="1"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15"
          bold="0" italic="0" justification="33"/>
   <TOGGLEBUTTON name="muteButton" id="7dab003004fb0c0e" memberName="muteButton"

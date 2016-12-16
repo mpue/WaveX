@@ -29,10 +29,9 @@ public:
     void paint (Graphics&) override;
     void resized() override;
 
-    AudioThumbnail* getThumbnail();
     WaveSelector* getSelector();
     
-    void addTrack(File file, TimeSliceThread* thread);
+    void addTrack(double sampleRate);
     Track* getCurrentTrack();
     std::vector<Track*> getTracks();
     
@@ -46,19 +45,15 @@ public:
 	float getZoom();
     void setZoom(float zoom);
     
-    MixerAudioSource* getMixerSource();
-    
 private:
 
-    Track* currentTrack;
+    Track* currentTrack = NULL;
     AudioFormatManager manager;
     PositionMarker* marker;
     
     std::vector<Track*> tracks;
     ScopedPointer<WaveSelector> selector;
 
-    ScopedPointer<MixerAudioSource> mixerSource;
-    
     bool playing = false;
     double position;
     float zoom;

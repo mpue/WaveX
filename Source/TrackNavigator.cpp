@@ -18,24 +18,22 @@ using namespace std;
 //==============================================================================
 TrackNavigator::TrackNavigator(PositionMarker* marker)
 {
-
     this->selector = new WaveSelector();
     this->selector->addChangeListener(this);
     this->selector->setSize(getWidth(), getHeight());
     this->selector->setBounds(0, 0, getWidth(), getHeight());
-    this->mixerSource = new MixerAudioSource();
     addAndMakeVisible(selector);
     this->zoom = 50;
     this->marker = marker;
+	this->position = 0;
+	manager.registerBasicFormats();
 }
 
 TrackNavigator::~TrackNavigator()
 {
     selector = nullptr;
-    mixerSource = nullptr;
     
     for(std::vector<Track*>::iterator it = tracks.begin(); it != tracks.end(); ++it) {
-        // *it = nullptr;;
         delete *it;
     }
     
@@ -46,8 +44,7 @@ void TrackNavigator::paint (Graphics& g)
 
     g.fillAll (Colours::darkgrey);
     
-    
-    for(int i = 0; i < tracks.size();i++) {
+    for(int i = 0; i < tracks.size();i++) {		
         tracks.at(i)->paint(g);
     }
     
@@ -66,20 +63,10 @@ void TrackNavigator::setZoom(float zoom) {
 }
 
 double TrackNavigator::getPosition() {
-    /*
-    if (tracks.size() > 0) {
-        position = tracks.at(0)->getSource()->getCurrentPosition();
-    }
-    */
     return position;
 }
 
 void TrackNavigator::setPosition(double position) {
-    /*
-    for (int i = 0; i < tracks.size();i++) {
-        tracks.at(i)->getSource()->setPosition(position);
-    }
-     */
     this->position = position;
 }
 
@@ -87,11 +74,8 @@ double TrackNavigator::getMaxLength() {
     double maxlen = 0;
     
     for (int i = 0; i < tracks.size();i++) {
-        
-        //AudioTransportSource* source = tracks.at(i)->getSource();
-        // double len = source->getLengthInSeconds();
 
-        double len = tracks.at(i)->getThumbnail()->getTotalLength();
+        double len = tracks.at(i)->getMaxLength();
         
         if (len > maxlen) {
             maxlen = len;
@@ -103,20 +87,6 @@ double TrackNavigator::getMaxLength() {
 
 void TrackNavigator::setPlaying(bool playing) {
     this->playing = playing;
-    /*
-    for (int i = 0; i < tracks.size();i++) {
-        if (playing) {
-            tracks.at(i)->getSource()->start();
-        }
-        else {
-            tracks.at(i)->getSource()->stop();
-        }
-    }
-     */
-}
-
-MixerAudioSource* TrackNavigator::getMixerSource() {
-    return this->mixerSource.get();
 }
 
 bool TrackNavigator::isPlaying() {
@@ -127,12 +97,13 @@ std::vector<Track*> TrackNavigator::getTracks() {
     return this->tracks;
 }
 
-void TrackNavigator::addTrack(File file, TimeSliceThread* thread) {
+void TrackNavigator::addTrack(double sampleRate) {
     
-    Track* track = new Track(file, thread);
-    Rectangle<int>* bounds = new Rectangle<int>(0,tracks.size() * 200,track->getThumbnail()->getTotalLength() * 20,200);
-    track->setThumbnailBounds(bounds);
-    if (zoom > 0)
+	Track* track = new Track(sampleRate);
+	
+	track->setBounds(0, tracks.size() * 200, 600 * this->zoom, 200);
+
+	if (zoom > 0)
         track->setZoom(zoom);
 
     this->tracks.push_back(track);
@@ -142,11 +113,15 @@ void TrackNavigator::addTrack(File file, TimeSliceThread* thread) {
 	setSize(getMaxLength() * this->zoom, height);
 	this->marker->setSize(getWidth(), getHeight());
 	this->marker->setLength(getMaxLength());
-    this->selector->setSize(getWidth(), getHeight() / tracks.size());
-    this->selector->setBounds(0, 0, getWidth(), getHeight() / tracks.size());
-    // this->mixerSource->addInputSource(track->getSource(), true);
+    this->selector->setSize(getWidth(), 200);
+    
     repaint();
 	sendChangeMessage();    
+}
+
+Track * TrackNavigator::getCurrentTrack()
+{
+	return this->currentTrack;
 }
 
 void TrackNavigator::resized()
@@ -157,14 +132,8 @@ void TrackNavigator::resized()
         numOfTracks = 1;
     }
     
-    this->selector->setSize(getWidth(), getHeight() / numOfTracks);
-    this->selector->setBounds(0, 0, getWidth(), getHeight() / numOfTracks);
 	this->marker->setSize(getWidth(), getHeight());
 	this->marker->setDrawingBounds(0, 25, getWidth(), getHeight());
-}
-
-AudioThumbnail* TrackNavigator::getThumbnail() {
-    return this->currentTrack->getThumbnail();
 }
 
 WaveSelector* TrackNavigator::getSelector() {
@@ -173,17 +142,14 @@ WaveSelector* TrackNavigator::getSelector() {
 
 void TrackNavigator::changeListenerCallback(ChangeBroadcaster * source) 
 {
-    if (source == this->currentTrack->getThumbnail()) {
-        repaint();
-    }
+
     if (source == selector) {
         Rectangle<int> range = selector->getSelectedRange();
     }
 
 }
 
-bool TrackNavigator::keyPressed(const KeyPress& key,
-                        Component* originatingComponent) {
+bool TrackNavigator::keyPressed(const KeyPress& key, Component* originatingComponent) {
     if (key == KeyPress::spaceKey) {
         if (isPlaying())
         {
@@ -222,28 +188,49 @@ bool TrackNavigator::keyPressed(const KeyPress& key,
 }
 
 void TrackNavigator::mouseDrag(const MouseEvent& event) {
-    if (getThumbnail()->getNumChannels() && event.mods.isLeftButtonDown()) {
+    if (event.mods.isLeftButtonDown()) {
         getSelector()->setSelectedRange(event.getMouseDownPosition().getX(), event.getOffsetFromDragStart().getX());
     }
 }
 
 void TrackNavigator::mouseDown (const MouseEvent& event) {
-    
-    
-    int x = event.x;
+
+	int x = event.x;
+	int y = event.y;
 
 	if (tracks.size() > 0) {
-		if (getThumbnail()->getNumChannels()) {
         
-			if (!event.mods.isCtrlDown() && event.mods.isRightButtonDown()) {
-				float pos = (float)x / getWidth();
-				double total = getMaxLength();
-				double relative = total * pos;
-				setPosition(relative);
-				sendChangeMessage();
-			}
-        
+		if (!event.mods.isCtrlDown() && event.mods.isRightButtonDown()) {
+			float pos = (float)x / getWidth();
+			double total = getMaxLength();
+			double relative = total * pos;
+			setPosition(relative);
+			sendChangeMessage();
 		}
+
+		if (event.mods.isLeftButtonDown()) {
+			for (int i = 0; i < tracks.size();i++) {
+
+				Rectangle<int> bounds =  tracks.at(i)->getBounds();
+				bounds.setY(i * 200);
+
+				if (bounds.contains(x, y)) {
+					currentTrack = tracks.at(i);
+					Rectangle<int> selectorBounds = this->selector->getBounds();
+					selectorBounds.setY(i * 200);
+					this->selector->setBounds(selectorBounds);
+					this->selector->setSelectedRange(0, 0);
+					tracks.at(i)->setSelected(true);						
+					sendChangeMessage();
+				}
+				else {
+					tracks.at(i)->setSelected(false);
+					sendChangeMessage();
+				}
+
+			}
+		}
+
 	}
     
 }

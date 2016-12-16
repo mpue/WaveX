@@ -49,6 +49,10 @@ void PositionMarker::setLength(double lengthInSeconds) {
 }
 
 void PositionMarker::setPosition(double position) {
+	if (position < 0) {
+		position = 0;
+	}
+
     this->audioPosition = position;
     repaint();
 }

@@ -37,6 +37,7 @@
                                                                     //[/Comments]
 */
 class TrackPropertyPanel  : public Component,
+                            public LabelListener,
                             public ButtonListener,
                             public SliderListener
 {
@@ -51,10 +52,13 @@ public:
     void setTrack(Track* track);
     Track* getTrack();
     void update();
+	void setSelected(bool selected);
+
     //[/UserMethods]
 
     void paint (Graphics& g) override;
     void resized() override;
+    void labelTextChanged (Label* labelThatHasChanged) override;
     void buttonClicked (Button* buttonThatWasClicked) override;
     void sliderValueChanged (Slider* sliderThatWasMoved) override;
 
@@ -64,6 +68,7 @@ private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     Track* track;
     CustomLookAndFeel* clf;
+	bool selected;
     //[/UserVariables]
 
     //==============================================================================

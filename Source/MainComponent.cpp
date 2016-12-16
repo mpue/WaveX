@@ -12,6 +12,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include <iostream>
 #include "TrackNavigator.h"
+#include "TrackPropertyView.h"
 #include "PositionMarker.h"
 #include "WaveSelector.h"
 #include "TimeLine.h"
@@ -26,11 +27,12 @@ class MainContentComponent : public AudioAppComponent, public MenuBarModel, publ
 {
 public:
     //==============================================================================
-    MainContentComponent(TimeLine* timeLine) : thread("main")
+    MainContentComponent(TimeLine* timeLine, TrackPropertyView* trackProperties) : thread("main")
     {		
         this->zoom = 21.0f;
 
 		this->timeLine = timeLine;
+		this->trackProperties = trackProperties;
 
 		this->marker = new PositionMarker(600);
         this->navigator = new TrackNavigator(marker);
@@ -63,13 +65,17 @@ public:
         
         setAudioChannels(2,2);
         
+		this->numSamples = 0;
     }
 
     ~MainContentComponent()
     {
+		/*
         for (int i = 0; i < navigator->getTracks().size();i++) {
             navigator->getTracks().at(i)->getBuffer()->clear();
         }
+		*/
+
         
         shutdownAudio();
 		// readerSource = nullptr;
@@ -96,38 +102,11 @@ public:
         // For more details, see the help for AudioProcessor::prepareToPlay()
         this->sampleRate = sampleRate;
         this->buffersize = samplesPerBlockExpected;
-        
-        navigator->getMixerSource()->prepareToPlay(samplesPerBlockExpected, sampleRate);
 
     }
 
     void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill) override
     {
-        // Your audio-processing code goes here!
-
-        // For more details, see the help for AudioProcessor::getNextAudioBlock()
-
-        // Right now we are not producing any data, in which case we need to clear the buffer
-        // (to prevent the output of random noise)
-        /*
-		if (readerSource == nullptr)
-		{
-			bufferToFill.clearActiveBufferRegion();
-			return;
-		}
-        */
-
-        
-		// navigator->getMixerSource()->getNextAudioBlock(bufferToFill);
-        
-
-        /*
-        float* leftIn = (float*)bufferToFill.buffer->getReadPointer(0);
-        float* rightIn = (float*)bufferToFill.buffer->getReadPointer(1);
-        
-        float* const leftOut = bufferToFill.buffer->getWritePointer(0);
-        float* const rightOut = bufferToFill.buffer->getWritePointer(1);
-        */
          
         if (navigator->isPlaying()) {
             for (int i = 0; i < navigator->getTracks().size();i++) {
@@ -140,6 +119,7 @@ public:
                 }
                 navigator->getTracks().at(i)->magnitudeLeft = bufferToFill.buffer->getMagnitude(0, bufferToFill.startSample, bufferToFill.numSamples);
                 navigator->getTracks().at(i)->magnitudeRight = bufferToFill.buffer->getMagnitude(1, bufferToFill.startSample, bufferToFill.numSamples);
+				navigator->getTracks().at(i)->setOffset(numSamples);
             }
             numSamples += this->buffersize;
             navigator->setPosition(numSamples / this->sampleRate);
@@ -152,23 +132,16 @@ public:
         }
          */
         
-        
         this->rmsLeft = bufferToFill.buffer->getRMSLevel(0, bufferToFill.startSample, bufferToFill.numSamples);
         this->rmsRight = bufferToFill.buffer->getRMSLevel(1, bufferToFill.startSample, bufferToFill.numSamples);
         
         this->magnitudeLeft = bufferToFill.buffer->getMagnitude(0, bufferToFill.startSample, bufferToFill.numSamples);
         this->magnitudeRight = bufferToFill.buffer->getMagnitude(1, bufferToFill.startSample, bufferToFill.numSamples);
         
-        
     }
 
     void releaseResources() override
     {
-        // This will be called when the audio device stops, or when it is being
-        // restarted due to a setting change.
-
-        // For more details, see the help for AudioProcessor::releaseResources()
-		navigator->getMixerSource()->releaseResources();
     }
 
     //==============================================================================
@@ -181,14 +154,6 @@ public:
      
     void resized() override
 	{
-		/*
-		Logger::getCurrentLogger()->writeToLog(String(getParentWidth()));
-
-		Rectangle<int> area(getLocalBounds());
-        marker->setDrawingBounds(0,0,getWidth(),getHeight() - 80);
-        
-		*/
-
 	}
 
     double getRms(int channel) {
@@ -231,6 +196,10 @@ public:
     }
     
     void addTrack() {
+
+		navigator->addTrack(this->sampleRate);
+
+		/*
         FileChooser chooser("Select a file to add...",
                             File::nonexistent,
                             "*.*");
@@ -238,10 +207,11 @@ public:
         if (chooser.browseForFileToOpen())
         {
             File file = chooser.getResult();
-            navigator->addTrack(file, &thread);
+
             
             // setSize(navigator->getMaxLength() * this->zoom, getHeight());
         }
+		*/
     }
     
     void openSettings() {
@@ -269,6 +239,7 @@ private:
     ScopedPointer<TrackNavigator> navigator;
     ScopedPointer<PositionMarker> marker;
 	ScopedPointer<TimeLine> timeLine;
+	TrackPropertyView* trackProperties;
 
     long numSamples = 0;
     double sampleRate = 0;

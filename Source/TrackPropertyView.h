@@ -51,17 +51,20 @@ public:
     virtual void changeListenerCallback (ChangeBroadcaster* source) override;
     void addTrack(Track* track);
     void timerCallback() override;
+	Track* getTrack(int i);
+	void setOffset(int offset);
+	void mouseDown(const MouseEvent& event) override;
     //[/UserMethods]
 
     void paint (Graphics& g) override;
     void resized() override;
-    Track* getTrack(int i);
 
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
 	std::vector<TrackPropertyPanel*> trackProperties;
-    //[/UserVariables]
+	int offset = 0;
+	//[/UserVariables]
 
     //==============================================================================
 

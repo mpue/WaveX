@@ -19,6 +19,7 @@
 
 //[Headers] You can add your own extra header files here...
 #include "TrackNavigator.h"
+#include "TrackPropertyPanel.h"
 //[/Headers]
 
 #include "TrackPropertyView.h"
@@ -58,6 +59,7 @@ TrackPropertyView::~TrackPropertyView()
         delete *it;
     }
 
+
     //[/Destructor]
 }
 
@@ -91,6 +93,13 @@ Track* TrackPropertyView::getTrack(int i) {
     
 }
 
+void TrackPropertyView::setOffset(int offset)
+{
+	this->offset = offset;
+	setTopLeftPosition(0, 75 + this->offset);
+
+}
+
 void TrackPropertyView::addTrack(Track* track)
 {
 	TrackPropertyPanel* panel = new TrackPropertyPanel();
@@ -99,6 +108,7 @@ void TrackPropertyView::addTrack(Track* track)
     panel->setTrack(track);
 	addAndMakeVisible(panel);
 	trackProperties.push_back(panel);
+	panel->addMouseListener(this, true);
 }
 
 void TrackPropertyView::changeListenerCallback (ChangeBroadcaster* source) {
@@ -113,7 +123,6 @@ void TrackPropertyView::changeListenerCallback (ChangeBroadcaster* source) {
 
     }
 
-
 }
 
 void TrackPropertyView::timerCallback() {
@@ -122,6 +131,23 @@ void TrackPropertyView::timerCallback() {
     }
 }
 
+
+void TrackPropertyView::mouseDown(const MouseEvent& event) {
+
+	if (event.mods.isLeftButtonDown()) {
+
+		if (TrackPropertyPanel* t = dynamic_cast<TrackPropertyPanel*>(event.eventComponent)) {
+
+			for (int i = 0; i < this->trackProperties.size();i++) {
+				this->trackProperties.at(i)->setSelected(false);
+			}
+
+			t->setSelected(true);
+		}
+
+	}
+
+}
 
 //[/MiscUserCode]
 

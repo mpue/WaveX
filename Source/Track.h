@@ -2,8 +2,8 @@
   ==============================================================================
 
     Track.h
-    Created: 25 Nov 2016 10:00:36pm
-    Author:  Matthias Pueski
+    Created: 16 Dec 2016 9:40:38am
+    Author:  pueskma
 
   ==============================================================================
 */
@@ -12,50 +12,60 @@
 #define TRACK_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "AudioRegion.h"
+#include <vector>
 
 //==============================================================================
 /*
 */
-class Track    : public Component, public ChangeListener
+
+using namespace std;
+
+class Track    : public Component
 {
 public:
-    Track(File file, TimeSliceThread* thread);
+    Track(double sampleRate);
     ~Track();
+
+	void setZoom(float zoom);
+	String getName();
+	void setGain(float gain);
+	void setVolume(float volume);
+	float getVolume();
+	const float* getReadBuffer(int channel);
+	int getNumSamples();
+	void setSelected(bool selected);
+	bool isSelected();
+	double getMaxLength();
+	void addRegion(File file, double sampleRate);
 
     void paint (Graphics&) override;
     void resized() override;
-    AudioThumbnail* getThumbnail();
-    AudioTransportSource* getSource();
-    void setThumbnailBounds(Rectangle<int>* bounds);
-    void setZoom(float zoom);
-    String getName();
-    void setGain(float gain);
-    void setVolume(float volume);
-    float getVolume();
-    AudioSampleBuffer* getBuffer();
-    const float* getReadBuffer(int channel);
-    int getNumSamples();
-    double magnitudeLeft = 0;
-    double magnitudeRight = 0;
-    
+
+	void setOffset(int offset);
+	int getOffset();
+
+	AudioSampleBuffer* getBuffer();
+
+	double magnitudeLeft = 0;
+	double magnitudeRight = 0;
+
 private:
-    AudioSampleBuffer* audioBuffer;
-    AudioFormatManager manager;
-    AudioThumbnail* thumbnail;
-    AudioThumbnailCache* thumbnailCache;
-    // AudioFormatReader* reader;
-    ScopedPointer<AudioFormatReaderSource> readerSource;
-    AudioTransportSource* source;
-    Rectangle<int>* thumbnailBounds;
-    float zoom;
-    String name;
-    float volume;
-    float gain = 1;
-    virtual void changeListenerCallback(ChangeBroadcaster * source) override;
-    void paintIfNoFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds);
-    void paintIfFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds);
-    
-    
+
+	float zoom = 20;
+	String name;
+	float volume;
+	float gain = 1;
+	double sampleRate;
+	bool selected = false;
+	AudioRegion* currentRegion = NULL;
+	AudioFormatManager manager;
+	vector<AudioRegion*> regions;
+	long numSamples = 0;
+	double maxLength = 600 * this->sampleRate;
+	int offset = 0;
+	AudioSampleBuffer* audioBuffer;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Track)
 };
 

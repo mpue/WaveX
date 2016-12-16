@@ -4,23 +4,21 @@
               bundleIdentifier="de.pueski.WaveX" includeBinaryInAppConfig="1"
               jucerVersion="4.3.0" companyName="pueski.de" companyWebsite="www.pueski.de">
   <MAINGROUP id="oMZ4Yu" name="WaveX">
-    <GROUP id="{5BB27121-C9C8-56C1-0BC5-68883A472AD8}" name="Resources">
-      <FILE id="jjc0e4" name="iconic_1-1-1_audio-spectrum_32_0_000000_none.png"
-            compile="0" resource="1" file="../../../Downloads/iconic_1-1-1_audio-spectrum_32_0_000000_none.png"/>
-      <FILE id="lEZGdF" name="iconic_1-1-1_audio-spectrum_128_0_000000_none.png"
-            compile="0" resource="1" file="../../../Downloads/iconic_1-1-1_audio-spectrum_128_0_000000_none.png"
-            xcodeResource="0"/>
-    </GROUP>
+    <GROUP id="{5BB27121-C9C8-56C1-0BC5-68883A472AD8}" name="Resources"/>
     <GROUP id="{4EC8E705-56D1-3A9F-9C5F-6B92CD6412F1}" name="Source">
       <FILE id="SsoNTP" name="AppViewPort.h" compile="0" resource="0" file="Source/AppViewPort.h"/>
       <FILE id="eBDgTg" name="AppWindowComponent.cpp" compile="1" resource="0"
             file="Source/AppWindowComponent.cpp"/>
       <FILE id="nABgQI" name="AppWindowComponent.h" compile="0" resource="0"
             file="Source/AppWindowComponent.h"/>
+      <FILE id="etRReE" name="AudioRegion.cpp" compile="1" resource="0" file="Source/AudioRegion.cpp"/>
+      <FILE id="KzQ23Z" name="AudioRegion.h" compile="0" resource="0" file="Source/AudioRegion.h"/>
       <FILE id="eqweyi" name="CustomLookAndFeel.cpp" compile="1" resource="0"
             file="Source/CustomLookAndFeel.cpp"/>
       <FILE id="TUUqVU" name="CustomLookAndFeel.h" compile="0" resource="0"
             file="Source/CustomLookAndFeel.h"/>
+      <FILE id="ZCmUWv" name="InfoPanel.cpp" compile="1" resource="0" file="Source/InfoPanel.cpp"/>
+      <FILE id="k6GD1T" name="InfoPanel.h" compile="0" resource="0" file="Source/InfoPanel.h"/>
       <FILE id="ei4XjV" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
       <FILE id="AUy7xn" name="MainComponent.cpp" compile="1" resource="0"
             file="Source/MainComponent.cpp"/>
@@ -37,8 +35,8 @@
       <FILE id="kJmpPP" name="ToolbarPanel.cpp" compile="1" resource="0"
             file="Source/ToolbarPanel.cpp"/>
       <FILE id="UCNDEJ" name="ToolbarPanel.h" compile="0" resource="0" file="Source/ToolbarPanel.h"/>
-      <FILE id="fZD9h4" name="Track.cpp" compile="1" resource="0" file="Source/Track.cpp"/>
-      <FILE id="D6ze9Z" name="Track.h" compile="0" resource="0" file="Source/Track.h"/>
+      <FILE id="aA40hC" name="Track.cpp" compile="1" resource="0" file="Source/Track.cpp"/>
+      <FILE id="a80kpX" name="Track.h" compile="0" resource="0" file="Source/Track.h"/>
       <FILE id="HdLg7o" name="TrackNavigator.cpp" compile="1" resource="0"
             file="Source/TrackNavigator.cpp"/>
       <FILE id="dgyuAJ" name="TrackNavigator.h" compile="0" resource="0"

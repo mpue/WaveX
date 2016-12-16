@@ -2,8 +2,8 @@
   ==============================================================================
 
     Track.cpp
-    Created: 25 Nov 2016 10:00:36pm
-    Author:  Matthias Pueski
+    Created: 16 Dec 2016 9:40:38am
+    Author:  pueskma
 
   ==============================================================================
 */
@@ -12,144 +12,124 @@
 #include "Track.h"
 
 //==============================================================================
-Track::Track(File file, TimeSliceThread* thread)
+Track::Track(double sampleRate)
 {
-    manager.registerBasicFormats();
-    AudioFormatReader* reader = manager.createReaderFor(file);
-    ScopedPointer<AudioFormatReaderSource> afr = new AudioFormatReaderSource(reader, true);
-
-    this->thumbnailCache = new AudioThumbnailCache(1);
-    this->thumbnail = new AudioThumbnail(512, manager, *this->thumbnailCache);
-    this->thumbnail->addChangeListener(this);
-    // this->thumbnail->setSource(new FileInputSource(file));
-    
-    audioBuffer = new AudioSampleBuffer(2, reader->lengthInSamples);
-    reader->read(audioBuffer, 0, reader->lengthInSamples, 0, true, true);
-    //
-
-    this->thumbnail->reset(2, 44100);
-    this->thumbnail->addBlock(0, *audioBuffer, 0,reader->lengthInSamples);
-    
-    /*
-    this->source = new AudioTransportSource();
-    this->source->setSource(afr,
-                              0,                   // tells it to buffer this many samples ahead
-                              thread,                 // this is the background thread to use for reading-ahead
-                              reader->sampleRate);     // allows for sample rate correction
-    
-    this->readerSource = afr.release();
-    */
-     
-    this->name = file.getFileNameWithoutExtension();
-    this->zoom = 20;
-    setSize(this->thumbnail->getTotalLength() * this->zoom, 200);
-    this->volume = 1;
-    
-
+	manager.registerBasicFormats();
+	this->sampleRate = sampleRate;
+	this->audioBuffer = new AudioSampleBuffer();
+	this->maxLength = 600;
+	this->name = "empty Track";
 }
 
 Track::~Track()
 {
-    delete this->thumbnailCache;
-    delete this->thumbnail;
-    delete this->audioBuffer;
-    // this->readerSource->releaseResources();
-    // this->readerSource = nullptr;
+	for (std::vector<AudioRegion*>::iterator it = regions.begin(); it != regions.end(); ++it) {
+		delete *it;
+	}
+
+	delete this->audioBuffer;
 }
 
-int Track::getNumSamples() {
-    return audioBuffer->getNumSamples();
+void Track::addRegion(File file, double sampleRate) {
+
+	AudioRegion* region = new AudioRegion(file, manager, sampleRate);
+	Rectangle<int>* bounds = new Rectangle<int>(0, 0, region->getThumbnail()->getTotalLength() * 20, 200);
+	region->setThumbnailBounds(bounds);
+	if (zoom > 0)
+		region->setZoom(zoom);
+
+	this->regions.push_back(region);
+	this->currentRegion = region;
+
+
+	repaint();
 }
 
-
-const float* Track::getReadBuffer(int channel) {
-    return audioBuffer->getReadPointer(channel);
+void Track::setZoom(float zoom)
+{
+	this->zoom = zoom;
 }
 
-AudioSampleBuffer* Track::getBuffer() {
-    return audioBuffer;
+String Track::getName()
+{
+	return name;
 }
 
-AudioTransportSource* Track::getSource() {
-    return this->source;
+void Track::setGain(float gain)
+{
+	this->gain = gain;
 }
 
-void Track::setGain(float gain) {
-    this->gain = gain;
+void Track::setVolume(float volume)
+{
+	this->volume = volume;
 }
 
-void Track::setVolume(float volume) {
-    this->volume = volume * gain;
+float Track::getVolume()
+{
+	return volume;
 }
 
-float Track::getVolume() {
-    return volume * gain;
+const float * Track::getReadBuffer(int channel)
+{
+	
+
+
+	return nullptr;
 }
 
-void Track::setZoom(float zoom) {
-    this->zoom = zoom;
-    setSize(this->thumbnail->getTotalLength() * this->zoom, 200);
-	setBounds(0,0,this->thumbnail->getTotalLength() * this->zoom, 200);
-    this->thumbnailBounds->setSize(this->thumbnail->getTotalLength() * this->zoom, 200);
-    repaint();
+int Track::getNumSamples()
+{
+	return numSamples;
 }
 
-void Track::setThumbnailBounds(Rectangle<int>* bounds) {
-    this->thumbnailBounds = bounds;
+void Track::setSelected(bool selected)
+{
+	this->selected = selected;
+}
+
+bool Track::isSelected()
+{
+	return selected;
+}
+
+double Track::getMaxLength()
+{
+	return maxLength;
 }
 
 void Track::paint (Graphics& g)
-{    
-    if (this->thumbnail->getNumChannels() == 0)
-        paintIfNoFileLoaded(g, *this->thumbnailBounds);
-    else
-        paintIfFileLoaded(g, *this->thumbnailBounds);
-    
-}
-
-void Track::paintIfNoFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds)
 {
-    g.setColour(Colours::cadetblue);
-    g.fillRect(thumbnailBounds);
-    g.setColour(Colours::white);
-    g.setFont (Font (30.00f, Font::plain));
-    g.drawFittedText("No File Loaded", thumbnailBounds, Justification::centred, 1.0f);
+	if (selected) {
+		g.setColour(Colours::lightgrey.brighter());
+	}
+	else {
+		g.setColour(Colours::lightgrey);
+	}
+	
+	g.fillRect(getBounds().getX(),getBounds().getY(),getBounds().getWidth(),getBounds().getHeight()-1);
+
+	for (int i = 0; i < regions.size();i++) {
+		regions.at(i)->paint(g);	
+	}
 }
-
-void Track::paintIfFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds)
-{
-    
-    g.setColour(Colours::steelblue);
-    g.fillRect(thumbnailBounds);
-    
-    g.setColour(Colours::white);
-    
-    const double audioLength(this->thumbnail->getTotalLength());
-    this->thumbnail->drawChannels(g,
-                                  thumbnailBounds,
-                                  0.0,
-                                  audioLength,
-                                  1.0f);
-    
-}
-
-
 
 void Track::resized()
 {
+
 }
 
-AudioThumbnail* Track::getThumbnail() {
-    return this->thumbnail;
-}
-
-void Track::changeListenerCallback(ChangeBroadcaster * source)
+void Track::setOffset(int offset)
 {
-    if (source == this->thumbnail) {
-        repaint();
-    }
+	this->offset = offset;
 }
 
-String Track::getName(){
-    return this->name;
+int Track::getOffset()
+{
+	return this->offset;
+}
+
+AudioSampleBuffer * Track::getBuffer()
+{
+	return audioBuffer;
 }
