@@ -65,6 +65,7 @@ public:
         
         setAudioChannels(2,2);
         
+        
 		this->numSamples = 0;
     }
 
@@ -107,16 +108,15 @@ public:
 
     void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill) override
     {
-        //bufferToFill.clearActiveBufferRegion();
+        bufferToFill.clearActiveBufferRegion();
          
         if (navigator->isPlaying()) {
             for (int i = 0; i < navigator->getTracks().size();i++) {
-                const float* trackBufferL = navigator->getTracks().at(i)->getReadBuffer(0);
-                const float* trackBufferR = navigator->getTracks().at(i)->getReadBuffer(1);
-                for (int j = numSamples; j < numSamples + this->buffersize && j < navigator->getTracks().at(i)->getBuffer()->getNumSamples();j++) {
-                    bufferToFill.buffer->addSample(0, j%this->buffersize, trackBufferL[j] * leftVolume * navigator->getTracks().at(i)->getVolume());
-                    bufferToFill.buffer->addSample(1, j%this->buffersize, trackBufferR[j] * rightVolume * navigator->getTracks().at(i)->getVolume());
-
+                // const float* trackBufferL = navigator->getTracks().at(i)->getReadBuffer(0);
+                // const float* trackBufferR = navigator->getTracks().at(i)->getReadBuffer(1);
+                for (int j = numSamples; j < numSamples + this->buffersize;j++) {
+                    bufferToFill.buffer->addSample(0, j%this->buffersize, navigator->getTracks().at(i)->getSample(0, j) * leftVolume * navigator->getTracks().at(i)->getVolume());
+                    bufferToFill.buffer->addSample(1, j%this->buffersize, navigator->getTracks().at(i)->getSample(1, j) * leftVolume * navigator->getTracks().at(i)->getVolume());
                 }
                 navigator->getTracks().at(i)->magnitudeLeft = bufferToFill.buffer->getMagnitude(0, bufferToFill.startSample, bufferToFill.numSamples);
                 navigator->getTracks().at(i)->magnitudeRight = bufferToFill.buffer->getMagnitude(1, bufferToFill.startSample, bufferToFill.numSamples);

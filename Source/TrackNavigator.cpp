@@ -29,7 +29,6 @@ TrackNavigator::TrackNavigator(PositionMarker* marker)
 	this->position = 0;
 	manager.registerBasicFormats();
     
-    
     // setInterceptsMouseClicks(true, true);
 }
 
@@ -64,7 +63,8 @@ void TrackNavigator::setZoom(float zoom) {
     this->zoom = zoom;
     for(int i = 0; i < tracks.size();i++) {
         tracks.at(i)->setZoom(zoom);
-    }	
+    }
+    constrainer.setRaster(this->zoom / 4);
 }
 
 double TrackNavigator::getPosition() {
@@ -123,6 +123,8 @@ void TrackNavigator::addTrack(double sampleRate) {
 	this->marker->setSize(getWidth(), getHeight());
 	this->marker->setLength(getMaxLength());
     this->selector->setSize(getWidth(), 200);
+    
+    constrainer.setRaster(this->zoom / 4);
     
     repaint();
 	sendChangeMessage();    
@@ -196,10 +198,25 @@ bool TrackNavigator::keyPressed(const KeyPress& key, Component* originatingCompo
     return true;
 }
 
+void TrackNavigator::mouseUp (const MouseEvent& event) {
+    if (AudioRegion* r = dynamic_cast<AudioRegion*>(event.eventComponent)){
+        int offset = r->getOffset();
+        r->setDynOffset(0);
+        r->setOffset(offset);
+        
+        long sampleNum = (600 / (600 * zoom)) * offset * r->getSampleRate();
+        r->setSampleOffset(sampleNum);
+        
+
+    }
+}
+
 void TrackNavigator::mouseDrag(const MouseEvent& event) {
     
     if (AudioRegion* r = dynamic_cast<AudioRegion*>(event.eventComponent)){
         dragger.dragComponent(r, event,&constrainer);
+        r->setDynOffset(constrainer.snap(event.getDistanceFromDragStartX(),zoom / 4));
+        Logger::getCurrentLogger()->writeToLog(String(constrainer.snap(event.getDistanceFromDragStartX(),zoom / 4)));
     }
     else {
         if (event.mods.isLeftButtonDown()) {

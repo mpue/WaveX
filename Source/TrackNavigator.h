@@ -63,6 +63,7 @@ private:
     
     virtual void changeListenerCallback(ChangeBroadcaster * source) override;
     virtual void mouseDown (const MouseEvent& event) override;
+    virtual void mouseUp (const MouseEvent& event) override;
     virtual bool keyPressed(const KeyPress& key, Component* originatingComponent) override;
     virtual void mouseDrag(const MouseEvent& event) override;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TrackNavigator)

@@ -33,6 +33,7 @@ public:
 	void setVolume(float volume);
 	float getVolume();
 	const float* getReadBuffer(int channel);
+    const float getSample(int channel, long sample);
 	int getNumSamples();
 	void setSelected(bool selected);
 	bool isSelected();

@@ -37,8 +37,14 @@ public:
 	void setSelected(bool selected);
 	bool isSelected();
 	void setOffset(int offset);
+    void setDynOffset(int offset);
 	int getOffset();
-
+    
+    long getSampleOffset();
+    void setSampleOffset(long offset);
+    
+    double getSampleRate();
+    
     double magnitudeLeft = 0;
     double magnitudeRight = 0;
 
@@ -54,7 +60,9 @@ private:
     float volume;
     float gain = 1;
 	int offset = 0;
+    int dynOffset = 0;
 	double sampleRate;
+    long sampleOffset = 0;
 	bool selected = false;
     virtual void changeListenerCallback(ChangeBroadcaster * source) override;
     void paintIfNoFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds);

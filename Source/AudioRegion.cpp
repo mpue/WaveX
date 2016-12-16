@@ -60,14 +60,32 @@ bool AudioRegion::isSelected()
 	return this->selected;
 }
 
+void AudioRegion::setDynOffset(int amount) {
+    this->dynOffset = amount;
+}
+
+void AudioRegion::setSampleOffset(long offset)
+{
+    this->sampleOffset = offset;
+}
+
+long AudioRegion::getSampleOffset() {
+    return this->sampleOffset;
+}
+
+
 void AudioRegion::setOffset(int offset)
 {
 	this->offset = offset;
 }
 
+double AudioRegion::getSampleRate() {
+    return this->sampleRate;
+}
+
 int AudioRegion::getOffset()
 {
-	return offset;
+	return offset + dynOffset;
 }
 
 const float* AudioRegion::getReadBuffer(int channel) {

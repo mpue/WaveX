@@ -10,6 +10,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "Track.h"
+#include <iostream>
 
 //==============================================================================
 Track::Track(double sampleRate)
@@ -49,7 +50,14 @@ void Track::addRegion(File file, double sampleRate) {
 
 void Track::setZoom(float zoom)
 {
-	this->zoom = zoom;
+    this->zoom = zoom;
+    
+    Logger::getCurrentLogger()->writeToLog(String(zoom));
+    
+    for (std::vector<AudioRegion*>::iterator it = regions.begin(); it != regions.end(); ++it) {
+        (*it)->setZoom(zoom);
+    }
+    
 }
 
 String Track::getName()
@@ -70,6 +78,23 @@ void Track::setVolume(float volume)
 float Track::getVolume()
 {
 	return volume;
+}
+
+const float Track::getSample(int channel, long sample) {
+    
+
+    
+    // sample index is not within sample range of current region
+    if (sample < currentRegion->getSampleOffset() || sample >= (currentRegion->getSampleOffset() + currentRegion->getBuffer()->getNumSamples())) {
+        return 0;
+    }
+    
+    // Logger::getCurrentLogger()->writeToLog(String(sample - currentRegion->getSampleOffset()));
+    
+    // cout << "Sample : " << sample << " offset : " << currentRegion->getSampleOffset() << " numSamples " << currentRegion->getBuffer()->getNumSamples() << endl;
+    
+    
+    return this->currentRegion->getBuffer()->getReadPointer(channel)[(long)(sample - currentRegion->getSampleOffset())];
 }
 
 const float * Track::getReadBuffer(int channel)
