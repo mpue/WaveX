@@ -112,10 +112,14 @@ void TrackNavigator::addTrack(double sampleRate) {
 	if (zoom > 0)
         track->setZoom(zoom);
 
+    for (int i = 0; i < tracks.size();i++) {
+        tracks.at(i)->setSelected(false);
+    }
+    track->setSelected(true);
+    
     this->tracks.push_back(track);
     this->currentTrack = track;
     track->toFront(true);
-    
     
 	// int height = this->getParentComponent()->getHeight();
     setSize(getMaxLength() * this->zoom, tracks.size() * 200);
@@ -194,6 +198,11 @@ bool TrackNavigator::keyPressed(const KeyPress& key, Component* originatingCompo
 		repaint();
         sendChangeMessage();
     }
+    else if (key.getTextCharacter() == 'l') {
+        for (int i = 0; i < tracks.size();i++) {
+            tracks.at(i)->toggleLoopSelection();
+        }
+    }
     
     return true;
 }
@@ -240,6 +249,10 @@ void TrackNavigator::mouseDown (const MouseEvent& event) {
     }
     
     if (AudioRegion* r = dynamic_cast<AudioRegion*>(event.eventComponent)){
+        for (int i = 0; i < tracks.size();i++) {
+            tracks.at(i)->clearSelection();
+        }
+        r->setSelected(true);
         dragger.startDraggingComponent(r, event);
     }
     else if (Track* r = dynamic_cast<Track*>(event.eventComponent)) {

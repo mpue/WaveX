@@ -45,7 +45,9 @@ public:
 
 	void setOffset(int offset);
 	int getOffset();
-
+    void toggleLoopSelection();
+    void clearSelection();
+    
 	AudioSampleBuffer* getBuffer();
 
 	double magnitudeLeft = 0;

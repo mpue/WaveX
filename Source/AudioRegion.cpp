@@ -68,6 +68,28 @@ bool AudioRegion::isSelected()
 	return this->selected;
 }
 
+void AudioRegion::setLoopCount(int count) {
+    this->loopCount = count;
+}
+
+void AudioRegion::setLoop(bool loop)
+{
+    if (loop) {
+         setSize(this->thumbnail->getTotalLength() * (loopCount + 1) * this->zoom, 200);
+    }
+    else {
+         setSize(this->thumbnail->getTotalLength() * this->zoom, 200);
+    }
+    
+    this->loop = loop;
+    repaint();
+}
+
+bool AudioRegion::isLoop()
+{
+    return this->loop;
+}
+
 void AudioRegion::setDynOffset(int amount) {
     this->dynOffset = amount;
 }
@@ -118,7 +140,13 @@ float AudioRegion::getVolume() {
 
 void AudioRegion::setZoom(float zoom) {
     this->zoom = zoom;
-    setSize(this->thumbnail->getTotalLength() * this->zoom, 200);
+    
+    if (loop) {
+        setSize(this->thumbnail->getTotalLength() * (loopCount + 1) * this->zoom, 200);
+    }
+    else {
+        setSize(this->thumbnail->getTotalLength() * this->zoom, 200);
+    }
     
     resizerR->setSize(5, getHeight());
     resizerR->setTopLeftPosition(getWidth() - 5, 0);
@@ -126,7 +154,7 @@ void AudioRegion::setZoom(float zoom) {
     resizerL->setSize(5, getHeight());
     resizerL->setTopLeftPosition(0, 0);
     
-    setBounds(0,0,this->thumbnail->getTotalLength() * this->zoom, 200);
+    // setBounds(0,0,this->thumbnail->getTotalLength() * this->zoom, 200);
     this->thumbnailBounds->setSize(this->thumbnail->getTotalLength() * this->zoom, 200);
     repaint();
 }
@@ -153,7 +181,7 @@ void AudioRegion::paintIfNoFileLoaded(Graphics& g, const Rectangle<int>& thumbna
     g.drawFittedText("No File Loaded", thumbnailBounds, Justification::centred, 1.0f);
 }
 
-void AudioRegion::paintIfFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds)
+void AudioRegion::paintIfFileLoaded(Graphics& g, const Rectangle<int>& b)
 {
     
 	if (this->selected) {
@@ -163,17 +191,32 @@ void AudioRegion::paintIfFileLoaded(Graphics& g, const Rectangle<int>& thumbnail
 		g.setColour(Colours::steelblue);
 	}
 
-    g.fillRect(thumbnailBounds);
-    
+    g.fillRoundedRectangle(b.getX(),b.getY(),b.getWidth(),b.getHeight(),10);
     g.setColour(Colours::white);
     
     const double audioLength(this->thumbnail->getTotalLength());
     this->thumbnail->drawChannels(g,
-                                  thumbnailBounds,
+                                  b,
                                   0.0,
                                   audioLength,
                                   1.0f);
     
+    
+    if(loop) {
+        for (int i = 1; i <= loopCount;i++) {
+            g.setColour(Colours::steelblue);
+            Rectangle<int> loopBounds(b.getX() + i * getWidth() / (loopCount + 1),b.getY(),b.getWidth(),b.getHeight());
+            g.fillRoundedRectangle(b.getX() + i * getWidth() / (loopCount + 1) ,b.getY(),b.getWidth(),b.getHeight(),10);
+            g.setColour(Colours::white);
+
+            const double audioLength(this->thumbnail->getTotalLength());
+            this->thumbnail->drawChannels(g,
+                                          loopBounds,
+                                          0.0,
+                                          audioLength,
+                                          1.0f);
+        }
+    }
 }
 
 

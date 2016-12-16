@@ -36,9 +36,12 @@ public:
 	int getNumSamples();
 	void setSelected(bool selected);
 	bool isSelected();
+    void setLoop(bool loop);
+    bool isLoop();
 	void setOffset(int offset);
     void setDynOffset(int offset);
 	int getOffset();
+    void setLoopCount(int count);
     
     long getSampleOffset();
     void setSampleOffset(long offset);
@@ -63,7 +66,9 @@ private:
     int dynOffset = 0;
 	double sampleRate;
     long sampleOffset = 0;
+    int loopCount = 1;
 	bool selected = false;
+    bool loop = false;
     virtual void changeListenerCallback(ChangeBroadcaster * source) override;
     void paintIfNoFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds);
     void paintIfFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds);

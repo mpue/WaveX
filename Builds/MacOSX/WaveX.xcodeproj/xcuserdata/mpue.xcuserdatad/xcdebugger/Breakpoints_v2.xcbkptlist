@@ -10,92 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../Source/TrackNavigator.cpp"
-            timestampString = "503614702.917624"
+            timestampString = "503620641.023939"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "242"
-            endingLineNumber = "242"
-            landmarkName = "TrackNavigator::mouseDown (const MouseEvent&amp; event)"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "TrackNavigator::mouseDown(juce::MouseEvent const&amp;)"
-                  moduleName = "WaveX"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mpue/Documents/devel/WaveX/Source/TrackNavigator.cpp"
-                  timestampString = "503599357.809843"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "214"
-                  endingLineNumber = "214"
-                  offsetFromSymbolStart = "58">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "TrackNavigator::mouseDown(juce::MouseEvent const&amp;)"
-                  moduleName = "WaveX"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mpue/Documents/devel/WaveX/Source/TrackNavigator.cpp"
-                  timestampString = "503599357.809975"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "214"
-                  endingLineNumber = "214"
-                  offsetFromSymbolStart = "177">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../../Source/TrackNavigator.cpp"
-            timestampString = "503614403.518586"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "115"
-            endingLineNumber = "115"
-            landmarkName = "TrackNavigator::addTrack(double sampleRate)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../../Source/TrackNavigator.cpp"
-            timestampString = "503614403.518586"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "114"
-            endingLineNumber = "114"
-            landmarkName = "TrackNavigator::addTrack(double sampleRate)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../../Source/PositionMarker.cpp"
-            timestampString = "503604605.453937"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "63"
-            endingLineNumber = "63"
-            landmarkName = "PositionMarker::getDrawPosition()"
+            startingLineNumber = "203"
+            endingLineNumber = "203"
+            landmarkName = "TrackNavigator::keyPressed(const KeyPress&amp; key, Component* originatingComponent)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -106,44 +26,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../Source/AudioRegion.cpp"
-            timestampString = "503618198.962607"
+            timestampString = "503621071.136836"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "31"
-            endingLineNumber = "31"
-            landmarkName = "AudioRegion::AudioRegion(File file, AudioFormatManager&amp; manager, double sampleRate)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../../Source/TrackNavigator.cpp"
-            timestampString = "503614505.365967"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "126"
-            endingLineNumber = "126"
-            landmarkName = "TrackNavigator::addTrack(double sampleRate)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../../Source/TrackNavigator.cpp"
-            timestampString = "503614403.518586"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "126"
-            endingLineNumber = "126"
-            landmarkName = "TrackNavigator::addTrack(double sampleRate)"
+            startingLineNumber = "84"
+            endingLineNumber = "84"
+            landmarkName = "AudioRegion::setLoop(bool loop)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -154,12 +42,92 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../Source/AudioRegion.cpp"
-            timestampString = "503618198.962607"
+            timestampString = "503621419.100748"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "120"
-            endingLineNumber = "120"
+            startingLineNumber = "206"
+            endingLineNumber = "206"
+            landmarkName = "AudioRegion::paintIfFileLoaded(Graphics&amp; g, const Rectangle&lt;int&gt;&amp; b)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Source/AudioRegion.cpp"
+            timestampString = "503622066.821925"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "212"
+            endingLineNumber = "212"
+            landmarkName = "AudioRegion::paintIfFileLoaded(Graphics&amp; g, const Rectangle&lt;int&gt;&amp; b)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Source/AudioRegion.cpp"
+            timestampString = "503621419.100748"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "194"
+            endingLineNumber = "194"
+            landmarkName = "AudioRegion::paintIfFileLoaded(Graphics&amp; g, const Rectangle&lt;int&gt;&amp; b)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Source/AudioRegion.cpp"
+            timestampString = "503621569.213089"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "168"
+            endingLineNumber = "168"
+            landmarkName = "AudioRegion::paint (Graphics&amp; g)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Source/AudioRegion.cpp"
+            timestampString = "503621606.06789"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "148"
+            endingLineNumber = "148"
             landmarkName = "AudioRegion::setZoom(float zoom)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Source/AudioRegion.cpp"
+            timestampString = "503621653.668083"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "77"
+            endingLineNumber = "77"
+            landmarkName = "AudioRegion::setLoop(bool loop)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

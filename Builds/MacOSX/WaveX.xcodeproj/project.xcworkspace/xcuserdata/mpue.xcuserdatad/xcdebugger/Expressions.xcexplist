@@ -3,6 +3,14 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "AudioRegion::paint(juce::Graphics&amp;):AudioRegion.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "b">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "AudioRegion::resized():AudioRegion.cpp">
          <PersistentStrings>
             <PersistentString
@@ -12,6 +20,9 @@
                value = "getHeight()">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AudioRegion::paintIfFileLoaded(juce::Graphics&amp;, juce::Rectangle&lt;int&gt; const&amp;):AudioRegion.cpp">
       </ContextState>
    </ContextStates>
 </VariablesViewState>
