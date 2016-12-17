@@ -80,7 +80,7 @@
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
-    <XCODE_MAC targetFolder="Builds/MacOSX" vst3Folder="" bigIcon="lEZGdF" smallIcon="jjc0e4">
+    <XCODE_MAC targetFolder="Builds/MacOSX" vst3Folder="" bigIcon="zaLFOJ" smallIcon="TGdhNR">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="WaveX"/>
         <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="WaveX"/>
