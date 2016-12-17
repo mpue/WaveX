@@ -24,7 +24,7 @@ TrackNavigator::TrackNavigator(PositionMarker* marker)
     this->selector->setSize(getWidth(), getHeight());
     this->selector->setBounds(0, 0, getWidth(), getHeight());
     addAndMakeVisible(selector);
-    this->zoom = 50;
+    this->zoom = 40;
     this->marker = marker;
 	this->position = 0;
 	manager.registerBasicFormats();
@@ -119,14 +119,15 @@ void TrackNavigator::addTrack(double sampleRate) {
     
     this->tracks.push_back(track);
     this->currentTrack = track;
-    track->toFront(true);
+    // track->toFront(true);
+    this->selector->toFront(false);
     
 	// int height = this->getParentComponent()->getHeight();
     setSize(getMaxLength() * this->zoom, tracks.size() * 200);
     track->setBounds(0, (tracks.size() - 1)  * 200, 600 * this->zoom, 200);
 	this->marker->setSize(getWidth(), getHeight());
 	this->marker->setLength(getMaxLength());
-    this->selector->setSize(getWidth(), 200);
+    this->selector->setSize(getWidth(), getHeight());
     
     constrainer.setRaster(this->zoom / 4);
     
@@ -203,6 +204,11 @@ bool TrackNavigator::keyPressed(const KeyPress& key, Component* originatingCompo
             tracks.at(i)->toggleLoopSelection();
         }
     }
+    else if (key.getTextCharacter() == 'd') {
+        for (int i = 0; i < tracks.size();i++) {
+            tracks.at(i)->duplicateSelectedRegions();
+        }
+    }
     
     return true;
 }
@@ -258,17 +264,17 @@ void TrackNavigator::mouseDown (const MouseEvent& event) {
     else if (Track* r = dynamic_cast<Track*>(event.eventComponent)) {
         for (int i = 0; i < tracks.size();i++) {
             tracks.at(i)->setSelected(false);
+            tracks.at(i)->clearSelection();
+            tracks.at(i)->setCurrentMarkerPosition(marker->getDrawPosition());
         }
+
         r->setSelected(true);
         currentTrack = r;
         sendChangeMessage();
     }
     else {
-
         
         if (tracks.size() > 0) {
-
-            
             if (event.mods.isLeftButtonDown()) {
                 for (int i = 0; i < tracks.size();i++) {
                     

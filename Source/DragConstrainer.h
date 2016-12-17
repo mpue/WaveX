@@ -35,7 +35,9 @@ public:
                               bool isStretchingRight) override {
         if (bounds.getY() != previousBounds.getY()) {
             bounds.setY(previousBounds.getY());
-
+        }
+        if (bounds.getX() < 0) {
+            bounds.setX(0);
         }
         bounds.setX(snap(bounds.getX(),this->raster));
     }

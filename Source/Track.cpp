@@ -46,12 +46,53 @@ void Track::toggleLoopSelection() {
     }
 }
 
+void Track::duplicateSelectedRegions() {
+    
+    vector<AudioRegion*> selected;
+    
+    for (std::vector<AudioRegion*>::iterator it = regions.begin(); it != regions.end(); ++it) {
+        if((*it)->isSelected())
+            selected.push_back((*it));
+    }
+    
+    for (int i = 0;i < selected.size();i++) {
+        duplicateRegion(selected.at(i));
+    }
+    
+    selected.clear();
+    
+}
+
+void Track::duplicateRegion(AudioRegion *region) {
+    AudioRegion* duplicate = new AudioRegion(region,manager, sampleRate);
+    Rectangle<int>* bounds = new Rectangle<int>(0, 0, region->getThumbnail()->getTotalLength() * 20, 200);
+    duplicate->setBounds(region->getWidth() + region->getX(), 0, region->getWidth(), region->getHeight());
+    duplicate->setThumbnailBounds(bounds);
+    duplicate->setLoopCount(0);
+    if (zoom > 0)
+        duplicate->setZoom(zoom);
+    
+    this->regions.push_back(duplicate);
+    this->currentRegion = duplicate;
+    
+    this->currentRegion->toFront(true);
+    addAndMakeVisible(duplicate);
+    
+    clearSelection();
+    duplicate->setSelected(true);
+    duplicate->setSampleOffset(region->getSampleOffset() + region->getNumSamples());
+    duplicate->setOffset(region->getOffset() + region->getWidth());
+    
+    repaint();
+}
+
 void Track::addRegion(File file, double sampleRate) {
 
 	AudioRegion* region = new AudioRegion(file, manager, sampleRate);
 	Rectangle<int>* bounds = new Rectangle<int>(0, 0, region->getThumbnail()->getTotalLength() * 20, 200);
+    region->setBounds(markerPosition, 0, region->getWidth(), region->getHeight());
 	region->setThumbnailBounds(bounds);
-    region->setLoopCount(3);
+    region->setLoopCount(0);
 	if (zoom > 0)
 		region->setZoom(zoom);
 
@@ -60,6 +101,16 @@ void Track::addRegion(File file, double sampleRate) {
 
     this->currentRegion->toFront(true);
     addAndMakeVisible(region);
+    
+    clearSelection();
+    region->setSelected(true);
+    
+    long sampleNum = (this->maxLength / (this->maxLength * zoom)) * markerPosition * sampleRate;
+    region->setSampleOffset(sampleNum);
+    
+    region->setSampleOffset(sampleNum);
+    region->setOffset(markerPosition);
+    
 	repaint();
 }
 
@@ -95,48 +146,41 @@ float Track::getVolume()
 	return volume;
 }
 
-const float Track::getSample(int channel, long sample) {
+AudioRegion* Track::getCurrentRegion(long sample) {
+    
+    AudioRegion* current = NULL;
     
     for (std::vector<AudioRegion*>::iterator it = regions.begin(); it != regions.end(); ++it) {
+        
         AudioRegion* r = *it;
         
         long len = r->getBuffer()->getNumSamples();
+        long offset = r->getSampleOffset();
         
-        if (r->isLoop()) {
-            if (sample % len >= r->getSampleOffset() && sample % len < (r->getSampleOffset() + r->getBuffer()->getNumSamples())) {
-                currentRegion = r;
-                break;
-            }
+        if (sample >= offset && sample < (offset + len)) {
+            current = r;
+            break;
         }
-        else {
-            if (sample >= r->getSampleOffset() && sample < (r->getSampleOffset() + r->getBuffer()->getNumSamples())) {
-                currentRegion = r;
-                break;
-            }
-        }
+        
     }
     
-    long len = currentRegion->getBuffer()->getNumSamples();
+    return current;
     
-    // sample index is not within sample range of current region
-    if (currentRegion->isLoop()) {
-        if (sample % len < currentRegion->getSampleOffset() || sample % len >= (currentRegion->getSampleOffset() + currentRegion->getBuffer()->getNumSamples())) {
-            return 0;
-        }
+}
+
+const float Track::getSample(int channel, long sample) {
+    
+
+    this->currentRegion = getCurrentRegion(sample);
+    
+    if (this->currentRegion != NULL) {
+        long offset = currentRegion->getSampleOffset();
+        return this->currentRegion->getBuffer()->getReadPointer(channel)[(long)sample - offset];
     }
     else {
-        if (sample < currentRegion->getSampleOffset() || sample >= (currentRegion->getSampleOffset() + currentRegion->getBuffer()->getNumSamples())) {
-            return 0;
-        }
+        return 0;
     }
 
-    
-    // Logger::getCurrentLogger()->writeToLog(String(sample - currentRegion->getSampleOffset()));
-    
-    // cout << "Sample : " << sample << " offset : " << currentRegion->getSampleOffset() << " numSamples " << currentRegion->getBuffer()->getNumSamples() << endl;
-    
-    
-    return this->currentRegion->getBuffer()->getReadPointer(channel)[(long)(sample % len - currentRegion->getSampleOffset())];
 }
 
 const float * Track::getReadBuffer(int channel)
@@ -174,16 +218,7 @@ void Track::paint (Graphics& g)
 	}
 	
     g.fillAll();
-    
-    /*
-	for (int i = 0; i < regions.size();i++) {
-        if (regions.at(i)->isLoop()) {
-            regions.at(i)->paint(g);
-        }
-		
-	}
-     */
-    
+     
 }
 
 void Track::resized()
@@ -204,4 +239,8 @@ int Track::getOffset()
 AudioSampleBuffer * Track::getBuffer()
 {
 	return this->currentRegion->getBuffer();
+}
+
+void Track::setCurrentMarkerPosition(int position) {
+    this->markerPosition = position;
 }

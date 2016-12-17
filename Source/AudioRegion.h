@@ -19,6 +19,9 @@
 class AudioRegion : public Component,  public ChangeListener
 {
 public:
+    
+    
+    AudioRegion(AudioRegion* other, AudioFormatManager& manager, double sampleRate);
     AudioRegion(File file, AudioFormatManager& manager,double sampleRate);
     ~AudioRegion();
 
@@ -42,6 +45,7 @@ public:
     void setDynOffset(int offset);
 	int getOffset();
     void setLoopCount(int count);
+    int getLoopCount();
     
     long getSampleOffset();
     void setSampleOffset(long offset);

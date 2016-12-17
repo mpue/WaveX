@@ -69,6 +69,7 @@ private:
     Track* track;
     CustomLookAndFeel* clf;
 	bool selected;
+    ResizableEdgeComponent* resizer;
     //[/UserVariables]
 
     //==============================================================================

@@ -53,6 +53,13 @@ public:
 	double magnitudeLeft = 0;
 	double magnitudeRight = 0;
 
+    AudioRegion* getCurrentRegion(long sample);
+    
+    void duplicateSelectedRegions();
+    void duplicateRegion(AudioRegion* region);
+    
+    void setCurrentMarkerPosition(int position);
+    
 private:
 
 	float zoom = 20;
@@ -68,7 +75,8 @@ private:
 	double maxLength = 600 * this->sampleRate;
 	int offset = 0;
 	AudioSampleBuffer* audioBuffer;
-
+    int markerPosition = 0;
+    int bufferSize;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Track)
 };

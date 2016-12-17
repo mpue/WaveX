@@ -112,18 +112,37 @@ public:
          
         if (navigator->isPlaying()) {
             for (int i = 0; i < navigator->getTracks().size();i++) {
-                // const float* trackBufferL = navigator->getTracks().at(i)->getReadBuffer(0);
-                // const float* trackBufferR = navigator->getTracks().at(i)->getReadBuffer(1);
                 for (int j = numSamples; j < numSamples + this->buffersize;j++) {
                     bufferToFill.buffer->addSample(0, j%this->buffersize, navigator->getTracks().at(i)->getSample(0, j) * leftVolume * navigator->getTracks().at(i)->getVolume());
-                    bufferToFill.buffer->addSample(1, j%this->buffersize, navigator->getTracks().at(i)->getSample(1, j) * leftVolume * navigator->getTracks().at(i)->getVolume());
+                    bufferToFill.buffer->addSample(1, j%this->buffersize, navigator->getTracks().at(i)->getSample(1, j) * rightVolume * navigator->getTracks().at(i)->getVolume());
                 }
-                navigator->getTracks().at(i)->magnitudeLeft = bufferToFill.buffer->getMagnitude(0, bufferToFill.startSample, bufferToFill.numSamples);
-                navigator->getTracks().at(i)->magnitudeRight = bufferToFill.buffer->getMagnitude(1, bufferToFill.startSample, bufferToFill.numSamples);
 				navigator->getTracks().at(i)->setOffset(numSamples);
+                
+                AudioRegion* ar = navigator->getTracks().at(i)->getCurrentRegion(numSamples);
+            
+                if (ar != NULL) {
+                    
+                    if (numSamples - ar->getSampleOffset() + this->buffersize < ar->getBuffer()->getNumSamples()) {
+                        navigator->getTracks().at(i)->magnitudeLeft  = ar->getBuffer()->getMagnitude(0, numSamples - ar->getSampleOffset() , this->buffersize);
+                        navigator->getTracks().at(i)->magnitudeRight = ar->getBuffer()->getMagnitude(1, numSamples - ar->getSampleOffset() , this->buffersize);
+                    }
+                    else {
+                        navigator->getTracks().at(i)->magnitudeLeft = 0;
+                        navigator->getTracks().at(i)->magnitudeRight = 0;
+                    }
+                    
+                }
+                
             }
             numSamples += this->buffersize;
             navigator->setPosition(numSamples / this->sampleRate);
+            
+        }
+        else {
+            for (int i = 0; i < navigator->getTracks().size();i++) {
+                navigator->getTracks().at(i)->magnitudeLeft = 0;
+                navigator->getTracks().at(i)->magnitudeRight = 0;
+            }
         }
         
         /*
@@ -210,12 +229,7 @@ public:
     }
     
     void addTrack() {
-
 		navigator->addTrack(this->sampleRate);
-
-		/*
-
-		*/
     }
     
     void openSettings() {

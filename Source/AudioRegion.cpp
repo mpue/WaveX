@@ -11,11 +11,42 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "AudioRegion.h"
 
+AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double sampleRate) {
+    
+    // resizerR = new ResizableEdgeComponent(this,nullptr,ResizableEdgeComponent::rightEdge);
+    // resizerL = new ResizableEdgeComponent(this,nullptr,ResizableEdgeComponent::leftEdge);
+    
+    this->sampleRate = sampleRate;
+    
+    this->thumbnailCache = new AudioThumbnailCache(1);
+    this->thumbnail = new AudioThumbnail(512, manager, *this->thumbnailCache);
+    this->thumbnail->addChangeListener(this);
+    
+    audioBuffer = new AudioSampleBuffer(2, other->getBuffer()->getNumSamples());
+    audioBuffer->copyFrom(0, 0, *other->getBuffer(), 0, 0, other->getNumSamples());
+    audioBuffer->copyFrom(1, 0, *other->getBuffer(), 1, 0, other->getNumSamples());
+    
+    this->thumbnail->reset(2, sampleRate);
+    this->thumbnail->addBlock(0, *audioBuffer, 0,other->getNumSamples());
+    
+    this->name = other->getName();
+    this->zoom = 20;
+    
+    double length = this->thumbnail->getTotalLength();
+    setSize(length * this->zoom, 200);
+    
+    this->volume = 1;
+    this->offset = 0;
+    
+    // addAndMakeVisible(resizerL);
+    // addAndMakeVisible(resizerR);
+}
+
 //==============================================================================
 AudioRegion::AudioRegion(File file, AudioFormatManager& manager, double sampleRate)
 {
-    resizerR = new ResizableEdgeComponent(this,nullptr,ResizableEdgeComponent::rightEdge);
-    resizerL = new ResizableEdgeComponent(this,nullptr,ResizableEdgeComponent::leftEdge);
+    // resizerR = new ResizableEdgeComponent(this,nullptr,ResizableEdgeComponent::rightEdge);
+    // resizerL = new ResizableEdgeComponent(this,nullptr,ResizableEdgeComponent::leftEdge);
 
 	this->sampleRate = sampleRate;
 
@@ -25,11 +56,9 @@ AudioRegion::AudioRegion(File file, AudioFormatManager& manager, double sampleRa
     this->thumbnailCache = new AudioThumbnailCache(1);
     this->thumbnail = new AudioThumbnail(512, manager, *this->thumbnailCache);
     this->thumbnail->addChangeListener(this);
-
     
     audioBuffer = new AudioSampleBuffer(2, reader->lengthInSamples);
     reader->read(audioBuffer, 0, reader->lengthInSamples, 0, true, true);
-
 
     this->thumbnail->reset(2, sampleRate);
     this->thumbnail->addBlock(0, *audioBuffer, 0,reader->lengthInSamples);
@@ -40,8 +69,8 @@ AudioRegion::AudioRegion(File file, AudioFormatManager& manager, double sampleRa
     this->volume = 1;
 	this->offset = 0;
     
-    addAndMakeVisible(resizerL);
-    addAndMakeVisible(resizerR);
+    // addAndMakeVisible(resizerL);
+    // addAndMakeVisible(resizerR);
 }
 
 AudioRegion::~AudioRegion()
@@ -49,8 +78,8 @@ AudioRegion::~AudioRegion()
     delete this->thumbnailCache;
     delete this->thumbnail;
     delete this->audioBuffer;
-    delete this->resizerL;
-    delete this->resizerR;
+    // delete this->resizerL;
+    // delete this->resizerR;
 }
 
 int AudioRegion::getNumSamples() {
@@ -66,6 +95,10 @@ void AudioRegion::setSelected(bool selected)
 bool AudioRegion::isSelected()
 {
 	return this->selected;
+}
+
+int AudioRegion::getLoopCount() {
+    return this->loopCount;
 }
 
 void AudioRegion::setLoopCount(int count) {
@@ -147,13 +180,13 @@ void AudioRegion::setZoom(float zoom) {
     else {
         setSize(this->thumbnail->getTotalLength() * this->zoom, 200);
     }
-    
+    /*
     resizerR->setSize(5, getHeight());
     resizerR->setTopLeftPosition(getWidth() - 5, 0);
     
     resizerL->setSize(5, getHeight());
     resizerL->setTopLeftPosition(0, 0);
-    
+    */
     // setBounds(0,0,this->thumbnail->getTotalLength() * this->zoom, 200);
     this->thumbnailBounds->setSize(this->thumbnail->getTotalLength() * this->zoom, 200);
     repaint();
@@ -201,6 +234,8 @@ void AudioRegion::paintIfFileLoaded(Graphics& g, const Rectangle<int>& b)
                                   audioLength,
                                   1.0f);
     
+    g.setColour(Colours::steelblue.darker());    
+    g.drawRoundedRectangle(b.getX(),b.getY(),b.getWidth(),b.getHeight(),10,1.0f);
     
     if(loop) {
         for (int i = 1; i <= loopCount;i++) {
@@ -224,9 +259,9 @@ void AudioRegion::paintIfFileLoaded(Graphics& g, const Rectangle<int>& b)
 void AudioRegion::resized()
 {
     if (this->thumbnail->getNumChannels() > 0) {
-        // resizer->setSize(5, getHeight());
-        resizerR->setTopLeftPosition(getWidth() - 5, 0);
-        resizerL->setTopLeftPosition(0, 0);
+
+        // resizerR->setTopLeftPosition(getWidth() - 5, 0);
+        // resizerL->setTopLeftPosition(0, 0);
     }
 
 }

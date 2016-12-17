@@ -50,7 +50,9 @@ Rectangle<int> WaveSelector::getSelectedRange() {
 }
 
 void WaveSelector::setSelectedRange(int start, int end){
-	this->selectionStart = start;
+    Logger::getCurrentLogger()->writeToLog("Selection range : "+String(start)+","+String(end));
+    
+    this->selectionStart = start;
 	this->selectionEnd = end;
 	repaint();
     sendChangeMessage();
