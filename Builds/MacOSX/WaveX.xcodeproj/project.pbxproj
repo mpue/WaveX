@@ -377,6 +377,7 @@
 		458D60B8E50DA6389C411308 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_Javascript.cpp"; path = "../../../../../Downloads/JUCE/modules/juce_core/javascript/juce_Javascript.cpp"; sourceTree = "SOURCE_ROOT"; };
 		45CAB0A233A6B9279983DC9F = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_MidiOutput.h"; path = "../../../../../Downloads/JUCE/modules/juce_audio_devices/midi_io/juce_MidiOutput.h"; sourceTree = "SOURCE_ROOT"; };
 		45E9E4893270D5A4FA79D23E = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_NamedValueSet.cpp"; path = "../../../../../Downloads/JUCE/modules/juce_core/containers/juce_NamedValueSet.cpp"; sourceTree = "SOURCE_ROOT"; };
+		461ABED8130767E5B883A515 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TrackPropertyConstrainer.h; path = ../../Source/TrackPropertyConstrainer.h; sourceTree = "SOURCE_ROOT"; };
 		46B48409DA85EB235EC35B4B = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_CallOutBox.h"; path = "../../../../../Downloads/JUCE/modules/juce_gui_basics/windows/juce_CallOutBox.h"; sourceTree = "SOURCE_ROOT"; };
 		46F6A82C8273CDA98F0D8B2F = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = crc.c; path = "../../../../../Downloads/JUCE/modules/juce_audio_formats/codecs/flac/libFLAC/crc.c"; sourceTree = "SOURCE_ROOT"; };
 		470EEF265CD41E566F40546D = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_MD5.h"; path = "../../../../../Downloads/JUCE/modules/juce_cryptography/hashing/juce_MD5.h"; sourceTree = "SOURCE_ROOT"; };
@@ -1324,6 +1325,7 @@
 					62B94CAA3BD547734D62D165,
 					2AE678DAB83ACFEC347CA06A,
 					19DF38ADD798A840E9387D62,
+					461ABED8130767E5B883A515,
 					AD72D6626D5DBCD96E132F88,
 					EDB1B82BB1BC5272E4D9EDD9,
 					0CB6C517E7462A4DDCEDC6B6,

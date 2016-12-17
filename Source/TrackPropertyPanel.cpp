@@ -23,7 +23,6 @@
 
 #include "TrackPropertyPanel.h"
 
-
 //[MiscUserDefs] You can add your own user definitions and misc code here...
 //[/MiscUserDefs]
 
@@ -94,7 +93,10 @@ TrackPropertyPanel::TrackPropertyPanel ()
 
 
     //[UserPreSize]
-    resizer = new ResizableEdgeComponent(this,nullptr,ResizableEdgeComponent::bottomEdge);
+    
+    constrainer = new TrackPropertyConstrainer(50,200);
+    
+    resizer = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::bottomEdge);
     addAndMakeVisible(resizer);
     //[/UserPreSize]
 
@@ -126,6 +128,7 @@ TrackPropertyPanel::~TrackPropertyPanel()
 
     //[Destructor]. You can add your own custom destruction code here..
     delete resizer;
+    delete constrainer;
     //[/Destructor]
 }
 
@@ -158,8 +161,6 @@ void TrackPropertyPanel::resized()
 {
     //[UserPreResize] Add your own custom resize code here..
     
-    Logger::getCurrentLogger()->writeToLog(getBounds().toString());
-    
     //[/UserPreResize]
 
     nameLabel->setBounds (8, 8, 136, 24);
@@ -173,6 +174,9 @@ void TrackPropertyPanel::resized()
     label3->setBounds (32, 128, 32, 16);
     //[UserResized] Add your own custom resize handling here..
     resizer->setBounds(0,getHeight()-5, getWidth(),5);
+    
+    if (track != NULL)
+        track->setBounds(0, track->getY(), track->getWidth(), getHeight());
     //[/UserResized]
 }
 

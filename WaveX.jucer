@@ -60,6 +60,8 @@
             file="Source/TrackNavigator.cpp"/>
       <FILE id="dgyuAJ" name="TrackNavigator.h" compile="0" resource="0"
             file="Source/TrackNavigator.h"/>
+      <FILE id="Gi1b7Z" name="TrackPropertyConstrainer.h" compile="0" resource="0"
+            file="Source/TrackPropertyConstrainer.h"/>
       <FILE id="bxh5a1" name="TrackPropertyPanel.cpp" compile="1" resource="0"
             file="Source/TrackPropertyPanel.cpp"/>
       <FILE id="syCPcL" name="TrackPropertyPanel.h" compile="0" resource="0"

@@ -94,14 +94,14 @@ TransportPanel::TransportPanel (MainContentComponent* mcc)
 
     //[Constructor] You can add your own custom stuff here..
     mode = STOP;
-
+    
     /*
 	ds = new DropShadow(Colour::fromFloatRGBA(0, 0, 0, 0.5), 3, Point<int>(3, 3));
 	d = new DropShadower(*ds);
 	d->setOwner(this);
     */
 
-    startTimer(100);
+    
     //[/Constructor]
 }
 
@@ -164,16 +164,16 @@ void TransportPanel::buttonClicked (Button* buttonThatWasClicked)
     {
         //[UserButtonCode_stopButton] -- add your button handler code here..
         mode = STOP;
+        stopTimer();
         mcc->getNavigator()->setPlaying(false);
-        mcc->getMarker()->setPlaying(false);
         //[/UserButtonCode_stopButton]
     }
     else if (buttonThatWasClicked == playButton)
     {
         //[UserButtonCode_playButton] -- add your button handler code here..
         mode = PLAY;
+        startTimer(100);
         mcc->getNavigator()->setPlaying(true);
-        mcc->getMarker()->setPlaying(true);
         //[/UserButtonCode_playButton]
     }
     else if (buttonThatWasClicked == backButton)
@@ -201,11 +201,9 @@ void TransportPanel::buttonClicked (Button* buttonThatWasClicked)
         mode = PAUSE;
         if (mcc->getNavigator()->isPlaying()) {
             mcc->getNavigator()->setPlaying(false);
-            mcc->getMarker()->setPlaying(false);
         }
         else {
             mcc->getNavigator()->setPlaying(true);
-            mcc->getMarker()->setPlaying(true);
         }
         //[/UserButtonCode_pauseButton]
     }
@@ -232,7 +230,7 @@ TransportPanel::TransportMode TransportPanel::getTransportMode() {
 }
 
 void TransportPanel::changeListenerCallback(ChangeBroadcaster * source) {
-
+    timeLabel->setText(TimeLine::secondsToTime(mcc->getNavigator()->getPosition()), juce::NotificationType::dontSendNotification);
 }
 
 void TransportPanel::timerCallback() {

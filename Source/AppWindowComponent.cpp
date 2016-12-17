@@ -77,6 +77,8 @@ AppWindowComponent::AppWindowComponent()
     this->transport = new TransportPanel(mcc);
     this->transport->setBounds(350,0,320,50);
     
+    mcc->getNavigator()->addChangeListener(transport);
+    
     this->toolbar = new ToolbarPanel(mcc);
     this->toolbar->setBounds(150, 0, 200, 50);
     

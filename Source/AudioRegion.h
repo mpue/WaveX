@@ -61,7 +61,7 @@ private:
     AudioThumbnail* thumbnail;
     AudioThumbnailCache* thumbnailCache;
     ScopedPointer<AudioFormatReaderSource> readerSource;
-    Rectangle<int>* thumbnailBounds;
+    Rectangle<int>* thumbnailBounds = NULL;
     float zoom;
     String name;
     float volume;

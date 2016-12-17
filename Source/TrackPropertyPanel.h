@@ -23,7 +23,8 @@
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "Track.h"
-#include "CustomLookAndFeel.h""
+#include "CustomLookAndFeel.h"
+#include "TrackPropertyConstrainer.h"
 //[/Headers]
 
 
@@ -66,10 +67,11 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-    Track* track;
+    Track* track = NULL;
     CustomLookAndFeel* clf;
 	bool selected;
     ResizableEdgeComponent* resizer;
+    TrackPropertyConstrainer* constrainer;
     //[/UserVariables]
 
     //==============================================================================

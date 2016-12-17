@@ -16,7 +16,7 @@
 //==============================================================================
 /*
 */
-class PositionMarker    : public Component, public Timer, public ChangeListener
+class PositionMarker    : public Component
 {
 public:
     PositionMarker(double lengthInSeconds);
@@ -30,14 +30,14 @@ public:
     double getDrawPosition();
     
     void setDrawingBounds(int x, int y, int width, int height);
-    void setPlaying(bool playing);
-	virtual void changeListenerCallback(ChangeBroadcaster * source) override;
+    
+    void setSize(int width, int height);
+    
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PositionMarker)
     double length;
 	double audioPosition;
 	double drawPosition;
-    void timerCallback() override;
     bool playing;
     int x;
     int y;

@@ -55,6 +55,7 @@ public:
 
     AudioRegion* getCurrentRegion(long sample);
     
+    void removeSelectedRegions();
     void duplicateSelectedRegions();
     void duplicateRegion(AudioRegion* region);
     

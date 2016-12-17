@@ -125,13 +125,13 @@ void TrackNavigator::addTrack(double sampleRate) {
 	// int height = this->getParentComponent()->getHeight();
     setSize(getMaxLength() * this->zoom, tracks.size() * 200);
     track->setBounds(0, (tracks.size() - 1)  * 200, 600 * this->zoom, 200);
-	this->marker->setSize(getWidth(), getHeight());
+	this->marker->setSize(2, getHeight());
 	this->marker->setLength(getMaxLength());
     this->selector->setSize(getWidth(), getHeight());
     
     constrainer.setRaster(this->zoom / 4);
     
-    repaint();
+    // repaint();
 	sendChangeMessage();    
 }
 
@@ -148,7 +148,7 @@ void TrackNavigator::resized()
         numOfTracks = 1;
     }
     
-	this->marker->setSize(getWidth(), getHeight());
+	this->marker->setSize(2, getHeight());
 	this->marker->setDrawingBounds(0, 25, getWidth(), getHeight());
 }
 
@@ -170,12 +170,10 @@ bool TrackNavigator::keyPressed(const KeyPress& key, Component* originatingCompo
         if (isPlaying())
         {
             setPlaying(false);
-            marker->setPlaying(false);
         }
         else
         {
             setPlaying(true);
-            marker->setPlaying(true);
         }
         
     }
@@ -207,6 +205,11 @@ bool TrackNavigator::keyPressed(const KeyPress& key, Component* originatingCompo
     else if (key.getTextCharacter() == 'd') {
         for (int i = 0; i < tracks.size();i++) {
             tracks.at(i)->duplicateSelectedRegions();
+        }
+    }
+    else if (key.getTextCharacter() == 'x') {
+        for (int i = 0; i < tracks.size();i++) {
+            tracks.at(i)->removeSelectedRegions();
         }
     }
     

@@ -46,6 +46,20 @@ void Track::toggleLoopSelection() {
     }
 }
 
+void Track::removeSelectedRegions() {
+    
+    for (std::vector<AudioRegion*>::iterator it = regions.begin(); it != regions.end();) {
+        if( (*it)->isSelected() ) {
+            delete * it;
+            it = regions.erase(it);
+        }
+        else {
+            ++it;
+        }
+    }
+    
+}
+
 void Track::duplicateSelectedRegions() {
     
     vector<AudioRegion*> selected;
@@ -223,7 +237,10 @@ void Track::paint (Graphics& g)
 
 void Track::resized()
 {
-
+    for (std::vector<AudioRegion*>::iterator it = regions.begin(); it != regions.end(); ++it) {
+        (*it)->setSize((*it)->getWidth(), getHeight());
+        (*it)->setZoom(zoom);
+    }
 }
 
 void Track::setOffset(int offset)

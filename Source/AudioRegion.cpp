@@ -175,10 +175,10 @@ void AudioRegion::setZoom(float zoom) {
     this->zoom = zoom;
     
     if (loop) {
-        setSize(this->thumbnail->getTotalLength() * (loopCount + 1) * this->zoom, 200);
+        setSize(this->thumbnail->getTotalLength() * (loopCount + 1) * this->zoom, getHeight());
     }
     else {
-        setSize(this->thumbnail->getTotalLength() * this->zoom, 200);
+        setSize(this->thumbnail->getTotalLength() * this->zoom, getHeight());
     }
     /*
     resizerR->setSize(5, getHeight());
@@ -188,7 +188,7 @@ void AudioRegion::setZoom(float zoom) {
     resizerL->setTopLeftPosition(0, 0);
     */
     // setBounds(0,0,this->thumbnail->getTotalLength() * this->zoom, 200);
-    this->thumbnailBounds->setSize(this->thumbnail->getTotalLength() * this->zoom, 200);
+    this->thumbnailBounds->setSize(this->thumbnail->getTotalLength() * this->zoom, getHeight());
     repaint();
 }
 
@@ -258,12 +258,10 @@ void AudioRegion::paintIfFileLoaded(Graphics& g, const Rectangle<int>& b)
 
 void AudioRegion::resized()
 {
-    if (this->thumbnail->getNumChannels() > 0) {
-
-        // resizerR->setTopLeftPosition(getWidth() - 5, 0);
-        // resizerL->setTopLeftPosition(0, 0);
-    }
-
+    Logger::getCurrentLogger()->writeToLog(String(getHeight()));
+    
+    if (this->thumbnailBounds != NULL)
+        this->thumbnailBounds->setHeight(getHeight());
 }
 
 AudioThumbnail* AudioRegion::getThumbnail() {

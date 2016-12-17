@@ -40,8 +40,8 @@ public:
         this->navigator->setSize(getWidth(), getHeight());
         this->navigator->setBounds(0, 0, getWidth(), getHeight());
         
-        this->marker->setSize(getWidth(), getHeight());
-        this->marker->setBounds(0, 0, getWidth(), getHeight());
+        // this->marker->setSize(getWidth(), getHeight());
+        this->marker->setBounds(0, 0, 2, getHeight());
 		
         addAndMakeVisible(navigator);
 		// addChildComponent(timeLine);
@@ -315,13 +315,11 @@ private:
 			if (navigator->isPlaying())
 			{
                 navigator->setPlaying(false);
-                marker->setPlaying(false);
 			}
 			else
 			{
 				// transportSource.setPosition(0);
 				navigator->setPlaying(true);
-                marker->setPlaying(true);
 			}
 		}
         else if (menuItemID == 3) {
@@ -364,6 +362,8 @@ private:
             
             this->numSamples = navigator->getPosition() * this->sampleRate - ((long)(navigator->getPosition() * this->sampleRate) % this->buffersize) ;
         
+            marker->setPosition(navigator->getPosition());
+            
 			this->zoom = navigator->getZoom();
 			int newWidth = navigator->getMaxLength() * this->zoom;
             setSize(newWidth, getHeight());

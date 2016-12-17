@@ -31,17 +31,17 @@ void PositionMarker::paint (Graphics& g)
 	if (length > 0) {
 		this->drawPosition = (audioPosition / length) * this->width + this->x;
 	}
-        
+    setTopLeftPosition(this->drawPosition, 0);
     g.setColour(Colours::green);    
-    g.drawLine(this->drawPosition, this->y, this->drawPosition, this->height, 2.0f);
+    g.fillAll();
+}
+
+void PositionMarker::setSize(int width, int height) {
+    Component::setSize(2, height);
 }
 
 void PositionMarker::resized()
 {
-}
-
-void PositionMarker::setPlaying(bool playing) {
-    this->playing = playing;
 }
 
 void PositionMarker::setLength(double lengthInSeconds) {
@@ -67,12 +67,6 @@ double PositionMarker::getPosition() {
     return audioPosition;
 }
 
-void PositionMarker::timerCallback() {
-    if (length > 0 && playing) {
-        repaint();
-    }
-}
-
 void PositionMarker::setDrawingBounds(int x, int y, int width, int height) {
     this->x = x;
     this->y = y;
@@ -80,7 +74,3 @@ void PositionMarker::setDrawingBounds(int x, int y, int width, int height) {
     this->height = height;
 }
 
-void PositionMarker::changeListenerCallback(ChangeBroadcaster * source)
-{
-    repaint();
-}

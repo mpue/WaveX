@@ -1733,6 +1733,7 @@
     <ClInclude Include="..\..\Source\ToolbarPanel.h"/>
     <ClInclude Include="..\..\Source\Track.h"/>
     <ClInclude Include="..\..\Source\TrackNavigator.h"/>
+    <ClInclude Include="..\..\Source\TrackPropertyConstrainer.h"/>
     <ClInclude Include="..\..\Source\TrackPropertyPanel.h"/>
     <ClInclude Include="..\..\Source\TrackPropertyView.h"/>
     <ClInclude Include="..\..\Source\TransportPanel.h"/>
