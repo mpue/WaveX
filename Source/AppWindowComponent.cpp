@@ -18,7 +18,7 @@ AppWindowComponent::AppWindowComponent()
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
     
-    this->offsetBottom = 75;
+    this->offsetBottom = 275;
     
     Rectangle<int> r = Desktop::getInstance().getDisplays().getMainDisplay().userArea;
     
@@ -120,6 +120,7 @@ void AppWindowComponent::resized()
     Rectangle<int> area(getLocalBounds());
     // this->menu->setBounds(area.removeFromTop(LookAndFeel::getDefaultLookAndFeel().getDefaultMenuBarHeight()));
     viewport->setSize(getWidth() - 150, getHeight() - this->offsetBottom);
+    this->trackProperties->setBounds(0, 75, 150, getHeight() - this->offsetBottom);
     // viewport->setBounds(getX(), getY()  ,getWidth(),getHeight() - this->offsetBottom);
 
 }

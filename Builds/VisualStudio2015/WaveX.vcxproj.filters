@@ -391,6 +391,9 @@
     <ClCompile Include="..\..\Source\MasterChannelPanel.cpp">
       <Filter>WaveX\Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\MixerPanel.cpp">
+      <Filter>WaveX\Source</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\PositionMarker.cpp">
       <Filter>WaveX\Source</Filter>
     </ClCompile>
@@ -2167,6 +2170,9 @@
       <Filter>WaveX\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\MasterChannelPanel.h">
+      <Filter>WaveX\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\MixerPanel.h">
       <Filter>WaveX\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\PositionMarker.h">
@@ -4037,6 +4043,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\Resources\Fader.png">
+      <Filter>WaveX\Resources</Filter>
+    </None>
     <None Include="..\..\Resources\font-awesome_4-7-0_copy_24_0_000000_none.png">
       <Filter>WaveX\Resources</Filter>
     </None>

@@ -20,6 +20,7 @@
 #include "TrackPropertyView.h"
 #include "ToolbarPanel.h"
 #include "InfoPanel.h"
+#include "MixerPanel.h"
 
 //==============================================================================
 /*
@@ -43,6 +44,7 @@ private:
 	TrackPropertyView* trackProperties = NULL;
     ScopedPointer<ToolbarPanel> toolbar;
 	ScopedPointer<InfoPanel> infoPanel;
+    ScopedPointer<MixerPanel> mixer;
 	TimeLine* timeLine;
 
     int dragstartX;

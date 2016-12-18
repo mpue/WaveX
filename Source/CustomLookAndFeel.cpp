@@ -39,6 +39,18 @@ void CustomLookAndFeel::drawLinearSlider (Graphics& g, int x, int y, int width, 
         // g.fillRect((float)x,from,(float)width,to);
 
     }
+    else if (style == Slider::SliderStyle::LinearVertical) {
+        Image fader = ImageCache::getFromMemory(BinaryData::Fader_png,BinaryData::Fader_pngSize);
+        
+
+        float from  = (sliderPos / maxSliderPos) * height;
+        LookAndFeel_V3::drawLinearSliderBackground(g, x, y, width, height, sliderPos, minSliderPos, maxSliderPos, style, slider);
+        
+        
+        g.setColour(Colours::white);
+        g.drawImageAt(fader.rescaled(fader.getWidth(), fader.getHeight()/2),0, from - fader.getHeight()/4 );
+        
+    }
     else {
         LookAndFeel_V3::drawLinearSlider(g, x, y, width, height, sliderPos, minSliderPos, maxSliderPos, style, slider);
     }

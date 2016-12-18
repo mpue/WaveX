@@ -69,11 +69,13 @@ public:
         this->leftVolume = 1.0;
         this->rightVolume = 1.0;
         
-        setAudioChannels(0,2);
+        setAudioChannels(2,2);
         
         deviceManager.setMidiInputEnabled("MPKmini2", true);
         deviceManager.addMidiInputCallback("MPKmini2",this);
     
+        apfm = new AudioPluginFormatManager();
+        apfm->addDefaultFormats();
         
 		this->numSamples = 0;
     }
@@ -92,8 +94,8 @@ public:
         navigator = nullptr;
         marker = nullptr;
 		timeLine = nullptr;
-        delete buffer;
-        delete win;
+        buffer = nullptr;
+        apfm = nullptr;
     
     }
     
@@ -315,28 +317,65 @@ public:
     
     void addPlugin(String name) {
         
-        AudioPluginFormatManager* apfm = new AudioPluginFormatManager();
-        apfm->addDefaultFormats();
+        if (plugin == nullptr) {
+            String error = String("Error");
+            PluginDescription pd;
+            
+            File preset = File("/Users/mpue/plugins/"+name);
+            ScopedPointer<XmlElement> xml = XmlDocument(preset).getDocumentElement();
+            pd.loadFromXml(*xml.get());
+            
+            plugin = apfm->createPluginInstance(pd, sampleRate, buffersize,error);
+            plugin->prepareToPlay(sampleRate, buffersize);
+            AudioProcessorEditor* editor = plugin->createEditorIfNeeded();
+            
+            juce::AudioProcessor::BusesLayout layout =  plugin->getBusesLayout();
+            
+            int numPluginInputs = plugin->getBusCount(true) * 2;
+            int numPluginOutputs = plugin->getBusCount(false) * 2;
+            
+            // check input and output bus configuration
+            
+            juce::BigInteger activeInputChannels = deviceManager.getCurrentAudioDevice()->getActiveInputChannels();
+            juce::BigInteger activeOutputChannels = deviceManager.getCurrentAudioDevice()->getActiveOutputChannels();
+            
+            int numInputChannels = deviceManager.getCurrentAudioDevice()->getInputChannelNames().size();
+            int numOutputChannels = deviceManager.getCurrentAudioDevice()->getOutputChannelNames().size();
+            
+            int numActiveHostInputs = getNumActiveChannels(activeInputChannels.toInteger());
+            int numActiveHostOutputs = getNumActiveChannels(activeOutputChannels.toInteger());
+            
+            int requestedInputChannelSize = numActiveHostInputs;
+            int requestedOutputChannelSize = numActiveHostOutputs;
+            
+            // we have a problem if a plugin has more inputs and outputs that are active
+            // try to set the num of inputs/ouputs accordingly, if this fails we are fucked anyway
+            
+            if (numPluginInputs > numActiveHostInputs) {
+                requestedInputChannelSize = numPluginInputs;
+            }
+            if (numPluginOutputs > numActiveHostOutputs) {
+                requestedOutputChannelSize = numPluginOutputs;
+            }
+            
+            setAudioChannels(requestedInputChannelSize, requestedOutputChannelSize);
+
+            Logger::getCurrentLogger()->writeToLog("Active output channels "+String(numActiveHostOutputs));
+            Logger::getCurrentLogger()->writeToLog("Active input channels "+String(numActiveHostInputs));
+            
+            setProcessor(plugin);
+            
+            win = new PluginWindow(name,editor);
+        }
         
-        String error = String("Error");
-        PluginDescription pd;
-        
-        File preset = File("/Users/mpue/plugins/"+name);
-        ScopedPointer<XmlElement> xml = XmlDocument(preset).getDocumentElement();
-        pd.loadFromXml(*xml.get());
-        
-        plugin = apfm->createPluginInstance(pd, sampleRate, buffersize,error);
-        plugin->prepareToPlay(sampleRate, buffersize);
-        AudioProcessorEditor* editor = plugin->createEditorIfNeeded();
-        
-        juce::AudioProcessor::BusesLayout layout =  plugin->getBusesLayout();
-        
-        setProcessor(plugin);
-        
-        
-        
-        win = new PluginWindow(name,editor);
+
         win->setVisible(true);
+    }
+    
+    int getNumActiveChannels(int i) {
+        i = i - ((i >> 1) & 0x55555555);
+        i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
+        return (((i + (i >> 4)) & 0x0F0F0F0F) * 0x01010101) >> 24;
     }
     
     void scanPlugins() {
@@ -456,20 +495,21 @@ private:
         
         void closeButtonPressed() override
         {
+            this->setVisible(false);
         }
-
         
-    private:
-        ScopedPointer<AudioProcessorEditor> plugin;
+        private:
+            ScopedPointer<AudioProcessorEditor> plugin;
     };
     
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainContentComponent)
 
-    AudioPluginInstance* plugin = NULL;
+    ScopedPointer<AudioPluginFormatManager> apfm;
+    ScopedPointer<AudioPluginInstance> plugin = nullptr;
     AudioProcessorPlayer* player;
-    AudioSampleBuffer* buffer;
-    PluginWindow* win;
+    ScopedPointer<AudioSampleBuffer> buffer;
+    ScopedPointer<PluginWindow> win = nullptr;
     MidiBuffer midiBuffer;
     
 	TimeSliceThread thread;

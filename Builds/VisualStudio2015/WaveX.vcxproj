@@ -135,6 +135,7 @@
     <ClCompile Include="..\..\Source\Main.cpp"/>
     <ClCompile Include="..\..\Source\MainComponent.cpp"/>
     <ClCompile Include="..\..\Source\MasterChannelPanel.cpp"/>
+    <ClCompile Include="..\..\Source\MixerPanel.cpp"/>
     <ClCompile Include="..\..\Source\PositionMarker.cpp"/>
     <ClCompile Include="..\..\Source\TimeLine.cpp"/>
     <ClCompile Include="..\..\Source\ToolbarPanel.cpp"/>
@@ -1728,6 +1729,7 @@
     <ClInclude Include="..\..\Source\DragConstrainer.h"/>
     <ClInclude Include="..\..\Source\InfoPanel.h"/>
     <ClInclude Include="..\..\Source\MasterChannelPanel.h"/>
+    <ClInclude Include="..\..\Source\MixerPanel.h"/>
     <ClInclude Include="..\..\Source\PositionMarker.h"/>
     <ClInclude Include="..\..\Source\TimeLine.h"/>
     <ClInclude Include="..\..\Source\ToolbarPanel.h"/>
@@ -2352,6 +2354,7 @@
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h"/>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\Resources\Fader.png"/>
     <None Include="..\..\Resources\font-awesome_4-7-0_copy_24_0_000000_none.png"/>
     <None Include="..\..\Resources\font-awesome_4-7-0_file-audio-o_32_0_000000_none.png"/>
     <None Include="..\..\Resources\font-awesome_4-7-0_pencil_24_0_000000_none.png"/>

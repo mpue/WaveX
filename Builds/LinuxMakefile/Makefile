@@ -64,6 +64,7 @@ OBJECTS := \
   $(JUCE_OBJDIR)/Main_90ebc5c2.o \
   $(JUCE_OBJDIR)/MainComponent_a6ffb4a5.o \
   $(JUCE_OBJDIR)/MasterChannelPanel_b4b7ea4c.o \
+  $(JUCE_OBJDIR)/MixerPanel_f7050b84.o \
   $(JUCE_OBJDIR)/PositionMarker_20eac8cc.o \
   $(JUCE_OBJDIR)/TimeLine_e3c86a6a.o \
   $(JUCE_OBJDIR)/ToolbarPanel_8e4ee752.o \
@@ -143,6 +144,11 @@ $(JUCE_OBJDIR)/MainComponent_a6ffb4a5.o: ../../Source/MainComponent.cpp
 $(JUCE_OBJDIR)/MasterChannelPanel_b4b7ea4c.o: ../../Source/MasterChannelPanel.cpp
 	-@mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling MasterChannelPanel.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/MixerPanel_f7050b84.o: ../../Source/MixerPanel.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling MixerPanel.cpp"
 	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/PositionMarker_20eac8cc.o: ../../Source/PositionMarker.cpp

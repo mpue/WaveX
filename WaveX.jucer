@@ -5,6 +5,7 @@
               jucerVersion="4.3.0" companyName="pueski.de" companyWebsite="www.pueski.de">
   <MAINGROUP id="oMZ4Yu" name="WaveX">
     <GROUP id="{5BB27121-C9C8-56C1-0BC5-68883A472AD8}" name="Resources">
+      <FILE id="HFpZBB" name="Fader.png" compile="0" resource="1" file="Resources/Fader.png"/>
       <FILE id="x8j2Oy" name="font-awesome_4-7-0_copy_24_0_000000_none.png"
             compile="0" resource="1" file="Resources/font-awesome_4-7-0_copy_24_0_000000_none.png"/>
       <FILE id="fAiRiR" name="font-awesome_4-7-0_file-audio-o_32_0_000000_none.png"
@@ -45,6 +46,8 @@
             file="Source/MasterChannelPanel.cpp"/>
       <FILE id="QdxXmZ" name="MasterChannelPanel.h" compile="0" resource="0"
             file="Source/MasterChannelPanel.h"/>
+      <FILE id="K2XNSj" name="MixerPanel.cpp" compile="1" resource="0" file="Source/MixerPanel.cpp"/>
+      <FILE id="bJpUsc" name="MixerPanel.h" compile="0" resource="0" file="Source/MixerPanel.h"/>
       <FILE id="UCX2Se" name="PositionMarker.cpp" compile="1" resource="0"
             file="Source/PositionMarker.cpp"/>
       <FILE id="RTkmEH" name="PositionMarker.h" compile="0" resource="0"

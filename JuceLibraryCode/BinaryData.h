@@ -9,6 +9,9 @@
 
 namespace BinaryData
 {
+    extern const char*   Fader_png;
+    const int            Fader_pngSize = 19460;
+
     extern const char*   fontawesome_470_copy_24_0_000000_none_png;
     const int            fontawesome_470_copy_24_0_000000_none_pngSize = 436;
 
@@ -37,7 +40,7 @@ namespace BinaryData
     extern const char* namedResourceList[];
 
     // Number of elements in the namedResourceList array.
-    const int namedResourceListSize = 8;
+    const int namedResourceListSize = 9;
 
     // If you provide the name of one of the binary resource variables above, this function will
     // return the corresponding data and its size (or a null pointer if the name isn't found).

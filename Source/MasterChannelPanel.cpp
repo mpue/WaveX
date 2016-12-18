@@ -56,6 +56,7 @@ MasterChannelPanel::MasterChannelPanel (MainContentComponent* mcc)
     leftVolumeSlider->setSliderStyle (Slider::LinearVertical);
     leftVolumeSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     leftVolumeSlider->setColour (Slider::thumbColourId, Colours::black);
+    leftVolumeSlider->setColour (Slider::trackColourId, Colour (0xff434242));
     leftVolumeSlider->addListener (this);
 
     addAndMakeVisible (rightVolumeSlider = new Slider ("leftVolumeSlider"));
@@ -63,6 +64,7 @@ MasterChannelPanel::MasterChannelPanel (MainContentComponent* mcc)
     rightVolumeSlider->setSliderStyle (Slider::LinearVertical);
     rightVolumeSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     rightVolumeSlider->setColour (Slider::thumbColourId, Colours::black);
+    rightVolumeSlider->setColour (Slider::trackColourId, Colour (0xff434242));
     rightVolumeSlider->addListener (this);
 
     addAndMakeVisible (levelLabel = new Label ("levelLabel",
@@ -131,6 +133,9 @@ MasterChannelPanel::MasterChannelPanel (MainContentComponent* mcc)
     vuSliderLeft->setLookAndFeel(clf);
     vuSliderRight->setLookAndFeel(clf);
 
+    leftVolumeSlider->setLookAndFeel(clf);
+    rightVolumeSlider->setLookAndFeel(clf);
+
     //[/Constructor]
 }
 
@@ -182,8 +187,8 @@ void MasterChannelPanel::resized()
 
     vuSliderLeft->setBounds (32, 31, 15, 200);
     vuSliderRight->setBounds (104, 31, 15, 200);
-    leftVolumeSlider->setBounds (55, 32, 15, 200);
-    rightVolumeSlider->setBounds (80, 32, 15, 200);
+    leftVolumeSlider->setBounds (53, 32, 18, 200);
+    rightVolumeSlider->setBounds (80, 32, 18, 200);
     levelLabel->setBounds (45, 12, 63, 24);
     leftLabel->setBounds (30, 229, 20, 20);
     rightLabel->setBounds (102, 229, 20, 20);
@@ -322,15 +327,15 @@ BEGIN_JUCER_METADATA
           style="LinearBarVertical" textBoxPos="NoTextBox" textBoxEditable="1"
           textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="leftVolumeSlider" id="102b74d9fca60f9e" memberName="leftVolumeSlider"
-          virtualName="" explicitFocusOrder="0" pos="55 32 15 200" thumbcol="ff000000"
-          min="0" max="1" int="0.010000000000000000208" style="LinearVertical"
-          textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
-          textBoxHeight="20" skewFactor="1" needsCallback="1"/>
+          virtualName="" explicitFocusOrder="0" pos="53 32 18 200" thumbcol="ff000000"
+          trackcol="ff434242" min="0" max="1" int="0.010000000000000000208"
+          style="LinearVertical" textBoxPos="NoTextBox" textBoxEditable="1"
+          textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="leftVolumeSlider" id="5a134fd786161e27" memberName="rightVolumeSlider"
-          virtualName="" explicitFocusOrder="0" pos="80 32 15 200" thumbcol="ff000000"
-          min="0" max="1" int="0.010000000000000000208" style="LinearVertical"
-          textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
-          textBoxHeight="20" skewFactor="1" needsCallback="1"/>
+          virtualName="" explicitFocusOrder="0" pos="80 32 18 200" thumbcol="ff000000"
+          trackcol="ff434242" min="0" max="1" int="0.010000000000000000208"
+          style="LinearVertical" textBoxPos="NoTextBox" textBoxEditable="1"
+          textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <LABEL name="levelLabel" id="351d6bc17f8a2c24" memberName="levelLabel"
          virtualName="" explicitFocusOrder="0" pos="45 12 63 24" edTextCol="ff000000"
          edBkgCol="0" labelText="Level" editableSingleClick="0" editableDoubleClick="0"
