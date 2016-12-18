@@ -38,24 +38,24 @@ TransportPanel::TransportPanel (MainContentComponent* mcc)
     stopButton->addListener (this);
 
     stopButton->setImages (false, true, true,
-                           ImageCache::getFromMemory (fontawesome_470_stop_32_0_000000_none_png, fontawesome_470_stop_32_0_000000_none_pngSize), 1.000f, Colour (0x00000000),
-                           Image(), 1.000f, Colour (0x00000000),
+                           ImageCache::getFromMemory (fontawesome_470_stop_32_0_000000_none_png, fontawesome_470_stop_32_0_000000_none_pngSize), 1.000f, Colour (0x00ffffff),
+                           Image(), 1.000f, Colours::cornflowerblue,
                            Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (playButton = new ImageButton ("playButton"));
     playButton->setButtonText (TRANS("Play"));
     playButton->addListener (this);
 
     playButton->setImages (false, true, true,
-                           ImageCache::getFromMemory (fontawesome_470_play_32_0_000000_none_png, fontawesome_470_play_32_0_000000_none_pngSize), 1.000f, Colour (0x00000000),
-                           Image(), 1.000f, Colour (0x00000000),
+                           ImageCache::getFromMemory (fontawesome_470_play_32_0_000000_none_png, fontawesome_470_play_32_0_000000_none_pngSize), 1.000f, Colour (0x00ffffff),
+                           Image(), 1.000f, Colours::cornflowerblue,
                            Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (backButton = new ImageButton ("backButton"));
     backButton->setButtonText (TRANS("Back"));
     backButton->addListener (this);
 
     backButton->setImages (false, true, true,
-                           ImageCache::getFromMemory (ionicons_201_iosskipbackward_32_0_000000_none_png, ionicons_201_iosskipbackward_32_0_000000_none_pngSize), 1.000f, Colour (0x00000000),
-                           Image(), 1.000f, Colour (0x00000000),
+                           ImageCache::getFromMemory (ionicons_201_iosskipbackward_32_0_000000_none_png, ionicons_201_iosskipbackward_32_0_000000_none_pngSize), 1.000f, Colour (0x00ffffff),
+                           Image(), 1.000f, Colours::cornflowerblue,
                            Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (endButton = new ImageButton ("endButton"));
     endButton->setButtonText (TRANS("End"));
@@ -63,7 +63,7 @@ TransportPanel::TransportPanel (MainContentComponent* mcc)
 
     endButton->setImages (false, true, true,
                           ImageCache::getFromMemory (ionicons_201_iosskipforward_32_0_000000_none_png, ionicons_201_iosskipforward_32_0_000000_none_pngSize), 1.000f, Colour (0x00000000),
-                          Image(), 1.000f, Colour (0x00000000),
+                          Image(), 1.000f, Colours::cornflowerblue,
                           Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (pauseButton = new ImageButton ("pauseButton"));
     pauseButton->setButtonText (TRANS("Pause"));
@@ -71,7 +71,7 @@ TransportPanel::TransportPanel (MainContentComponent* mcc)
 
     pauseButton->setImages (false, true, true,
                             ImageCache::getFromMemory (fontawesome_470_pause_32_0_000000_none_png, fontawesome_470_pause_32_0_000000_none_pngSize), 1.000f, Colour (0x00000000),
-                            Image(), 1.000f, Colour (0x00000000),
+                            Image(), 1.000f, Colours::cornflowerblue,
                             Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (timeLabel = new Label ("timeLabel",
                                               TRANS("00:00:00\n")));
@@ -84,6 +84,14 @@ TransportPanel::TransportPanel (MainContentComponent* mcc)
     timeLabel->setColour (TextEditor::textColourId, Colours::black);
     timeLabel->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
+    addAndMakeVisible (recordButton = new ImageButton ("recordButton"));
+    recordButton->setButtonText (TRANS("Back"));
+    recordButton->addListener (this);
+
+    recordButton->setImages (false, true, true,
+                             ImageCache::getFromMemory (fontawesome_470_circle_32_0_000000_none_png, fontawesome_470_circle_32_0_000000_none_pngSize), 1.000f, Colour (0x00000000),
+                             Image(), 1.000f, Colours::crimson,
+                             Image(), 1.000f, Colour (0x00000000));
 
     //[UserPreSize]
     setSize (250, 60);
@@ -94,14 +102,14 @@ TransportPanel::TransportPanel (MainContentComponent* mcc)
 
     //[Constructor] You can add your own custom stuff here..
     mode = STOP;
-    
+
     /*
 	ds = new DropShadow(Colour::fromFloatRGBA(0, 0, 0, 0.5), 3, Point<int>(3, 3));
 	d = new DropShadower(*ds);
 	d->setOwner(this);
     */
 
-    
+
     //[/Constructor]
 }
 
@@ -116,6 +124,7 @@ TransportPanel::~TransportPanel()
     endButton = nullptr;
     pauseButton = nullptr;
     timeLabel = nullptr;
+    recordButton = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -145,12 +154,13 @@ void TransportPanel::resized()
     //[UserPreResize] Add your own custom resize code here..
     //[/UserPreResize]
 
-    stopButton->setBounds (42, 14, 24, 24);
-    playButton->setBounds (74, 14, 24, 24);
-    backButton->setBounds (10, 14, 24, 24);
-    endButton->setBounds (130, 14, 24, 24);
-    pauseButton->setBounds (98, 14, 24, 24);
-    timeLabel->setBounds (162, 8, 112, 32);
+    stopButton->setBounds (74, 14, 24, 24);
+    playButton->setBounds (106, 14, 24, 24);
+    backButton->setBounds (42, 14, 22, 24);
+    endButton->setBounds (162, 14, 24, 24);
+    pauseButton->setBounds (130, 14, 24, 24);
+    timeLabel->setBounds (194, 8, 112, 32);
+    recordButton->setBounds (8, 14, 24, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -207,6 +217,11 @@ void TransportPanel::buttonClicked (Button* buttonThatWasClicked)
         }
         //[/UserButtonCode_pauseButton]
     }
+    else if (buttonThatWasClicked == recordButton)
+    {
+        //[UserButtonCode_recordButton] -- add your button handler code here..
+        //[/UserButtonCode_recordButton]
+    }
 
     //[UserbuttonClicked_Post]
     //[/UserbuttonClicked_Post]
@@ -258,41 +273,47 @@ BEGIN_JUCER_METADATA
                  fixedSize="0" initialWidth="420" initialHeight="40">
   <BACKGROUND backgroundColour="808080"/>
   <IMAGEBUTTON name="stopButton" id="4cd37851bb11a613" memberName="stopButton"
-               virtualName="" explicitFocusOrder="0" pos="42 14 24 24" buttonText="Stop"
+               virtualName="" explicitFocusOrder="0" pos="74 14 24 24" buttonText="Stop"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
                resourceNormal="fontawesome_470_stop_32_0_000000_none_png" opacityNormal="1"
-               colourNormal="0" resourceOver="" opacityOver="1" colourOver="0"
+               colourNormal="ffffff" resourceOver="" opacityOver="1" colourOver="ff6495ed"
                resourceDown="" opacityDown="1" colourDown="0"/>
   <IMAGEBUTTON name="playButton" id="c8555f308f9d15ec" memberName="playButton"
-               virtualName="" explicitFocusOrder="0" pos="74 14 24 24" buttonText="Play"
+               virtualName="" explicitFocusOrder="0" pos="106 14 24 24" buttonText="Play"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
                resourceNormal="fontawesome_470_play_32_0_000000_none_png" opacityNormal="1"
-               colourNormal="0" resourceOver="" opacityOver="1" colourOver="0"
+               colourNormal="ffffff" resourceOver="" opacityOver="1" colourOver="ff6495ed"
                resourceDown="" opacityDown="1" colourDown="0"/>
   <IMAGEBUTTON name="backButton" id="c457ade9e0c0c98f" memberName="backButton"
-               virtualName="" explicitFocusOrder="0" pos="10 14 24 24" buttonText="Back"
+               virtualName="" explicitFocusOrder="0" pos="42 14 22 24" buttonText="Back"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
                resourceNormal="ionicons_201_iosskipbackward_32_0_000000_none_png"
-               opacityNormal="1" colourNormal="0" resourceOver="" opacityOver="1"
-               colourOver="0" resourceDown="" opacityDown="1" colourDown="0"/>
+               opacityNormal="1" colourNormal="ffffff" resourceOver="" opacityOver="1"
+               colourOver="ff6495ed" resourceDown="" opacityDown="1" colourDown="0"/>
   <IMAGEBUTTON name="endButton" id="b649d3250331ad42" memberName="endButton"
-               virtualName="" explicitFocusOrder="0" pos="130 14 24 24" buttonText="End"
+               virtualName="" explicitFocusOrder="0" pos="162 14 24 24" buttonText="End"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
                resourceNormal="ionicons_201_iosskipforward_32_0_000000_none_png"
                opacityNormal="1" colourNormal="0" resourceOver="" opacityOver="1"
-               colourOver="0" resourceDown="" opacityDown="1" colourDown="0"/>
+               colourOver="ff6495ed" resourceDown="" opacityDown="1" colourDown="0"/>
   <IMAGEBUTTON name="pauseButton" id="bc895af41d57982" memberName="pauseButton"
-               virtualName="" explicitFocusOrder="0" pos="98 14 24 24" buttonText="Pause"
+               virtualName="" explicitFocusOrder="0" pos="130 14 24 24" buttonText="Pause"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
                resourceNormal="fontawesome_470_pause_32_0_000000_none_png" opacityNormal="1"
-               colourNormal="0" resourceOver="" opacityOver="1" colourOver="0"
+               colourNormal="0" resourceOver="" opacityOver="1" colourOver="ff6495ed"
                resourceDown="" opacityDown="1" colourDown="0"/>
   <LABEL name="timeLabel" id="4b26497a62774d79" memberName="timeLabel"
-         virtualName="" explicitFocusOrder="0" pos="162 8 112 32" bkgCol="ff0c0b0b"
+         virtualName="" explicitFocusOrder="0" pos="194 8 112 32" bkgCol="ff0c0b0b"
          textCol="ffffffff" outlineCol="ffffffff" edTextCol="ff000000"
          edBkgCol="0" labelText="00:00:00&#10;" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
          fontsize="24" bold="0" italic="0" justification="36"/>
+  <IMAGEBUTTON name="recordButton" id="7521828dc05bc048" memberName="recordButton"
+               virtualName="" explicitFocusOrder="0" pos="8 14 24 24" buttonText="Back"
+               connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
+               resourceNormal="fontawesome_470_circle_32_0_000000_none_png"
+               opacityNormal="1" colourNormal="0" resourceOver="" opacityOver="1"
+               colourOver="ffdc143c" resourceDown="" opacityDown="1" colourDown="0"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA
@@ -354,6 +375,21 @@ static const unsigned char resource_TransportPanel_fontawesome_470_pause_32_0_00
 
 const char* TransportPanel::fontawesome_470_pause_32_0_000000_none_png = (const char*) resource_TransportPanel_fontawesome_470_pause_32_0_000000_none_png;
 const int TransportPanel::fontawesome_470_pause_32_0_000000_none_pngSize = 224;
+
+// JUCER_RESOURCE: fontawesome_470_circle_32_0_000000_none_png, 603, "../Resources/font-awesome_4-7-0_circle_32_0_000000_none.png"
+static const unsigned char resource_TransportPanel_fontawesome_470_circle_32_0_000000_none_png[] = { 137,80,78,71,13,10,26,10,0,0,0,13,73,72,68,82,0,0,0,32,0,0,0,32,8,3,0,0,0,68,164,138,198,0,0,0,234,
+80,76,84,69,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,198,225,44,73,0,0,0,77,116,82,78,83,0,1,2,3,6,7,8,15,16,20,21,23,28,29,30,35,38,39,47,48,49,58,60,68,71,73,75,81,84,88,89,
+91,93,95,97,98,100,102,104,111,112,113,115,117,119,123,124,136,140,143,148,149,151,155,166,168,170,176,190,195,197,204,206,213,217,220,224,228,233,235,237,239,241,243,245,247,253,157,236,231,80,0,0,0,
+211,73,68,65,84,24,25,125,193,7,66,194,80,20,69,193,243,131,68,4,11,216,123,197,138,98,5,11,246,40,40,230,238,127,59,34,32,49,152,188,25,34,174,184,115,253,244,249,254,112,177,146,39,65,118,191,173,129,
+151,5,71,156,219,8,21,19,148,248,203,111,232,159,170,99,32,23,40,65,221,163,207,15,148,168,70,143,107,40,69,153,174,77,165,42,208,225,135,74,117,71,199,161,12,83,224,190,100,184,132,162,44,97,134,178,
+76,19,220,200,180,200,179,76,187,180,101,58,161,41,83,133,71,153,182,184,146,105,142,85,153,198,40,200,210,116,240,42,195,17,176,44,195,40,224,189,41,213,25,63,166,149,166,53,66,215,169,82,204,208,227,
+110,149,104,141,95,94,93,9,214,137,184,3,13,251,152,37,102,252,94,49,231,89,134,149,106,161,250,90,149,28,73,50,147,75,123,213,227,237,249,188,35,242,13,52,211,233,144,91,111,132,67,0,0,0,0,73,69,78,68,
+174,66,96,130,0,0};
+
+const char* TransportPanel::fontawesome_470_circle_32_0_000000_none_png = (const char*) resource_TransportPanel_fontawesome_470_circle_32_0_000000_none_png;
+const int TransportPanel::fontawesome_470_circle_32_0_000000_none_pngSize = 603;
 
 
 //[EndFile] You can add extra defines here...

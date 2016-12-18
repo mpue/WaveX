@@ -39,7 +39,7 @@ ToolbarPanel::ToolbarPanel (MainContentComponent* mcc)
 
     addTrackButton->setImages (false, true, true,
                                ImageCache::getFromMemory (ionicons_201_androidaddcircle_24_0_000000_none_png, ionicons_201_androidaddcircle_24_0_000000_none_pngSize), 1.000f, Colour (0x00000000),
-                               Image(), 1.000f, Colour (0x00000000),
+                               Image(), 1.000f, Colours::cornflowerblue,
                                Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (removeTrackButton = new ImageButton ("removeTrackButton"));
     removeTrackButton->setButtonText (TRANS("new button"));
@@ -47,7 +47,7 @@ ToolbarPanel::ToolbarPanel (MainContentComponent* mcc)
 
     removeTrackButton->setImages (false, true, true,
                                   ImageCache::getFromMemory (ionicons_201_androidremovecircle_24_0_000000_none_png, ionicons_201_androidremovecircle_24_0_000000_none_pngSize), 1.000f, Colour (0x00000000),
-                                  Image(), 1.000f, Colour (0x00000000),
+                                  Image(), 1.000f, Colours::cornflowerblue,
                                   Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (copyButton = new ImageButton ("copyButton"));
     copyButton->setButtonText (TRANS("new button"));
@@ -55,7 +55,7 @@ ToolbarPanel::ToolbarPanel (MainContentComponent* mcc)
 
     copyButton->setImages (false, true, true,
                            ImageCache::getFromMemory (fontawesome_470_copy_24_0_000000_none_png, fontawesome_470_copy_24_0_000000_none_pngSize), 1.000f, Colour (0x00000000),
-                           Image(), 1.000f, Colour (0x00000000),
+                           Image(), 1.000f, Colours::cornflowerblue,
                            Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (editButton = new ImageButton ("editButton"));
     editButton->setButtonText (TRANS("new button"));
@@ -63,7 +63,7 @@ ToolbarPanel::ToolbarPanel (MainContentComponent* mcc)
 
     editButton->setImages (false, true, true,
                            ImageCache::getFromMemory (fontawesome_470_pencil_24_0_000000_none_png, fontawesome_470_pencil_24_0_000000_none_pngSize), 1.000f, Colour (0x00000000),
-                           Image(), 1.000f, Colour (0x00000000),
+                           Image(), 1.000f, Colours::cornflowerblue,
                            Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (settingsButton = new ImageButton ("settingsButton"));
     settingsButton->setButtonText (TRANS("new button"));
@@ -71,7 +71,7 @@ ToolbarPanel::ToolbarPanel (MainContentComponent* mcc)
 
     settingsButton->setImages (false, true, true,
                                ImageCache::getFromMemory (ionicons_201_settings_24_0_000000_none_png, ionicons_201_settings_24_0_000000_none_pngSize), 1.000f, Colour (0x00000000),
-                               Image(), 1.000f, Colour (0x00000000),
+                               Image(), 1.000f, Colours::cornflowerblue,
                                Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (importAudioButton = new ImageButton ("importAudioButton"));
     importAudioButton->setButtonText (TRANS("new button"));
@@ -79,13 +79,21 @@ ToolbarPanel::ToolbarPanel (MainContentComponent* mcc)
 
     importAudioButton->setImages (false, true, true,
                                   ImageCache::getFromMemory (fontawesome_470_fileaudioo_32_0_000000_none_png, fontawesome_470_fileaudioo_32_0_000000_none_pngSize), 1.000f, Colour (0x00000000),
-                                  Image(), 1.000f, Colour (0x00000000),
+                                  Image(), 1.000f, Colours::cornflowerblue,
                                   Image(), 1.000f, Colour (0x00000000));
+    addAndMakeVisible (pluginsButton = new ImageButton ("pluginsButton"));
+    pluginsButton->setButtonText (TRANS("new button"));
+    pluginsButton->addListener (this);
+
+    pluginsButton->setImages (false, true, true,
+                              ImageCache::getFromMemory (fontawesome_470_plug_32_0_000000_none_png, fontawesome_470_plug_32_0_000000_none_pngSize), 1.000f, Colour (0x00000000),
+                              Image(), 1.000f, Colours::cornflowerblue,
+                              Image(), 1.000f, Colour (0x00000000));
 
     //[UserPreSize]
     //[/UserPreSize]
 
-    setSize (100, 50);
+    setSize (130, 50);
 
 
     //[Constructor] You can add your own custom stuff here..
@@ -103,6 +111,7 @@ ToolbarPanel::~ToolbarPanel()
     editButton = nullptr;
     settingsButton = nullptr;
     importAudioButton = nullptr;
+    pluginsButton = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -130,6 +139,7 @@ void ToolbarPanel::resized()
     editButton->setBounds (104, 14, 24, 24);
     settingsButton->setBounds (136, 14, 24, 24);
     importAudioButton->setBounds (168, 14, 24, 24);
+    pluginsButton->setBounds (200, 14, 24, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -172,6 +182,12 @@ void ToolbarPanel::buttonClicked (Button* buttonThatWasClicked)
         mcc->importAudio();
         //[/UserButtonCode_importAudioButton]
     }
+    else if (buttonThatWasClicked == pluginsButton)
+    {
+        //[UserButtonCode_pluginsButton] -- add your button handler code here..
+        mcc->addPlugin("Trio");
+        //[/UserButtonCode_pluginsButton]
+    }
 
     //[UserbuttonClicked_Post]
     //[/UserbuttonClicked_Post]
@@ -195,44 +211,50 @@ BEGIN_JUCER_METADATA
 <JUCER_COMPONENT documentType="Component" className="ToolbarPanel" componentName=""
                  parentClasses="public Component" constructorParams="MainContentComponent* mcc"
                  variableInitialisers="" snapPixels="8" snapActive="1" snapShown="1"
-                 overlayOpacity="0.330" fixedSize="0" initialWidth="100" initialHeight="50">
+                 overlayOpacity="0.330" fixedSize="0" initialWidth="130" initialHeight="50">
   <BACKGROUND backgroundColour="ffffff"/>
   <IMAGEBUTTON name="addTrackButton" id="b040fab84432c089" memberName="addTrackButton"
                virtualName="" explicitFocusOrder="0" pos="10 14 24 24" buttonText="new button"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
                resourceNormal="ionicons_201_androidaddcircle_24_0_000000_none_png"
                opacityNormal="1" colourNormal="0" resourceOver="" opacityOver="1"
-               colourOver="0" resourceDown="" opacityDown="1" colourDown="0"/>
+               colourOver="ff6495ed" resourceDown="" opacityDown="1" colourDown="0"/>
   <IMAGEBUTTON name="removeTrackButton" id="70f6412688935645" memberName="removeTrackButton"
                virtualName="" explicitFocusOrder="0" pos="40 14 24 24" buttonText="new button"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
                resourceNormal="ionicons_201_androidremovecircle_24_0_000000_none_png"
                opacityNormal="1" colourNormal="0" resourceOver="" opacityOver="1"
-               colourOver="0" resourceDown="" opacityDown="1" colourDown="0"/>
+               colourOver="ff6495ed" resourceDown="" opacityDown="1" colourDown="0"/>
   <IMAGEBUTTON name="copyButton" id="14fb30dd46ca0d9a" memberName="copyButton"
                virtualName="" explicitFocusOrder="0" pos="72 14 24 24" buttonText="new button"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
                resourceNormal="fontawesome_470_copy_24_0_000000_none_png" opacityNormal="1"
-               colourNormal="0" resourceOver="" opacityOver="1" colourOver="0"
+               colourNormal="0" resourceOver="" opacityOver="1" colourOver="ff6495ed"
                resourceDown="" opacityDown="1" colourDown="0"/>
   <IMAGEBUTTON name="editButton" id="aae00a5880931a24" memberName="editButton"
                virtualName="" explicitFocusOrder="0" pos="104 14 24 24" buttonText="new button"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
                resourceNormal="fontawesome_470_pencil_24_0_000000_none_png"
                opacityNormal="1" colourNormal="0" resourceOver="" opacityOver="1"
-               colourOver="0" resourceDown="" opacityDown="1" colourDown="0"/>
+               colourOver="ff6495ed" resourceDown="" opacityDown="1" colourDown="0"/>
   <IMAGEBUTTON name="settingsButton" id="291742b3ea36a25e" memberName="settingsButton"
                virtualName="" explicitFocusOrder="0" pos="136 14 24 24" buttonText="new button"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
                resourceNormal="ionicons_201_settings_24_0_000000_none_png" opacityNormal="1"
-               colourNormal="0" resourceOver="" opacityOver="1" colourOver="0"
+               colourNormal="0" resourceOver="" opacityOver="1" colourOver="ff6495ed"
                resourceDown="" opacityDown="1" colourDown="0"/>
   <IMAGEBUTTON name="importAudioButton" id="1584ca1f93618745" memberName="importAudioButton"
                virtualName="" explicitFocusOrder="0" pos="168 14 24 24" buttonText="new button"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
                resourceNormal="fontawesome_470_fileaudioo_32_0_000000_none_png"
                opacityNormal="1" colourNormal="0" resourceOver="" opacityOver="1"
-               colourOver="0" resourceDown="" opacityDown="1" colourDown="0"/>
+               colourOver="ff6495ed" resourceDown="" opacityDown="1" colourDown="0"/>
+  <IMAGEBUTTON name="pluginsButton" id="3f2551fd0588fd22" memberName="pluginsButton"
+               virtualName="" explicitFocusOrder="0" pos="200 14 24 24" buttonText="new button"
+               connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
+               resourceNormal="fontawesome_470_plug_32_0_000000_none_png" opacityNormal="1"
+               colourNormal="0" resourceOver="" opacityOver="1" colourOver="ff6495ed"
+               resourceDown="" opacityDown="1" colourDown="0"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA
@@ -320,6 +342,20 @@ static const unsigned char resource_ToolbarPanel_fontawesome_470_fileaudioo_32_0
 
 const char* ToolbarPanel::fontawesome_470_fileaudioo_32_0_000000_none_png = (const char*) resource_ToolbarPanel_fontawesome_470_fileaudioo_32_0_000000_none_png;
 const int ToolbarPanel::fontawesome_470_fileaudioo_32_0_000000_none_pngSize = 622;
+
+// JUCER_RESOURCE: fontawesome_470_plug_32_0_000000_none_png, 522, "../Resources/font-awesome_4-7-0_plug_32_0_000000_none.png"
+static const unsigned char resource_ToolbarPanel_fontawesome_470_plug_32_0_000000_none_png[] = { 137,80,78,71,13,10,26,10,0,0,0,13,73,72,68,82,0,0,0,32,0,0,0,32,8,3,0,0,0,68,164,138,198,0,0,0,168,80,76,
+84,69,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,44,223,72,134,0,0,0,55,116,82,78,83,0,1,2,3,5,7,10,12,13,22,
+23,24,28,32,37,48,53,65,73,79,81,82,84,85,86,87,88,91,102,103,105,123,124,126,127,130,145,148,165,166,168,170,173,178,183,193,206,213,218,222,226,228,243,245,247,88,166,243,10,0,0,0,218,73,68,65,84,56,
+141,149,210,233,18,130,32,20,5,224,171,217,158,217,98,105,169,45,182,154,149,165,213,125,255,55,203,61,20,208,233,252,96,96,190,51,12,3,0,48,162,33,62,37,22,164,89,98,152,49,223,23,145,163,194,117,45,
+246,35,67,132,120,156,199,126,18,104,23,93,51,28,103,21,142,104,129,202,117,193,141,228,26,251,57,115,35,112,90,89,225,128,121,114,183,195,133,147,206,39,28,199,32,153,75,175,220,3,145,116,52,146,133,
+250,219,0,77,210,237,180,237,97,185,145,248,54,117,9,177,212,40,58,244,139,5,180,74,14,50,178,178,129,234,2,225,208,97,248,186,112,207,111,186,176,42,188,196,142,177,133,69,22,186,172,67,168,100,99,79,
+187,215,36,188,237,255,237,247,26,63,53,40,255,12,167,249,155,251,35,160,125,16,126,75,101,119,11,30,23,75,6,182,115,82,231,80,231,80,231,160,235,122,175,202,191,52,87,93,217,174,14,186,251,0,0,0,0,73,
+69,78,68,174,66,96,130,0,0};
+
+const char* ToolbarPanel::fontawesome_470_plug_32_0_000000_none_png = (const char*) resource_ToolbarPanel_fontawesome_470_plug_32_0_000000_none_png;
+const int ToolbarPanel::fontawesome_470_plug_32_0_000000_none_pngSize = 522;
 
 
 //[EndFile] You can add extra defines here...

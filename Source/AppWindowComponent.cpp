@@ -75,12 +75,12 @@ AppWindowComponent::AppWindowComponent()
     addAndMakeVisible(masterPanel);
 
     this->transport = new TransportPanel(mcc);
-    this->transport->setBounds(350,0,320,50);
+    this->transport->setBounds(450,0,320,50);
     
     mcc->getNavigator()->addChangeListener(transport);
     
     this->toolbar = new ToolbarPanel(mcc);
-    this->toolbar->setBounds(150, 0, 200, 50);
+    this->toolbar->setBounds(150, 0, 300, 50);
     
 	this->infoPanel = new InfoPanel();
 	this->infoPanel->setBounds(0, 0, 150, 75);

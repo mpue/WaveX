@@ -69,12 +69,11 @@ public:
         this->leftVolume = 1.0;
         this->rightVolume = 1.0;
         
-        setAudioChannels(2,2);
+        setAudioChannels(0,2);
         
         deviceManager.setMidiInputEnabled("MPKmini2", true);
         deviceManager.addMidiInputCallback("MPKmini2",this);
-        
-      
+    
         
 		this->numSamples = 0;
     }
@@ -93,6 +92,9 @@ public:
         navigator = nullptr;
         marker = nullptr;
 		timeLine = nullptr;
+        delete buffer;
+        delete win;
+    
     }
     
     int useTimeSlice() override {
@@ -128,6 +130,8 @@ public:
                                         int numOutputChannels,
                                         int _numSamples) override {
         
+        if (plugin != NULL)
+            plugin->processBlock(*buffer, midiBuffer);
         
         if (navigator->isPlaying()) {
             
@@ -135,9 +139,7 @@ public:
             
             for (int i = 0; i < navigator->getTracks().size();i++) {
                 for (int j = numSamples; j < numSamples + _numSamples;j++) {
-                    
-                    //outputChannelData[0][j%_numSamples] += inputChannelData[0][j%_numSamples] + navigator->getTracks().at(i)->getSample(0, j) * leftVolume * navigator->getTracks().at(i)->getVolume();
-                    //outputChannelData[1][j%_numSamples] += inputChannelData[1][j%_numSamples] + navigator->getTracks().at(i)->getSample(1, j) * leftVolume * navigator->getTracks().at(i)->getVolume();
+
                     buffer->addSample(0, j%this->buffersize, navigator->getTracks().at(i)->getSample(0, j) * leftVolume * navigator->getTracks().at(i)->getVolume());
                     buffer->addSample(1, j%this->buffersize, navigator->getTracks().at(i)->getSample(1, j) * rightVolume * navigator->getTracks().at(i)->getVolume());
                 }
@@ -160,27 +162,40 @@ public:
             }
             numSamples += _numSamples;
             navigator->setPosition(numSamples / this->sampleRate);
- 
+            
+
         }
         else {
+            
+            // AudioProcessorPlayer::audioDeviceIOCallback(inputChannelData, numInputChannels, outputChannelData, numOutputChannels, _numSamples);
+            
+            /*
             for (int j = 0; j < _numSamples;j++) {
                 
-                buffer->setSample(0, j,inputChannelData[0][j] * leftVolume);
-                buffer->setSample(1, j,inputChannelData[1][j] * rightVolume);
+                buffer->addSample(0, j,inputChannelData[0][j] * leftVolume);
+                buffer->addSample(1, j,inputChannelData[1][j] * rightVolume);
             }
-            // AudioProcessorPlayer::audioDeviceIOCallback(inputChannelData, numInputChannels, outputChannelData, numOutputChannels, _numSamples);
+             */
+            
+            
         }
+
+        
         
         const float* left = buffer->getReadPointer(0);
         const float* right = buffer->getReadPointer(1);
         
         for (int sample = 0; sample < buffer->getNumSamples(); ++sample) {
-            outputChannelData[0][sample] = left[sample];
-            outputChannelData[1][sample] = right[sample];
+            outputChannelData[0][sample] = left[sample] * leftVolume;
+            outputChannelData[1][sample] = right[sample] * rightVolume;
         }
+        
         
         this->magnitudeLeft = buffer->getMagnitude(0, 0, _numSamples);
         this->magnitudeRight = buffer->getMagnitude(1, 0, _numSamples);
+        
+        this->rmsLeft = buffer->getRMSLevel(0, 0,_numSamples);
+        this->rmsRight = buffer->getRMSLevel(1, 0,_numSamples);
         
         buffer->clear();
         
@@ -233,22 +248,13 @@ public:
             rightOut[sample] = rightIn[sample] * rightVolume;
         }
          */
-        
-        if(plugin != NULL) {
-        }
-        
-
-        
-        this->rmsLeft = bufferToFill.buffer->getRMSLevel(0, bufferToFill.startSample, bufferToFill.numSamples);
-        this->rmsRight = bufferToFill.buffer->getRMSLevel(1, bufferToFill.startSample, bufferToFill.numSamples);
-        
-        this->magnitudeLeft = bufferToFill.buffer->getMagnitude(0, bufferToFill.startSample, bufferToFill.numSamples);
-        this->magnitudeRight = bufferToFill.buffer->getMagnitude(1, bufferToFill.startSample, bufferToFill.numSamples);
+    
         
     }
 
     virtual void handleIncomingMidiMessage (MidiInput* source, const MidiMessage& message) override {
-        Logger::getCurrentLogger()->writeToLog(String(message.getNoteNumber()));
+        midiBuffer.addEvent(message, numSamples);
+        getMidiMessageCollector().addMessageToQueue(message);
     }
     
     void releaseResources() override
@@ -307,7 +313,7 @@ public:
         return this->marker;
     }
     
-    void addPlugin() {
+    void addPlugin(String name) {
         
         AudioPluginFormatManager* apfm = new AudioPluginFormatManager();
         apfm->addDefaultFormats();
@@ -315,21 +321,21 @@ public:
         String error = String("Error");
         PluginDescription pd;
         
-        File preset = File("/Users/mpue/plugins/Trio");
+        File preset = File("/Users/mpue/plugins/"+name);
         ScopedPointer<XmlElement> xml = XmlDocument(preset).getDocumentElement();
         pd.loadFromXml(*xml.get());
         
-        plugin = apfm->createPluginInstance(pd, 44100, 512,error);
-        plugin->prepareToPlay(44100, 512);
+        plugin = apfm->createPluginInstance(pd, sampleRate, buffersize,error);
+        plugin->prepareToPlay(sampleRate, buffersize);
         AudioProcessorEditor* editor = plugin->createEditorIfNeeded();
         
-        
+        juce::AudioProcessor::BusesLayout layout =  plugin->getBusesLayout();
         
         setProcessor(plugin);
         
-
         
-        PluginWindow* win = new PluginWindow("Trio",editor);
+        
+        win = new PluginWindow(name,editor);
         win->setVisible(true);
     }
     
@@ -434,9 +440,10 @@ private:
                                                     Colours::lightgrey,
                                                     DocumentWindow::allButtons)
         {
-      
+            setUsingNativeTitleBar(true);
             this->plugin = editor;
             setContentOwned (editor, true);
+            setAlwaysOnTop(true);
             setResizable (true, true);
             centreWithSize(editor->getWidth(),editor->getHeight()+25);
             setVisible (true);
@@ -449,7 +456,6 @@ private:
         
         void closeButtonPressed() override
         {
-
         }
 
         
@@ -463,6 +469,8 @@ private:
     AudioPluginInstance* plugin = NULL;
     AudioProcessorPlayer* player;
     AudioSampleBuffer* buffer;
+    PluginWindow* win;
+    MidiBuffer midiBuffer;
     
 	TimeSliceThread thread;
     ScopedPointer<TrackNavigator> navigator;
@@ -488,15 +496,44 @@ private:
     
     float zoom;
     
+    vector<String> availableInstruments;
+    
 	virtual StringArray getMenuBarNames() override
 	{
-		const char* const names[] = { "File", "View", nullptr };
+		const char* const names[] = { "File", "View", "Plugins", nullptr };
 
 		return StringArray(names);
 
 	}
-
-	virtual PopupMenu getMenuForIndex(int index, const String & menuName) override
+    
+    virtual void buildPluginMenu(PopupMenu &menu) {
+        String appDataPath = File::getSpecialLocation(File::userApplicationDataDirectory).getFullPathName();
+        String presetPath = "/Users/mpue/plugins";
+        
+        File presets = File(presetPath);
+        
+        int index = 100;
+        
+        if(presets.exists() && presets.isDirectory()) {
+            ScopedPointer<DirectoryIterator> iter = new DirectoryIterator(presets, false);
+            while(iter->next()) {
+                ScopedPointer<XmlElement> xml = XmlDocument(iter->getFile()).getDocumentElement();
+                PluginDescription pd;
+                pd.loadFromXml(*xml.get());
+                
+                if (pd.isInstrument) {
+                    availableInstruments.push_back(pd.name);
+                    menu.addItem(index, pd.name, true, false,nullptr);
+                    index++;
+                }
+                
+            }
+            iter = nullptr;
+            
+        }
+    }
+    
+    virtual PopupMenu getMenuForIndex(int index, const String & menuName) override
 	{
 		PopupMenu menu;
 
@@ -511,7 +548,9 @@ private:
             menu.addItem(5, "Zoom in", true, false, nullptr);
             menu.addItem(6, "Zoom out", true, false, nullptr);
             menu.addItem(8, "Manage Plugins", true, false, nullptr);
-            menu.addItem(9, "Open plugin", true, false, nullptr);
+        }
+        else if (index == 2) {
+            buildPluginMenu(menu);
         }
         
 		return menu;
@@ -567,9 +606,10 @@ private:
         else if (menuItemID == 8) {
             scanPlugins();
         }
-        else if (menuItemID == 9) {
-            addPlugin();
+        else if (menuItemID >= 100) {
+            addPlugin(availableInstruments.at(menuItemID - 100));
         }
+        
 	}
 
 	virtual void changeListenerCallback(ChangeBroadcaster * source) override
