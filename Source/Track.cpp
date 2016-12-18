@@ -269,3 +269,11 @@ AudioSampleBuffer * Track::getBuffer()
 void Track::setCurrentMarkerPosition(int position) {
     this->markerPosition = position;
 }
+
+int Track::getMidiChannel() {
+    return midiChannel;
+}
+
+void Track::setMidiChannel(int channel) {
+    this->midiChannel = channel;
+}

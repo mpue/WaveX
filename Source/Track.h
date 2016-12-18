@@ -62,6 +62,10 @@ public:
     
     void setCurrentMarkerPosition(int position);
     
+    int getMidiChannel();
+    void setMidiChannel(int channel);
+
+    
 private:
 
 	float zoom = 20;
@@ -79,7 +83,8 @@ private:
 	AudioSampleBuffer* audioBuffer;
     int markerPosition = 0;
     int bufferSize;
-
+    int midiChannel = 1;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Track)
 };
 

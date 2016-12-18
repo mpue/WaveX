@@ -58,13 +58,12 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     MainContentComponent* mcc;
+    vector<MasterChannelPanel*> channels;
     //[/UserVariables]
 
     //==============================================================================
     ScopedPointer<MasterChannelPanel> masterChannel;
     ScopedPointer<MasterChannelPanel> aux1;
-    
-    vector<MasterChannelPanel*> channels;
 
 
     //==============================================================================

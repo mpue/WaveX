@@ -117,6 +117,7 @@ void TrackNavigator::addTrack(double sampleRate) {
     }
     track->setSelected(true);
     
+    track->setMidiChannel(tracks.size() % 16);
     this->tracks.push_back(track);
     this->currentTrack = track;
     // track->toFront(true);

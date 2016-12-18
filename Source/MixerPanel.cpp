@@ -48,9 +48,9 @@ MixerPanel::MixerPanel (MainContentComponent* mcc)
 
 
     //[Constructor] You can add your own custom stuff here..
-    
-    
-    
+
+
+
     //[/Constructor]
 }
 
@@ -96,7 +96,7 @@ void MixerPanel::resized()
 void MixerPanel::changeListenerCallback(ChangeBroadcaster * source) {
 
     if (TrackNavigator* tn = dynamic_cast<TrackNavigator*>(source)){
-        
+
         if (tn->getTracks().size() > channels.size()){
             MasterChannelPanel* panel = new MasterChannelPanel(mcc);
             panel->setName(tn->getTracks().back()->getName());
@@ -104,7 +104,7 @@ void MixerPanel::changeListenerCallback(ChangeBroadcaster * source) {
             panel->setTopLeftPosition((channels.size() + 2) * 90, 0);
             addAndMakeVisible(panel);
             channels.push_back(panel);
-            
+
         }
 
     }
