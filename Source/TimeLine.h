@@ -33,7 +33,8 @@ private:
 	virtual void changeListenerCallback(ChangeBroadcaster * source) override;
 	double length;
 	int offset = 0;
-
+    ScopedPointer<DropShadow> dropShadow;
+    ScopedPointer<DropShadower> dropShadower;
 
 };
 

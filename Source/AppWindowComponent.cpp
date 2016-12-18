@@ -18,7 +18,7 @@ AppWindowComponent::AppWindowComponent()
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
     
-    this->offsetBottom = 275;
+    this->offsetBottom = 350;
     
     Rectangle<int> r = Desktop::getInstance().getDisplays().getMainDisplay().userArea;
     
@@ -38,7 +38,7 @@ AppWindowComponent::AppWindowComponent()
     mcc = new MainContentComponent(timeLine, trackProperties);
     mcc->setSize(r.getWidth(), r.getHeight() - this->offsetBottom - 50);
     viewport->setViewedComponent(mcc);
-
+    
     this->menu = new MenuBarComponent();
     
 #if JUCE_MAC
@@ -50,9 +50,6 @@ AppWindowComponent::AppWindowComponent()
     
     Rectangle<int> area(getLocalBounds());
 
-    setSize(r.getWidth(), r.getHeight());
-    setBounds(0,0,r.getWidth(),r.getHeight());
-
     this->menu->setBounds(0,0,getWidth(),25);
 	this->menu->setSize(getWidth(), 25);
     
@@ -62,18 +59,28 @@ AppWindowComponent::AppWindowComponent()
 	addAndMakeVisible(timeLine);
     addAndMakeVisible(viewport);
 	addAndMakeVisible(trackProperties);
+    
+    this->mixer = new MixerPanel(mcc);
+    this->mixerViewport = new Viewport();
+    this->mixerViewport->setViewedComponent(mixer);
+
+    
+    addAndMakeVisible(mixerViewport);
 
     mcc->getNavigator()->addChangeListener(this->trackProperties);
-
+    mcc->getNavigator()->addChangeListener(this->mixer);
+    
 	menu->toFront(true);
     
     addMouseListener(this,true);
-    
+
+    /*
     this->masterPanel = new MasterChannelPanel(mcc);
     this->masterPanel->setTopLeftPosition(getWidth() - this->masterPanel->getWidth() - 50, getHeight() - this->masterPanel->getHeight() - 50);
     mcc->addChangeListener(this->masterPanel);
     addAndMakeVisible(masterPanel);
-
+     */
+     
     this->transport = new TransportPanel(mcc);
     this->transport->setBounds(450,0,320,50);
     
@@ -88,6 +95,11 @@ AppWindowComponent::AppWindowComponent()
     addAndMakeVisible(transport);
     addAndMakeVisible(toolbar);
 	addAndMakeVisible(infoPanel);
+    
+    setSize(r.getWidth(), r.getHeight());
+    setBounds(0,0,r.getWidth(),r.getHeight());
+    
+    timeLine->toFront(false);
     
     // transport->setTopLeftPosition(50, r.getHeight() - (this->transport->getHeight() + 50));
 
@@ -110,7 +122,7 @@ AppWindowComponent::~AppWindowComponent()
 
 void AppWindowComponent::paint (Graphics& g)
 {
-
+    g.fillAll(Colours::lightgrey);
 }
 
 void AppWindowComponent::resized()
@@ -119,8 +131,10 @@ void AppWindowComponent::resized()
     // components that your component contains..
     Rectangle<int> area(getLocalBounds());
     // this->menu->setBounds(area.removeFromTop(LookAndFeel::getDefaultLookAndFeel().getDefaultMenuBarHeight()));
-    viewport->setSize(getWidth() - 150, getHeight() - this->offsetBottom);
+    viewport->setSize(getWidth() - 150, getHeight() - this->offsetBottom - 3);
     this->trackProperties->setBounds(0, 75, 150, getHeight() - this->offsetBottom);
+    this->mixerViewport->setBounds(0,getHeight() - this->offsetBottom + 75 ,getWidth(), this->offsetBottom - 75);
+    this->mixer->setBounds(0,50,getWidth()* 2 ,800);
     // viewport->setBounds(getX(), getY()  ,getWidth(),getHeight() - this->offsetBottom);
 
 }

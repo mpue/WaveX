@@ -18,6 +18,7 @@
 */
 
 //[Headers] You can add your own extra header files here...
+#include "Track.h"
 //[/Headers]
 
 #include "MixerPanel.h"
@@ -27,10 +28,17 @@
 //[/MiscUserDefs]
 
 //==============================================================================
-MixerPanel::MixerPanel ()
+MixerPanel::MixerPanel (MainContentComponent* mcc)
 {
     //[Constructor_pre] You can add your own custom stuff here..
+    this->mcc = mcc;
     //[/Constructor_pre]
+
+    addAndMakeVisible (masterChannel = new MasterChannelPanel (mcc));
+    masterChannel->setName ("Master");
+
+    addAndMakeVisible (aux1 = new MasterChannelPanel (mcc));
+    aux1->setName ("Aux 1");
 
 
     //[UserPreSize]
@@ -40,6 +48,9 @@ MixerPanel::MixerPanel ()
 
 
     //[Constructor] You can add your own custom stuff here..
+    
+    
+    
     //[/Constructor]
 }
 
@@ -48,6 +59,8 @@ MixerPanel::~MixerPanel()
     //[Destructor_pre]. You can add your own custom destruction code here..
     //[/Destructor_pre]
 
+    masterChannel = nullptr;
+    aux1 = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -71,6 +84,8 @@ void MixerPanel::resized()
     //[UserPreResize] Add your own custom resize code here..
     //[/UserPreResize]
 
+    masterChannel->setBounds (90, 0, 90, 250);
+    aux1->setBounds (0, 0, 90, 250);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -78,6 +93,24 @@ void MixerPanel::resized()
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
+void MixerPanel::changeListenerCallback(ChangeBroadcaster * source) {
+
+    if (TrackNavigator* tn = dynamic_cast<TrackNavigator*>(source)){
+        
+        if (tn->getTracks().size() > channels.size()){
+            MasterChannelPanel* panel = new MasterChannelPanel(mcc);
+            panel->setName(tn->getTracks().back()->getName());
+            tn->getTracks().back()->addChangeListener(panel);
+            panel->setTopLeftPosition((channels.size() + 2) * 90, 0);
+            addAndMakeVisible(panel);
+            channels.push_back(panel);
+            
+        }
+
+    }
+
+}
+
 //[/MiscUserCode]
 
 
@@ -91,10 +124,16 @@ void MixerPanel::resized()
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="MixerPanel" componentName=""
-                 parentClasses="public Component" constructorParams="" variableInitialisers=""
-                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="0" initialWidth="600" initialHeight="400">
+                 parentClasses="public Component, public ChangeListener" constructorParams="MainContentComponent* mcc"
+                 variableInitialisers="" snapPixels="8" snapActive="1" snapShown="1"
+                 overlayOpacity="0.330" fixedSize="0" initialWidth="600" initialHeight="400">
   <BACKGROUND backgroundColour="ff808080"/>
+  <GENERICCOMPONENT name="Master" id="dac96aabc1eedcee" memberName="masterChannel"
+                    virtualName="MasterChannelPanel" explicitFocusOrder="0" pos="90 0 90 250"
+                    class="MasterChannelPanel" params="mcc"/>
+  <GENERICCOMPONENT name="Aux 1" id="fbda51a6d9971c30" memberName="aux1" virtualName="MasterChannelPanel"
+                    explicitFocusOrder="0" pos="0 0 90 250" class="MasterChannelPanel"
+                    params="mcc"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

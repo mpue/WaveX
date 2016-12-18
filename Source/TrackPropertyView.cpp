@@ -43,6 +43,10 @@ TrackPropertyView::TrackPropertyView ()
 
     //[Constructor] You can add your own custom stuff here..
     startTimer(70);
+    
+    dropShadow = new DropShadow(Colour::fromFloatRGBA(0,0,0,0.5),3,Point<int>(2,0));
+    dropShadower = new DropShadower(*dropShadow);
+    dropShadower->setOwner(this);
     //[/Constructor]
 }
 
@@ -58,7 +62,8 @@ TrackPropertyView::~TrackPropertyView()
     for(std::vector<TrackPropertyPanel*>::iterator it = trackProperties.begin(); it != trackProperties.end();it++) {
         delete *it;
     }
-
+    dropShadow = nullptr;
+    dropShadower = nullptr;
 
     //[/Destructor]
 }
@@ -109,6 +114,7 @@ void TrackPropertyView::addTrack(Track* track)
 	addAndMakeVisible(panel);
 	trackProperties.push_back(panel);
 	panel->addMouseListener(this, true);
+    setSize(getWidth(), this->trackProperties.size() * 200);
 }
 
 void TrackPropertyView::changeListenerCallback (ChangeBroadcaster* source) {

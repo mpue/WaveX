@@ -24,6 +24,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MainComponent.cpp"
 #include "CustomLookAndFeel.h"
+#include "Track.h"
 //[/Headers]
 
 
@@ -48,6 +49,7 @@ public:
     ~MasterChannelPanel();
 
     //==============================================================================
+    void setName(String name);
     //[UserMethods]     -- You can add your own custom methods in this section.
 
     enum MeterMode {
@@ -69,13 +71,13 @@ public:
     // Binary resources:
     static const char* peaks_png;
     static const int peaks_pngSize;
+    static const char* round_button_png;
+    static const int round_button_pngSize;
 
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
 
-    ScopedPointer<DropShadow> ds;
-    ScopedPointer<DropShadower> d;
     MainContentComponent* mcc;
     ComponentDragger dragger;
     MeterMode mode;
@@ -84,17 +86,14 @@ private:
     //[/UserVariables]
 
     //==============================================================================
-    ScopedPointer<Slider> vuSliderLeft;
-    ScopedPointer<Slider> vuSliderRight;
-    ScopedPointer<Slider> leftVolumeSlider;
-    ScopedPointer<Slider> rightVolumeSlider;
-    ScopedPointer<Label> levelLabel;
-    ScopedPointer<Label> leftLabel;
-    ScopedPointer<Label> rightLabel;
-    ScopedPointer<ToggleButton> modeToggleButtonRMS;
-    ScopedPointer<ToggleButton> modeToggleButtonPeak;
-    ScopedPointer<ToggleButton> linkButton;
-    Image cachedImage_peaks_png_1;
+    ScopedPointer<Slider> vuSlider;
+    ScopedPointer<Slider> channelVolume;
+    ScopedPointer<Slider> panSlider;
+    ScopedPointer<Label> nameLabel;
+    ScopedPointer<ImageButton> muteButton;
+    ScopedPointer<ImageButton> soloButton;
+    ScopedPointer<Label> M;
+    ScopedPointer<Label> S;
 
 
     //==============================================================================

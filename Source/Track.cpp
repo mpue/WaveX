@@ -33,6 +33,12 @@ Track::~Track()
 	delete this->audioBuffer;
 }
 
+void Track::setName(juce::String name ) {
+    Component::setName(name);
+    this->name = name;
+    sendChangeMessage();
+}
+
 void Track::clearSelection() {
     for (std::vector<AudioRegion*>::iterator it = regions.begin(); it != regions.end(); ++it) {
         (*it)->setSelected(false);
@@ -232,8 +238,10 @@ void Track::paint (Graphics& g)
 	}
 	
     g.fillAll();
-     
+    g.setColour(Colours::grey);
+    g.drawLine(0,getHeight(),getWidth(),getHeight());
 }
+               
 
 void Track::resized()
 {

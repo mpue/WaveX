@@ -39,6 +39,7 @@ private:
     ScopedPointer<MasterChannelPanel> masterPanel;
     ScopedPointer<MenuBarComponent> menu;
     ScopedPointer<AppViewPort> viewport;
+    ScopedPointer<Viewport> mixerViewport;
     ScopedPointer<MainContentComponent> mcc;
     ScopedPointer<TransportPanel> transport;
 	TrackPropertyView* trackProperties = NULL;

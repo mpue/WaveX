@@ -137,8 +137,6 @@ public:
         
         if (navigator->isPlaying()) {
             
-            // AudioProcessorPlayer::audioDeviceIOCallback(inputChannelData, numInputChannels, outputChannelData, numOutputChannels, _numSamples);
-            
             for (int i = 0; i < navigator->getTracks().size();i++) {
                 for (int j = numSamples; j < numSamples + _numSamples;j++) {
 
@@ -168,9 +166,7 @@ public:
 
         }
         else {
-            
-            // AudioProcessorPlayer::audioDeviceIOCallback(inputChannelData, numInputChannels, outputChannelData, numOutputChannels, _numSamples);
-            
+
             /*
             for (int j = 0; j < _numSamples;j++) {
                 
@@ -178,11 +174,7 @@ public:
                 buffer->addSample(1, j,inputChannelData[1][j] * rightVolume);
             }
              */
-            
-            
         }
-
-        
         
         const float* left = buffer->getReadPointer(0);
         const float* right = buffer->getReadPointer(1);
@@ -274,7 +266,7 @@ public:
      
     void resized() override
 	{
-	}
+    }
 
     double getRms(int channel) {
         if (channel == 0)
@@ -665,7 +657,13 @@ private:
             
 			this->zoom = navigator->getZoom();
 			int newWidth = navigator->getMaxLength() * this->zoom;
-            setSize(newWidth, getHeight());
+            
+            if (getHeight() < navigator->getTracks().size() * 200)
+                setSize(newWidth, navigator->getTracks().size() * 200);
+            else {
+                setSize(newWidth, getHeight());
+            }
+            
 			this->timeLine->setLength(navigator->getMaxLength());
 			this->timeLine->setSize(navigator->getMaxLength() * zoom, 25);
 			this->marker->setDrawingBounds(0,0,navigator->getWidth(),getHeight());

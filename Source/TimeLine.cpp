@@ -17,10 +17,15 @@
 TimeLine::TimeLine(double lengthInSeconds)
 {
     this->length = lengthInSeconds;
+    dropShadow = new DropShadow(Colour::fromFloatRGBA(0,0,0,0.5),3,Point<int>(3,3));
+    dropShadower = new DropShadower(*dropShadow);
+    dropShadower->setOwner(this);
 }
 
 TimeLine::~TimeLine()
 {
+    dropShadower = nullptr;
+    dropShadow = nullptr;
 }
 
 void TimeLine::paint (Graphics& g)

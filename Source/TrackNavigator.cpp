@@ -123,7 +123,7 @@ void TrackNavigator::addTrack(double sampleRate) {
     this->selector->toFront(false);
     
 	// int height = this->getParentComponent()->getHeight();
-    setSize(getMaxLength() * this->zoom, tracks.size() * 200);
+    setBounds(getX(), getY(), getMaxLength() * this->zoom, tracks.size() * 200);
     track->setBounds(0, (tracks.size() - 1)  * 200, 600 * this->zoom, 200);
 	this->marker->setSize(2, getHeight());
 	this->marker->setLength(getMaxLength());

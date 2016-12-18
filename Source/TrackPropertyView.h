@@ -64,6 +64,9 @@ private:
     //[UserVariables]   -- You can add your own custom variables in this section.
 	std::vector<TrackPropertyPanel*> trackProperties;
 	int offset = 0;
+    ScopedPointer<DropShadow> dropShadow;
+    ScopedPointer<DropShadower> dropShadower;
+    
 	//[/UserVariables]
 
     //==============================================================================

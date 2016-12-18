@@ -188,6 +188,7 @@ void TrackPropertyPanel::labelTextChanged (Label* labelThatHasChanged)
     if (labelThatHasChanged == nameLabel)
     {
         //[UserLabelCode_nameLabel] -- add your label text handling code here..
+        track->setName(nameLabel->getText());
         //[/UserLabelCode_nameLabel]
     }
 

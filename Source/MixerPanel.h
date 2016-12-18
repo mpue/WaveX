@@ -22,6 +22,9 @@
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "MainComponent.cpp"
+#include "MasterChannelPanel.h"
+#include "TrackNavigator.h"
 //[/Headers]
 
 
@@ -34,15 +37,17 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class MixerPanel  : public Component
+class MixerPanel  : public Component,
+                    public ChangeListener
 {
 public:
     //==============================================================================
-    MixerPanel ();
+    MixerPanel (MainContentComponent* mcc);
     ~MixerPanel();
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
+    virtual void changeListenerCallback(ChangeBroadcaster * source) override;
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -52,9 +57,14 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
+    MainContentComponent* mcc;
     //[/UserVariables]
 
     //==============================================================================
+    ScopedPointer<MasterChannelPanel> masterChannel;
+    ScopedPointer<MasterChannelPanel> aux1;
+    
+    vector<MasterChannelPanel*> channels;
 
 
     //==============================================================================

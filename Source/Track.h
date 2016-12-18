@@ -21,7 +21,7 @@
 
 using namespace std;
 
-class Track    : public Component
+class Track    : public Component, public ChangeBroadcaster
 {
 public:
     Track(double sampleRate);
@@ -29,6 +29,7 @@ public:
 
 	void setZoom(float zoom);
 	String getName();
+    void setName(String name);
 	void setGain(float gain);
 	void setVolume(float volume);
 	float getVolume();
