@@ -87,7 +87,7 @@
     <XCODE_MAC targetFolder="Builds/MacOSX" vst3Folder="" bigIcon="zaLFOJ" smallIcon="TGdhNR">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="WaveX"/>
-        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="WaveX"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="6" targetName="WaveX"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_core" path="../../../Downloads/JUCE/modules"/>

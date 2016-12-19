@@ -305,7 +305,7 @@ void TrackNavigator::mouseUp (const MouseEvent& event) {
         r->setOffset(offset);
         
         long sampleNum = (600 / (600 * zoom)) * offset * r->getSampleRate();
-        r->setSampleOffset(sampleNum);
+        r->setSampleOffset(sampleNum, true, true);
         
 
     }

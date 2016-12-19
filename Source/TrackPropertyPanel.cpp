@@ -285,11 +285,6 @@ Track* TrackPropertyPanel::getTrack() {
 
 void TrackPropertyPanel::update() {
     this->volumeViewSlider->setValue(track->magnitudeLeft);
-	if (this->selected != track->isSelected()) {
-		this->selected = track->isSelected();
-		repaint();
-	}
-
 }
 
 void TrackPropertyPanel::setSelected(bool selected)

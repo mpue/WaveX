@@ -127,9 +127,22 @@ void AudioRegion::setDynOffset(int amount) {
     this->dynOffset = amount;
 }
 
-void AudioRegion::setSampleOffset(long offset)
+void AudioRegion::setSampleOffset(long offset, bool reminder, bool notify)
 {
+    if (reminder)
+        this->oldOffset = this->sampleOffset;
+    
     this->sampleOffset = offset;
+    
+    if (!reminder)
+        this->oldOffset = this->sampleOffset;
+    
+    if (notify)
+        sendChangeMessage();
+}
+
+long AudioRegion::getOldOffset() {
+    return oldOffset;
 }
 
 long AudioRegion::getSampleOffset() {

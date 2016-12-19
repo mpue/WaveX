@@ -22,7 +22,6 @@
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "MainComponent.cpp"
 #include "CustomLookAndFeel.h"
 #include "Track.h"
 #include "DragConstrainer.h"
@@ -39,18 +38,16 @@
                                                                     //[/Comments]
 */
 class MasterChannelPanel  : public Component,
-                            public Timer,
                             public ChangeListener,
                             public SliderListener,
                             public ButtonListener
 {
 public:
     //==============================================================================
-    MasterChannelPanel (MainContentComponent* mcc);
+    MasterChannelPanel ();
     ~MasterChannelPanel();
 
     //==============================================================================
-    void setName(String name);
     //[UserMethods]     -- You can add your own custom methods in this section.
 
     enum MeterMode {
@@ -60,8 +57,10 @@ public:
 
     void mouseDown (const MouseEvent& e) override;
     void mouseDrag (const MouseEvent& e) override;
-    void timerCallback() override;
+
     virtual void changeListenerCallback(ChangeBroadcaster * source) override;
+    void setName(String name);
+    void setMagnitude(float magnitude);
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -74,12 +73,13 @@ public:
     static const int peaks_pngSize;
     static const char* round_button_png;
     static const int round_button_pngSize;
+    static const char* round_button_pushed_png;
+    static const int round_button_pushed_pngSize;
 
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
 
-    MainContentComponent* mcc;
     ComponentDragger dragger;
 	DragConstrainer constrainer;
     MeterMode mode;

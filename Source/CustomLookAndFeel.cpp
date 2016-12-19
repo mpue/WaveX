@@ -20,6 +20,7 @@ void CustomLookAndFeel::drawLinearSlider (Graphics& g, int x, int y, int width, 
         float from  = (sliderPos / maxSliderPos) * height;
         float to = height;
         
+        /*
         for (float val = from ; val <= to; val += 5) {
         
             if (val / height <= 0.05f) {
@@ -34,9 +35,10 @@ void CustomLookAndFeel::drawLinearSlider (Graphics& g, int x, int y, int width, 
             //g.drawEllipse((float)x, val, 5, 5, 1);
             g.fillRect((float)x, val, (float)width,3.0f);
         }
+        */
         
-        
-        // g.fillRect((float)x,from,(float)width,to);
+        g.setGradientFill(gradient);
+        g.fillRect((float)x,from,(float)width,to);
 
     }
     else if (style == Slider::SliderStyle::LinearVertical) {

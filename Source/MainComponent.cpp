@@ -16,6 +16,7 @@
 #include "PositionMarker.h"
 #include "WaveSelector.h"
 #include "TimeLine.h"
+#include "MixerPanel.h"
 
 using namespace std;
 //==============================================================================
@@ -28,15 +29,17 @@ class MainContentComponent : public AudioAppComponent,
                              public MenuBarModel,
                              public ChangeListener,
                              public ChangeBroadcaster,
-                             public TimeSliceClient
+                             public TimeSliceClient,
+                             public Timer
 
 {
 public:
     //============================================================================
-    MainContentComponent(TimeLine* timeLine, TrackPropertyView* trackProperties) : thread("main")
+    MainContentComponent(TimeLine* timeLine, TrackPropertyView* trackProperties, MixerPanel* mixer) : thread("main")
     {		
         this->zoom = 21.0f;
 
+        this->mixer = mixer;
 		this->timeLine = timeLine;
 		this->trackProperties = trackProperties;
 
@@ -60,7 +63,7 @@ public:
 
         this->navigator->repaint();
         thread.startThread(3);
-        //thread.addTimeSliceClient(this);
+        // thread.addTimeSliceClient(this);
 
         this->leftShiftPressed = false;
         this->ctrlPressed = false;
@@ -78,6 +81,8 @@ public:
         apfm->addDefaultFormats();
         
 		this->numSamples = 0;
+        
+        startTimer(50);
     }
 
     ~MainContentComponent()
@@ -99,9 +104,20 @@ public:
     
     }
     
+    void timerCallback() override {
+        trackProperties->timerCallback();
+        for (int i = 0; i < navigator->getTracks().size();i++) {
+            Track* t = navigator->getTracks().at(i);
+            mixer->getChannels().at(i)->setMagnitude(t->magnitudeLeft);
+        }
+        mixer->setMasterVolume(magnitudeLeft);
+    }
+    
     int useTimeSlice() override {
         if (navigator->isPlaying())
             sendChangeMessage();
+
+        
         return 70;
     }
 
@@ -139,26 +155,12 @@ public:
             
             for (int i = 0; i < navigator->getTracks().size();i++) {
                 for (int j = numSamples; j < numSamples + _numSamples;j++) {
-
                     buffer->addSample(0, j%this->buffersize, navigator->getTracks().at(i)->getSample(0, j) * leftVolume * navigator->getTracks().at(i)->getVolume());
                     buffer->addSample(1, j%this->buffersize, navigator->getTracks().at(i)->getSample(1, j) * rightVolume * navigator->getTracks().at(i)->getVolume());
                 }
                 navigator->getTracks().at(i)->setOffset(numSamples);
-                
-                AudioRegion* ar = navigator->getTracks().at(i)->getCurrentRegion(numSamples);
-                
-                if (ar != NULL) {
-                    
-                    if (numSamples - ar->getSampleOffset() + this->buffersize < ar->getBuffer()->getNumSamples()) {
-                        navigator->getTracks().at(i)->magnitudeLeft  = ar->getBuffer()->getMagnitude(0, numSamples - ar->getSampleOffset() , this->buffersize);
-                        navigator->getTracks().at(i)->magnitudeRight = ar->getBuffer()->getMagnitude(1, numSamples - ar->getSampleOffset() , this->buffersize);
-                    }
-                    else {
-                        navigator->getTracks().at(i)->magnitudeLeft = 0;
-                        navigator->getTracks().at(i)->magnitudeRight = 0;
-                    }
-                    
-                }
+                navigator->getTracks().at(i)->updateMagnitude(numSamples, _numSamples);
+
             }
             numSamples += _numSamples;
             navigator->setPosition(numSamples / this->sampleRate);
@@ -512,6 +514,7 @@ private:
     ScopedPointer<TrackNavigator> navigator;
     ScopedPointer<PositionMarker> marker;
 	ScopedPointer<TimeLine> timeLine;
+    MixerPanel* mixer;
 	TrackPropertyView* trackProperties;
 
     long numSamples = 0;

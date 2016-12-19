@@ -21,7 +21,7 @@
 
 using namespace std;
 
-class Track    : public Component, public ChangeBroadcaster
+class Track    : public Component, public ChangeBroadcaster, public ChangeListener
 {
 public:
     Track(double sampleRate);
@@ -53,6 +53,8 @@ public:
 
 	double magnitudeLeft = 0;
 	double magnitudeRight = 0;
+    
+    void updateMagnitude(int sample, int buffersize);
 
     AudioRegion* getCurrentRegion(long sample);
     
@@ -84,6 +86,7 @@ private:
     int markerPosition = 0;
     int bufferSize;
     int midiChannel = 1;
+    virtual void changeListenerCallback(ChangeBroadcaster * source) override;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Track)
 };

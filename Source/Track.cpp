@@ -17,10 +17,11 @@ Track::Track(double sampleRate)
 {
 	manager.registerBasicFormats();
 	this->sampleRate = sampleRate;
-	this->audioBuffer = new AudioSampleBuffer();
+
 	this->maxLength = 600;
 	this->name = "empty Track";
     this->volume = 1;
+    this->audioBuffer = new AudioSampleBuffer(2,maxLength*sampleRate);
     
 }
 
@@ -57,6 +58,7 @@ void Track::removeSelectedRegions() {
     for (std::vector<AudioRegion*>::iterator it = regions.begin(); it != regions.end();) {
         if( (*it)->isSelected() ) {
             delete * it;
+            (*it)->removeAllChangeListeners();
             it = regions.erase(it);
         }
         else {
@@ -100,7 +102,7 @@ void Track::duplicateRegion(AudioRegion *region) {
     
     clearSelection();
     duplicate->setSelected(true);
-    duplicate->setSampleOffset(region->getSampleOffset() + region->getNumSamples());
+    duplicate->setSampleOffset(region->getSampleOffset() + region->getNumSamples(), false, true);
     duplicate->setOffset(region->getOffset() + region->getWidth());
     
     repaint();
@@ -118,6 +120,7 @@ void Track::addRegion(File file, double sampleRate) {
 
 	this->regions.push_back(region);
 	this->currentRegion = region;
+    region->addChangeListener(this);
 
     this->currentRegion->toFront(true);
     addAndMakeVisible(region);
@@ -126,10 +129,10 @@ void Track::addRegion(File file, double sampleRate) {
     region->setSelected(true);
     
     long sampleNum = (this->maxLength / (this->maxLength * zoom)) * markerPosition * sampleRate;
-    region->setSampleOffset(sampleNum);
-    
-    region->setSampleOffset(sampleNum);
+    region->setSampleOffset(sampleNum,false,true);
     region->setOffset(markerPosition);
+    
+
     
 	repaint();
 }
@@ -190,7 +193,7 @@ AudioRegion* Track::getCurrentRegion(long sample) {
 
 const float Track::getSample(int channel, long sample) {
     
-
+    /*
     this->currentRegion = getCurrentRegion(sample);
     
     if (this->currentRegion != NULL) {
@@ -200,7 +203,14 @@ const float Track::getSample(int channel, long sample) {
     else {
         return 0;
     }
+     */
+    return audioBuffer->getSample(channel,sample);
 
+}
+
+void Track::updateMagnitude(int sample, int buffersize) {
+    this->magnitudeLeft = audioBuffer->getMagnitude(0, sample, buffersize);
+    this->magnitudeRight = audioBuffer->getMagnitude(1, sample, buffersize);
 }
 
 const float * Track::getReadBuffer(int channel)
@@ -278,4 +288,15 @@ int Track::getMidiChannel() {
 
 void Track::setMidiChannel(int channel) {
     this->midiChannel = channel;
+}
+
+void Track::changeListenerCallback(ChangeBroadcaster * source) {
+    
+    if(AudioRegion* r = dynamic_cast<AudioRegion*>(source)){
+        audioBuffer->clear(r->getOldOffset(), r->getBuffer()->getNumSamples());
+        audioBuffer->copyFrom(0, r->getSampleOffset(), *r->getBuffer(), 0, 0, r->getBuffer()->getNumSamples());
+        audioBuffer->copyFrom(1, r->getSampleOffset(), *r->getBuffer(), 1, 0, r->getBuffer()->getNumSamples());
+        
+    }
+    
 }

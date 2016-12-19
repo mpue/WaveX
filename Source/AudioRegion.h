@@ -16,7 +16,7 @@
 //==============================================================================
 /*
 */
-class AudioRegion : public Component,  public ChangeListener
+class AudioRegion : public Component,  public ChangeListener, public ChangeBroadcaster
 {
 public:
     
@@ -48,7 +48,8 @@ public:
     int getLoopCount();
     
     long getSampleOffset();
-    void setSampleOffset(long offset);
+    void setSampleOffset(long offset,bool reminder, bool notify);
+    long getOldOffset();
     
     double getSampleRate();
     
@@ -70,6 +71,7 @@ private:
     int dynOffset = 0;
 	double sampleRate;
     long sampleOffset = 0;
+    long oldOffset = 0;
     int loopCount = 1;
 	bool selected = false;
     bool loop = false;

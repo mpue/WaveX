@@ -34,8 +34,12 @@ AppWindowComponent::AppWindowComponent()
 
 	this->trackProperties = new TrackPropertyView();
 	this->trackProperties->setBounds(0, 75, 150, r.getHeight() - this->offsetBottom - 50);
+    
+    this->mixer = new MixerPanel();
+    this->mixerViewport = new Viewport();
+    this->mixerViewport->setViewedComponent(mixer);
 
-    mcc = new MainContentComponent(timeLine, trackProperties);
+    mcc = new MainContentComponent(timeLine, trackProperties, mixer);
     mcc->setSize(r.getWidth(), r.getHeight() - this->offsetBottom - 50);
     viewport->setViewedComponent(mcc);
     
@@ -59,12 +63,6 @@ AppWindowComponent::AppWindowComponent()
 	addAndMakeVisible(timeLine);
     addAndMakeVisible(viewport);
 	addAndMakeVisible(trackProperties);
-    
-    this->mixer = new MixerPanel(mcc);
-    this->mixerViewport = new Viewport();
-    this->mixerViewport->setViewedComponent(mixer);
-
-    
     addAndMakeVisible(mixerViewport);
 
     mcc->getNavigator()->addChangeListener(this->trackProperties);
@@ -117,6 +115,7 @@ AppWindowComponent::~AppWindowComponent()
     transport = nullptr;
     toolbar = nullptr;
 	infoPanel = nullptr;
+    mixer = nullptr;
 	delete trackProperties;
 }
 
