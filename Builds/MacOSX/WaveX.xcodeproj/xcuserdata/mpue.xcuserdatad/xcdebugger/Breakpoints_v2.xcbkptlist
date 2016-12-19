@@ -6,32 +6,48 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../../Source/Track.cpp"
-            timestampString = "503872130.524355"
+            filePath = "../../Source/AudioRegion.cpp"
+            timestampString = "503881621.622601"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "296"
-            endingLineNumber = "296"
-            landmarkName = "Track::changeListenerCallback(ChangeBroadcaster * source)"
+            startingLineNumber = "132"
+            endingLineNumber = "132"
+            landmarkName = "AudioRegion::setSampleOffset(long offset, bool reminder, bool notify)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Source/TrackNavigator.cpp"
+            timestampString = "503882158.650485"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "303"
+            endingLineNumber = "303"
+            landmarkName = "TrackNavigator::mouseUp (const MouseEvent&amp; event)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../Source/Track.cpp"
-            timestampString = "503872634.185903"
+            timestampString = "503882556.793992"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "104"
-            endingLineNumber = "104"
-            landmarkName = "Track::duplicateRegion(AudioRegion *region)"
+            startingLineNumber = "303"
+            endingLineNumber = "303"
+            landmarkName = "Track::changeListenerCallback(ChangeBroadcaster * source)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

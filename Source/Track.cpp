@@ -102,8 +102,13 @@ void Track::duplicateRegion(AudioRegion *region) {
     
     clearSelection();
     duplicate->setSelected(true);
-    duplicate->setSampleOffset(region->getSampleOffset() + region->getNumSamples(), false, true);
+    duplicate->setSampleOffset(region->getSampleOffset() + region->getNumSamples(), false, false);
     duplicate->setOffset(region->getOffset() + region->getWidth());
+    duplicate->addChangeListener(this);
+    
+
+    audioBuffer->copyFrom(0, duplicate->getSampleOffset(), *region->getBuffer(), 0, 0, region->getBuffer()->getNumSamples());
+    audioBuffer->copyFrom(1, duplicate->getSampleOffset(), *region->getBuffer(), 1, 0, region->getBuffer()->getNumSamples());
     
     repaint();
 }
@@ -129,9 +134,11 @@ void Track::addRegion(File file, double sampleRate) {
     region->setSelected(true);
     
     long sampleNum = (this->maxLength / (this->maxLength * zoom)) * markerPosition * sampleRate;
-    region->setSampleOffset(sampleNum,false,true);
+    region->setSampleOffset(sampleNum,false,false);
     region->setOffset(markerPosition);
     
+    audioBuffer->copyFrom(0, region->getSampleOffset(), *region->getBuffer(), 0, 0, region->getBuffer()->getNumSamples());
+    audioBuffer->copyFrom(1, region->getSampleOffset(), *region->getBuffer(), 1, 0, region->getBuffer()->getNumSamples());
 
     
 	repaint();
