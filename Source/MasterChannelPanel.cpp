@@ -117,12 +117,14 @@ MasterChannelPanel::MasterChannelPanel (MainContentComponent* mcc)
 
     channelVolume->setValue(1.0);
 
-
     link = false;
     clf = new CustomLookAndFeel();
 
     channelVolume->setLookAndFeel(clf);
     vuSlider->setLookAndFeel(clf);
+
+	constrainer.setRaster(getWidth());
+	constrainer.setTolerance(1);
 
     //[/Constructor]
 }
@@ -131,7 +133,7 @@ MasterChannelPanel::~MasterChannelPanel()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
     //[/Destructor_pre]
-
+	
     vuSlider = nullptr;
     channelVolume = nullptr;
     panSlider = nullptr;
@@ -143,6 +145,7 @@ MasterChannelPanel::~MasterChannelPanel()
 
 
     //[Destructor]. You can add your own custom destruction code here..
+	clf = nullptr;
     //[/Destructor]
 }
 
@@ -235,7 +238,7 @@ void MasterChannelPanel::mouseDown (const MouseEvent& e)
 }
 void MasterChannelPanel::mouseDrag (const MouseEvent& e)
 {
-    dragger.dragComponent (this, e, nullptr);
+    dragger.dragComponent (this, e, &constrainer);
 }
 
 void MasterChannelPanel::timerCallback() {

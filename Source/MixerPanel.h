@@ -25,6 +25,7 @@
 #include "MainComponent.cpp"
 #include "MasterChannelPanel.h"
 #include "TrackNavigator.h"
+#include "DragConstrainer.h"
 //[/Headers]
 
 

@@ -107,6 +107,7 @@ void TrackNavigator::addTrack(double sampleRate) {
 	Track* track = new Track(sampleRate);
     addAndMakeVisible(track);
 	
+	track->addChangeListener(this);
     // track->setTopLeftPosition(0, 200 * tracks.size());
 
 	if (zoom > 0)
@@ -118,6 +119,13 @@ void TrackNavigator::addTrack(double sampleRate) {
     track->setSelected(true);
     
     track->setMidiChannel(tracks.size() % 16);
+
+	int yPos = 0;
+
+	for (int i = 0; i < this->tracks.size();i++) {
+		yPos += tracks.at(i)->getHeight();
+	}
+
     this->tracks.push_back(track);
     this->currentTrack = track;
     // track->toFront(true);
@@ -125,7 +133,8 @@ void TrackNavigator::addTrack(double sampleRate) {
     
 	// int height = this->getParentComponent()->getHeight();
     setBounds(getX(), getY(), getMaxLength() * this->zoom, tracks.size() * 200);
-    track->setBounds(0, (tracks.size() - 1)  * 200, 600 * this->zoom, 200);
+    track->setBounds(0, yPos, 600 * this->zoom, 200);
+
 	this->marker->setSize(2, getHeight());
 	this->marker->setLength(getMaxLength());
     this->selector->setSize(getWidth(), getHeight());
@@ -159,14 +168,47 @@ WaveSelector* TrackNavigator::getSelector() {
 
 void TrackNavigator::changeListenerCallback(ChangeBroadcaster * source) 
 {
+	int index = -1;
 
+	for (int i = 0; i < tracks.size();i++) {
+		if (source == tracks.at(i) && i < tracks.size() - 1) {			
+			index = i;
+			break;
+		}
+	}
+
+	if (index >= 0 && tracks.size() > index + 1) {
+
+		for (int i = index + 1; i < tracks.size();i++) {
+			tracks.at(i)->setTopLeftPosition(tracks.at(i - 1)->getX(), tracks.at(i - 1)->getPosition().getY() + tracks.at(i - 1)->getHeight());				
+		}
+		
+		sendChangeMessage();
+	}
+
+	int height = 0;
+
+	for (int i = 0; i < tracks.size();i++) {
+		height += tracks.at(i)->getHeight();
+	}
+
+	if (getHeight() != height) {
+		setSize(getWidth(), height);
+		sendChangeMessage();
+	}
+
+	/*
     if (source == selector) {
         Rectangle<int> range = selector->getSelectedRange();
     }
+	*/
 
 }
 
 bool TrackNavigator::keyPressed(const KeyPress& key, Component* originatingComponent) {
+
+
+
     if (key == KeyPress::spaceKey) {
         if (isPlaying())
         {

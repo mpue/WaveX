@@ -73,6 +73,7 @@
             file="Source/TrackPropertyView.cpp"/>
       <FILE id="Y8VraN" name="TrackPropertyView.h" compile="0" resource="0"
             file="Source/TrackPropertyView.h"/>
+      <FILE id="e2QMbW" name="TrackResizer.h" compile="0" resource="0" file="Source/TrackResizer.h"/>
       <FILE id="C73fzP" name="TransportPanel.cpp" compile="1" resource="0"
             file="Source/TransportPanel.cpp"/>
       <FILE id="JrlRtk" name="TransportPanel.h" compile="0" resource="0"

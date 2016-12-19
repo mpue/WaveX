@@ -25,6 +25,7 @@
 #include "MainComponent.cpp"
 #include "CustomLookAndFeel.h"
 #include "Track.h"
+#include "DragConstrainer.h"
 //[/Headers]
 
 
@@ -80,6 +81,7 @@ private:
 
     MainContentComponent* mcc;
     ComponentDragger dragger;
+	DragConstrainer constrainer;
     MeterMode mode;
     bool link;
     ScopedPointer<CustomLookAndFeel> clf;

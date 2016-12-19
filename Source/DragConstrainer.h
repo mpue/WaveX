@@ -44,7 +44,7 @@ public:
     
     double snap(double location, double raster) {
         
-        int toleranceWindow = (raster / 4);
+        int toleranceWindow = (raster / tolerance);
         
         if (location > 0) {
             
@@ -65,8 +65,6 @@ public:
             }
         }
         
-        // std::cout << location << std::endl;
-        
         return location;
     }
     
@@ -74,9 +72,13 @@ public:
         this->raster = raster;
     }
     
+	void setTolerance(int tolerance) {
+		this->tolerance = tolerance;			
+	}
     
 private:
     int raster = 1;
+	int tolerance = 4;
     
 };
 

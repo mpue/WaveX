@@ -62,6 +62,7 @@ TrackPropertyView::~TrackPropertyView()
     for(std::vector<TrackPropertyPanel*>::iterator it = trackProperties.begin(); it != trackProperties.end();it++) {
         delete *it;
     }
+
     dropShadow = nullptr;
     dropShadower = nullptr;
 
@@ -109,7 +110,15 @@ void TrackPropertyView::addTrack(Track* track)
 {
 	TrackPropertyPanel* panel = new TrackPropertyPanel();
     panel->setName(track->getName());
-	panel->setBounds(0, trackProperties.size() * 200, 150, 200);
+
+	int yPos = 0;
+
+	for (int i = 0; i < this->trackProperties.size();i++) {
+		yPos += trackProperties.at(i)->getHeight();
+
+	}
+
+	panel->setBounds(0, yPos, 150, 200);
     panel->setTrack(track);
 	addAndMakeVisible(panel);
 	trackProperties.push_back(panel);
@@ -126,6 +135,15 @@ void TrackPropertyView::changeListenerCallback (ChangeBroadcaster* source) {
         while (tn->getTracks().size() > trackProperties.size()) {
             addTrack(tn->getTracks().at(i--));
         }
+
+		int height = 0;
+
+		for (int i = 0; i < this->trackProperties.size();i++) {
+			trackProperties.at(i)->setTopLeftPosition(trackProperties.at(i)->getX(), trackProperties.at(i)->getTrack()->getY());
+			height += trackProperties.at(i)->getHeight();
+		}
+
+		setSize(getWidth(), height);
 
     }
 

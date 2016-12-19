@@ -94,7 +94,7 @@ TrackPropertyPanel::TrackPropertyPanel ()
 
     //[UserPreSize]
     
-    constrainer = new TrackPropertyConstrainer(50,200);
+    constrainer = new TrackPropertyConstrainer(50,300);
     
     resizer = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::bottomEdge);
     addAndMakeVisible(resizer);
@@ -106,6 +106,7 @@ TrackPropertyPanel::TrackPropertyPanel ()
     //[Constructor] You can add your own custom stuff here..
     // clf = new CustomLookAndFeel();
     // volumeViewSlider->setLookAndFeel(clf);
+	addKeyListener(this);
 
     //[/Constructor]
 }
@@ -144,15 +145,15 @@ void TrackPropertyPanel::paint (Graphics& g)
 
 	if (selected) {
 		g.setColour(Colour(0xffa0a0a0).brighter());
-		g.fillRect(0, 0, 150, 200);
+		g.fillRect(0, 0, 150, getHeight());
 	}
 	else {
 		g.setColour(Colour(0xffa0a0a0));
-		g.fillRect(0, 0, 150, 200);
+		g.fillRect(0, 0, 150, getHeight());
 	}
 
 	g.setColour(Colours::darkgrey);
-	g.drawLine(0, 200, 150, 200,0.5);
+	g.drawLine(0, getHeight(), 150, getHeight(),0.5);
 
     //[/UserPaint]
 }
@@ -174,6 +175,8 @@ void TrackPropertyPanel::resized()
     label3->setBounds (32, 128, 32, 16);
     //[UserResized] Add your own custom resize handling here..
     resizer->setBounds(0,getHeight()-5, getWidth(),5);
+
+	Logger::getCurrentLogger()->writeToLog(getBounds().toString());
     
     if (track != NULL)
         track->setBounds(0, track->getY(), track->getWidth(), getHeight());
@@ -286,6 +289,23 @@ void TrackPropertyPanel::setSelected(bool selected)
 	track->setSelected(this->selected);
 	repaint();
 }
+
+bool TrackPropertyPanel::keyPressed(const KeyPress & key, Component * originatingComponent)
+{
+	if (key.getModifiers().shiftModifier) {
+		Logger::getCurrentLogger()->writeToLog("Shift pressed");
+	}
+
+	return false;
+}
+
+bool TrackPropertyPanel::keyStateChanged(bool isKeyDown, Component * originatingComponent)
+{
+	Logger::getCurrentLogger()->writeToLog("keyStateChanged to "+String(isKeyDown));
+	return false;
+}
+
+
 
 
 

@@ -109,8 +109,8 @@ void Track::duplicateRegion(AudioRegion *region) {
 void Track::addRegion(File file, double sampleRate) {
 
 	AudioRegion* region = new AudioRegion(file, manager, sampleRate);
-	Rectangle<int>* bounds = new Rectangle<int>(0, 0, region->getThumbnail()->getTotalLength() * 20, 200);
-    region->setBounds(markerPosition, 0, region->getWidth(), region->getHeight());
+	Rectangle<int>* bounds = new Rectangle<int>(0, 0, region->getThumbnail()->getTotalLength() * 20, getHeight());
+    region->setBounds(markerPosition, 0, region->getWidth(), getHeight());
 	region->setThumbnailBounds(bounds);
     region->setLoopCount(0);
 	if (zoom > 0)
@@ -249,6 +249,7 @@ void Track::resized()
         (*it)->setSize((*it)->getWidth(), getHeight());
         (*it)->setZoom(zoom);
     }
+	sendChangeMessage();
 }
 
 void Track::setOffset(int offset)

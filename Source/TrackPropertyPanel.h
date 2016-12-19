@@ -25,6 +25,7 @@
 #include "Track.h"
 #include "CustomLookAndFeel.h"
 #include "TrackPropertyConstrainer.h"
+#include "TrackResizer.h"
 //[/Headers]
 
 
@@ -38,6 +39,7 @@
                                                                     //[/Comments]
 */
 class TrackPropertyPanel  : public Component,
+                            public KeyListener,
                             public LabelListener,
                             public ButtonListener,
                             public SliderListener
@@ -54,6 +56,8 @@ public:
     Track* getTrack();
     void update();
 	void setSelected(bool selected);
+	virtual bool keyPressed(const KeyPress& key, Component* originatingComponent) override;
+	virtual bool keyStateChanged(bool isKeyDown, Component* originatingComponent) override;
 
     //[/UserMethods]
 
@@ -70,8 +74,9 @@ private:
     Track* track = NULL;
     CustomLookAndFeel* clf;
 	bool selected;
-    ResizableEdgeComponent* resizer;
+	ResizableEdgeComponent* resizer;
     TrackPropertyConstrainer* constrainer;
+	bool shiftPressed = false;
     //[/UserVariables]
 
     //==============================================================================
