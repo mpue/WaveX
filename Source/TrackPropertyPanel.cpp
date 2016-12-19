@@ -180,6 +180,15 @@ void TrackPropertyPanel::resized()
     
     if (track != NULL)
         track->setBounds(0, track->getY(), track->getWidth(), getHeight());
+
+	if (volumeViewSlider->getBottom() > getHeight()) {
+		volumeViewSlider->setVisible(false);
+	}
+	else {
+		volumeViewSlider->setVisible(true);
+	}
+
+
     //[/UserResized]
 }
 
