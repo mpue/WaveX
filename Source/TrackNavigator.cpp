@@ -67,6 +67,43 @@ void TrackNavigator::setZoom(float zoom) {
     constrainer.setRaster(this->zoom / 4);
 }
 
+void TrackNavigator::updateTrackLayout(ChangeBroadcaster * source)
+{
+	int index = -1;
+
+	for (int i = 0; i < tracks.size();i++) {
+		if (source == tracks.at(i) && i < tracks.size() - 1) {
+			index = i;
+			break;
+		}
+	}
+
+	if (index >= 0 && tracks.size() > index + 1) {
+
+		for (int i = index + 1; i < tracks.size();i++) {
+			tracks.at(i)->setTopLeftPosition(tracks.at(i - 1)->getX(), tracks.at(i - 1)->getPosition().getY() + tracks.at(i - 1)->getHeight());
+		}
+
+	
+	}
+
+	adjustHeight();
+	sendChangeMessage();
+}
+
+void TrackNavigator::adjustHeight()
+{
+	int height = 0;
+
+	for (int i = 0; i < tracks.size();i++) {
+		height += tracks.at(i)->getHeight();
+	}
+
+	if (getHeight() != height) {
+		setSize(getWidth(), height);
+	}
+}
+
 double TrackNavigator::getPosition() {
     return position;
 }
@@ -145,6 +182,35 @@ void TrackNavigator::addTrack(double sampleRate) {
 	sendChangeMessage();    
 }
 
+void TrackNavigator::removeSelectedTrack()
+{
+	for (std::vector<Track*>::iterator it = tracks.begin(); it != tracks.end();) {
+		if ((*it)->isSelected()) {
+			delete * it;
+			it = tracks.erase(it);
+
+			break;
+		}
+		else {
+			++it;
+		}
+	}
+
+	if (tracks.size() > 0) {
+
+		tracks.at(0)->setTopLeftPosition(tracks.at(0)->getX(), 0);
+
+		for (int i = 1; i < tracks.size();i++) {
+			tracks.at(i)->setTopLeftPosition(tracks.at(i - 1)->getX(), tracks.at(i - 1)->getHeight() + tracks.at(i - 1)->getY());
+		}
+
+	}
+
+	adjustHeight();
+	sendChangeMessage();
+
+}
+
 Track * TrackNavigator::getCurrentTrack()
 {
 	return this->currentTrack;
@@ -168,34 +234,7 @@ WaveSelector* TrackNavigator::getSelector() {
 
 void TrackNavigator::changeListenerCallback(ChangeBroadcaster * source) 
 {
-	int index = -1;
-
-	for (int i = 0; i < tracks.size();i++) {
-		if (source == tracks.at(i) && i < tracks.size() - 1) {			
-			index = i;
-			break;
-		}
-	}
-
-	if (index >= 0 && tracks.size() > index + 1) {
-
-		for (int i = index + 1; i < tracks.size();i++) {
-			tracks.at(i)->setTopLeftPosition(tracks.at(i - 1)->getX(), tracks.at(i - 1)->getPosition().getY() + tracks.at(i - 1)->getHeight());				
-		}
-		
-		sendChangeMessage();
-	}
-
-	int height = 0;
-
-	for (int i = 0; i < tracks.size();i++) {
-		height += tracks.at(i)->getHeight();
-	}
-
-	if (getHeight() != height) {
-		setSize(getWidth(), height);
-		sendChangeMessage();
-	}
+	updateTrackLayout(source);
 
 	/*
     if (source == selector) {

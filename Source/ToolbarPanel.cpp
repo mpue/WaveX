@@ -158,6 +158,7 @@ void ToolbarPanel::buttonClicked (Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == removeTrackButton)
     {
         //[UserButtonCode_removeTrackButton] -- add your button handler code here..
+		mcc->removeSelectedTrack();
         //[/UserButtonCode_removeTrackButton]
     }
     else if (buttonThatWasClicked == copyButton)

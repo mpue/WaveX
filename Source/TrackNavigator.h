@@ -33,6 +33,7 @@ public:
     WaveSelector* getSelector();
     
     void addTrack(double sampleRate);
+	void removeSelectedTrack();
     Track* getCurrentTrack();
     std::vector<Track*> getTracks();
     
@@ -46,6 +47,10 @@ public:
 	float getZoom();
     void setZoom(float zoom);
     
+	void updateTrackLayout(ChangeBroadcaster * source);
+	void adjustHeight();
+
+
 private:
     ComponentDragger dragger;
     DragConstrainer constrainer;

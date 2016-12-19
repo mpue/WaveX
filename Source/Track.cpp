@@ -216,6 +216,7 @@ int Track::getNumSamples()
 void Track::setSelected(bool selected)
 {
 	this->selected = selected;
+	repaint();
 }
 
 bool Track::isSelected()

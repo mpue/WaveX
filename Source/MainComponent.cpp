@@ -442,6 +442,10 @@ public:
         }
     }
     
+	void removeSelectedTrack() {
+		navigator->removeSelectedTrack();
+	}
+
     void addTrack() {
 		navigator->addTrack(this->sampleRate);
     }
