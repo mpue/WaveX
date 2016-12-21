@@ -17,6 +17,7 @@
 #include "WaveSelector.h"
 #include "TimeLine.h"
 #include "MixerPanel.h"
+#include "Project.h"
 
 using namespace std;
 //==============================================================================
@@ -39,11 +40,13 @@ public:
     {		
         this->zoom = 21.0f;
 
+        this->tracklength = Project::getInstance()->getTrackLength();;
+        
         this->mixer = mixer;
 		this->timeLine = timeLine;
 		this->trackProperties = trackProperties;
 
-		this->marker = new PositionMarker(600);
+		this->marker = new PositionMarker(tracklength);
         this->navigator = new TrackNavigator(marker);
 
         this->navigator->setSize(getWidth(), getHeight());
@@ -81,6 +84,7 @@ public:
         apfm->addDefaultFormats();
         
 		this->numSamples = 0;
+
         
         startTimer(50);
     }
@@ -139,6 +143,8 @@ public:
         
         this->buffer = new AudioSampleBuffer(2,this->buffersize);
         this->buffer->clear(0, this->buffersize);
+        
+        Project::getInstance()->setSampleRate(sampleRate);
 
     }
     
@@ -466,6 +472,14 @@ public:
         launchOptions.content->setSize(600, 580);
         launchOptions.launchAsync();
     }
+
+    void setTracklength(long length) {
+        this->tracklength = length;
+    }
+    
+    long getTrackLength( ) {
+        return tracklength;
+    }
     
 private:
     //==============================================================================
@@ -517,6 +531,9 @@ private:
     MixerPanel* mixer;
 	TrackPropertyView* trackProperties;
 
+    // track length in seconds
+    long tracklength = 0;
+    
     long numSamples = 0;
     double sampleRate = 0;
     
@@ -625,7 +642,7 @@ private:
                 return;
             }
             
-            this->zoom += 10;
+            this->zoom += 20;
             // setSize(navigator->getMaxLength() * this->zoom, getHeight());
             navigator->setZoom(zoom);
         }
@@ -633,8 +650,8 @@ private:
             if (navigator->getMaxLength()== 0) {
                 return;
             }
-            if (this->zoom - 10 >= 1)
-            this->zoom -= 10;
+            if (this->zoom - 20 >= 1)
+            this->zoom -= 20;
 
             // setSize(navigator->getMaxLength() * this->zoom, getHeight());
             navigator->setZoom(zoom);
@@ -660,7 +677,7 @@ private:
             
             this->numSamples = navigator->getPosition() * this->sampleRate - ((long)(navigator->getPosition() * this->sampleRate) % this->buffersize) ;
         
-            marker->setPosition(navigator->getPosition());
+            // marker->setPosition(navigator->getPosition());
             
 			this->zoom = navigator->getZoom();
 			int newWidth = navigator->getMaxLength() * this->zoom;

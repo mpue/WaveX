@@ -137,6 +137,7 @@
     <ClCompile Include="..\..\Source\MasterChannelPanel.cpp"/>
     <ClCompile Include="..\..\Source\MixerPanel.cpp"/>
     <ClCompile Include="..\..\Source\PositionMarker.cpp"/>
+    <ClCompile Include="..\..\Source\Project.cpp"/>
     <ClCompile Include="..\..\Source\TimeLine.cpp"/>
     <ClCompile Include="..\..\Source\ToolbarPanel.cpp"/>
     <ClCompile Include="..\..\Source\Track.cpp"/>
@@ -1731,6 +1732,7 @@
     <ClInclude Include="..\..\Source\MasterChannelPanel.h"/>
     <ClInclude Include="..\..\Source\MixerPanel.h"/>
     <ClInclude Include="..\..\Source\PositionMarker.h"/>
+    <ClInclude Include="..\..\Source\Project.h"/>
     <ClInclude Include="..\..\Source\TimeLine.h"/>
     <ClInclude Include="..\..\Source\ToolbarPanel.h"/>
     <ClInclude Include="..\..\Source\Track.h"/>

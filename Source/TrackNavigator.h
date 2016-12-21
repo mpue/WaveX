@@ -50,6 +50,8 @@ public:
 	void updateTrackLayout(ChangeBroadcaster * source);
 	void adjustHeight();
 
+    
+
 
 private:
     ComponentDragger dragger;
@@ -65,6 +67,8 @@ private:
     bool playing = false;
     double position;
     float zoom;
+    // length of the track in seconds
+    long tracklength;
     
     virtual void changeListenerCallback(ChangeBroadcaster * source) override;
     virtual void mouseDown (const MouseEvent& event) override;

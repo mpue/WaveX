@@ -60,6 +60,8 @@ void PositionMarker::setPosition(double position) {
 
 double PositionMarker::getDrawPosition() {
     this->drawPosition = (audioPosition / length) * this->width + this->x;
+    Logger::getCurrentLogger()->writeToLog("Marker : "+String(drawPosition));
+    
     return drawPosition;
 }
 

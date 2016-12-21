@@ -18,10 +18,11 @@
 */
 
 //[Headers] You can add your own extra header files here...
-
+#include "MasterChannelPanel.h"
 //[/Headers]
 
 #include "TrackPropertyPanel.h"
+
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
 //[/MiscUserDefs]
@@ -93,9 +94,9 @@ TrackPropertyPanel::TrackPropertyPanel ()
 
 
     //[UserPreSize]
-    
+
     constrainer = new TrackPropertyConstrainer(50,300);
-    
+
     resizer = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::bottomEdge);
     addAndMakeVisible(resizer);
     //[/UserPreSize]
@@ -161,7 +162,7 @@ void TrackPropertyPanel::paint (Graphics& g)
 void TrackPropertyPanel::resized()
 {
     //[UserPreResize] Add your own custom resize code here..
-    
+
     //[/UserPreResize]
 
     nameLabel->setBounds (8, 8, 136, 24);
@@ -177,7 +178,7 @@ void TrackPropertyPanel::resized()
     resizer->setBounds(0,getHeight()-5, getWidth(),5);
 
 	Logger::getCurrentLogger()->writeToLog(getBounds().toString());
-    
+
     if (track != NULL)
         track->setBounds(0, track->getY(), track->getWidth(), getHeight());
 
@@ -310,7 +311,16 @@ bool TrackPropertyPanel::keyStateChanged(bool isKeyDown, Component * originating
 }
 
 
+void TrackPropertyPanel::changeListenerCallback(ChangeBroadcaster * source) {
+    if (MasterChannelPanel* channel = dynamic_cast<MasterChannelPanel*>(source)){
+        
 
+        
+        muteButton->setToggleState(false, juce::NotificationType::dontSendNotification);
+        
+        
+    }
+}
 
 
 
@@ -327,9 +337,10 @@ bool TrackPropertyPanel::keyStateChanged(bool isKeyDown, Component * originating
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="TrackPropertyPanel" componentName=""
-                 parentClasses="public Component" constructorParams="" variableInitialisers=""
-                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="0" initialWidth="150" initialHeight="200">
+                 parentClasses="public Component, public ChangeListener, public KeyListener"
+                 constructorParams="" variableInitialisers="" snapPixels="8" snapActive="1"
+                 snapShown="1" overlayOpacity="0.330" fixedSize="0" initialWidth="150"
+                 initialHeight="200">
   <BACKGROUND backgroundColour="ffffffff"/>
   <LABEL name="nameLabel" id="e816bfe76d3f902e" memberName="nameLabel"
          virtualName="" explicitFocusOrder="0" pos="8 8 136 24" edTextCol="ff000000"

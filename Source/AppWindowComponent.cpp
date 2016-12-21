@@ -11,6 +11,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "AppWindowComponent.h"
 #include "MainComponent.cpp"
+#include "Project.h"
 
 //==============================================================================
 AppWindowComponent::AppWindowComponent()
@@ -26,7 +27,9 @@ AppWindowComponent::AppWindowComponent()
     viewport->setBounds(150,75,r.getWidth() - 150,r.getHeight() - this->offsetBottom);
     viewport->setSize(r.getWidth() - 150, r.getHeight() - this->offsetBottom);
     
-	this->timeLine = new TimeLine(600);
+    long trackLength = Project::getInstance()->getTrackLength();
+	this->timeLine = new TimeLine(trackLength);
+    
 	this->timeLine->setSize(getWidth(), 25);
 	this->timeLine->setBounds(150, 50, r.getWidth(), 25);
 

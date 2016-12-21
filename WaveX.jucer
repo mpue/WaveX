@@ -52,6 +52,8 @@
             file="Source/PositionMarker.cpp"/>
       <FILE id="RTkmEH" name="PositionMarker.h" compile="0" resource="0"
             file="Source/PositionMarker.h"/>
+      <FILE id="BLUnCU" name="Project.cpp" compile="1" resource="0" file="Source/Project.cpp"/>
+      <FILE id="REXQ28" name="Project.h" compile="0" resource="0" file="Source/Project.h"/>
       <FILE id="pTCHo3" name="TimeLine.cpp" compile="1" resource="0" file="Source/TimeLine.cpp"/>
       <FILE id="jwjM4l" name="TimeLine.h" compile="0" resource="0" file="Source/TimeLine.h"/>
       <FILE id="kJmpPP" name="ToolbarPanel.cpp" compile="1" resource="0"

@@ -44,6 +44,7 @@ public:
 	void setOffset(int offset);
     void setDynOffset(int offset);
 	int getOffset();
+    int getDynOffset();
     void setLoopCount(int count);
     int getLoopCount();
     

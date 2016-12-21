@@ -10,6 +10,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "Track.h"
+#include "Project.h"
 #include <iostream>
 
 //==============================================================================
@@ -18,7 +19,8 @@ Track::Track(double sampleRate)
 	manager.registerBasicFormats();
 	this->sampleRate = sampleRate;
 
-	this->maxLength = 600;
+    this->maxLength = Project::getInstance()->getTrackLength();
+    Project::getInstance()->addChangeListener(this);
 	this->name = "empty Track";
     this->volume = 1;
     this->audioBuffer = new AudioSampleBuffer(2,maxLength*sampleRate);
@@ -57,8 +59,9 @@ void Track::removeSelectedRegions() {
     
     for (std::vector<AudioRegion*>::iterator it = regions.begin(); it != regions.end();) {
         if( (*it)->isSelected() ) {
-            delete * it;
             (*it)->removeAllChangeListeners();
+            audioBuffer->clear((*it)->getSampleOffset(), (*it)->getNumSamples());
+            delete * it;
             it = regions.erase(it);
         }
         else {
@@ -91,8 +94,6 @@ void Track::duplicateRegion(AudioRegion *region) {
     duplicate->setBounds(region->getWidth() + region->getX(), 0, region->getWidth(), region->getHeight());
     duplicate->setThumbnailBounds(bounds);
     duplicate->setLoopCount(0);
-    if (zoom > 0)
-        duplicate->setZoom(zoom);
     
     this->regions.push_back(duplicate);
     this->currentRegion = duplicate;
@@ -105,8 +106,11 @@ void Track::duplicateRegion(AudioRegion *region) {
     duplicate->setSampleOffset(region->getSampleOffset() + region->getNumSamples(), false, false);
     duplicate->setOffset(region->getOffset() + region->getWidth());
     duplicate->addChangeListener(this);
+ 
+    if (zoom > 0)
+        duplicate->setZoom(zoom);
     
-
+    
     audioBuffer->copyFrom(0, duplicate->getSampleOffset(), *region->getBuffer(), 0, 0, region->getBuffer()->getNumSamples());
     audioBuffer->copyFrom(1, duplicate->getSampleOffset(), *region->getBuffer(), 1, 0, region->getBuffer()->getNumSamples());
     
@@ -120,8 +124,6 @@ void Track::addRegion(File file, double sampleRate) {
     region->setBounds(markerPosition, 0, region->getWidth(), getHeight());
 	region->setThumbnailBounds(bounds);
     region->setLoopCount(0);
-	if (zoom > 0)
-		region->setZoom(zoom);
 
 	this->regions.push_back(region);
 	this->currentRegion = region;
@@ -136,6 +138,9 @@ void Track::addRegion(File file, double sampleRate) {
     long sampleNum = (this->maxLength / (this->maxLength * zoom)) * markerPosition * sampleRate;
     region->setSampleOffset(sampleNum,false,false);
     region->setOffset(markerPosition);
+    
+    if (zoom > 0)
+        region->setZoom(zoom);
     
     audioBuffer->copyFrom(0, region->getSampleOffset(), *region->getBuffer(), 0, 0, region->getBuffer()->getNumSamples());
     audioBuffer->copyFrom(1, region->getSampleOffset(), *region->getBuffer(), 1, 0, region->getBuffer()->getNumSamples());
@@ -199,20 +204,7 @@ AudioRegion* Track::getCurrentRegion(long sample) {
 }
 
 const float Track::getSample(int channel, long sample) {
-    
-    /*
-    this->currentRegion = getCurrentRegion(sample);
-    
-    if (this->currentRegion != NULL) {
-        long offset = currentRegion->getSampleOffset();
-        return this->currentRegion->getBuffer()->getReadPointer(channel)[(long)sample - offset];
-    }
-    else {
-        return 0;
-    }
-     */
     return audioBuffer->getSample(channel,sample);
-
 }
 
 void Track::updateMagnitude(int sample, int buffersize) {
@@ -287,6 +279,7 @@ AudioSampleBuffer * Track::getBuffer()
 
 void Track::setCurrentMarkerPosition(int position) {
     this->markerPosition = position;
+    Logger::getCurrentLogger()->writeToLog("Track " + String(midiChannel) + " marker : "+ String(position));
 }
 
 int Track::getMidiChannel() {

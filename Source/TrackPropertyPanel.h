@@ -39,6 +39,7 @@
                                                                     //[/Comments]
 */
 class TrackPropertyPanel  : public Component,
+                            public ChangeListener,
                             public KeyListener,
                             public LabelListener,
                             public ButtonListener,
@@ -58,7 +59,7 @@ public:
 	void setSelected(bool selected);
 	virtual bool keyPressed(const KeyPress& key, Component* originatingComponent) override;
 	virtual bool keyStateChanged(bool isKeyDown, Component* originatingComponent) override;
-
+    virtual void changeListenerCallback(ChangeBroadcaster * source) override;
     //[/UserMethods]
 
     void paint (Graphics& g) override;

@@ -11,6 +11,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "AppWindowComponent.h"
 #include "CustomLookAndFeel.h"
+#include "Project.h"
 
 //==============================================================================
 class WaveXApplication  : public JUCEApplication
@@ -37,6 +38,7 @@ public:
         // Add your application's shutdown code here..
 
         mainWindow = nullptr; // (deletes our window)
+        Project::getInstance()->destroy();
     }
 
     //==============================================================================

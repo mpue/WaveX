@@ -61,6 +61,8 @@ public:
     virtual void changeListenerCallback(ChangeBroadcaster * source) override;
     void setName(String name);
     void setMagnitude(float magnitude);
+    void setMute(bool mute);
+    void setSolo(bool solo);
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -68,6 +70,7 @@ public:
     void sliderValueChanged (Slider* sliderThatWasMoved) override;
     void buttonClicked (Button* buttonThatWasClicked) override;
 
+    
     // Binary resources:
     static const char* peaks_png;
     static const int peaks_pngSize;
@@ -84,6 +87,9 @@ private:
 	DragConstrainer constrainer;
     MeterMode mode;
     bool link;
+    bool mute = false;
+    bool solo = false;
+    
     ScopedPointer<CustomLookAndFeel> clf;
     //[/UserVariables]
 

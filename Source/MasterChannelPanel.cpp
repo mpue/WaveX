@@ -75,7 +75,7 @@ MasterChannelPanel::MasterChannelPanel ()
     muteButton->setImages (false, true, true,
                            ImageCache::getFromMemory (round_button_png, round_button_pngSize), 1.000f, Colour (0x00000000),
                            Image(), 1.000f, Colour (0x00000000),
-                           ImageCache::getFromMemory (round_button_pushed_png, round_button_pushed_pngSize), 1.000f, Colour (0xfffc6900));
+                           ImageCache::getFromMemory (round_button_pushed_png, round_button_pushed_pngSize), 1.000f, Colours::cornflowerblue);
     addAndMakeVisible (soloButton = new ImageButton ("soloButton"));
     soloButton->setButtonText (TRANS("new button"));
     soloButton->addListener (this);
@@ -83,7 +83,7 @@ MasterChannelPanel::MasterChannelPanel ()
     soloButton->setImages (false, true, true,
                            ImageCache::getFromMemory (round_button_png, round_button_pngSize), 1.000f, Colour (0x00000000),
                            Image(), 1.000f, Colour (0x00000000),
-                           ImageCache::getFromMemory (round_button_pushed_png, round_button_pushed_pngSize), 1.000f, Colour (0xffff6a00));
+                           ImageCache::getFromMemory (round_button_pushed_png, round_button_pushed_pngSize), 1.000f, Colour (0xffffa800));
     addAndMakeVisible (M = new Label ("M",
                                       TRANS("M")));
     M->setFont (Font (11.60f, Font::plain));
@@ -268,6 +268,17 @@ void MasterChannelPanel::setName(String name) {
     this->nameLabel->setText(name, juce::NotificationType::dontSendNotification);
 }
 
+void MasterChannelPanel::setMute(bool mute) {
+    this->mute = mute;
+    this->muteButton->setToggleState(mute, juce::NotificationType::dontSendNotification);
+}
+
+void MasterChannelPanel::setSolo(bool solo) {
+    this->solo = solo;
+    this->soloButton->setToggleState(solo, juce::NotificationType::dontSendNotification);
+}
+
+
 //[/MiscUserCode]
 
 
@@ -314,13 +325,13 @@ BEGIN_JUCER_METADATA
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
                resourceNormal="round_button_png" opacityNormal="1" colourNormal="0"
                resourceOver="" opacityOver="1" colourOver="0" resourceDown="round_button_pushed_png"
-               opacityDown="1" colourDown="fffc6900"/>
+               opacityDown="1" colourDown="ff6495ed"/>
   <IMAGEBUTTON name="soloButton" id="c246db8f0f11748c" memberName="soloButton"
                virtualName="" explicitFocusOrder="0" pos="48 200 16 16" buttonText="new button"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
                resourceNormal="round_button_png" opacityNormal="1" colourNormal="0"
                resourceOver="" opacityOver="1" colourOver="0" resourceDown="round_button_pushed_png"
-               opacityDown="1" colourDown="ffff6a00"/>
+               opacityDown="1" colourDown="ffffa800"/>
   <LABEL name="M" id="326797e7520c2518" memberName="M" virtualName=""
          explicitFocusOrder="0" pos="18 200 22 16" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="M" editableSingleClick="0"

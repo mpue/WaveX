@@ -127,6 +127,10 @@ void AudioRegion::setDynOffset(int amount) {
     this->dynOffset = amount;
 }
 
+int AudioRegion::getDynOffset(){
+    return dynOffset;
+}
+
 void AudioRegion::setSampleOffset(long offset, bool reminder, bool notify)
 {
     if (reminder)
@@ -193,6 +197,12 @@ void AudioRegion::setZoom(float zoom) {
     else {
         setSize(this->thumbnail->getTotalLength() * this->zoom, getHeight());
     }
+    
+    int newOffset = (this->sampleOffset / this->sampleRate) * zoom;
+    this->setOffset(newOffset);
+
+    this->setTopLeftPosition(newOffset, 0);
+    
     /*
     resizerR->setSize(5, getHeight());
     resizerR->setTopLeftPosition(getWidth() - 5, 0);
@@ -241,14 +251,14 @@ void AudioRegion::paintIfFileLoaded(Graphics& g, const Rectangle<int>& b)
     g.setColour(Colours::white);
     
     const double audioLength(this->thumbnail->getTotalLength());
-    this->thumbnail->drawChannels(g,
-                                  b,
-                                  0.0,
-                                  audioLength,
-                                  1.0f);
+    this->thumbnail->drawChannels(g, b, 0.0, audioLength, 1.0f);
     
     g.setColour(Colours::steelblue.darker());    
     g.drawRoundedRectangle(b.getX(),b.getY(),b.getWidth(),b.getHeight(),10,1.0f);
+    
+    g.setColour(Colours::darkblue);
+    g.setFont(14.0);
+    g.drawText(String(offset), 10, 10, 140, 20, juce::Justification::left);
     
     if(loop) {
         for (int i = 1; i <= loopCount;i++) {
@@ -258,16 +268,10 @@ void AudioRegion::paintIfFileLoaded(Graphics& g, const Rectangle<int>& b)
             g.setColour(Colours::white);
 
             const double audioLength(this->thumbnail->getTotalLength());
-            this->thumbnail->drawChannels(g,
-                                          loopBounds,
-                                          0.0,
-                                          audioLength,
-                                          1.0f);
+            this->thumbnail->drawChannels(g, loopBounds,0.0,audioLength, 1.0f);
         }
     }
 }
-
-
 
 void AudioRegion::resized()
 {

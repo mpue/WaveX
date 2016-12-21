@@ -11,6 +11,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "TrackNavigator.h"
 #include "AudioRegion.h"
+#include "Project.h"
 #include <iterator>
 #include <iostream>
 
@@ -65,6 +66,7 @@ void TrackNavigator::setZoom(float zoom) {
         tracks.at(i)->setZoom(zoom);
     }
     constrainer.setRaster(this->zoom / 4);
+    constrainer.setMaxX(getMaxLength() * this->zoom);
 }
 
 void TrackNavigator::updateTrackLayout(ChangeBroadcaster * source)
@@ -168,15 +170,18 @@ void TrackNavigator::addTrack(double sampleRate) {
     // track->toFront(true);
     this->selector->toFront(false);
     
+    Project* p = Project::getInstance();
+    
 	// int height = this->getParentComponent()->getHeight();
     setBounds(getX(), getY(), getMaxLength() * this->zoom, tracks.size() * 200);
-    track->setBounds(0, yPos, 600 * this->zoom, 200);
+    track->setBounds(0, yPos, p->getTrackLength() * this->zoom, 200);
 
 	this->marker->setSize(2, getHeight());
 	this->marker->setLength(getMaxLength());
     this->selector->setSize(getWidth(), getHeight());
     
     constrainer.setRaster(this->zoom / 4);
+    constrainer.setMaxX(getMaxLength() * this->zoom);
     
     // repaint();
 	sendChangeMessage();    
@@ -263,7 +268,7 @@ bool TrackNavigator::keyPressed(const KeyPress& key, Component* originatingCompo
         if (getMaxLength() == 0) {
             return false;
         }
-        this->zoom += 10;
+        this->zoom += 20;
 		setSize(getMaxLength() * this->zoom, getHeight());
         setZoom(zoom);
 		repaint();
@@ -273,7 +278,7 @@ bool TrackNavigator::keyPressed(const KeyPress& key, Component* originatingCompo
         if (getMaxLength() == 0) {
             return false;
         }
-        this->zoom -= 10;
+        this->zoom -= 20;
         setSize(getMaxLength() * this->zoom, getHeight());
         setZoom(zoom);
 		repaint();
@@ -300,15 +305,35 @@ bool TrackNavigator::keyPressed(const KeyPress& key, Component* originatingCompo
 
 void TrackNavigator::mouseUp (const MouseEvent& event) {
     if (AudioRegion* r = dynamic_cast<AudioRegion*>(event.eventComponent)){
-        int offset = r->getOffset();
-        r->setDynOffset(0);
-        r->setOffset(offset);
+
+        long tracklen = Project::getInstance()->getTrackLength();
+        double sampleRate = Project::getInstance()->getSampleRate();
         
-        long sampleNum = (600 / (600 * zoom)) * offset * r->getSampleRate();
-        if (sampleNum != r->getSampleOffset()) {
-            r->setSampleOffset(sampleNum, true, true);
+        
+        int offset = r->getOffset();
+        int dynSampleOffset = r->getDynOffset() / zoom * sampleRate;
+
+        if (r->getSampleOffset() + r->getBuffer()->getNumSamples() + dynSampleOffset >= tracklen * sampleRate) {
+            
+            r->setSampleOffset(tracklen * sampleRate - r->getBuffer()->getNumSamples(), false, false);
+            r->setDynOffset(0);
+            return;
         }
         
+        
+        if (offset >= 0) {
+        
+            long sampleNum = (tracklen / (tracklen * zoom)) * offset * r->getSampleRate();
+            if (sampleNum != r->getSampleOffset()) {
+                r->setSampleOffset(sampleNum, true, true);
+            }
+            
+            r->setDynOffset(0);
+            r->setOffset(offset);
+        
+        }
+        
+
 
     }
 }
@@ -318,7 +343,8 @@ void TrackNavigator::mouseDrag(const MouseEvent& event) {
     if (AudioRegion* r = dynamic_cast<AudioRegion*>(event.eventComponent)){
         dragger.dragComponent(r, event,&constrainer);
         r->setDynOffset(constrainer.snap(event.getDistanceFromDragStartX(),zoom / 4));
-        Logger::getCurrentLogger()->writeToLog(String(constrainer.snap(event.getDistanceFromDragStartX(),zoom / 4)));
+        r->repaint();
+        repaint();
     }
     else {
         if (event.mods.isLeftButtonDown()) {
@@ -338,6 +364,7 @@ void TrackNavigator::mouseDown (const MouseEvent& event) {
         double total = getMaxLength();
         double relative = total * pos;
         setPosition(relative);
+        marker->setPosition(position);
         sendChangeMessage();
     }
     
@@ -358,6 +385,7 @@ void TrackNavigator::mouseDown (const MouseEvent& event) {
         r->setSelected(true);
         currentTrack = r;
         sendChangeMessage();
+        repaint();
     }
     else {
         

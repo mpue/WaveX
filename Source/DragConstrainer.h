@@ -33,11 +33,18 @@ public:
                               bool isStretchingLeft,
                               bool isStretchingBottom,
                               bool isStretchingRight) override {
+        
+                    cout << " x :"  << bounds.getX() << endl;
+        
         if (bounds.getY() != previousBounds.getY()) {
             bounds.setY(previousBounds.getY());
         }
         if (bounds.getX() < 0) {
             bounds.setX(0);
+        }
+        if (bounds.getX() + bounds.getWidth() > maxX) {
+
+            bounds.setX(maxX - bounds.getWidth());
         }
         bounds.setX(snap(bounds.getX(),this->raster));
     }
@@ -76,9 +83,14 @@ public:
 		this->tolerance = tolerance;			
 	}
     
+    void setMaxX(int maxX) {
+        this->maxX = maxX;
+    }
+    
 private:
     int raster = 1;
 	int tolerance = 4;
+    int maxX = 0;
     
 };
 

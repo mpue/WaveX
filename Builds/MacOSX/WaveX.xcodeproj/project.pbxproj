@@ -33,6 +33,7 @@
 		BA8D5E98595E03678F58722F = {isa = PBXBuildFile; fileRef = 2F7FC43F8E04FF62B5244D7C; };
 		86E49F17F1053A2116237727 = {isa = PBXBuildFile; fileRef = 01EFB35D3B76AF5F32A78047; };
 		B9FAD13C5CC93B414961EF08 = {isa = PBXBuildFile; fileRef = 6A9BBBEEF95DDCFA99DB6FA4; };
+		7E8C04576103BE71EDAC7E18 = {isa = PBXBuildFile; fileRef = A6452CEE5B412BDA30C2557C; };
 		271D3FF797DEB97208719954 = {isa = PBXBuildFile; fileRef = 597A65D0F629DB2C91C59649; };
 		1653D640D2D1661CEFA6DD4F = {isa = PBXBuildFile; fileRef = E344F6AE25645433214C4651; };
 		136102FF1A369D3CB09DA8D8 = {isa = PBXBuildFile; fileRef = 14892B351A1FC1FE3F7E72DA; };
@@ -463,6 +464,7 @@
 		55FCB41DCE87FC00BFDB133B = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_MultiTimer.h"; path = "../../../../../Downloads/JUCE/modules/juce_events/timers/juce_MultiTimer.h"; sourceTree = "SOURCE_ROOT"; };
 		5699D144B9FEA1908630336F = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_linux_Network.cpp"; path = "../../../../../Downloads/JUCE/modules/juce_core/native/juce_linux_Network.cpp"; sourceTree = "SOURCE_ROOT"; };
 		56DAE8F5D8DB840EE9FC40A1 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_DropShadower.h"; path = "../../../../../Downloads/JUCE/modules/juce_gui_basics/misc/juce_DropShadower.h"; sourceTree = "SOURCE_ROOT"; };
+		576ACE4E518EF540A84EE890 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Project.h; path = ../../Source/Project.h; sourceTree = "SOURCE_ROOT"; };
 		5771782CAD18B98DAC3BA024 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_CallbackMessage.h"; path = "../../../../../Downloads/JUCE/modules/juce_events/messages/juce_CallbackMessage.h"; sourceTree = "SOURCE_ROOT"; };
 		57C450D2D5115C5863DFEAA1 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_PNGLoader.cpp"; path = "../../../../../Downloads/JUCE/modules/juce_graphics/image_formats/juce_PNGLoader.cpp"; sourceTree = "SOURCE_ROOT"; };
 		57E4582B937E83371981BBCA = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_VSTCommon.h"; path = "../../../../../Downloads/JUCE/modules/juce_audio_processors/format_types/juce_VSTCommon.h"; sourceTree = "SOURCE_ROOT"; };
@@ -853,6 +855,7 @@
 		A5DC453951389A572CCDDF2F = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_ImageButton.cpp"; path = "../../../../../Downloads/JUCE/modules/juce_gui_basics/buttons/juce_ImageButton.cpp"; sourceTree = "SOURCE_ROOT"; };
 		A60237890AA50C39FC5021D5 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_CaretComponent.cpp"; path = "../../../../../Downloads/JUCE/modules/juce_gui_basics/keyboard/juce_CaretComponent.cpp"; sourceTree = "SOURCE_ROOT"; };
 		A632AB2E10887CCDC3AB88A4 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "stream_decoder.h"; path = "../../../../../Downloads/JUCE/modules/juce_audio_formats/codecs/flac/libFLAC/include/protected/stream_decoder.h"; sourceTree = "SOURCE_ROOT"; };
+		A6452CEE5B412BDA30C2557C = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Project.cpp; path = ../../Source/Project.cpp; sourceTree = "SOURCE_ROOT"; };
 		A6568E5933F4ACA51F135D18 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_StatisticsAccumulator.h"; path = "../../../../../Downloads/JUCE/modules/juce_core/maths/juce_StatisticsAccumulator.h"; sourceTree = "SOURCE_ROOT"; };
 		A674046AE7A335E1F2C8E23B = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_PreferencesPanel.h"; path = "../../../../../Downloads/JUCE/modules/juce_gui_extra/misc/juce_PreferencesPanel.h"; sourceTree = "SOURCE_ROOT"; };
 		A6B930189D01B8909C1E6561 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CustomLookAndFeel.cpp; path = ../../Source/CustomLookAndFeel.cpp; sourceTree = "SOURCE_ROOT"; };
@@ -1327,6 +1330,8 @@
 					8390A3742AEF57129FE1678E,
 					6A9BBBEEF95DDCFA99DB6FA4,
 					A3796E040936F8A9CBB11750,
+					A6452CEE5B412BDA30C2557C,
+					576ACE4E518EF540A84EE890,
 					597A65D0F629DB2C91C59649,
 					DE7DFE5B87AC98C4B4A62D17,
 					E344F6AE25645433214C4651,
@@ -2902,6 +2907,7 @@
 					BA8D5E98595E03678F58722F,
 					86E49F17F1053A2116237727,
 					B9FAD13C5CC93B414961EF08,
+					7E8C04576103BE71EDAC7E18,
 					271D3FF797DEB97208719954,
 					1653D640D2D1661CEFA6DD4F,
 					136102FF1A369D3CB09DA8D8,

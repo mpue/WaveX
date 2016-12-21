@@ -10,12 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../Source/AudioRegion.cpp"
-            timestampString = "503881621.622601"
+            timestampString = "504049860.469897"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "132"
-            endingLineNumber = "132"
-            landmarkName = "AudioRegion::setSampleOffset(long offset, bool reminder, bool notify)"
+            startingLineNumber = "194"
+            endingLineNumber = "194"
+            landmarkName = "AudioRegion::setZoom(float zoom)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -26,28 +26,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../Source/TrackNavigator.cpp"
-            timestampString = "503882158.650485"
+            timestampString = "504050155.027639"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "303"
-            endingLineNumber = "303"
-            landmarkName = "TrackNavigator::mouseUp (const MouseEvent&amp; event)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../../Source/Track.cpp"
-            timestampString = "503882556.793992"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "303"
-            endingLineNumber = "303"
-            landmarkName = "Track::changeListenerCallback(ChangeBroadcaster * source)"
+            startingLineNumber = "360"
+            endingLineNumber = "360"
+            landmarkName = "TrackNavigator::mouseDown (const MouseEvent&amp; event)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

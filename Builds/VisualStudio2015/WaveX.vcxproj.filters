@@ -397,6 +397,9 @@
     <ClCompile Include="..\..\Source\PositionMarker.cpp">
       <Filter>WaveX\Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Project.cpp">
+      <Filter>WaveX\Source</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\TimeLine.cpp">
       <Filter>WaveX\Source</Filter>
     </ClCompile>
@@ -2176,6 +2179,9 @@
       <Filter>WaveX\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\PositionMarker.h">
+      <Filter>WaveX\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Project.h">
       <Filter>WaveX\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\TimeLine.h">
