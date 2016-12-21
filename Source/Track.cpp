@@ -55,12 +55,13 @@ void Track::toggleLoopSelection() {
     }
 }
 
-void Track::removeSelectedRegions() {
+void Track::removeSelectedRegions(bool clear) {
     
     for (std::vector<AudioRegion*>::iterator it = regions.begin(); it != regions.end();) {
         if( (*it)->isSelected() ) {
             (*it)->removeAllChangeListeners();
-            audioBuffer->clear((*it)->getSampleOffset(), (*it)->getNumSamples());
+            if (clear)
+                audioBuffer->clear((*it)->getSampleOffset(), (*it)->getNumSamples());
             delete * it;
             it = regions.erase(it);
         }
@@ -147,6 +148,61 @@ void Track::addRegion(File file, double sampleRate) {
 
     
 	repaint();
+}
+
+void Track::splitRegion() {
+    long sampleNum = (this->maxLength / (this->maxLength * zoom)) * markerPosition * sampleRate;
+    
+    AudioRegion* region = getCurrentRegion(sampleNum);
+    
+    if (region != NULL) {
+        
+        long numLeftSamples = sampleNum - region->getSampleOffset();
+        long numRightSamples = region->getNumSamples() - numLeftSamples;
+        
+        AudioRegion* leftRegion = new AudioRegion(region,manager,sampleRate,0,numLeftSamples);
+        AudioRegion* rightRegion = new AudioRegion(region,manager,sampleRate,numLeftSamples, numRightSamples);
+        
+        Rectangle<int>* leftBounds = new Rectangle<int>(0, 0, leftRegion->getThumbnail()->getTotalLength() * 20, getHeight());
+        Rectangle<int>* rightBounds = new Rectangle<int>(0, 0, rightRegion->getThumbnail()->getTotalLength() * 20, getHeight());
+        
+        leftRegion->setBounds(region->getX(), 0, leftRegion->getWidth(), getHeight());
+        leftRegion->setThumbnailBounds(leftBounds);
+
+        rightRegion->setBounds(markerPosition, 0, rightRegion->getWidth(), getHeight());
+        rightRegion->setThumbnailBounds(rightBounds);
+        
+        this->regions.push_back(leftRegion);
+        leftRegion->addChangeListener(this);
+        this->regions.push_back(rightRegion);
+        rightRegion->addChangeListener(this);
+
+        addAndMakeVisible(leftRegion);
+        addAndMakeVisible(rightRegion);
+
+        leftRegion->setSampleOffset(region->getSampleOffset(),false,false);
+        leftRegion->setOffset(region->getOffset());
+        
+        rightRegion->setSampleOffset(sampleNum,false,false);
+        rightRegion->setOffset(markerPosition);
+        
+        if (zoom > 0) {
+            leftRegion->setZoom(zoom);
+            rightRegion->setZoom(zoom);
+        }
+        
+        clearSelection();
+        
+        region->setSelected(true);
+        
+        removeSelectedRegions(false);
+        
+        leftRegion->setSelected(true);
+        rightRegion->setSelected(true);
+        
+        
+    }
+    
 }
 
 void Track::setZoom(float zoom)

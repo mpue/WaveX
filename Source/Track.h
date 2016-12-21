@@ -58,9 +58,10 @@ public:
 
     AudioRegion* getCurrentRegion(long sample);
     
-    void removeSelectedRegions();
+    void removeSelectedRegions(bool clear);
     void duplicateSelectedRegions();
     void duplicateRegion(AudioRegion* region);
+    void splitRegion();
     
     void setCurrentMarkerPosition(int position);
     

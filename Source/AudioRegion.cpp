@@ -11,6 +11,30 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "AudioRegion.h"
 
+AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double sampleRate, long startSample, long numSamples) {
+    this->sampleRate = sampleRate;
+    
+    this->thumbnailCache = new AudioThumbnailCache(1);
+    this->thumbnail = new AudioThumbnail(512, manager, *this->thumbnailCache);
+    this->thumbnail->addChangeListener(this);
+    
+    audioBuffer = new AudioSampleBuffer(2, numSamples);
+    audioBuffer->copyFrom(0, 0, *other->getBuffer(), 0, startSample, numSamples);
+    audioBuffer->copyFrom(1, 0, *other->getBuffer(), 1, startSample, numSamples);
+    
+    this->thumbnail->reset(2, sampleRate);
+    this->thumbnail->addBlock(0, *audioBuffer, 0,numSamples);
+    
+    this->name = other->getName();
+    this->zoom = 20;
+    
+    double length = this->thumbnail->getTotalLength();
+    setSize(length * this->zoom, 200);
+    
+    this->volume = 1;
+    this->offset = 0;
+}
+
 AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double sampleRate) {
     
     // resizerR = new ResizableEdgeComponent(this,nullptr,ResizableEdgeComponent::rightEdge);
@@ -258,7 +282,7 @@ void AudioRegion::paintIfFileLoaded(Graphics& g, const Rectangle<int>& b)
     
     g.setColour(Colours::darkblue);
     g.setFont(14.0);
-    g.drawText(String(offset), 10, 10, 140, 20, juce::Justification::left);
+    g.drawText(String(sampleOffset), 10, 10, 140, 20, juce::Justification::left);
     
     if(loop) {
         for (int i = 1; i <= loopCount;i++) {

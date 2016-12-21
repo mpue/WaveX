@@ -12,4 +12,4 @@
 
 
 Project *Project::instance = NULL;
-long Project::DEFAULT_TRACK_LENGTH = 60;
+long Project::DEFAULT_TRACK_LENGTH = 300;

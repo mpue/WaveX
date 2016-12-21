@@ -22,6 +22,7 @@ public:
     
     
     AudioRegion(AudioRegion* other, AudioFormatManager& manager, double sampleRate);
+    AudioRegion(AudioRegion* other, AudioFormatManager& manager, double sampleRate, long startSample, long numSamples);
     AudioRegion(File file, AudioFormatManager& manager,double sampleRate);
     ~AudioRegion();
 

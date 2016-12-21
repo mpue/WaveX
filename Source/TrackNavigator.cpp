@@ -296,7 +296,12 @@ bool TrackNavigator::keyPressed(const KeyPress& key, Component* originatingCompo
     }
     else if (key.getTextCharacter() == 'x') {
         for (int i = 0; i < tracks.size();i++) {
-            tracks.at(i)->removeSelectedRegions();
+            tracks.at(i)->removeSelectedRegions(true);
+        }
+    }
+    else if (key.getTextCharacter() == 't') {
+        for (int i = 0; i < tracks.size();i++) {
+            tracks.at(i)->splitRegion();
         }
     }
     
@@ -365,6 +370,9 @@ void TrackNavigator::mouseDown (const MouseEvent& event) {
         double relative = total * pos;
         setPosition(relative);
         marker->setPosition(position);
+        for (int i = 0; i < tracks.size();i++) {
+            tracks.at(i)->setCurrentMarkerPosition(marker->getDrawPosition());
+        }
         sendChangeMessage();
     }
     
@@ -379,7 +387,6 @@ void TrackNavigator::mouseDown (const MouseEvent& event) {
         for (int i = 0; i < tracks.size();i++) {
             tracks.at(i)->setSelected(false);
             tracks.at(i)->clearSelection();
-            tracks.at(i)->setCurrentMarkerPosition(marker->getDrawPosition());
         }
 
         r->setSelected(true);
