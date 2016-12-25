@@ -43,7 +43,7 @@ TrackPropertyView::TrackPropertyView ()
 
     //[Constructor] You can add your own custom stuff here..
     // startTimer(70);
-    
+
     dropShadow = new DropShadow(Colour::fromFloatRGBA(0,0,0,0.5),3,Point<int>(2,0));
     dropShadower = new DropShadower(*dropShadow);
     dropShadower->setOwner(this);
@@ -96,7 +96,7 @@ void TrackPropertyView::resized()
 
 Track* TrackPropertyView::getTrack(int i) {
     return this->trackProperties.at(i)->getTrack();
-    
+
 }
 
 void TrackPropertyView::setOffset(int offset)

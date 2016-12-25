@@ -16,6 +16,7 @@
 #include "PositionMarker.h"
 #include "Track.h"
 #include "DragConstrainer.h"
+#include "MultiComponentDragger.h"
 #include <vector>
 
 //==============================================================================
@@ -50,12 +51,14 @@ public:
 	void updateTrackLayout(ChangeBroadcaster * source);
 	void adjustHeight();
 
-    
 
 
 private:
-    ComponentDragger dragger;
-    DragConstrainer constrainer;
+    
+    // ComponentDragger dragger;
+    // DragConstrainer constrainer;
+    
+    MultiComponentDragger* dragger = NULL;
     
     Track* currentTrack = NULL;
     AudioFormatManager manager;
@@ -69,10 +72,12 @@ private:
     float zoom;
     // length of the track in seconds
     long tracklength;
+    int mouseDeltaX = 0;
     
     virtual void changeListenerCallback(ChangeBroadcaster * source) override;
     virtual void mouseDown (const MouseEvent& event) override;
     virtual void mouseUp (const MouseEvent& event) override;
+    virtual void mouseMove(const juce::MouseEvent &event) override;
     virtual bool keyPressed(const KeyPress& key, Component* originatingComponent) override;
     virtual void mouseDrag(const MouseEvent& event) override;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TrackNavigator)

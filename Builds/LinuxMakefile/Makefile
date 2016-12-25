@@ -58,23 +58,23 @@ endif
 
 OBJECTS := \
   $(JUCE_OBJDIR)/AppWindowComponent_c01bc215.o \
-  $(JUCE_OBJDIR)/AudioRegion_46364bcb.o \
   $(JUCE_OBJDIR)/CustomLookAndFeel_ab3d772e.o \
   $(JUCE_OBJDIR)/InfoPanel_a131c57.o \
-  $(JUCE_OBJDIR)/Main_90ebc5c2.o \
   $(JUCE_OBJDIR)/MainComponent_a6ffb4a5.o \
+  $(JUCE_OBJDIR)/ToolbarPanel_8e4ee752.o \
+  $(JUCE_OBJDIR)/TransportPanel_18909a64.o \
   $(JUCE_OBJDIR)/MasterChannelPanel_b4b7ea4c.o \
   $(JUCE_OBJDIR)/MixerPanel_f7050b84.o \
+  $(JUCE_OBJDIR)/WaveSelector_5f1b5681.o \
+  $(JUCE_OBJDIR)/AudioRegion_46364bcb.o \
   $(JUCE_OBJDIR)/PositionMarker_20eac8cc.o \
-  $(JUCE_OBJDIR)/Project_cc5166fa.o \
   $(JUCE_OBJDIR)/TimeLine_e3c86a6a.o \
-  $(JUCE_OBJDIR)/ToolbarPanel_8e4ee752.o \
   $(JUCE_OBJDIR)/Track_c9ac1f2c.o \
   $(JUCE_OBJDIR)/TrackNavigator_897222d5.o \
   $(JUCE_OBJDIR)/TrackPropertyPanel_23c5992d.o \
   $(JUCE_OBJDIR)/TrackPropertyView_42f565e6.o \
-  $(JUCE_OBJDIR)/TransportPanel_18909a64.o \
-  $(JUCE_OBJDIR)/WaveSelector_5f1b5681.o \
+  $(JUCE_OBJDIR)/Main_90ebc5c2.o \
+  $(JUCE_OBJDIR)/Project_cc5166fa.o \
   $(JUCE_OBJDIR)/BinaryData_ce4232d4.o \
   $(JUCE_OBJDIR)/juce_audio_basics_6b797ca1.o \
   $(JUCE_OBJDIR)/juce_audio_devices_a742c38b.o \
@@ -117,11 +117,6 @@ $(JUCE_OBJDIR)/AppWindowComponent_c01bc215.o: ../../Source/AppWindowComponent.cp
 	@echo "Compiling AppWindowComponent.cpp"
 	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/AudioRegion_46364bcb.o: ../../Source/AudioRegion.cpp
-	-@mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling AudioRegion.cpp"
-	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
-
 $(JUCE_OBJDIR)/CustomLookAndFeel_ab3d772e.o: ../../Source/CustomLookAndFeel.cpp
 	-@mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling CustomLookAndFeel.cpp"
@@ -132,14 +127,19 @@ $(JUCE_OBJDIR)/InfoPanel_a131c57.o: ../../Source/InfoPanel.cpp
 	@echo "Compiling InfoPanel.cpp"
 	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/Main_90ebc5c2.o: ../../Source/Main.cpp
-	-@mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling Main.cpp"
-	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
-
 $(JUCE_OBJDIR)/MainComponent_a6ffb4a5.o: ../../Source/MainComponent.cpp
 	-@mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling MainComponent.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ToolbarPanel_8e4ee752.o: ../../Source/ToolbarPanel.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ToolbarPanel.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/TransportPanel_18909a64.o: ../../Source/TransportPanel.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling TransportPanel.cpp"
 	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/MasterChannelPanel_b4b7ea4c.o: ../../Source/MasterChannelPanel.cpp
@@ -152,24 +152,24 @@ $(JUCE_OBJDIR)/MixerPanel_f7050b84.o: ../../Source/MixerPanel.cpp
 	@echo "Compiling MixerPanel.cpp"
 	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
+$(JUCE_OBJDIR)/WaveSelector_5f1b5681.o: ../../Source/WaveSelector.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling WaveSelector.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/AudioRegion_46364bcb.o: ../../Source/AudioRegion.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling AudioRegion.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
 $(JUCE_OBJDIR)/PositionMarker_20eac8cc.o: ../../Source/PositionMarker.cpp
 	-@mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling PositionMarker.cpp"
 	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/Project_cc5166fa.o: ../../Source/Project.cpp
-	-@mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling Project.cpp"
-	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
-
 $(JUCE_OBJDIR)/TimeLine_e3c86a6a.o: ../../Source/TimeLine.cpp
 	-@mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling TimeLine.cpp"
-	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/ToolbarPanel_8e4ee752.o: ../../Source/ToolbarPanel.cpp
-	-@mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling ToolbarPanel.cpp"
 	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/Track_c9ac1f2c.o: ../../Source/Track.cpp
@@ -192,14 +192,14 @@ $(JUCE_OBJDIR)/TrackPropertyView_42f565e6.o: ../../Source/TrackPropertyView.cpp
 	@echo "Compiling TrackPropertyView.cpp"
 	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/TransportPanel_18909a64.o: ../../Source/TransportPanel.cpp
+$(JUCE_OBJDIR)/Main_90ebc5c2.o: ../../Source/Main.cpp
 	-@mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling TransportPanel.cpp"
+	@echo "Compiling Main.cpp"
 	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/WaveSelector_5f1b5681.o: ../../Source/WaveSelector.cpp
+$(JUCE_OBJDIR)/Project_cc5166fa.o: ../../Source/Project.cpp
 	-@mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling WaveSelector.cpp"
+	@echo "Compiling Project.cpp"
 	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/BinaryData_ce4232d4.o: ../../JuceLibraryCode/BinaryData.cpp

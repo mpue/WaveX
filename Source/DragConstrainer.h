@@ -34,8 +34,6 @@ public:
                               bool isStretchingBottom,
                               bool isStretchingRight) override {
         
-                    cout << " x :"  << bounds.getX() << endl;
-        
         if (bounds.getY() != previousBounds.getY()) {
             bounds.setY(previousBounds.getY());
         }

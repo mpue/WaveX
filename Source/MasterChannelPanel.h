@@ -70,7 +70,6 @@ public:
     void sliderValueChanged (Slider* sliderThatWasMoved) override;
     void buttonClicked (Button* buttonThatWasClicked) override;
 
-    
     // Binary resources:
     static const char* peaks_png;
     static const int peaks_pngSize;
@@ -89,7 +88,7 @@ private:
     bool link;
     bool mute = false;
     bool solo = false;
-    
+
     ScopedPointer<CustomLookAndFeel> clf;
     //[/UserVariables]
 

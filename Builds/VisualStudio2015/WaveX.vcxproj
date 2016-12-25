@@ -129,23 +129,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\AppWindowComponent.cpp"/>
-    <ClCompile Include="..\..\Source\AudioRegion.cpp"/>
     <ClCompile Include="..\..\Source\CustomLookAndFeel.cpp"/>
     <ClCompile Include="..\..\Source\InfoPanel.cpp"/>
-    <ClCompile Include="..\..\Source\Main.cpp"/>
     <ClCompile Include="..\..\Source\MainComponent.cpp"/>
+    <ClCompile Include="..\..\Source\ToolbarPanel.cpp"/>
+    <ClCompile Include="..\..\Source\TransportPanel.cpp"/>
     <ClCompile Include="..\..\Source\MasterChannelPanel.cpp"/>
     <ClCompile Include="..\..\Source\MixerPanel.cpp"/>
+    <ClCompile Include="..\..\Source\WaveSelector.cpp"/>
+    <ClCompile Include="..\..\Source\AudioRegion.cpp"/>
     <ClCompile Include="..\..\Source\PositionMarker.cpp"/>
-    <ClCompile Include="..\..\Source\Project.cpp"/>
     <ClCompile Include="..\..\Source\TimeLine.cpp"/>
-    <ClCompile Include="..\..\Source\ToolbarPanel.cpp"/>
     <ClCompile Include="..\..\Source\Track.cpp"/>
     <ClCompile Include="..\..\Source\TrackNavigator.cpp"/>
     <ClCompile Include="..\..\Source\TrackPropertyPanel.cpp"/>
     <ClCompile Include="..\..\Source\TrackPropertyView.cpp"/>
-    <ClCompile Include="..\..\Source\TransportPanel.cpp"/>
-    <ClCompile Include="..\..\Source\WaveSelector.cpp"/>
+    <ClCompile Include="..\..\Source\Main.cpp"/>
+    <ClCompile Include="..\..\Source\Project.cpp"/>
     <ClCompile Include="..\..\..\..\..\vst\JUCE\modules\juce_audio_basics\buffers\juce_AudioChannelSet.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
@@ -1723,26 +1723,27 @@
     <ClCompile Include="..\..\JuceLibraryCode\juce_video.cpp"/>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\jcf_multi_component_dragger.h"/>
     <ClInclude Include="..\..\Source\AppViewPort.h"/>
     <ClInclude Include="..\..\Source\AppWindowComponent.h"/>
-    <ClInclude Include="..\..\Source\AudioRegion.h"/>
     <ClInclude Include="..\..\Source\CustomLookAndFeel.h"/>
-    <ClInclude Include="..\..\Source\DragConstrainer.h"/>
     <ClInclude Include="..\..\Source\InfoPanel.h"/>
+    <ClInclude Include="..\..\Source\ToolbarPanel.h"/>
+    <ClInclude Include="..\..\Source\TransportPanel.h"/>
     <ClInclude Include="..\..\Source\MasterChannelPanel.h"/>
     <ClInclude Include="..\..\Source\MixerPanel.h"/>
+    <ClInclude Include="..\..\Source\WaveSelector.h"/>
+    <ClInclude Include="..\..\Source\DragConstrainer.h"/>
+    <ClInclude Include="..\..\Source\AudioRegion.h"/>
     <ClInclude Include="..\..\Source\PositionMarker.h"/>
-    <ClInclude Include="..\..\Source\Project.h"/>
     <ClInclude Include="..\..\Source\TimeLine.h"/>
-    <ClInclude Include="..\..\Source\ToolbarPanel.h"/>
     <ClInclude Include="..\..\Source\Track.h"/>
     <ClInclude Include="..\..\Source\TrackNavigator.h"/>
     <ClInclude Include="..\..\Source\TrackPropertyConstrainer.h"/>
     <ClInclude Include="..\..\Source\TrackPropertyPanel.h"/>
     <ClInclude Include="..\..\Source\TrackPropertyView.h"/>
     <ClInclude Include="..\..\Source\TrackResizer.h"/>
-    <ClInclude Include="..\..\Source\TransportPanel.h"/>
-    <ClInclude Include="..\..\Source\WaveSelector.h"/>
+    <ClInclude Include="..\..\Source\Project.h"/>
     <ClInclude Include="..\..\..\..\..\vst\JUCE\modules\juce_audio_basics\buffers\juce_AudioChannelSet.h"/>
     <ClInclude Include="..\..\..\..\..\vst\JUCE\modules\juce_audio_basics\buffers\juce_AudioDataConverters.h"/>
     <ClInclude Include="..\..\..\..\..\vst\JUCE\modules\juce_audio_basics\buffers\juce_AudioSampleBuffer.h"/>

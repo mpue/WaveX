@@ -14,7 +14,7 @@
 #include <iostream>
 
 //==============================================================================
-Track::Track(double sampleRate)
+Track::Track(double sampleRate, MultiComponentDragger* dragger)
 {
 	manager.registerBasicFormats();
 	this->sampleRate = sampleRate;
@@ -24,6 +24,7 @@ Track::Track(double sampleRate)
 	this->name = "empty Track";
     this->volume = 1;
     this->audioBuffer = new AudioSampleBuffer(2,maxLength*sampleRate);
+    this->dragger = dragger;
     
 }
 
@@ -91,6 +92,7 @@ void Track::duplicateSelectedRegions() {
 
 void Track::duplicateRegion(AudioRegion *region) {
     AudioRegion* duplicate = new AudioRegion(region,manager, sampleRate);
+    duplicate->setDragger(dragger);
     Rectangle<int>* bounds = new Rectangle<int>(0, 0, region->getThumbnail()->getTotalLength() * 20, 200);
     duplicate->setBounds(region->getWidth() + region->getX(), 0, region->getWidth(), region->getHeight());
     duplicate->setThumbnailBounds(bounds);
@@ -121,6 +123,7 @@ void Track::duplicateRegion(AudioRegion *region) {
 void Track::addRegion(File file, double sampleRate) {
 
 	AudioRegion* region = new AudioRegion(file, manager, sampleRate);
+    region->setDragger(dragger);
 	Rectangle<int>* bounds = new Rectangle<int>(0, 0, region->getThumbnail()->getTotalLength() * 20, getHeight());
     region->setBounds(markerPosition, 0, region->getWidth(), getHeight());
 	region->setThumbnailBounds(bounds);
@@ -162,6 +165,9 @@ void Track::splitRegion() {
         
         AudioRegion* leftRegion = new AudioRegion(region,manager,sampleRate,0,numLeftSamples);
         AudioRegion* rightRegion = new AudioRegion(region,manager,sampleRate,numLeftSamples, numRightSamples);
+        
+        leftRegion->setDragger(dragger);
+        rightRegion->setDragger(dragger);
         
         Rectangle<int>* leftBounds = new Rectangle<int>(0, 0, leftRegion->getThumbnail()->getTotalLength() * 20, getHeight());
         Rectangle<int>* rightBounds = new Rectangle<int>(0, 0, rightRegion->getThumbnail()->getTotalLength() * 20, getHeight());
@@ -355,4 +361,8 @@ void Track::changeListenerCallback(ChangeBroadcaster * source) {
         
     }
     
+}
+
+vector<AudioRegion*>Track::getRegions() {
+    return this->regions;
 }

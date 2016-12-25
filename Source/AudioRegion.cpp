@@ -12,6 +12,7 @@
 #include "AudioRegion.h"
 
 AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double sampleRate, long startSample, long numSamples) {
+
     this->sampleRate = sampleRate;
     
     this->thumbnailCache = new AudioThumbnailCache(1);
@@ -33,6 +34,7 @@ AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double
     
     this->volume = 1;
     this->offset = 0;
+    
 }
 
 AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double sampleRate) {
@@ -113,6 +115,7 @@ int AudioRegion::getNumSamples() {
 void AudioRegion::setSelected(bool selected)
 {
 	this->selected = selected;
+    this->dragger->setSelected(this, false);
 	repaint();
 }
 
@@ -147,14 +150,6 @@ bool AudioRegion::isLoop()
     return this->loop;
 }
 
-void AudioRegion::setDynOffset(int amount) {
-    this->dynOffset = amount;
-}
-
-int AudioRegion::getDynOffset(){
-    return dynOffset;
-}
-
 void AudioRegion::setSampleOffset(long offset, bool reminder, bool notify)
 {
     if (reminder)
@@ -180,6 +175,7 @@ long AudioRegion::getSampleOffset() {
 
 void AudioRegion::setOffset(int offset)
 {
+    Logger::getCurrentLogger()->writeToLog("Setting offset to "+ String(offset));
 	this->offset = offset;
 }
 
@@ -189,7 +185,7 @@ double AudioRegion::getSampleRate() {
 
 int AudioRegion::getOffset()
 {
-	return offset + dynOffset;
+	return offset;
 }
 
 const float* AudioRegion::getReadBuffer(int channel) {
@@ -264,7 +260,7 @@ void AudioRegion::paintIfNoFileLoaded(Graphics& g, const Rectangle<int>& thumbna
 void AudioRegion::paintIfFileLoaded(Graphics& g, const Rectangle<int>& b)
 {
     
-	if (this->selected) {
+	if (dragger->isSelected(this)) {
 		g.setColour(Colours::steelblue.brighter());
 	}
 	else {
@@ -282,7 +278,7 @@ void AudioRegion::paintIfFileLoaded(Graphics& g, const Rectangle<int>& b)
     
     g.setColour(Colours::darkblue);
     g.setFont(14.0);
-    g.drawText(String(sampleOffset), 10, 10, 140, 20, juce::Justification::left);
+    g.drawText(name, 10, 10, 140, 20, juce::Justification::left);
     
     if(loop) {
         for (int i = 1; i <= loopCount;i++) {
@@ -299,7 +295,7 @@ void AudioRegion::paintIfFileLoaded(Graphics& g, const Rectangle<int>& b)
 
 void AudioRegion::resized()
 {
-    Logger::getCurrentLogger()->writeToLog(String(getHeight()));
+    // Logger::getCurrentLogger()->writeToLog(String(getHeight()));
     
     if (this->thumbnailBounds != NULL)
         this->thumbnailBounds->setHeight(getHeight());
@@ -320,5 +316,44 @@ String AudioRegion::getName(){
     return this->name;
 }
 
+bool AudioRegion::isDragging() {
+    return dragging;
+}
+
+void AudioRegion::setDragging(bool dragging) {
+    this->dragging = dragging;
+    if (dragging) {
+        this->dragStartX = getPosition().getX();
+        // Logger::getCurrentLogger()->writeToLog("Drag start at " + String(dragStartX));
+    }
+    else {
+        // Logger::getCurrentLogger()->writeToLog("Drag stop at " + String(getBounds().getX()));
+        this->offset = getBounds().getX();
+        this->dragStartX = 0;
+    }
+    
+}
+
+void AudioRegion::move(int offset) {
+    // ogger::getCurrentLogger()->writeToLog(name + " move to offset " + String(offset) +" from offset :" + String(this->offset) + " DragStartx :" + String(dragStartX));
+    setTopLeftPosition(this->offset + offset, 0);
+}
 
 
+void AudioRegion::mouseDown(const MouseEvent & e) 
+{
+    if (dragger != NULL)
+        dragger->handleMouseDown(this, e);
+}
+
+void AudioRegion::mouseUp(const MouseEvent & e)
+{
+    if (dragger != NULL)
+        dragger->handleMouseUp(this, e);
+}
+
+void AudioRegion::mouseDrag(const MouseEvent & e)
+{
+    if (dragger != NULL)
+        dragger->handleMouseDrag(e);
+}

@@ -12,6 +12,7 @@
 #define AUDIOREGION_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "MultiComponentDragger.h"
 
 //==============================================================================
 /*
@@ -19,7 +20,6 @@
 class AudioRegion : public Component,  public ChangeListener, public ChangeBroadcaster
 {
 public:
-    
     
     AudioRegion(AudioRegion* other, AudioFormatManager& manager, double sampleRate);
     AudioRegion(AudioRegion* other, AudioFormatManager& manager, double sampleRate, long startSample, long numSamples);
@@ -43,9 +43,7 @@ public:
     void setLoop(bool loop);
     bool isLoop();
 	void setOffset(int offset);
-    void setDynOffset(int offset);
 	int getOffset();
-    int getDynOffset();
     void setLoopCount(int count);
     int getLoopCount();
     
@@ -53,11 +51,23 @@ public:
     void setSampleOffset(long offset,bool reminder, bool notify);
     long getOldOffset();
     
+    void setDragging(bool dragging);
+    bool isDragging();
+    void move(int offset);
+    
     double getSampleRate();
     
     double magnitudeLeft = 0;
     double magnitudeRight = 0;
 
+    void mouseDown(const MouseEvent & e) override;
+    void mouseUp(const MouseEvent & e) override;
+    void mouseDrag(const MouseEvent & e) override;
+    
+    inline void setDragger(MultiComponentDragger* dragger) {
+        this->dragger = dragger;
+    }
+    
 private:
 
     AudioSampleBuffer* audioBuffer;
@@ -70,19 +80,23 @@ private:
     float volume;
     float gain = 1;
 	int offset = 0;
-    int dynOffset = 0;
 	double sampleRate;
     long sampleOffset = 0;
     long oldOffset = 0;
     int loopCount = 1;
 	bool selected = false;
     bool loop = false;
+    bool dragging = false;
+    int dragStartX = 0;
     virtual void changeListenerCallback(ChangeBroadcaster * source) override;
     void paintIfNoFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds);
     void paintIfFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds);
     ResizableEdgeComponent* resizerR;
     ResizableEdgeComponent* resizerL;
+    MultiComponentDragger* dragger = NULL;
     
+
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioRegion)
 };
 

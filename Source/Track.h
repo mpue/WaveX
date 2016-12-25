@@ -14,6 +14,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "AudioRegion.h"
 #include <vector>
+#include "MultiComponentDragger.h"
 
 //==============================================================================
 /*
@@ -24,7 +25,7 @@ using namespace std;
 class Track    : public Component, public ChangeBroadcaster, public ChangeListener
 {
 public:
-    Track(double sampleRate);
+    Track(double sampleRate, MultiComponentDragger* dragger);
     ~Track();
 
 	void setZoom(float zoom);
@@ -67,7 +68,8 @@ public:
     
     int getMidiChannel();
     void setMidiChannel(int channel);
-
+    
+    vector<AudioRegion*> getRegions();
     
 private:
 
@@ -88,6 +90,7 @@ private:
     int bufferSize;
     int midiChannel = 1;
     virtual void changeListenerCallback(ChangeBroadcaster * source) override;
+    MultiComponentDragger* dragger = NULL;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Track)
 };
