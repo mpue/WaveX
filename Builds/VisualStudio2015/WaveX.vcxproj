@@ -1723,11 +1723,11 @@
     <ClCompile Include="..\..\JuceLibraryCode\juce_video.cpp"/>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\jcf_multi_component_dragger.h"/>
     <ClInclude Include="..\..\Source\AppViewPort.h"/>
     <ClInclude Include="..\..\Source\AppWindowComponent.h"/>
     <ClInclude Include="..\..\Source\CustomLookAndFeel.h"/>
     <ClInclude Include="..\..\Source\InfoPanel.h"/>
+    <ClInclude Include="..\..\Source\MultiComponentDragger.h"/>
     <ClInclude Include="..\..\Source\ToolbarPanel.h"/>
     <ClInclude Include="..\..\Source\TransportPanel.h"/>
     <ClInclude Include="..\..\Source\MasterChannelPanel.h"/>

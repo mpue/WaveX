@@ -2163,9 +2163,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\jcf_multi_component_dragger.h">
-      <Filter>WaveX\Source\MainUI</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\AppViewPort.h">
       <Filter>WaveX\Source\MainUI</Filter>
     </ClInclude>
@@ -2176,6 +2173,9 @@
       <Filter>WaveX\Source\MainUI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\InfoPanel.h">
+      <Filter>WaveX\Source\MainUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\MultiComponentDragger.h">
       <Filter>WaveX\Source\MainUI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ToolbarPanel.h">

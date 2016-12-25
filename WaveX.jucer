@@ -25,8 +25,6 @@
     </GROUP>
     <GROUP id="{4EC8E705-56D1-3A9F-9C5F-6B92CD6412F1}" name="Source">
       <GROUP id="{39B17561-85F6-8D15-A90B-46048549C696}" name="MainUI">
-        <FILE id="JueA4n" name="jcf_multi_component_dragger.h" compile="0"
-              resource="0" file="Source/jcf_multi_component_dragger.h"/>
         <FILE id="SsoNTP" name="AppViewPort.h" compile="0" resource="0" file="Source/AppViewPort.h"/>
         <FILE id="eBDgTg" name="AppWindowComponent.cpp" compile="1" resource="0"
               file="Source/AppWindowComponent.cpp"/>
@@ -40,6 +38,8 @@
         <FILE id="k6GD1T" name="InfoPanel.h" compile="0" resource="0" file="Source/InfoPanel.h"/>
         <FILE id="AUy7xn" name="MainComponent.cpp" compile="1" resource="0"
               file="Source/MainComponent.cpp"/>
+        <FILE id="ngkQ9l" name="MultiComponentDragger.h" compile="0" resource="0"
+              file="Source/MultiComponentDragger.h"/>
         <FILE id="kJmpPP" name="ToolbarPanel.cpp" compile="1" resource="0"
               file="Source/ToolbarPanel.cpp"/>
         <FILE id="UCNDEJ" name="ToolbarPanel.h" compile="0" resource="0" file="Source/ToolbarPanel.h"/>

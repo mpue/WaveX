@@ -59,7 +59,7 @@ void Track::toggleLoopSelection() {
 void Track::removeSelectedRegions(bool clear) {
     
     for (std::vector<AudioRegion*>::iterator it = regions.begin(); it != regions.end();) {
-        if( (*it)->isSelected() ) {
+        if(dragger->isSelected((*it))) {
             (*it)->removeAllChangeListeners();
             if (clear)
                 audioBuffer->clear((*it)->getSampleOffset(), (*it)->getNumSamples());
@@ -78,7 +78,7 @@ void Track::duplicateSelectedRegions() {
     vector<AudioRegion*> selected;
     
     for (std::vector<AudioRegion*>::iterator it = regions.begin(); it != regions.end(); ++it) {
-        if((*it)->isSelected())
+        if (dragger->isSelected((*it)))
             selected.push_back((*it));
     }
     
@@ -200,6 +200,7 @@ void Track::splitRegion() {
         clearSelection();
         
         region->setSelected(true);
+        dragger->setSelected(region, true);
         
         removeSelectedRegions(false);
         

@@ -17,7 +17,7 @@
 //==============================================================================
 /*
 */
-class AudioRegion : public Component,  public ChangeListener, public ChangeBroadcaster
+class AudioRegion : public Component,  public ChangeListener, public ChangeBroadcaster, public ComponentListener
 {
 public:
     
@@ -67,6 +67,10 @@ public:
     inline void setDragger(MultiComponentDragger* dragger) {
         this->dragger = dragger;
     }
+    
+    virtual void componentMovedOrResized (Component& component,
+                                          bool wasMoved,
+                                          bool wasResized) override;
     
 private:
 

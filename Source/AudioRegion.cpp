@@ -10,6 +10,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "AudioRegion.h"
+#include "Project.h"
 
 AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double sampleRate, long startSample, long numSamples) {
 
@@ -34,6 +35,8 @@ AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double
     
     this->volume = 1;
     this->offset = 0;
+    
+    addComponentListener(this);
     
 }
 
@@ -66,6 +69,8 @@ AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double
     
     // addAndMakeVisible(resizerL);
     // addAndMakeVisible(resizerR);
+   
+    addComponentListener(this);
 }
 
 //==============================================================================
@@ -94,6 +99,8 @@ AudioRegion::AudioRegion(File file, AudioFormatManager& manager, double sampleRa
     setSize(this->thumbnail->getTotalLength() * this->zoom, 200);
     this->volume = 1;
 	this->offset = 0;
+    
+    addComponentListener(this);
     
     // addAndMakeVisible(resizerL);
     // addAndMakeVisible(resizerR);
@@ -232,6 +239,9 @@ void AudioRegion::setZoom(float zoom) {
     */
     // setBounds(0,0,this->thumbnail->getTotalLength() * this->zoom, 200);
     this->thumbnailBounds->setSize(this->thumbnail->getTotalLength() * this->zoom, getHeight());
+    
+    dragger->setRaster(this->zoom / 4);
+    
     repaint();
 }
 
@@ -356,4 +366,24 @@ void AudioRegion::mouseDrag(const MouseEvent & e)
 {
     if (dragger != NULL)
         dragger->handleMouseDrag(e);
+}
+
+void AudioRegion::componentMovedOrResized (Component& component, bool wasMoved, bool wasResized) {
+    
+    if (wasMoved) {
+        long tracklen = Project::getInstance()->getTrackLength();
+        double sampleRate = Project::getInstance()->getSampleRate();
+        
+        long sampleNum = (tracklen / (tracklen * zoom)) * getBounds().getX() * getSampleRate();
+        if (sampleNum != getSampleOffset()) {
+            setSampleOffset(sampleNum, true, true);
+        }
+        
+        if (getSampleOffset() >= tracklen * sampleRate) {
+            
+            setSampleOffset(tracklen * sampleRate - getBuffer()->getNumSamples(), false, false);
+        }
+        
+        Logger::getCurrentLogger()->writeToLog("AudioRegion sampleOffset " + String(sampleOffset));
+    }
 }

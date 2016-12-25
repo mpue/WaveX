@@ -310,80 +310,9 @@ bool TrackNavigator::keyPressed(const KeyPress& key, Component* originatingCompo
 }
 
 void TrackNavigator::mouseUp (const MouseEvent& event) {
-    
-    /*
-    for (int i = 0; i < tracks.size();i++) {
-        for (int j = 0; j < tracks.at(i)->getRegions().size();j++) {
-            if(tracks.at(i)->getRegions().at(j)->isSelected()) {
-                // int position = tracks.at(i)->getRegions().at(j)->getOffset();
-                tracks.at(i)->getRegions().at(j)->setOffset(mouseDeltaX);
-            }
-            //tracks.at(i)->getRegions().at(j)->setDragging(false);
-        }
-    }
-    
-    mouseDeltaX = 0;
-    
-
-    if (AudioRegion* r = dynamic_cast<AudioRegion*>(event.eventComponent)){
-
-        if (r->isSelected()) {
-
-            long tracklen = Project::getInstance()->getTrackLength();
-            double sampleRate = Project::getInstance()->getSampleRate();
-            
-            
-            int offset = r->getOffset();
-            int dynSampleOffset = r->getDynOffset() / zoom * sampleRate;
-            
-            if (r->getSampleOffset() + r->getBuffer()->getNumSamples() + dynSampleOffset >= tracklen * sampleRate) {
-                
-                r->setSampleOffset(tracklen * sampleRate - r->getBuffer()->getNumSamples(), false, false);
-                r->setDynOffset(0);
-                return;
-            }
-            
-            
-            if (offset >= 0) {
-                
-                long sampleNum = (tracklen / (tracklen * zoom)) * offset * r->getSampleRate();
-                if (sampleNum != r->getSampleOffset()) {
-                    r->setSampleOffset(sampleNum, true, true);
-                }
-                
-                r->setDynOffset(0);
-                r->setOffset(offset);
-                
-            }
-        }
-    }
-     */
 }
 
 void TrackNavigator::mouseDrag(const MouseEvent& event) {
-        
-    /*
-    if (event.mods.isLeftButtonDown()) {
-        getSelector()->setSelectedRange(event.getMouseDownPosition().getX(), event.getOffsetFromDragStart().getX());
-    }
-     */
-    
-    /*
-    mouseDeltaX = event.getDistanceFromDragStartX();
-    
-    int selectedRegions = 0;
-    
-    for (int i = 0; i < tracks.size();i++) {
-        for (int j = 0; j < tracks.at(i)->getRegions().size();j++) {
-            if(tracks.at(i)->getRegions().at(j)->isSelected()) {
-                tracks.at(i)->getRegions().at(j)->move(constrainer.snap(mouseDeltaX,zoom / 4));
-                tracks.at(i)->getRegions().at(j)->repaint();
-                selectedRegions++;
-            }
-        }
-    }
-     */
-    
     
 }
 
@@ -429,7 +358,7 @@ void TrackNavigator::mouseDown (const MouseEvent& event) {
     
     
     if (!event.mods.isCtrlDown() && event.mods.isRightButtonDown()) {
-        float pos = (float)x / getWidth();
+        float pos = (float)dragger->snap(x,zoom/4) / getWidth();
         double total = getMaxLength();
         double relative = total * pos;
         setPosition(relative);
@@ -438,48 +367,6 @@ void TrackNavigator::mouseDown (const MouseEvent& event) {
             tracks.at(i)->setCurrentMarkerPosition(marker->getDrawPosition());
         }
         sendChangeMessage();
-    }
-    
-    if (AudioRegion* r = dynamic_cast<AudioRegion*>(event.eventComponent)){
-        /*
-        if (!event.mods.isShiftDown()) {
-            for (int i = 0; i < tracks.size();i++) {
-                tracks.at(i)->clearSelection();
-            }
-        }
-        else if (event.mods.isShiftDown()) {
-             for (int i = 0; i < tracks.size();i++) {
-                 for (int j = 0; j < tracks.at(i)->getRegions().size();j++) {
-                     dragger.startDraggingComponent(tracks.at(i)->getRegions().at(j), event);
-                 }
-             }
-        }
-        else {
-            dragger.startDraggingComponent(r, event);
-            r->setSelected(true);
-        }
-        
-        if (event.mods.isShiftDown()) {
-            // Logger::getCurrentLogger()->writeToLog("adding region to selection.");
-            r->setSelected(true);;
-            // r->setDragging(true);
-            // mouseDeltaX = 0;
-            // dragger.startDraggingComponent(r,event);
-            repaint();
-        }
-        else {
-            for (int i = 0; i < tracks.size();i++) {
-                tracks.at(i)->clearSelection();
-            }
-            // Logger::getCurrentLogger()->writeToLog("new selection.");
-            r->setSelected(true);
-            // r->setDragging(true);
-            // mouseDeltaX = 0;
-            // dragger.startDraggingComponent(r,event);
-            repaint();
-        }
-         */
-
     }
     //else
     if (Track* r = dynamic_cast<Track*>(event.eventComponent)) {

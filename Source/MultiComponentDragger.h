@@ -186,6 +186,8 @@ public:
         }
 
         applyDirectionConstraints(e, delta);
+        
+        delta.x = snap(delta.x, raster);
 
         for (auto comp: selectedComponents)
         {
@@ -198,11 +200,51 @@ public:
                 comp->setBounds (bounds);
             }
         }
+
+        
         totalDragDelta += delta;
     }
 
+    double snap(double location, double raster) {
+        
+        int toleranceWindow = (raster / tolerance);
+        
+        if (location > 0) {
+            
+            
+            if ((fmod(location,raster )) > toleranceWindow) {
+                location = location + (raster - (fmod(location,raster)));
+            }
+            else {
+                location = location - (fmod(location,raster));
+            }
+        }
+        else {
+            if ((fmod(location,raster)) < toleranceWindow) {
+                location = location + (raster - (fmod(location,raster))) - raster;
+            }
+            else {
+                location = location - (fmod(location, raster)) - raster;
+            }
+        }
+        
+        return location;
+    }
+    
+    void setRaster(int raster) {
+        this->raster = raster;
+    }
+    
+    void setTolerance(int tolerance) {
+        this->tolerance = tolerance;
+    }
+    
+    void setMaxX(int maxX) {
+        this->maxX = maxX;
+    }
+    
 private:
-
+    
     Rectangle<int> getAreaOfSelectedComponents()
     {
         if (selectedComponents.size() == 0)
@@ -288,6 +330,10 @@ private:
     Component * componentBeingDragged { nullptr };
     
     BorderSize<int> amountPermittedOffscreen;
+   
+    int raster = 1;
+    int tolerance = 4;
+    int maxX = 0;
 };
 
 
