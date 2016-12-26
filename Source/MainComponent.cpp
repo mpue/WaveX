@@ -211,6 +211,8 @@ public:
                     
                 }
                 
+        
+                navigator->getTracks().at(i)->updateMagnitude(numSamples, _numSamples);
                 navigator->getTracks().at(i)->setOffset(numSamples);
  
             }
@@ -228,6 +230,10 @@ public:
             for (int j = 0; j < _numSamples;j++) {
                 buffer->addSample(0, j,inputChannelData[0][j] * leftVolume * gainLeft);
                 buffer->addSample(1, j,inputChannelData [1][j] * rightVolume * gainRight);
+            }
+            for (int i = 0; i < navigator->getTracks().size();i++) {
+                navigator->getTracks().at(i)->setMagnitude(0, 0);
+                navigator->getTracks().at(i)->setMagnitude(1, 0);
             }
         }
         
@@ -247,13 +253,12 @@ public:
         this->rmsLeft = buffer->getRMSLevel(0, 0,_numSamples);
         this->rmsRight = buffer->getRMSLevel(1, 0,_numSamples);
         
+        // Maybe we can use this later to display the peak at a specific sample point
+        /*
         for (int i = 0; i < navigator->getTracks().size();i++) {
-            // navigator->getTracks().at(i)->updateMagnitude(numSamples, _numSamples);
-            if (navigator->getTracks().at(i)->isRecording()) {
-                navigator->getTracks().at(i)->setMagnitude(0, this->magnitudeLeft);
-                navigator->getTracks().at(i)->setMagnitude(1, this->magnitudeRight);
-            }
+            navigator->getTracks().at(i)->updateMagnitude(numSamples, _numSamples);
         }
+         */
         
         
         buffer->clear();

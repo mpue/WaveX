@@ -99,7 +99,7 @@ private:
 	double sampleRate;
 	bool selected = false;
 	AudioRegion* currentRegion = NULL;
-	AudioFormatManager manager;
+	AudioFormatManager* manager;
 	vector<AudioRegion*> regions;
 	long numSamples = 0;
 	double maxLength = 600 * this->sampleRate;

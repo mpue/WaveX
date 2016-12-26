@@ -32,7 +32,11 @@ public:
 private:
     ColourGradient gradientVertical;
     ColourGradient gradientHorizontal;
+    ComponentAnimator animator;
     
+    long triggerTime = 0;
+    int maxY = 0xFFFF;
+    int maxX = 0;
 };
 
 

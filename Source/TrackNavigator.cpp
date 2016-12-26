@@ -28,7 +28,6 @@ TrackNavigator::TrackNavigator(PositionMarker* marker)
     this->zoom = 40;
     this->marker = marker;
 	this->position = 0;
-	manager.registerBasicFormats();
     this->dragger = new MultiComponentDragger();
     Project::getInstance()->addChangeListener(this);
     // setInterceptsMouseClicks(true, true);
@@ -344,7 +343,13 @@ void TrackNavigator::mouseUp (const MouseEvent& event) {
 }
 
 void TrackNavigator::mouseDrag(const MouseEvent& event) {
-    
+    if (event.mods.isLeftButtonDown() && event.mods.isAltDown()) {
+        
+        int start = dragger->snap(event.getMouseDownPosition().getX(), zoom / 4);
+        int end = dragger->snap(event.getOffsetFromDragStart().getX(), zoom / 4);
+        
+        getSelector()->setSelectedRange(start,end);
+    }
 }
 
 void TrackNavigator::mouseMove(const juce::MouseEvent &event ) {

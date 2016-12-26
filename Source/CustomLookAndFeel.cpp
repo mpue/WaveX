@@ -21,6 +21,18 @@ void CustomLookAndFeel::drawLinearSlider (Graphics& g, int x, int y, int width, 
         float to = height;
         
         g.setGradientFill(gradientVertical);
+
+        if (Time::getMillisecondCounter() - triggerTime > 2000){
+            triggerTime = Time::getMillisecondCounter();
+            maxY = 0xFFFF;
+        }
+        
+        if (from < maxY) {
+            maxY = from;
+
+        }
+        
+        g.fillRect((float)x,(float)maxY,(float)width,1.0f);
         g.fillRect((float)x,from,(float)width,to);
 
     }
@@ -31,7 +43,18 @@ void CustomLookAndFeel::drawLinearSlider (Graphics& g, int x, int y, int width, 
         
         g.setGradientFill(gradientHorizontal);
         //g.fillRect((float)x,(float)y,(float)to,(float)height);
-        g.fillRect (sliderPos, (float)y, 1.0f, (float)height);
+        
+        if (Time::getMillisecondCounter() - triggerTime > 2000){
+            triggerTime = Time::getMillisecondCounter();
+            maxX = 0;
+        }
+        
+        if (sliderPos > maxX) {
+            maxX = sliderPos;
+
+        }
+        
+        g.fillRect ((float)maxX, (float)y, 2.0f, (float)height);
         g.fillRect (0.0f, (float)y, (float)(sliderPos), (float)height);
     }
     

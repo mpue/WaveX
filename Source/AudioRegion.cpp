@@ -31,7 +31,7 @@ AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double
     this->zoom = 20;
     
     double length = this->thumbnail->getTotalLength();
-    setSize(length * this->zoom, 200);
+    setSize(length * this->zoom, other->getHeight());
     
     this->volume = 1;
     this->offset = 0;
@@ -63,7 +63,7 @@ AudioRegion::AudioRegion(AudioSampleBuffer* source, AudioFormatManager& manager,
     this->zoom = 20;
     
     double length = this->thumbnail->getTotalLength();
-    setSize(length * this->zoom, 200);
+    setSize(length * this->zoom, Project::DEFAULT_TRACK_HEIGHT);
     
     this->volume = 1;
     this->offset = 0;
@@ -96,7 +96,7 @@ AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double
     this->zoom = 20;
     
     double length = this->thumbnail->getTotalLength();
-    setSize(length * this->zoom, 200);
+    setSize(length * this->zoom, other->getHeight());
     
     this->volume = 1;
     this->offset = 0;
@@ -130,7 +130,7 @@ AudioRegion::AudioRegion(File file, AudioFormatManager& manager, double sampleRa
      
     this->name = file.getFileNameWithoutExtension();
     this->zoom = 20;
-    setSize(this->thumbnail->getTotalLength() * this->zoom, 200);
+    setSize(this->thumbnail->getTotalLength() * this->zoom, Project::DEFAULT_TRACK_HEIGHT);
     this->volume = 1;
 	this->offset = 0;
     
@@ -176,10 +176,10 @@ void AudioRegion::setLoopCount(int count) {
 void AudioRegion::setLoop(bool loop)
 {
     if (loop) {
-         setSize(this->thumbnail->getTotalLength() * (loopCount + 1) * this->zoom, 200);
+         setSize(this->thumbnail->getTotalLength() * (loopCount + 1) * this->zoom, getHeight());
     }
     else {
-         setSize(this->thumbnail->getTotalLength() * this->zoom, 200);
+         setSize(this->thumbnail->getTotalLength() * this->zoom, getHeight());
     }
     
     this->loop = loop;

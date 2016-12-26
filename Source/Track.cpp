@@ -17,7 +17,7 @@
 //==============================================================================
 Track::Track(double sampleRate, MultiComponentDragger* dragger)
 {
-	manager.registerBasicFormats();
+    manager = Project::getInstance()->getAudioFormatManager();
 	this->sampleRate = sampleRate;
 
     this->maxLength = Project::getInstance()->getTrackLength();
@@ -101,9 +101,9 @@ void Track::duplicateSelectedRegions() {
 }
 
 void Track::duplicateRegion(AudioRegion *region) {
-    AudioRegion* duplicate = new AudioRegion(region,manager, sampleRate);
+    AudioRegion* duplicate = new AudioRegion(region,*manager, sampleRate);
     duplicate->setDragger(dragger);
-    Rectangle<int>* bounds = new Rectangle<int>(0, 0, region->getThumbnail()->getTotalLength() * 20, 200);
+    Rectangle<int>* bounds = new Rectangle<int>(0, 0, region->getThumbnail()->getTotalLength() * 20, getHeight());
     duplicate->setBounds(region->getWidth() + region->getX(), 0, region->getWidth(), region->getHeight());
     duplicate->setThumbnailBounds(bounds);
     duplicate->setLoopCount(0);
@@ -133,7 +133,7 @@ void Track::duplicateRegion(AudioRegion *region) {
 
 void Track::addRegion(File file, double sampleRate) {
 
-	AudioRegion* region = new AudioRegion(file, manager, sampleRate);
+	AudioRegion* region = new AudioRegion(file, *manager, sampleRate);
     region->setDragger(dragger);
 	Rectangle<int>* bounds = new Rectangle<int>(0, 0, region->getThumbnail()->getTotalLength() * 20, getHeight());
     region->setBounds(markerPosition, 0, region->getWidth(), getHeight());
@@ -170,7 +170,7 @@ void Track::addRegion(File file, double sampleRate) {
 
 void Track::addRegion(AudioSampleBuffer* source, double sampleRate, long samplePosition,long regionLength) {
     
-    AudioRegion* region = new AudioRegion(source, manager, samplePosition, regionLength, sampleRate);
+    AudioRegion* region = new AudioRegion(source, *manager, samplePosition, regionLength, sampleRate);
     region->setDragger(dragger);
     Rectangle<int>* bounds = new Rectangle<int>(0, 0, region->getThumbnail()->getTotalLength() * 20, getHeight());
     region->setBounds(markerPosition, 0, region->getWidth(), getHeight());
@@ -214,8 +214,8 @@ void Track::splitRegion() {
         long numLeftSamples = sampleNum - region->getSampleOffset();
         long numRightSamples = region->getNumSamples() - numLeftSamples;
         
-        AudioRegion* leftRegion = new AudioRegion(region,manager,sampleRate,0,numLeftSamples);
-        AudioRegion* rightRegion = new AudioRegion(region,manager,sampleRate,numLeftSamples, numRightSamples);
+        AudioRegion* leftRegion = new AudioRegion(region,*manager,sampleRate,0,numLeftSamples);
+        AudioRegion* rightRegion = new AudioRegion(region,*manager,sampleRate,numLeftSamples, numRightSamples);
         
         leftRegion->setDragger(dragger);
         rightRegion->setDragger(dragger);

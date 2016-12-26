@@ -187,6 +187,11 @@ public:
 
         applyDirectionConstraints(e, delta);
         
+        
+        if (e.mods.isAltDown()) {
+            return;
+        }
+        
         delta.x = snap(delta.x, raster);
 
         for (auto comp: selectedComponents)

@@ -64,19 +64,33 @@ public:
         regionsClipboard.push_back(region);
     }
     
+    inline AudioRegion* pasteRegion(long position) {
+        AudioRegion* copy = new AudioRegion(regionsClipboard.back(),*manager,sampleRate);
+        copy->setSampleOffset(position, false, false);
+        return copy;
+    }
+    
     inline void clearRegionsClipboard() {
         regionsClipboard.clear();
     }
     
+    inline AudioFormatManager* getAudioFormatManager() {
+        return manager;
+    }
+    
     static long DEFAULT_TRACK_LENGTH;
+    static int  DEFAULT_TRACK_HEIGHT;
     
 protected:
     Project() {
         this->tracklength = DEFAULT_TRACK_LENGTH;
         name = "empty Project";
+        manager = new AudioFormatManager();
+        manager->registerBasicFormats();
     };
     
     ~Project() {
+        delete manager;
         removeAllChangeListeners();
     }
     
@@ -86,6 +100,7 @@ protected:
     long tracklength;
     double sampleRate;
     std::vector<AudioRegion*> regionsClipboard;
+    AudioFormatManager* manager;
     
 };
 

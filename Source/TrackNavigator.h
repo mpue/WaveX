@@ -64,7 +64,6 @@ private:
     MultiComponentDragger* dragger = NULL;
     
     Track* currentTrack = NULL;
-    AudioFormatManager manager;
     PositionMarker* marker;
     
     std::vector<Track*> tracks;
