@@ -108,12 +108,12 @@ TransportPanel::TransportPanel (MainContentComponent* mcc)
 	d = new DropShadower(*ds);
 	d->setOwner(this);
     */
-    
+
 
 
     recordButton->setClickingTogglesState(true);
     playButton->setClickingTogglesState(true);
-    
+
     recordButton->setToggleState(false, juce::NotificationType::dontSendNotification);
 
     //[/Constructor]
@@ -184,7 +184,7 @@ void TransportPanel::buttonClicked (Button* buttonThatWasClicked)
         playButton->setToggleState(false, juce::NotificationType::sendNotification);
         mcc->getNavigator()->setPlaying(false);
         if (mcc->getNavigator()->isRecording()){
-            mcc->getNavigator()->setRecording(false);        
+            mcc->getNavigator()->setRecording(false);
         }
 
         //[/UserButtonCode_stopButton]

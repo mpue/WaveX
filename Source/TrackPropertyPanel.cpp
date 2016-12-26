@@ -20,6 +20,7 @@
 //[Headers] You can add your own extra header files here...
 #include "MasterChannelPanel.h"
 #include "ImageToggleButton.h"
+#include "Project.h"
 //[/Headers]
 
 #include "TrackPropertyPanel.h"
@@ -110,6 +111,7 @@ TrackPropertyPanel::TrackPropertyPanel ()
 
 
     //[Constructor] You can add your own custom stuff here..
+    setSize(150,Project::DEFAULT_TRACK_HEIGHT);
     clf = new CustomLookAndFeel();
     volumeViewSlider->setLookAndFeel(clf);
 	addKeyListener(this);

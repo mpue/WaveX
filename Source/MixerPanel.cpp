@@ -115,8 +115,9 @@ void MixerPanel::changeListenerCallback(ChangeBroadcaster * source) {
 vector<MasterChannelPanel*> MixerPanel::getChannels() {
     return channels;
 }
-void MixerPanel::setMasterVolume(float volume) {
-    masterChannel->setMagnitude(volume);
+
+void MixerPanel::setMasterVolume(int channel, float volume) {
+    masterChannel->setMagnitude(channel,volume);
 }
 
 void MixerPanel::timerCallback() {

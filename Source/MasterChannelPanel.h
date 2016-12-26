@@ -61,7 +61,7 @@ public:
 
     virtual void changeListenerCallback(ChangeBroadcaster * source) override;
     void setName(String name);
-    void setMagnitude(float magnitude);
+    void setMagnitude(int channel, float magnitude);
     void setMute(bool mute);
     void setSolo(bool solo);
     double getVolume();
@@ -99,7 +99,7 @@ private:
     //[/UserVariables]
 
     //==============================================================================
-    ScopedPointer<Slider> vuSlider;
+    ScopedPointer<Slider> vuSliderL;
     ScopedPointer<Slider> channelVolume;
     ScopedPointer<Slider> panSlider;
     ScopedPointer<Label> nameLabel;
@@ -107,6 +107,7 @@ private:
     ScopedPointer<ImageButton> soloButton;
     ScopedPointer<Label> M;
     ScopedPointer<Label> S;
+    ScopedPointer<Slider> vuSliderR;
 
 
     //==============================================================================

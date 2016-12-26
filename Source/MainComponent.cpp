@@ -112,9 +112,12 @@ public:
         trackProperties->timerCallback();
         for (int i = 0; i < navigator->getTracks().size();i++) {
             Track* t = navigator->getTracks().at(i);
-            mixer->getChannels().at(i)->setMagnitude(t->getMagnitude(0));
+            mixer->getChannels().at(i)->setMagnitude(0,t->getMagnitude(0));
+            mixer->getChannels().at(i)->setMagnitude(1,t->getMagnitude(1));
         }
-        mixer->setMasterVolume(magnitudeLeft);
+        
+        mixer->setMasterVolume(0, magnitudeLeft);
+        mixer->setMasterVolume(1, magnitudeRight);
     }
     
     int useTimeSlice() override {

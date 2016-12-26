@@ -51,7 +51,7 @@ public:
     virtual void changeListenerCallback(ChangeBroadcaster * source) override;
     void timerCallback() override;
     vector<MasterChannelPanel*> getChannels();
-    void setMasterVolume(float volume);
+    void setMasterVolume(int channel, float volume);
     //[/UserMethods]
 
     void paint (Graphics& g) override;

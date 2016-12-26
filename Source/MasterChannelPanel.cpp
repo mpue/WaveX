@@ -33,14 +33,16 @@ MasterChannelPanel::MasterChannelPanel ()
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
 
-    addAndMakeVisible (vuSlider = new Slider ("vuSlider"));
-    vuSlider->setRange (0, 1, 0.01);
-    vuSlider->setSliderStyle (Slider::LinearBarVertical);
-    vuSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
-    vuSlider->setColour (Slider::backgroundColourId, Colour (0xff313131));
-    vuSlider->setColour (Slider::thumbColourId, Colours::chartreuse);
-    vuSlider->setColour (Slider::trackColourId, Colour (0xff434242));
-    vuSlider->addListener (this);
+    addAndMakeVisible (vuSliderL = new Slider ("vuSliderL"));
+    vuSliderL->setRange (0, 1, 0.01);
+    vuSliderL->setSliderStyle (Slider::LinearBarVertical);
+    vuSliderL->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
+    vuSliderL->setColour (Slider::backgroundColourId, Colour (0xff313131));
+    vuSliderL->setColour (Slider::thumbColourId, Colours::chartreuse);
+    vuSliderL->setColour (Slider::trackColourId, Colour (0xff434242));
+    vuSliderL->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66ffffff));
+    vuSliderL->setColour (Slider::textBoxBackgroundColourId, Colour (0x00ffffff));
+    vuSliderL->addListener (this);
 
     addAndMakeVisible (channelVolume = new Slider ("channelVolume"));
     channelVolume->setRange (0, 1, 0.01);
@@ -102,6 +104,17 @@ MasterChannelPanel::MasterChannelPanel ()
     S->setColour (TextEditor::textColourId, Colours::black);
     S->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
+    addAndMakeVisible (vuSliderR = new Slider ("vuSlider"));
+    vuSliderR->setRange (0, 1, 0.01);
+    vuSliderR->setSliderStyle (Slider::LinearBarVertical);
+    vuSliderR->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
+    vuSliderR->setColour (Slider::backgroundColourId, Colour (0xff313131));
+    vuSliderR->setColour (Slider::thumbColourId, Colours::chartreuse);
+    vuSliderR->setColour (Slider::trackColourId, Colour (0xff434242));
+    vuSliderR->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66ffffff));
+    vuSliderR->setColour (Slider::textBoxBackgroundColourId, Colour (0x00ffffff));
+    vuSliderR->addListener (this);
+
 
     //[UserPreSize]
     //[/UserPreSize]
@@ -117,7 +130,8 @@ MasterChannelPanel::MasterChannelPanel ()
     clf = new CustomLookAndFeel();
 
     channelVolume->setLookAndFeel(clf);
-    vuSlider->setLookAndFeel(clf);
+    vuSliderL->setLookAndFeel(clf);
+    vuSliderR->setLookAndFeel(clf);
 
 	// constrainer.setRaster(getWidth());
 	// constrainer.setTolerance(1);
@@ -136,7 +150,7 @@ MasterChannelPanel::~MasterChannelPanel()
     //[Destructor_pre]. You can add your own custom destruction code here..
     //[/Destructor_pre]
 
-    vuSlider = nullptr;
+    vuSliderL = nullptr;
     channelVolume = nullptr;
     panSlider = nullptr;
     nameLabel = nullptr;
@@ -144,6 +158,7 @@ MasterChannelPanel::~MasterChannelPanel()
     soloButton = nullptr;
     M = nullptr;
     S = nullptr;
+    vuSliderR = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -173,7 +188,7 @@ void MasterChannelPanel::resized()
     //[UserPreResize] Add your own custom resize code here..
     //[/UserPreResize]
 
-    vuSlider->setBounds (24, 48, 8, 128);
+    vuSliderL->setBounds (24, 48, 6, 128);
     channelVolume->setBounds (48, 40, 16, 136);
     panSlider->setBounds (40, 8, 32, 32);
     nameLabel->setBounds (11, 219, 64, 24);
@@ -181,6 +196,7 @@ void MasterChannelPanel::resized()
     soloButton->setBounds (48, 200, 16, 16);
     M->setBounds (18, 200, 22, 16);
     S->setBounds (48, 200, 20, 16);
+    vuSliderR->setBounds (32, 48, 6, 128);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -190,10 +206,10 @@ void MasterChannelPanel::sliderValueChanged (Slider* sliderThatWasMoved)
     //[UsersliderValueChanged_Pre]
     //[/UsersliderValueChanged_Pre]
 
-    if (sliderThatWasMoved == vuSlider)
+    if (sliderThatWasMoved == vuSliderL)
     {
-        //[UserSliderCode_vuSlider] -- add your slider handling code here..
-        //[/UserSliderCode_vuSlider]
+        //[UserSliderCode_vuSliderL] -- add your slider handling code here..
+        //[/UserSliderCode_vuSliderL]
     }
     else if (sliderThatWasMoved == channelVolume)
     {
@@ -208,6 +224,11 @@ void MasterChannelPanel::sliderValueChanged (Slider* sliderThatWasMoved)
         pan = panSlider->getValue();
         sendChangeMessage();
         //[/UserSliderCode_panSlider]
+    }
+    else if (sliderThatWasMoved == vuSliderR)
+    {
+        //[UserSliderCode_vuSliderR] -- add your slider handling code here..
+        //[/UserSliderCode_vuSliderR]
     }
 
     //[UsersliderValueChanged_Post]
@@ -255,13 +276,13 @@ void MasterChannelPanel::mouseDrag (const MouseEvent& e)
     // dragger.dragComponent (this, e, &constrainer);
 }
 
-void MasterChannelPanel::setMagnitude(float magnitude) {
+void MasterChannelPanel::setMagnitude(int channel, float magnitude) {
 
-    if (mode == MAGNITUDE) {
-        vuSlider->setValue(magnitude * channelVolume->getValue());
+    if (channel == 0) {
+        vuSliderL->setValue(magnitude * channelVolume->getValue());
     }
     else {
-        vuSlider->setValue(magnitude * channelVolume->getValue());
+        vuSliderR->setValue(magnitude * channelVolume->getValue());
     }
 
 }
@@ -314,9 +335,10 @@ BEGIN_JUCER_METADATA
     <RECT pos="0 0 90 250" fill="solid: ff434242" hasStroke="1" stroke="1, mitered, butt"
           strokeColour="solid: ff3f3f3f"/>
   </BACKGROUND>
-  <SLIDER name="vuSlider" id="ec971d63574facb2" memberName="vuSlider" virtualName=""
-          explicitFocusOrder="0" pos="24 48 8 128" bkgcol="ff313131" thumbcol="ff7fff00"
-          trackcol="ff434242" min="0" max="1" int="0.010000000000000000208"
+  <SLIDER name="vuSliderL" id="ec971d63574facb2" memberName="vuSliderL"
+          virtualName="" explicitFocusOrder="0" pos="24 48 6 128" bkgcol="ff313131"
+          thumbcol="ff7fff00" trackcol="ff434242" rotaryslideroutline="66ffffff"
+          textboxbkgd="ffffff" min="0" max="1" int="0.010000000000000000208"
           style="LinearBarVertical" textBoxPos="NoTextBox" textBoxEditable="1"
           textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="channelVolume" id="5a134fd786161e27" memberName="channelVolume"
@@ -357,6 +379,12 @@ BEGIN_JUCER_METADATA
          edTextCol="ff000000" edBkgCol="0" labelText="S" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
          fontsize="11.599999999999999645" bold="0" italic="0" justification="33"/>
+  <SLIDER name="vuSlider" id="13ed73975c767d8f" memberName="vuSliderR"
+          virtualName="" explicitFocusOrder="0" pos="32 48 6 128" bkgcol="ff313131"
+          thumbcol="ff7fff00" trackcol="ff434242" rotaryslideroutline="66ffffff"
+          textboxbkgd="ffffff" min="0" max="1" int="0.010000000000000000208"
+          style="LinearBarVertical" textBoxPos="NoTextBox" textBoxEditable="1"
+          textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

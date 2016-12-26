@@ -20,6 +20,7 @@
 //[Headers] You can add your own extra header files here...
 #include "TrackNavigator.h"
 #include "TrackPropertyPanel.h"
+#include "Project.h"
 //[/Headers]
 
 #include "TrackPropertyView.h"
@@ -118,14 +119,14 @@ void TrackPropertyView::addTrack(Track* track)
 
 	}
 
-	panel->setBounds(0, yPos, 150, 200);
+	panel->setBounds(0, yPos, 150, Project::DEFAULT_TRACK_HEIGHT);
     panel->setTrack(track);
 	addAndMakeVisible(panel);
 	trackProperties.push_back(panel);
 
 	panel->addMouseListener(this, true);
     track->addChangeListener(panel);
-    setSize(getWidth(), this->trackProperties.size() * 200);
+    setSize(getWidth(), this->trackProperties.size() * Project::DEFAULT_TRACK_HEIGHT);
 }
 
 void TrackPropertyView::changeListenerCallback (ChangeBroadcaster* source) {

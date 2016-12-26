@@ -190,8 +190,8 @@ void TrackNavigator::addTrack(double sampleRate) {
     Project* p = Project::getInstance();
     
 	// int height = this->getParentComponent()->getHeight();
-    setBounds(getX(), getY(), getMaxLength() * this->zoom, tracks.size() * 200);
-    track->setBounds(0, yPos, p->getTrackLength() * this->zoom, 200);
+    setBounds(getX(), getY(), getMaxLength() * this->zoom, tracks.size() * Project::DEFAULT_TRACK_HEIGHT);
+    track->setBounds(0, yPos, p->getTrackLength() * this->zoom, Project::DEFAULT_TRACK_HEIGHT);
 
 	this->marker->setSize(2, getHeight());
 	this->marker->setLength(getMaxLength());
@@ -392,12 +392,12 @@ void TrackNavigator::mouseDown (const MouseEvent& event) {
                 for (int i = 0; i < tracks.size();i++) {
                     
                     Rectangle<int> bounds =  tracks.at(i)->getBounds();
-                    bounds.setY(i * 200);
+                    bounds.setY(i * Project::DEFAULT_TRACK_HEIGHT);
                     
                     if (bounds.contains(x, y)) {
                         currentTrack = tracks.at(i);
                         Rectangle<int> selectorBounds = this->selector->getBounds();
-                        selectorBounds.setY(i * 200);
+                        selectorBounds.setY(i * Project::DEFAULT_TRACK_HEIGHT);
                         this->selector->setBounds(selectorBounds);
                         this->selector->setSelectedRange(0, 0);
                         tracks.at(i)->setSelected(true);						
