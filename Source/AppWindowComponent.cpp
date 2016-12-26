@@ -36,7 +36,7 @@ AppWindowComponent::AppWindowComponent()
 	viewport->setTimeLine(this->timeLine);
 
 	this->trackProperties = new TrackPropertyView();
-	this->trackProperties->setBounds(0, 75, 150, r.getHeight() - this->offsetBottom - 50);
+	this->trackProperties->setBounds(0, 75, 150, r.getHeight() - this->offsetBottom - 75);
     
     this->mixer = new MixerPanel();
     this->mixerViewport = new Viewport();
@@ -134,7 +134,7 @@ void AppWindowComponent::resized()
     Rectangle<int> area(getLocalBounds());
     // this->menu->setBounds(area.removeFromTop(LookAndFeel::getDefaultLookAndFeel().getDefaultMenuBarHeight()));
     viewport->setSize(getWidth() - 150, getHeight() - this->offsetBottom - 3);
-    this->trackProperties->setBounds(0, 75, 150, getHeight() - this->offsetBottom);
+    this->trackProperties->setBounds(0, 75, 150, getHeight() - this->offsetBottom - 75);
     this->mixerViewport->setBounds(0,getHeight() - this->offsetBottom + 75 ,getWidth(), this->offsetBottom - 75);
     this->mixer->setBounds(0,50,getWidth()* 2 ,800);
     // viewport->setBounds(getX(), getY()  ,getWidth(),getHeight() - this->offsetBottom);

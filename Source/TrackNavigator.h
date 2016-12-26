@@ -41,6 +41,9 @@ public:
     bool isPlaying();
     void setPlaying(bool playing);
     
+    bool isRecording();
+    void setRecording(bool recording);
+    
     double getMaxLength();
     void setPosition(double position);
     double getPosition();
@@ -68,11 +71,15 @@ private:
     ScopedPointer<WaveSelector> selector;
 
     bool playing = false;
+    bool recording = false;
     double position;
     float zoom;
     // length of the track in seconds
     long tracklength;
     int mouseDeltaX = 0;
+    
+    long recordStart = 0;
+    long recordStop = 0;
     
     virtual void changeListenerCallback(ChangeBroadcaster * source) override;
     virtual void mouseDown (const MouseEvent& event) override;

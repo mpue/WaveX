@@ -52,6 +52,7 @@ public:
     enum TransportMode {
         STOP,
         PLAY,
+        RECORD,
         BACK,
         END,
         PAUSE

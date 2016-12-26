@@ -122,7 +122,9 @@ void TrackPropertyView::addTrack(Track* track)
     panel->setTrack(track);
 	addAndMakeVisible(panel);
 	trackProperties.push_back(panel);
+
 	panel->addMouseListener(this, true);
+    track->addChangeListener(panel);
     setSize(getWidth(), this->trackProperties.size() * 200);
 }
 

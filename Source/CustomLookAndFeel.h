@@ -18,10 +18,11 @@ class CustomLookAndFeel : public LookAndFeel_V3 {
 public:
     
     CustomLookAndFeel() {
-        gradient = ColourGradient(Colours::red, 0, 0, Colours::chartreuse, 5, 128, false);
-        //gradient.addColour(0.3, Colours::chartreuse);
-        //gradient.addColour(0.7, Colours::orange);
-        gradient.addColour(0.2 , Colours::orange);
+        gradientVertical = ColourGradient(Colours::red, 0, 0, Colours::chartreuse, 5, 128, false);
+        gradientVertical.addColour(0.2 , Colours::orange);
+        
+        gradientHorizontal = ColourGradient(Colours::chartreuse, 0, 0, Colours::red, 128, 5, false);
+        gradientHorizontal.addColour(0.8 , Colours::orange);
     }
     
     void drawLinearSlider (Graphics&, int x, int y, int width, int height,
@@ -29,8 +30,8 @@ public:
                            const Slider::SliderStyle, Slider&) override;
     
 private:
-    ColourGradient gradient;
-    
+    ColourGradient gradientVertical;
+    ColourGradient gradientHorizontal;
     
 };
 

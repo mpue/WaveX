@@ -26,6 +26,7 @@
 #include "CustomLookAndFeel.h"
 #include "TrackPropertyConstrainer.h"
 #include "TrackResizer.h"
+#include "ImageToggleButton.h"
 //[/Headers]
 
 
@@ -41,8 +42,8 @@
 class TrackPropertyPanel  : public Component,
                             public ChangeListener,
                             public KeyListener,
-                            public LabelListener,
                             public ButtonListener,
+                            public LabelListener,
                             public SliderListener
 {
 public:
@@ -60,12 +61,12 @@ public:
 	virtual bool keyPressed(const KeyPress& key, Component* originatingComponent) override;
 	virtual bool keyStateChanged(bool isKeyDown, Component* originatingComponent) override;
     virtual void changeListenerCallback(ChangeBroadcaster * source) override;
+    void buttonClicked (Button* buttonThatWasClicked) override;
     //[/UserMethods]
 
     void paint (Graphics& g) override;
     void resized() override;
     void labelTextChanged (Label* labelThatHasChanged) override;
-    void buttonClicked (Button* buttonThatWasClicked) override;
     void sliderValueChanged (Slider* sliderThatWasMoved) override;
 
 
@@ -82,14 +83,14 @@ private:
 
     //==============================================================================
     ScopedPointer<Label> nameLabel;
-    ScopedPointer<ToggleButton> muteButton;
-    ScopedPointer<ToggleButton> soloButton;
-    ScopedPointer<ToggleButton> recordButton;
     ScopedPointer<Slider> volumeViewSlider;
     ScopedPointer<Slider> volumeSlider;
     ScopedPointer<Slider> balanceSlider;
     ScopedPointer<Label> label2;
     ScopedPointer<Label> label3;
+    ScopedPointer<ImageToggleButton> muteButton;
+    ScopedPointer<ImageToggleButton> soloButton;
+    ScopedPointer<ImageToggleButton> recButton;
 
 
     //==============================================================================

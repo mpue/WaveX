@@ -39,6 +39,7 @@
 */
 class MasterChannelPanel  : public Component,
                             public ChangeListener,
+                            public ChangeBroadcaster,
                             public SliderListener,
                             public ButtonListener
 {
@@ -63,6 +64,8 @@ public:
     void setMagnitude(float magnitude);
     void setMute(bool mute);
     void setSolo(bool solo);
+    double getVolume();
+    double getPan();
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -82,12 +85,15 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
 
-    ComponentDragger dragger;
-	DragConstrainer constrainer;
+    // ComponentDragger dragger;
+	// DragConstrainer constrainer;
     MeterMode mode;
     bool link;
     bool mute = false;
     bool solo = false;
+
+    double volume = 1.0f;
+    double pan = 0.0f;
 
     ScopedPointer<CustomLookAndFeel> clf;
     //[/UserVariables]

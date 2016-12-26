@@ -385,6 +385,9 @@
     <ClCompile Include="..\..\Source\CustomLookAndFeel.cpp">
       <Filter>WaveX\Source\MainUI</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ImageToggleButton.cpp">
+      <Filter>WaveX\Source\MainUI</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\InfoPanel.cpp">
       <Filter>WaveX\Source\MainUI</Filter>
     </ClCompile>
@@ -2170,6 +2173,9 @@
       <Filter>WaveX\Source\MainUI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\CustomLookAndFeel.h">
+      <Filter>WaveX\Source\MainUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ImageToggleButton.h">
       <Filter>WaveX\Source\MainUI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\InfoPanel.h">

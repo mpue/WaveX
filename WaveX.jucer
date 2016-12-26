@@ -34,6 +34,10 @@
               file="Source/CustomLookAndFeel.cpp"/>
         <FILE id="TUUqVU" name="CustomLookAndFeel.h" compile="0" resource="0"
               file="Source/CustomLookAndFeel.h"/>
+        <FILE id="Bmh0wa" name="ImageToggleButton.cpp" compile="1" resource="0"
+              file="Source/ImageToggleButton.cpp"/>
+        <FILE id="XRmntP" name="ImageToggleButton.h" compile="0" resource="0"
+              file="Source/ImageToggleButton.h"/>
         <FILE id="ZCmUWv" name="InfoPanel.cpp" compile="1" resource="0" file="Source/InfoPanel.cpp"/>
         <FILE id="k6GD1T" name="InfoPanel.h" compile="0" resource="0" file="Source/InfoPanel.h"/>
         <FILE id="AUy7xn" name="MainComponent.cpp" compile="1" resource="0"

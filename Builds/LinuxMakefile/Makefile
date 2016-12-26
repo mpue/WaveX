@@ -59,6 +59,7 @@ endif
 OBJECTS := \
   $(JUCE_OBJDIR)/AppWindowComponent_c01bc215.o \
   $(JUCE_OBJDIR)/CustomLookAndFeel_ab3d772e.o \
+  $(JUCE_OBJDIR)/ImageToggleButton_895fbd82.o \
   $(JUCE_OBJDIR)/InfoPanel_a131c57.o \
   $(JUCE_OBJDIR)/MainComponent_a6ffb4a5.o \
   $(JUCE_OBJDIR)/ToolbarPanel_8e4ee752.o \
@@ -120,6 +121,11 @@ $(JUCE_OBJDIR)/AppWindowComponent_c01bc215.o: ../../Source/AppWindowComponent.cp
 $(JUCE_OBJDIR)/CustomLookAndFeel_ab3d772e.o: ../../Source/CustomLookAndFeel.cpp
 	-@mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling CustomLookAndFeel.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ImageToggleButton_895fbd82.o: ../../Source/ImageToggleButton.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ImageToggleButton.cpp"
 	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/InfoPanel_a131c57.o: ../../Source/InfoPanel.cpp

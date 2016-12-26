@@ -47,8 +47,8 @@ TransportPanel::TransportPanel (MainContentComponent* mcc)
 
     playButton->setImages (false, true, true,
                            ImageCache::getFromMemory (fontawesome_470_play_32_0_000000_none_png, fontawesome_470_play_32_0_000000_none_pngSize), 1.000f, Colour (0x00ffffff),
-                           Image(), 1.000f, Colours::cornflowerblue,
-                           Image(), 1.000f, Colour (0x00000000));
+                           Image(), 1.000f, Colours::green,
+                           Image(), 1.000f, Colours::green);
     addAndMakeVisible (backButton = new ImageButton ("backButton"));
     backButton->setButtonText (TRANS("Back"));
     backButton->addListener (this);
@@ -90,8 +90,8 @@ TransportPanel::TransportPanel (MainContentComponent* mcc)
 
     recordButton->setImages (false, true, true,
                              ImageCache::getFromMemory (fontawesome_470_circle_32_0_000000_none_png, fontawesome_470_circle_32_0_000000_none_pngSize), 1.000f, Colour (0x00000000),
-                             Image(), 1.000f, Colours::crimson,
-                             Image(), 1.000f, Colour (0x00000000));
+                             Image(), 1.000f, Colours::red,
+                             Image(), 1.000f, Colours::red);
 
     //[UserPreSize]
     setSize (250, 60);
@@ -108,7 +108,13 @@ TransportPanel::TransportPanel (MainContentComponent* mcc)
 	d = new DropShadower(*ds);
 	d->setOwner(this);
     */
+    
 
+
+    recordButton->setClickingTogglesState(true);
+    playButton->setClickingTogglesState(true);
+    
+    recordButton->setToggleState(false, juce::NotificationType::dontSendNotification);
 
     //[/Constructor]
 }
@@ -175,7 +181,12 @@ void TransportPanel::buttonClicked (Button* buttonThatWasClicked)
         //[UserButtonCode_stopButton] -- add your button handler code here..
         mode = STOP;
         stopTimer();
+        playButton->setToggleState(false, juce::NotificationType::sendNotification);
         mcc->getNavigator()->setPlaying(false);
+        if (mcc->getNavigator()->isRecording()){
+            mcc->getNavigator()->setRecording(false);        
+        }
+
         //[/UserButtonCode_stopButton]
     }
     else if (buttonThatWasClicked == playButton)
@@ -220,6 +231,17 @@ void TransportPanel::buttonClicked (Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == recordButton)
     {
         //[UserButtonCode_recordButton] -- add your button handler code here..
+
+        if (!recordButton->getToggleState()) {
+            mode = STOP;
+            stopTimer();
+            mcc->getNavigator()->setRecording(false);
+        }
+        else {
+            mode = RECORD;
+            startTimer(100);
+            mcc->getNavigator()->setRecording(true);
+        }
         //[/UserButtonCode_recordButton]
     }
 
@@ -282,8 +304,8 @@ BEGIN_JUCER_METADATA
                virtualName="" explicitFocusOrder="0" pos="106 14 24 24" buttonText="Play"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
                resourceNormal="fontawesome_470_play_32_0_000000_none_png" opacityNormal="1"
-               colourNormal="ffffff" resourceOver="" opacityOver="1" colourOver="ff6495ed"
-               resourceDown="" opacityDown="1" colourDown="0"/>
+               colourNormal="ffffff" resourceOver="" opacityOver="1" colourOver="ff008000"
+               resourceDown="" opacityDown="1" colourDown="ff008000"/>
   <IMAGEBUTTON name="backButton" id="c457ade9e0c0c98f" memberName="backButton"
                virtualName="" explicitFocusOrder="0" pos="42 14 22 24" buttonText="Back"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
@@ -313,7 +335,7 @@ BEGIN_JUCER_METADATA
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
                resourceNormal="fontawesome_470_circle_32_0_000000_none_png"
                opacityNormal="1" colourNormal="0" resourceOver="" opacityOver="1"
-               colourOver="ffdc143c" resourceDown="" opacityDown="1" colourDown="0"/>
+               colourOver="ffff0000" resourceDown="" opacityDown="1" colourDown="ffff0000"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

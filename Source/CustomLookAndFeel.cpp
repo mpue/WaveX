@@ -20,27 +20,22 @@ void CustomLookAndFeel::drawLinearSlider (Graphics& g, int x, int y, int width, 
         float from  = (sliderPos / maxSliderPos) * height;
         float to = height;
         
-        /*
-        for (float val = from ; val <= to; val += 5) {
-        
-            if (val / height <= 0.05f) {
-                g.setColour(Colours::red);
-            }
-            else if (val / height <= 0.25f) {
-                g.setColour(Colours::orange);
-            }
-            else {
-                g.setColour(Colours::chartreuse);
-            }
-            //g.drawEllipse((float)x, val, 5, 5, 1);
-            g.fillRect((float)x, val, (float)width,3.0f);
-        }
-        */
-        
-        g.setGradientFill(gradient);
+        g.setGradientFill(gradientVertical);
         g.fillRect((float)x,from,(float)width,to);
 
     }
+    else if (style == Slider::SliderStyle::LinearBar) {
+        
+        float to  = (sliderPos / maxSliderPos) * width;
+        //float to = width;
+        
+        g.setGradientFill(gradientHorizontal);
+        //g.fillRect((float)x,(float)y,(float)to,(float)height);
+        g.fillRect (sliderPos, (float)y, 1.0f, (float)height);
+        g.fillRect (0.0f, (float)y, (float)(sliderPos), (float)height);
+    }
+    
+    
     else if (style == Slider::SliderStyle::LinearVertical) {
         Image fader = ImageCache::getFromMemory(BinaryData::Fader_png,BinaryData::Fader_pngSize);
         

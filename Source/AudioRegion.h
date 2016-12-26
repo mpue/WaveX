@@ -21,8 +21,9 @@ class AudioRegion : public Component,  public ChangeListener, public ChangeBroad
 {
 public:
     
-    AudioRegion(AudioRegion* other, AudioFormatManager& manager, double sampleRate);
     AudioRegion(AudioRegion* other, AudioFormatManager& manager, double sampleRate, long startSample, long numSamples);
+    AudioRegion(AudioRegion* other, AudioFormatManager& manager, double sampleRate);
+    AudioRegion(AudioSampleBuffer* source, AudioFormatManager& manager, long startSample, long sampleLength, double sampleRate);
     AudioRegion(File file, AudioFormatManager& manager,double sampleRate);
     ~AudioRegion();
 

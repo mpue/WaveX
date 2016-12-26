@@ -31,9 +31,13 @@ public:
 	void setZoom(float zoom);
 	String getName();
     void setName(String name);
-	void setGain(float gain);
+	
+    void setGain(float gain);
 	void setVolume(float volume);
 	float getVolume();
+    float getPan();
+    void setPan(float pan);
+    
 	const float* getReadBuffer(int channel);
     const float getSample(int channel, long sample);
 	int getNumSamples();
@@ -41,6 +45,7 @@ public:
 	bool isSelected();
 	double getMaxLength();
 	void addRegion(File file, double sampleRate);
+    void addRegion(AudioSampleBuffer* source, double sampleRate, long samplePosition, long regionLength);
 
     void paint (Graphics&) override;
     void resized() override;
@@ -51,9 +56,8 @@ public:
     void clearSelection();
     
 	AudioSampleBuffer* getBuffer();
-
-	double magnitudeLeft = 0;
-	double magnitudeRight = 0;
+    
+  	AudioSampleBuffer* getRecordingBuffer();
     
     void updateMagnitude(int sample, int buffersize);
 
@@ -61,6 +65,7 @@ public:
     
     void removeSelectedRegions(bool clear);
     void duplicateSelectedRegions();
+    void copySelectedRegions();
     void duplicateRegion(AudioRegion* region);
     void splitRegion();
     
@@ -71,12 +76,26 @@ public:
     
     vector<AudioRegion*> getRegions();
     
+    void setTrackLength(long trackLength);
+    void setMagnitude(int channel, double magnitude);
+    double getMagnitude(int channel);
+    
+    bool isRecording();
+    void setRecording(bool recording);
+    
+    bool isSolo();
+    void setSolo(bool solo);
+    
+    bool isMute();
+    void setMute(bool mute);
+    
 private:
 
 	float zoom = 20;
 	String name;
 	float volume;
 	float gain = 1;
+    float pan = 0.0f;
 	double sampleRate;
 	bool selected = false;
 	AudioRegion* currentRegion = NULL;
@@ -91,6 +110,13 @@ private:
     int midiChannel = 1;
     virtual void changeListenerCallback(ChangeBroadcaster * source) override;
     MultiComponentDragger* dragger = NULL;
+    
+    bool recording = false;
+    bool solo = false;
+    bool mute = false;
+    
+    double magnitudeLeft = 0;
+    double magnitudeRight = 0;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Track)
 };

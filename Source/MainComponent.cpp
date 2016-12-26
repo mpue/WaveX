@@ -112,7 +112,7 @@ public:
         trackProperties->timerCallback();
         for (int i = 0; i < navigator->getTracks().size();i++) {
             Track* t = navigator->getTracks().at(i);
-            mixer->getChannels().at(i)->setMagnitude(t->magnitudeLeft);
+            mixer->getChannels().at(i)->setMagnitude(t->getMagnitude(0));
         }
         mixer->setMasterVolume(magnitudeLeft);
     }
@@ -159,30 +159,78 @@ public:
         
         if (navigator->isPlaying()) {
             
+            
             for (int i = 0; i < navigator->getTracks().size();i++) {
+                
+                double pan = navigator->getTracks().at(i)->getPan();
+                
+                float gainLeft = cos((M_PI*(pan + 1) / 4));
+                float gainRight = sin((M_PI*(pan + 1) / 4));
+
                 for (int j = numSamples; j < numSamples + _numSamples;j++) {
-                    buffer->addSample(0, j%this->buffersize, navigator->getTracks().at(i)->getSample(0, j) * leftVolume * navigator->getTracks().at(i)->getVolume());
-                    buffer->addSample(1, j%this->buffersize, navigator->getTracks().at(i)->getSample(1, j) * rightVolume * navigator->getTracks().at(i)->getVolume());
+                    
+                    buffer->addSample(0, j%this->buffersize, navigator->getTracks().at(i)->getSample(0, j) * navigator->getTracks().at(i)->getVolume() * gainLeft);
+                    buffer->addSample(1, j%this->buffersize, navigator->getTracks().at(i)->getSample(1, j) * navigator->getTracks().at(i)->getVolume() * gainRight);
+                    
                 }
+                
+                //buffer->applyGain (0, 0, _numSamples, gainLeft);
+                // buffer->applyGain (1, 0, _numSamples, gainRight);
+                
                 navigator->getTracks().at(i)->setOffset(numSamples);
                 navigator->getTracks().at(i)->updateMagnitude(numSamples, _numSamples);
 
             }
+            
+
             numSamples += _numSamples;
             navigator->setPosition(numSamples / this->sampleRate);
             
 
         }
-        else {
-
-            /*
-            for (int j = 0; j < _numSamples;j++) {
+        else if (navigator->isRecording()){
+            
+            for (int i = 0; i < navigator->getTracks().size();i++) {
                 
-                buffer->addSample(0, j,inputChannelData[0][j] * leftVolume);
-                buffer->addSample(1, j,inputChannelData[1][j] * rightVolume);
+                double pan = navigator->getTracks().at(i)->getPan();
+                
+                float gainLeft = cos((M_PI*(pan + 1) / 4));
+                float gainRight = sin((M_PI*(pan + 1) / 4));
+                
+                for (int j = numSamples; j < numSamples + _numSamples;j++) {
+                    
+                    if (navigator->getTracks().at(i)->isRecording()) {
+                        navigator->getTracks().at(i)->getRecordingBuffer()->addSample(0, j,inputChannelData[0][j%this->buffersize] * leftVolume * gainLeft);
+                        navigator->getTracks().at(i)->getRecordingBuffer()->addSample(1, j,inputChannelData[0][j%this->buffersize] * rightVolume * gainRight);
+                    }
+                }
+                
+                for (int j = 0; j < _numSamples;j++) {
+                    buffer->copyFrom(0, numSamples % this->buffersize, *navigator->getTracks().at(i)->getRecordingBuffer(), 0, numSamples , _numSamples);
+                    buffer->copyFrom(1, numSamples % this->buffersize, *navigator->getTracks().at(i)->getRecordingBuffer(), 0, numSamples , _numSamples);
+                    
+                }
+                
+                navigator->getTracks().at(i)->setOffset(numSamples);
+ 
             }
-             */
+            
+            numSamples += _numSamples;
+            navigator->setPosition(numSamples / this->sampleRate);
         }
+        else {
+            
+            float pan = 0;
+            
+            float gainLeft  = cos((M_PI*(pan + 1) / 4));
+            float gainRight = sin((M_PI*(pan + 1) / 4));
+            
+            for (int j = 0; j < _numSamples;j++) {
+                buffer->addSample(0, j,inputChannelData[0][j] * leftVolume * gainLeft);
+                buffer->addSample(1, j,inputChannelData [1][j] * rightVolume * gainRight);
+            }
+        }
+        
         
         const float* left = buffer->getReadPointer(0);
         const float* right = buffer->getReadPointer(1);
@@ -191,13 +239,22 @@ public:
             outputChannelData[0][sample] = left[sample] * leftVolume;
             outputChannelData[1][sample] = right[sample] * rightVolume;
         }
-        
+
         
         this->magnitudeLeft = buffer->getMagnitude(0, 0, _numSamples);
         this->magnitudeRight = buffer->getMagnitude(1, 0, _numSamples);
         
         this->rmsLeft = buffer->getRMSLevel(0, 0,_numSamples);
         this->rmsRight = buffer->getRMSLevel(1, 0,_numSamples);
+        
+        for (int i = 0; i < navigator->getTracks().size();i++) {
+            // navigator->getTracks().at(i)->updateMagnitude(numSamples, _numSamples);
+            if (navigator->getTracks().at(i)->isRecording()) {
+                navigator->getTracks().at(i)->setMagnitude(0, this->magnitudeLeft);
+                navigator->getTracks().at(i)->setMagnitude(1, this->magnitudeRight);
+            }
+        }
+        
         
         buffer->clear();
         
@@ -670,8 +727,10 @@ private:
 
 	virtual void changeListenerCallback(ChangeBroadcaster * source) override
 	{
-		if (source == navigator)
+        if (source == navigator || source == Project::getInstance())
 		{
+            long trackLength = Project::getInstance()->getTrackLength();
+            
             // we need to snap the position on a multiple of the block size, to prevent the buffer being accessed in a odd way
             // because this leads to a broken audio stream
             
@@ -680,7 +739,7 @@ private:
             // marker->setPosition(navigator->getPosition());
             
 			this->zoom = navigator->getZoom();
-			int newWidth = navigator->getMaxLength() * this->zoom;
+			int newWidth = trackLength * this->zoom;
             
             if (getHeight() < navigator->getTracks().size() * 200)
                 setSize(newWidth, navigator->getTracks().size() * 200);
@@ -688,8 +747,8 @@ private:
                 setSize(newWidth, getHeight());
             }
             
-			this->timeLine->setLength(navigator->getMaxLength());
-			this->timeLine->setSize(navigator->getMaxLength() * zoom, 25);
+			this->timeLine->setLength(trackLength);
+			this->timeLine->setSize(trackLength * zoom, 25);
 			this->marker->setDrawingBounds(0,0,navigator->getWidth(),getHeight());
 			this->marker->setSize(navigator->getWidth(), getHeight());
 			repaint();

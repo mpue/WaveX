@@ -56,7 +56,7 @@ MasterChannelPanel::MasterChannelPanel ()
     panSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     panSlider->setColour (Slider::thumbColourId, Colours::white);
     panSlider->setColour (Slider::rotarySliderFillColourId, Colours::cornflowerblue);
-    panSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66ffffff));
+    panSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x7cffffff));
     panSlider->addListener (this);
 
     addAndMakeVisible (nameLabel = new Label ("nameLabel",
@@ -119,8 +119,8 @@ MasterChannelPanel::MasterChannelPanel ()
     channelVolume->setLookAndFeel(clf);
     vuSlider->setLookAndFeel(clf);
 
-	constrainer.setRaster(getWidth());
-	constrainer.setTolerance(1);
+	// constrainer.setRaster(getWidth());
+	// constrainer.setTolerance(1);
 
     M->setInterceptsMouseClicks(false, true);
     S->setInterceptsMouseClicks(false, true);
@@ -198,11 +198,15 @@ void MasterChannelPanel::sliderValueChanged (Slider* sliderThatWasMoved)
     else if (sliderThatWasMoved == channelVolume)
     {
         //[UserSliderCode_channelVolume] -- add your slider handling code here..
+        volume = channelVolume->getValue();
+        sendChangeMessage();
         //[/UserSliderCode_channelVolume]
     }
     else if (sliderThatWasMoved == panSlider)
     {
         //[UserSliderCode_panSlider] -- add your slider handling code here..
+        pan = panSlider->getValue();
+        sendChangeMessage();
         //[/UserSliderCode_panSlider]
     }
 
@@ -234,13 +238,21 @@ void MasterChannelPanel::buttonClicked (Button* buttonThatWasClicked)
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 
+double MasterChannelPanel::getVolume(){
+    return volume;
+}
+
+double MasterChannelPanel::getPan() {
+    return pan;
+}
+
 void MasterChannelPanel::mouseDown (const MouseEvent& e)
 {
-    dragger.startDraggingComponent (this, e);
+    // dragger.startDraggingComponent (this, e);
 }
 void MasterChannelPanel::mouseDrag (const MouseEvent& e)
 {
-    dragger.dragComponent (this, e, &constrainer);
+    // dragger.dragComponent (this, e, &constrainer);
 }
 
 void MasterChannelPanel::setMagnitude(float magnitude) {
@@ -259,6 +271,8 @@ void MasterChannelPanel::changeListenerCallback(ChangeBroadcaster * source) {
     if(Track* t = dynamic_cast<Track*>(source)){
         setName(t->getName());
         nameLabel->setText(t->getName(), juce::NotificationType::dontSendNotification);
+        channelVolume->setValue(t->getVolume());
+        panSlider->setValue(t->getPan());
     }
 
 }
@@ -292,9 +306,10 @@ void MasterChannelPanel::setSolo(bool solo) {
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="MasterChannelPanel" componentName=""
-                 parentClasses="public Component, public ChangeListener" constructorParams=""
-                 variableInitialisers="" snapPixels="8" snapActive="1" snapShown="1"
-                 overlayOpacity="0.330" fixedSize="0" initialWidth="90" initialHeight="250">
+                 parentClasses="public Component, public ChangeListener, public ChangeBroadcaster"
+                 constructorParams="" variableInitialisers="" snapPixels="8" snapActive="1"
+                 snapShown="1" overlayOpacity="0.330" fixedSize="0" initialWidth="90"
+                 initialHeight="250">
   <BACKGROUND backgroundColour="f0f8ff">
     <RECT pos="0 0 90 250" fill="solid: ff434242" hasStroke="1" stroke="1, mitered, butt"
           strokeColour="solid: ff3f3f3f"/>
@@ -311,7 +326,7 @@ BEGIN_JUCER_METADATA
           textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
   <SLIDER name="panSlider" id="c52368ab34d3e8df" memberName="panSlider"
           virtualName="" explicitFocusOrder="0" pos="40 8 32 32" thumbcol="ffffffff"
-          rotarysliderfill="ff6495ed" rotaryslideroutline="66ffffff" min="-1"
+          rotarysliderfill="ff6495ed" rotaryslideroutline="7cffffff" min="-1"
           max="1" int="0.020000000000000000416" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1" needsCallback="1"/>

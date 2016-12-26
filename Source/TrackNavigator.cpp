@@ -30,6 +30,7 @@ TrackNavigator::TrackNavigator(PositionMarker* marker)
 	this->position = 0;
 	manager.registerBasicFormats();
     this->dragger = new MultiComponentDragger();
+    Project::getInstance()->addChangeListener(this);
     // setInterceptsMouseClicks(true, true);
 }
 
@@ -138,6 +139,22 @@ bool TrackNavigator::isPlaying() {
     return playing;
 }
 
+void TrackNavigator::setRecording(bool recording) {
+    if (recording) {
+        recordStart = marker->getPosition() * Project::getInstance()->getSampleRate();
+    }
+    else {
+        recordStop  = marker->getPosition() * Project::getInstance()->getSampleRate();
+        currentTrack->addRegion(currentTrack->getRecordingBuffer(),Project::getInstance()->getSampleRate(), recordStart, recordStop - recordStart);
+    }
+
+    this->recording = recording;
+}
+
+bool TrackNavigator::isRecording() {
+    return recording;
+}
+
 std::vector<Track*> TrackNavigator::getTracks() {
     return this->tracks;
 }
@@ -156,8 +173,8 @@ void TrackNavigator::addTrack(double sampleRate) {
     for (int i = 0; i < tracks.size();i++) {
         tracks.at(i)->setSelected(false);
     }
-    track->setSelected(true);
     
+    track->setSelected(true);
     track->setMidiChannel(tracks.size() % 16);
 
 	int yPos = 0;
@@ -241,18 +258,19 @@ WaveSelector* TrackNavigator::getSelector() {
 void TrackNavigator::changeListenerCallback(ChangeBroadcaster * source) 
 {
 	updateTrackLayout(source);
-
-	/*
-    if (source == selector) {
-        Rectangle<int> range = selector->getSelectedRange();
+	
+    if (source == Project::getInstance()) {
+        tracklength = Project::getInstance()->getTrackLength();
+        
+        for (int i = 0; i < tracks.size();i++) {
+            tracks.at(i)->setTrackLength(tracklength);
+        }
     }
-	*/
+	
 
 }
 
 bool TrackNavigator::keyPressed(const KeyPress& key, Component* originatingComponent) {
-
-
 
     if (key == KeyPress::spaceKey) {
         if (isPlaying())
@@ -265,7 +283,7 @@ bool TrackNavigator::keyPressed(const KeyPress& key, Component* originatingCompo
         }
         
     }
-    else if (key.getTextCharacter() == '+') {
+    if (key.getTextCharacter() == '+') {
         if (getMaxLength() == 0) {
             return false;
         }
@@ -285,24 +303,37 @@ bool TrackNavigator::keyPressed(const KeyPress& key, Component* originatingCompo
 		repaint();
         sendChangeMessage();
     }
-    else if (key.getTextCharacter() == 'l') {
-        for (int i = 0; i < tracks.size();i++) {
-            tracks.at(i)->toggleLoopSelection();
+    
+    ModifierKeys m = key.getModifiers();
+    
+    if(m.isCommandDown()) {
+        
+        Logger::getCurrentLogger()->writeToLog(String(key.getKeyCode()));
+        
+        if (key.getKeyCode() == 76) { // L
+            for (int i = 0; i < tracks.size();i++) {
+                tracks.at(i)->toggleLoopSelection();
+            }
         }
-    }
-    else if (key.getTextCharacter() == 'd') {
-        for (int i = 0; i < tracks.size();i++) {
-            tracks.at(i)->duplicateSelectedRegions();
+        else if (key.getKeyCode() == 67) { // C
+            for (int i = 0; i < tracks.size();i++) {
+                tracks.at(i)->copySelectedRegions();
+            }
         }
-    }
-    else if (key.getTextCharacter() == 'x') {
-        for (int i = 0; i < tracks.size();i++) {
-            tracks.at(i)->removeSelectedRegions(true);
+        else if (key.getKeyCode() == 68) { // D
+            for (int i = 0; i < tracks.size();i++) {
+                tracks.at(i)->duplicateSelectedRegions();
+            }
         }
-    }
-    else if (key.getTextCharacter() == 't') {
-        for (int i = 0; i < tracks.size();i++) {
-            tracks.at(i)->splitRegion();
+        else if (key.getKeyCode() == 88) { // X
+            for (int i = 0; i < tracks.size();i++) {
+                tracks.at(i)->removeSelectedRegions(true);
+            }
+        }
+        else if (key.getKeyCode() == 84) { // T
+            for (int i = 0; i < tracks.size();i++) {
+                tracks.at(i)->splitRegion();
+            }
         }
     }
     
@@ -317,37 +348,6 @@ void TrackNavigator::mouseDrag(const MouseEvent& event) {
 }
 
 void TrackNavigator::mouseMove(const juce::MouseEvent &event ) {
-    
-    
-    /*
-    if (AudioRegion* r = dynamic_cast<AudioRegion*>(event.eventComponent)){
-        
-        
-        
-        
-        if (event.mods.isShiftDown()) {
-            for (int i = 0; i < tracks.size();i++) {
-                for (int j = 0; j < tracks.at(i)->getRegions().size();j++) {
-                    if(tracks.at(i)->getRegions().at(j)->isSelected() && tracks.at(i)->getRegions().at(j)->isDragging()) {
-                        tracks.at(i)->getRegions().at(j)->setDynOffset(constrainer.snap(event.getDistanceFromDragStartX(),zoom / 4));
-                        tracks.at(i)->getRegions().at(j)->move(constrainer.snap(event.getDistanceFromDragStartX(),zoom / 4));
-                        tracks.at(i)->getRegions().at(j)->repaint();
-                    }
-                }
-            }
-        }
-        else {
-            if (r->isSelected() && r->isDragging()) {
-                r->setDynOffset(constrainer.snap(event.getDistanceFromDragStartX(),zoom / 4));
-                r->move(constrainer.snap(event.getDistanceFromDragStartX(),zoom / 4));
-                r->repaint();
-            }
-        }
-        
-        repaint();
-    }
-    */
-
     
 }
 

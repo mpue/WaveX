@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\Source\AppWindowComponent.cpp"/>
     <ClCompile Include="..\..\Source\CustomLookAndFeel.cpp"/>
+    <ClCompile Include="..\..\Source\ImageToggleButton.cpp"/>
     <ClCompile Include="..\..\Source\InfoPanel.cpp"/>
     <ClCompile Include="..\..\Source\MainComponent.cpp"/>
     <ClCompile Include="..\..\Source\ToolbarPanel.cpp"/>
@@ -1726,6 +1727,7 @@
     <ClInclude Include="..\..\Source\AppViewPort.h"/>
     <ClInclude Include="..\..\Source\AppWindowComponent.h"/>
     <ClInclude Include="..\..\Source\CustomLookAndFeel.h"/>
+    <ClInclude Include="..\..\Source\ImageToggleButton.h"/>
     <ClInclude Include="..\..\Source\InfoPanel.h"/>
     <ClInclude Include="..\..\Source\MultiComponentDragger.h"/>
     <ClInclude Include="..\..\Source\ToolbarPanel.h"/>

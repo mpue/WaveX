@@ -12,7 +12,8 @@
 #define PROJECT_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
-
+#include <vector>
+#include "AudioRegion.h"
 
 class Project : public ChangeBroadcaster {
     
@@ -55,6 +56,18 @@ public:
         return sampleRate;
     }
 
+    inline void addChangeListener (ChangeListener* listener) {
+        ChangeBroadcaster::addChangeListener(listener);
+    }
+    
+    inline void copyRegion(AudioRegion* region) {
+        regionsClipboard.push_back(region);
+    }
+    
+    inline void clearRegionsClipboard() {
+        regionsClipboard.clear();
+    }
+    
     static long DEFAULT_TRACK_LENGTH;
     
 protected:
@@ -72,7 +85,7 @@ protected:
     String name;
     long tracklength;
     double sampleRate;
-
+    std::vector<AudioRegion*> regionsClipboard;
     
 };
 

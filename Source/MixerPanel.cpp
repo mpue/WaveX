@@ -100,7 +100,8 @@ void MixerPanel::changeListenerCallback(ChangeBroadcaster * source) {
         if (tn->getTracks().size() > channels.size()){
             MasterChannelPanel* panel = new MasterChannelPanel();
             panel->setName(tn->getTracks().back()->getName());
-            tn->getTracks().back()->addChangeListener(panel);
+            // tn->getTracks().back()->addChangeListener(panel);
+            panel->addChangeListener(tn->getTracks().back());
             panel->setTopLeftPosition((channels.size() + 2) * 90, 0);
             addAndMakeVisible(panel);
             channels.push_back(panel);

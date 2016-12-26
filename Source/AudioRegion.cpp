@@ -40,6 +40,40 @@ AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double
     
 }
 
+
+AudioRegion::AudioRegion(AudioSampleBuffer* source, AudioFormatManager& manager, long startSample, long sampleLength, double sampleRate) {
+    
+    // resizerR = new ResizableEdgeComponent(this,nullptr,ResizableEdgeComponent::rightEdge);
+    // resizerL = new ResizableEdgeComponent(this,nullptr,ResizableEdgeComponent::leftEdge);
+    
+    this->sampleRate = sampleRate;
+    
+    this->thumbnailCache = new AudioThumbnailCache(1);
+    this->thumbnail = new AudioThumbnail(512, manager, *this->thumbnailCache);
+    this->thumbnail->addChangeListener(this);
+    
+    audioBuffer = new AudioSampleBuffer(2, sampleLength);
+    audioBuffer->copyFrom(0, 0, *source, 0, 0, sampleLength);
+    audioBuffer->copyFrom(1, 0, *source, 1, 0, sampleLength);
+    
+    this->thumbnail->reset(2, sampleRate);
+    this->thumbnail->addBlock(0, *audioBuffer, 0, sampleLength);
+    
+    this->name = "new";
+    this->zoom = 20;
+    
+    double length = this->thumbnail->getTotalLength();
+    setSize(length * this->zoom, 200);
+    
+    this->volume = 1;
+    this->offset = 0;
+    
+    // addAndMakeVisible(resizerL);
+    // addAndMakeVisible(resizerR);
+    
+    addComponentListener(this);
+}
+
 AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double sampleRate) {
     
     // resizerR = new ResizableEdgeComponent(this,nullptr,ResizableEdgeComponent::rightEdge);
