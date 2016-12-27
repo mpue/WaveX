@@ -32,6 +32,7 @@ TrackNavigator::TrackNavigator(PositionMarker* marker)
     this->dragger = new MultiComponentDragger();
     Project::getInstance()->addChangeListener(this);
     addChangeListener(Mixer::getInstance());
+    midiBuffer = new MidiBuffer();
     
     // setInterceptsMouseClicks(true, true);
 }
@@ -160,6 +161,29 @@ void TrackNavigator::setRecording(bool recording) {
                 tracks.at(i)->getCurrentRecorder()->stopTimer();
             }
         }
+        
+        MidiMessage message;
+        int sampleNumber;
+        
+        midiMessages.clear();
+        
+        if (iterator == NULL) {
+            iterator = new MidiBuffer::Iterator(*midiBuffer);
+        }
+        
+        while(iterator->getNextEvent(message, sampleNumber)) {
+            
+            MidiMessage* m = new MidiMessage(message);
+            
+            m->setTimeStamp(dragger->snap(m->getTimeStamp(),512));
+            
+            if (m->getRawDataSize() > 0)
+                midiMessages.insert(std::make_pair(sampleNumber,m ));
+            
+            
+        }
+
+        midiBuffer->clear();
     }
 
     this->recording = recording;

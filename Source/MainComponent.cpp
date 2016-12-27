@@ -215,7 +215,7 @@ public:
                                         int _numSamples) override {
         
         if (plugin != NULL)
-            plugin->processBlock(*buffer, midiBuffer);
+            plugin->processBlock(*buffer, *navigator->getMidiBuffer());
         
         if (navigator->isPlaying()) {
             
@@ -381,25 +381,12 @@ public:
             outputBuffers.at(i)->clear();
         }
  
-        if (navigator->isPlaying() && !midiBuffer.isEmpty()) {
+        if (navigator->isPlaying()) {
 
-            // deviceManager.getDefaultMidiOutput()->sendBlockOfMessagesNow(midiBuffer);
-            MidiMessage message;
-            int sampleNumber;
+            MidiMessage* m = navigator->getMessage(numSamples);
             
-            if (iterator == NULL) {
-                iterator = new MidiBuffer::Iterator(midiBuffer);
-            }
-            
-            cout << numSamples << endl;
-            
-            if(iterator->getNextEvent(message, sampleNumber)) {
-
-                cout << sampleNumber << endl;
-                deviceManager.getDefaultMidiOutput()->sendMessageNow(message);
-            }
-            
-            // deviceManager.getDefaultMidiOutput()->sendMessageNow(midiSequence.ex);
+            if (m != NULL)
+                deviceManager.getDefaultMidiOutput()->sendMessageNow(*m);
         }
     }
     
@@ -411,7 +398,7 @@ public:
     virtual void handleIncomingMidiMessage (MidiInput* source, const MidiMessage& message) override {
         
         if (navigator->isRecording())
-            midiBuffer.addEvent(message, numSamples);
+            navigator->getMidiBuffer()->addEvent(message, numSamples);
  
         deviceManager.getDefaultMidiOutput()->sendMessageNow(message);
 
@@ -684,7 +671,7 @@ private:
                                  
     ScopedPointer<AudioSampleBuffer> buffer;
     ScopedPointer<PluginWindow> win = nullptr;
-    MidiBuffer midiBuffer;
+
     
 	TimeSliceThread thread;
     ScopedPointer<TrackNavigator> navigator;
@@ -713,9 +700,7 @@ private:
     float rightVolume;
                                  
     float zoom;
-                                 
-    MidiBuffer::Iterator* iterator = NULL;
-    MidiMessage message;
+
                 
                                  
     vector<String> availableInstruments;
