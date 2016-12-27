@@ -68,6 +68,14 @@ public:
         return this->availableInputChannels;
     }
     
+    void setAvailableOutputChannelNames(StringArray channels) {
+        this->availableOutputChannels = channels;
+    }
+    
+    StringArray getOutputChannels() {
+        return this->availableOutputChannels;
+    }
+    
     
 private:
     Mixer() {
@@ -83,6 +91,7 @@ private:
     vector<Track*> tracks;
     Track* lastModified = NULL;
     StringArray availableInputChannels;
+    StringArray availableOutputChannels;
     
 };
 

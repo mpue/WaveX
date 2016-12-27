@@ -209,7 +209,7 @@ void Track::splitRegion() {
     
     AudioRegion* region = getCurrentRegion(sampleNum);
     
-    if (region != NULL) {
+    if (region != NULL && region->isSelected()) {
         
         long numLeftSamples = sampleNum - region->getSampleOffset();
         long numRightSamples = region->getNumSamples() - numLeftSamples;

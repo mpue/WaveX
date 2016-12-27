@@ -95,6 +95,9 @@ private:
     ScopedPointer<ImageToggleButton> recButton;
     ScopedPointer<ComboBox> inputCombo;
     ScopedPointer<ImageToggleButton> monoButton;
+    ScopedPointer<Label> inputsLabel;
+    ScopedPointer<ComboBox> outputCombo;
+    ScopedPointer<Label> inputsLabel2;
 
 
     //==============================================================================

@@ -147,7 +147,11 @@ void TrackNavigator::setRecording(bool recording) {
     }
     else {
         recordStop  = marker->getPosition() * Project::getInstance()->getSampleRate();
-        currentTrack->addRegion(currentTrack->getRecordingBuffer(),Project::getInstance()->getSampleRate(), recordStart, recordStop - recordStart);
+        for (int i = 0; i < tracks.size();i++) {
+            if (tracks.at(i)->isRecording()) {
+                tracks.at(i)->addRegion(tracks.at(i)->getRecordingBuffer(),Project::getInstance()->getSampleRate(), recordStart, recordStop - recordStart);
+            }
+        }
     }
 
     this->recording = recording;

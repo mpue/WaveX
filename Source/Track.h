@@ -106,6 +106,15 @@ public:
         return &this->inputChannels[0];
     }
     
+    inline void setOutputChannels(int* channels) {
+        this->outputChannels[0] = channels[0];
+        this->outputChannels[1] = channels[1];
+    }
+    
+    inline int* getOutputChannels() {
+        return &this->outputChannels[0];
+    }
+    
 private:
 
 	float zoom = 20;
@@ -137,6 +146,7 @@ private:
     double magnitudeRight = 0;
     
     int inputChannels[2] = { 0 };
+    int outputChannels[2] = { 0 };
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Track)
 };

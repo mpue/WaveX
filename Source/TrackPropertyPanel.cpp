@@ -109,6 +109,33 @@ TrackPropertyPanel::TrackPropertyPanel ()
     addAndMakeVisible (monoButton = new ImageToggleButton());
     monoButton->setName ("monoButton");
 
+    addAndMakeVisible (inputsLabel = new Label ("inputsLabel",
+                                                TRANS("Input")));
+    inputsLabel->setFont (Font (12.00f, Font::plain));
+    inputsLabel->setJustificationType (Justification::centredLeft);
+    inputsLabel->setEditable (false, false, false);
+    inputsLabel->setColour (Label::textColourId, Colours::white);
+    inputsLabel->setColour (Label::outlineColourId, Colour (0x00ffffff));
+    inputsLabel->setColour (TextEditor::textColourId, Colours::black);
+    inputsLabel->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+
+    addAndMakeVisible (outputCombo = new ComboBox ("outputCombo"));
+    outputCombo->setEditableText (false);
+    outputCombo->setJustificationType (Justification::centredLeft);
+    outputCombo->setTextWhenNothingSelected (String());
+    outputCombo->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
+    outputCombo->addListener (this);
+
+    addAndMakeVisible (inputsLabel2 = new Label ("inputsLabel",
+                                                 TRANS("Output")));
+    inputsLabel2->setFont (Font (12.00f, Font::plain));
+    inputsLabel2->setJustificationType (Justification::centredLeft);
+    inputsLabel2->setEditable (false, false, false);
+    inputsLabel2->setColour (Label::textColourId, Colours::white);
+    inputsLabel2->setColour (Label::outlineColourId, Colour (0x00ffffff));
+    inputsLabel2->setColour (TextEditor::textColourId, Colours::black);
+    inputsLabel2->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+
 
     //[UserPreSize]
 
@@ -152,7 +179,7 @@ TrackPropertyPanel::TrackPropertyPanel ()
                           ImageCache::getFromMemory (ImageToggleButton::round_button_png, ImageToggleButton::round_button_pngSize), 1.000f, Colour (0x00000000),
                           Image(), 1.000f, Colour (0x00000000),
                           ImageCache::getFromMemory (ImageToggleButton::round_button_pushed_png, ImageToggleButton::round_button_pushed_pngSize), 1.000f, Colours::green);
-    
+
 
     muteButton->getButton()->addListener(this);
     soloButton->getButton()->addListener(this);
@@ -161,12 +188,20 @@ TrackPropertyPanel::TrackPropertyPanel ()
 
 
     StringArray channels = Mixer::getInstance()->getInputChannels();
-    
+
     for (int i = 0; i < channels.size() - 1; i+=2) {
         inputCombo->addItem(channels.getReference(i) + " + " + channels.getReference(i + 1), i + 1);
     }
-    
+
     inputCombo->setSelectedId(1);
+    
+    channels = Mixer::getInstance()->getOutputChannels();
+    
+    for (int i = 0; i < channels.size() - 1; i+=2) {
+        outputCombo->addItem(channels.getReference(i) + " + " + channels.getReference(i + 1), i + 1);
+    }
+    
+    outputCombo->setSelectedId(1);
     
     //[/Constructor]
 }
@@ -187,6 +222,9 @@ TrackPropertyPanel::~TrackPropertyPanel()
     recButton = nullptr;
     inputCombo = nullptr;
     monoButton = nullptr;
+    inputsLabel = nullptr;
+    outputCombo = nullptr;
+    inputsLabel2 = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -236,8 +274,11 @@ void TrackPropertyPanel::resized()
     muteButton->setBounds (16, 112, 24, 24);
     soloButton->setBounds (48, 112, 24, 24);
     recButton->setBounds (80, 112, 24, 24);
-    inputCombo->setBounds (16, 144, 128, 24);
+    inputCombo->setBounds (16, 160, 128, 24);
     monoButton->setBounds (112, 112, 24, 24);
+    inputsLabel->setBounds (16, 144, 55, 16);
+    outputCombo->setBounds (16, 208, 128, 24);
+    inputsLabel2->setBounds (16, 192, 55, 16);
     //[UserResized] Add your own custom resize handling here..
     resizer->setBounds(0,getHeight()-5, getWidth(),5);
 
@@ -317,9 +358,9 @@ void TrackPropertyPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
     if (comboBoxThatHasChanged == inputCombo)
     {
         //[UserComboBoxCode_inputCombo] -- add your combo box handling code here..
-        
+
         if (this->track != NULL) {
-            
+
             if (track->isMono()) {
                 int input[2] =  { inputCombo->getSelectedId() - 1, inputCombo->getSelectedId() - 1 };
                 track->setInputChannels(input);
@@ -328,10 +369,28 @@ void TrackPropertyPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
                 int input[2] =  { inputCombo->getSelectedId() - 1, inputCombo->getSelectedId() };
                 track->setInputChannels(input);
             }
+
+        }
+
+        //[/UserComboBoxCode_inputCombo]
+    }
+    else if (comboBoxThatHasChanged == outputCombo)
+    {
+        //[UserComboBoxCode_outputCombo] -- add your combo box handling code here..
+        
+        if (this->track != NULL) {
+            
+            if (track->isMono()) {
+                int output[2] =  { outputCombo->getSelectedId() - 1, outputCombo->getSelectedId() - 1 };
+                track->setOutputChannels(output);
+            }
+            else {
+                int output[2] =  { outputCombo->getSelectedId() - 1, outputCombo->getSelectedId() };
+                track->setOutputChannels(output);
+            }
             
         }
-        
-        //[/UserComboBoxCode_inputCombo]
+        //[/UserComboBoxCode_outputCombo]
     }
 
     //[UsercomboBoxChanged_Post]
@@ -413,11 +472,11 @@ void TrackPropertyPanel::buttonClicked (Button* buttonThatWasClicked) {
     }
     else if(buttonThatWasClicked == monoButton->getButton()) {
         track->setMono(monoButton->getButton()->getToggleState());
-        
+
         StringArray channels = Mixer::getInstance()->getInputChannels();
-        
+
         inputCombo->clear();
-        
+
         if (track->isMono()) {
             for (int i = 0; i < channels.size(); i++) {
                 inputCombo->addItem(channels.getReference(i) + "("+ String(i) + ")", i + 1);
@@ -430,8 +489,24 @@ void TrackPropertyPanel::buttonClicked (Button* buttonThatWasClicked) {
         }
         inputCombo->setSelectedId(1);
         
+        channels = Mixer::getInstance()->getOutputChannels();
+        
+        outputCombo->clear();
+        
+        if (track->isMono()) {
+            for (int i = 0; i < channels.size(); i++) {
+                outputCombo->addItem(channels.getReference(i) + "("+ String(i) + ")", i + 1);
+            }
+        }
+        else {
+            for (int i = 0; i < channels.size() - 1; i+=2) {
+                outputCombo->addItem(channels.getReference(i) + "|" + channels.getReference(i + 1)+ "("+ String(i) + ")" , i + 1);
+            }
+        }
+        outputCombo->setSelectedId(1);
+        
     }
-
+    
     Mixer::getInstance()->sendChangeMessage();
 }
 
@@ -496,11 +571,24 @@ BEGIN_JUCER_METADATA
                     virtualName="ImageToggleButton" explicitFocusOrder="0" pos="80 112 24 24"
                     class="ImageToggleButton" params=""/>
   <COMBOBOX name="inputCombo" id="8fa7ef2d51e455d3" memberName="inputCombo"
-            virtualName="" explicitFocusOrder="0" pos="16 144 128 24" editable="0"
+            virtualName="" explicitFocusOrder="0" pos="16 160 128 24" editable="0"
             layout="33" items="" textWhenNonSelected="" textWhenNoItems="(no choices)"/>
   <GENERICCOMPONENT name="monoButton" id="c1da9de25247e565" memberName="monoButton"
                     virtualName="ImageToggleButton" explicitFocusOrder="0" pos="112 112 24 24"
                     class="ImageToggleButton" params=""/>
+  <LABEL name="inputsLabel" id="6e066caf6e46a50f" memberName="inputsLabel"
+         virtualName="" explicitFocusOrder="0" pos="16 144 55 16" textCol="ffffffff"
+         outlineCol="ffffff" edTextCol="ff000000" edBkgCol="0" labelText="Input"
+         editableSingleClick="0" editableDoubleClick="0" focusDiscardsChanges="0"
+         fontname="Default font" fontsize="12" bold="0" italic="0" justification="33"/>
+  <COMBOBOX name="outputCombo" id="5927994406d03619" memberName="outputCombo"
+            virtualName="" explicitFocusOrder="0" pos="16 208 128 24" editable="0"
+            layout="33" items="" textWhenNonSelected="" textWhenNoItems="(no choices)"/>
+  <LABEL name="inputsLabel" id="42c156b7729e159e" memberName="inputsLabel2"
+         virtualName="" explicitFocusOrder="0" pos="16 192 55 16" textCol="ffffffff"
+         outlineCol="ffffff" edTextCol="ff000000" edBkgCol="0" labelText="Output"
+         editableSingleClick="0" editableDoubleClick="0" focusDiscardsChanges="0"
+         fontname="Default font" fontsize="12" bold="0" italic="0" justification="33"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA
