@@ -347,7 +347,7 @@ AudioThumbnail* AudioRegion::getThumbnail() {
 void AudioRegion::changeListenerCallback(ChangeBroadcaster * source)
 {
     if (source == this->thumbnail) {
-        repaint();
+        // repaint();
     }
 }
 

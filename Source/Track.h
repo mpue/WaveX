@@ -92,6 +92,9 @@ public:
     bool isMono();
     void setMono(bool mono);
     
+    inline AudioRegion* getCurrentRecorder() {
+        return currentRegion;
+    }
     
     inline void addChangeListener (ChangeListener* listener)  {
         ChangeBroadcaster::addChangeListener(listener);

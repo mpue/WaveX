@@ -144,12 +144,20 @@ bool TrackNavigator::isPlaying() {
 void TrackNavigator::setRecording(bool recording) {
     if (recording) {
         recordStart = marker->getPosition() * Project::getInstance()->getSampleRate();
+        for (int i = 0; i < tracks.size();i++) {
+            if (tracks.at(i)->isRecording()) {
+                tracks.at(i)->addRegion(tracks.at(i)->getRecordingBuffer(),Project::getInstance()->getSampleRate(), recordStart, 0);
+                tracks.at(i)->getCurrentRecorder()->getThumbnail()->reset(2, Project::getInstance()->getSampleRate());
+                tracks.at(i)->getCurrentRecorder()->startTimer(500);
+            }
+        }
     }
     else {
         recordStop  = marker->getPosition() * Project::getInstance()->getSampleRate();
         for (int i = 0; i < tracks.size();i++) {
             if (tracks.at(i)->isRecording()) {
-                tracks.at(i)->addRegion(tracks.at(i)->getRecordingBuffer(),Project::getInstance()->getSampleRate(), recordStart, recordStop - recordStart);
+                // tracks.at(i)->addRegion(tracks.at(i)->getRecordingBuffer(),Project::getInstance()->getSampleRate(), recordStart, recordStop - recordStart);
+                tracks.at(i)->getCurrentRecorder()->stopTimer();
             }
         }
     }

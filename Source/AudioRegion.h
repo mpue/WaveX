@@ -17,7 +17,7 @@
 //==============================================================================
 /*
 */
-class AudioRegion : public Component,  public ChangeListener, public ChangeBroadcaster, public ComponentListener
+class AudioRegion : public Component,  public ChangeListener, public ChangeBroadcaster, public ComponentListener, public Timer
 {
 public:
     
@@ -60,8 +60,20 @@ public:
     void mouseUp(const MouseEvent & e) override;
     void mouseDrag(const MouseEvent & e) override;
     
+    inline virtual void timerCallback() override {
+        updateThumb();
+    }
+    
     inline void setDragger(MultiComponentDragger* dragger) {
         this->dragger = dragger;
+    }
+    
+    inline void updateThumb()
+    {
+        double length = this->thumbnail->getTotalLength();
+        setSize(length * this->zoom, getHeight());
+        this->thumbnailBounds->setWidth(length * this->zoom);
+        repaint();
     }
     
     virtual void componentMovedOrResized (Component& component,
