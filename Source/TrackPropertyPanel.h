@@ -70,7 +70,6 @@ public:
     void sliderValueChanged (Slider* sliderThatWasMoved) override;
 
 
-
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     Track* track = NULL;

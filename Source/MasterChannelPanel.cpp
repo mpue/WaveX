@@ -19,6 +19,7 @@
 
 //[Headers] You can add your own extra header files here...
 #include "CustomLookAndFeel.h"
+#include "Mixer.h"
 //[/Headers]
 
 #include "MasterChannelPanel.h"
@@ -204,6 +205,7 @@ void MasterChannelPanel::resized()
 void MasterChannelPanel::sliderValueChanged (Slider* sliderThatWasMoved)
 {
     //[UsersliderValueChanged_Pre]
+    Mixer::getInstance()->setSource(Mixer::Source::MIXER);
     //[/UsersliderValueChanged_Pre]
 
     if (sliderThatWasMoved == vuSliderL)
@@ -215,14 +217,24 @@ void MasterChannelPanel::sliderValueChanged (Slider* sliderThatWasMoved)
     {
         //[UserSliderCode_channelVolume] -- add your slider handling code here..
         volume = channelVolume->getValue();
-        sendChangeMessage();
+        if (track != NULL) {
+            track->setVolume(volume);
+        }
+        else {
+            sendChangeMessage();        
+        }
         //[/UserSliderCode_channelVolume]
     }
     else if (sliderThatWasMoved == panSlider)
     {
         //[UserSliderCode_panSlider] -- add your slider handling code here..
         pan = panSlider->getValue();
-        sendChangeMessage();
+        if (track != NULL) {
+            track->setPan(pan);
+        }
+        else {
+            sendChangeMessage();
+        }
         //[/UserSliderCode_panSlider]
     }
     else if (sliderThatWasMoved == vuSliderR)
@@ -232,26 +244,31 @@ void MasterChannelPanel::sliderValueChanged (Slider* sliderThatWasMoved)
     }
 
     //[UsersliderValueChanged_Post]
+    Mixer::getInstance()->sendChangeMessage();
     //[/UsersliderValueChanged_Post]
 }
 
 void MasterChannelPanel::buttonClicked (Button* buttonThatWasClicked)
 {
     //[UserbuttonClicked_Pre]
+    Mixer::getInstance()->setSource(Mixer::Source::MIXER);
     //[/UserbuttonClicked_Pre]
 
     if (buttonThatWasClicked == muteButton)
     {
         //[UserButtonCode_muteButton] -- add your button handler code here..
+        track->setMute(muteButton->getToggleState());
         //[/UserButtonCode_muteButton]
     }
     else if (buttonThatWasClicked == soloButton)
     {
         //[UserButtonCode_soloButton] -- add your button handler code here..
+        track->setSolo(soloButton->getToggleState());
         //[/UserButtonCode_soloButton]
     }
 
     //[UserbuttonClicked_Post]
+    Mixer::getInstance()->sendChangeMessage();
     //[/UserbuttonClicked_Post]
 }
 
@@ -289,11 +306,20 @@ void MasterChannelPanel::setMagnitude(int channel, float magnitude) {
 
 void MasterChannelPanel::changeListenerCallback(ChangeBroadcaster * source) {
 
-    if(Track* t = dynamic_cast<Track*>(source)){
-        setName(t->getName());
-        nameLabel->setText(t->getName(), juce::NotificationType::dontSendNotification);
-        channelVolume->setValue(t->getVolume());
-        panSlider->setValue(t->getPan());
+    if(Mixer::getInstance() == source){
+        
+        if (Mixer::getInstance()->getSource() == Mixer::Source::MIXER) {
+            return;
+        }
+        
+        if (Mixer::getInstance()->getLastModifiedTrack() == this->track) {
+            setName(track->getName());
+            nameLabel->setText(track->getName(), juce::NotificationType::dontSendNotification);
+            channelVolume->setValue(track->getVolume(), juce::NotificationType::dontSendNotification);
+            panSlider->setValue(track->getPan(),  juce::NotificationType::dontSendNotification);
+            muteButton->setToggleState(track->isMute(), juce::NotificationType::dontSendNotification);
+            soloButton->setToggleState(track->isSolo(), juce::NotificationType::dontSendNotification);
+        }
     }
 
 }
@@ -303,16 +329,30 @@ void MasterChannelPanel::setName(String name) {
     this->nameLabel->setText(name, juce::NotificationType::dontSendNotification);
 }
 
+bool MasterChannelPanel::getMute() {
+    return this->mute;
+}
+
 void MasterChannelPanel::setMute(bool mute) {
     this->mute = mute;
     this->muteButton->setToggleState(mute, juce::NotificationType::dontSendNotification);
+    this->track->setMute(mute);
+}
+
+bool MasterChannelPanel::getSolo() {
+    return this->solo;
 }
 
 void MasterChannelPanel::setSolo(bool solo) {
     this->solo = solo;
     this->soloButton->setToggleState(solo, juce::NotificationType::dontSendNotification);
+    this->track->setMute(mute);
 }
 
+void MasterChannelPanel::setTrack(Track *t) {
+    this->track = t;
+    setName(track->getName());
+}
 
 //[/MiscUserCode]
 

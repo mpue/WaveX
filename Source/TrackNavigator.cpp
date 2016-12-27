@@ -12,6 +12,7 @@
 #include "TrackNavigator.h"
 #include "AudioRegion.h"
 #include "Project.h"
+#include "Mixer.h"
 #include <iterator>
 #include <iostream>
 
@@ -30,6 +31,8 @@ TrackNavigator::TrackNavigator(PositionMarker* marker)
 	this->position = 0;
     this->dragger = new MultiComponentDragger();
     Project::getInstance()->addChangeListener(this);
+    addChangeListener(Mixer::getInstance());
+    
     // setInterceptsMouseClicks(true, true);
 }
 
@@ -164,8 +167,9 @@ void TrackNavigator::addTrack(double sampleRate) {
     addAndMakeVisible(track);
 	
 	track->addChangeListener(this);
-    // track->setTopLeftPosition(0, 200 * tracks.size());
 
+    Mixer::getInstance()->addTrack(track);
+    
 	if (zoom > 0)
         track->setZoom(zoom);
 

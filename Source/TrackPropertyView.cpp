@@ -21,6 +21,7 @@
 #include "TrackNavigator.h"
 #include "TrackPropertyPanel.h"
 #include "Project.h"
+#include "Mixer.h"
 //[/Headers]
 
 #include "TrackPropertyView.h"
@@ -48,6 +49,8 @@ TrackPropertyView::TrackPropertyView ()
     dropShadow = new DropShadow(Colour::fromFloatRGBA(0,0,0,0.5),3,Point<int>(2,0));
     dropShadower = new DropShadower(*dropShadow);
     dropShadower->setOwner(this);
+    
+    Mixer::getInstance()->addChangeListener(this);
     //[/Constructor]
 }
 
@@ -112,6 +115,8 @@ void TrackPropertyView::addTrack(Track* track)
 	TrackPropertyPanel* panel = new TrackPropertyPanel();
     panel->setName(track->getName());
 
+    Mixer::getInstance()->addChangeListener(panel);
+    
 	int yPos = 0;
 
 	for (int i = 0; i < this->trackProperties.size();i++) {
@@ -125,18 +130,19 @@ void TrackPropertyView::addTrack(Track* track)
 	trackProperties.push_back(panel);
 
 	panel->addMouseListener(this, true);
-    track->addChangeListener(panel);
+
+    
     setSize(getWidth(), this->trackProperties.size() * Project::DEFAULT_TRACK_HEIGHT);
 }
 
 void TrackPropertyView::changeListenerCallback (ChangeBroadcaster* source) {
 
-    if (TrackNavigator* tn = dynamic_cast<TrackNavigator*>(source)){
+    if (Mixer::getInstance() == source){
 
-        int i = tn->getTracks().size() - 1;
+        int i = Mixer::getInstance()->getTracks().size() - 1;
 
-        while (tn->getTracks().size() > trackProperties.size()) {
-            addTrack(tn->getTracks().at(i--));
+        while (Mixer::getInstance()->getTracks().size() > trackProperties.size()) {
+            addTrack(Mixer::getInstance()->getTracks().at(i--));
         }
 
 		int height = 0;

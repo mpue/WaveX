@@ -31,9 +31,7 @@ class MainContentComponent : public AudioAppComponent,
                              public ChangeListener,
                              public ChangeBroadcaster,
                              public TimeSliceClient,
-                             public Timer
-
-{
+                             public Timer {
 public:
     //============================================================================
     MainContentComponent(TimeLine* timeLine, TrackPropertyView* trackProperties, MixerPanel* mixer) : thread("main")
@@ -181,7 +179,7 @@ public:
                 // buffer->applyGain (1, 0, _numSamples, gainRight);
                 
                 navigator->getTracks().at(i)->setOffset(numSamples);
-                navigator->getTracks().at(i)->updateMagnitude(numSamples, _numSamples);
+                navigator->getTracks().at(i)->updateMagnitude(numSamples, _numSamples, gainLeft, gainRight);
 
             }
             
@@ -215,7 +213,7 @@ public:
                 }
                 
         
-                navigator->getTracks().at(i)->updateMagnitude(numSamples, _numSamples);
+                navigator->getTracks().at(i)->updateMagnitude(numSamples, _numSamples, gainLeft, gainRight);
                 navigator->getTracks().at(i)->setOffset(numSamples);
  
             }
@@ -497,22 +495,17 @@ public:
             pluginList->getType(i)->createXml()->writeToFile(File("/Users/mpue/plugins/"+pluginList->getType(i)->name),"");
         }
         
-        
-        
-        
     }
     
     void importAudio() {
-        FileChooser chooser("Select a file to add...",
-                            File::nonexistent,
-                            "*.*");
         
-        if (chooser.browseForFileToOpen())
-        {
+        FileChooser chooser("Select a file to add...", File::nonexistent, "*.*");
+        
+        if (chooser.browseForFileToOpen()) {
             File file = chooser.getResult();
             navigator->getCurrentTrack()->addRegion(file, this->sampleRate);
-            
         }
+        
     }
     
 	void removeSelectedTrack() {

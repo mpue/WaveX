@@ -59,7 +59,7 @@ public:
     
   	AudioSampleBuffer* getRecordingBuffer();
     
-    void updateMagnitude(int sample, int buffersize);
+    void updateMagnitude(int sample, int buffersize, float gainLeft, float gainRight);
 
     AudioRegion* getCurrentRegion(long sample);
     
@@ -88,6 +88,10 @@ public:
     
     bool isMute();
     void setMute(bool mute);
+    
+    inline void addChangeListener (ChangeListener* listener)  {
+        ChangeBroadcaster::addChangeListener(listener);
+    }
     
 private:
 

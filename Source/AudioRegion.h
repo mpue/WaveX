@@ -50,11 +50,6 @@ public:
     
     long getSampleOffset();
     void setSampleOffset(long offset,bool reminder, bool notify);
-    long getOldOffset();
-    
-    void setDragging(bool dragging);
-    bool isDragging();
-    void move(int offset);
     
     double getSampleRate();
     
@@ -91,8 +86,6 @@ private:
     int loopCount = 1;
 	bool selected = false;
     bool loop = false;
-    bool dragging = false;
-    int dragStartX = 0;
     virtual void changeListenerCallback(ChangeBroadcaster * source) override;
     void paintIfNoFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds);
     void paintIfFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds);

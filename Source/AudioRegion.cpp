@@ -205,10 +205,6 @@ void AudioRegion::setSampleOffset(long offset, bool reminder, bool notify)
         sendChangeMessage();
 }
 
-long AudioRegion::getOldOffset() {
-    return oldOffset;
-}
-
 long AudioRegion::getSampleOffset() {
     return this->sampleOffset;
 }
@@ -216,7 +212,6 @@ long AudioRegion::getSampleOffset() {
 
 void AudioRegion::setOffset(int offset)
 {
-    Logger::getCurrentLogger()->writeToLog("Setting offset to "+ String(offset));
 	this->offset = offset;
 }
 
@@ -359,30 +354,6 @@ void AudioRegion::changeListenerCallback(ChangeBroadcaster * source)
 String AudioRegion::getName(){
     return this->name;
 }
-
-bool AudioRegion::isDragging() {
-    return dragging;
-}
-
-void AudioRegion::setDragging(bool dragging) {
-    this->dragging = dragging;
-    if (dragging) {
-        this->dragStartX = getPosition().getX();
-        // Logger::getCurrentLogger()->writeToLog("Drag start at " + String(dragStartX));
-    }
-    else {
-        // Logger::getCurrentLogger()->writeToLog("Drag stop at " + String(getBounds().getX()));
-        this->offset = getBounds().getX();
-        this->dragStartX = 0;
-    }
-    
-}
-
-void AudioRegion::move(int offset) {
-    // ogger::getCurrentLogger()->writeToLog(name + " move to offset " + String(offset) +" from offset :" + String(this->offset) + " DragStartx :" + String(dragStartX));
-    setTopLeftPosition(this->offset + offset, 0);
-}
-
 
 void AudioRegion::mouseDown(const MouseEvent & e) 
 {

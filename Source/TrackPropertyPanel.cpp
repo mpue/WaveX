@@ -21,6 +21,7 @@
 #include "MasterChannelPanel.h"
 #include "ImageToggleButton.h"
 #include "Project.h"
+#include "Mixer.h"
 //[/Headers]
 
 #include "TrackPropertyPanel.h"
@@ -254,8 +255,11 @@ void TrackPropertyPanel::labelTextChanged (Label* labelThatHasChanged)
 void TrackPropertyPanel::sliderValueChanged (Slider* sliderThatWasMoved)
 {
     //[UsersliderValueChanged_Pre]
+    Mixer::getInstance()->setSource(Mixer::Source::PROPERTYVIEW);
     //[/UsersliderValueChanged_Pre]
 
+
+    
     if (sliderThatWasMoved == volumeViewSlider)
     {
         //[UserSliderCode_volumeViewSlider] -- add your slider handling code here..
@@ -275,6 +279,7 @@ void TrackPropertyPanel::sliderValueChanged (Slider* sliderThatWasMoved)
     }
 
     //[UsersliderValueChanged_Post]
+    Mixer::getInstance()->sendChangeMessage();
     //[/UsersliderValueChanged_Post]
 }
 
@@ -287,7 +292,7 @@ void TrackPropertyPanel::setName(juce::String name ) {
 
 void TrackPropertyPanel::setTrack(Track *track) {
     this->track = track;
-    this->volumeSlider->setValue(1.0);
+    this->volumeSlider->setValue(track->getVolume());
 }
 
 Track* TrackPropertyPanel::getTrack() {
@@ -325,24 +330,37 @@ void TrackPropertyPanel::changeListenerCallback(ChangeBroadcaster * source) {
     if (MasterChannelPanel* channel = dynamic_cast<MasterChannelPanel*>(source)){
         muteButton->setToggleState(false, juce::NotificationType::dontSendNotification);
     }
-    else if (Track* t = dynamic_cast<Track*>(source)) {
-        setName(t->getName());
-        volumeSlider->setValue(t->getVolume());
-        balanceSlider->setValue(t->getPan());
+    else if (Mixer::getInstance() == source) {
+        
+        if (Mixer::getInstance()->getSource() == Mixer::Source::PROPERTYVIEW) {
+            return;
+        }
+        
+        Track* t = Mixer::getInstance()->getLastModifiedTrack();
+        
+        if (track == t) {
+            setName(t->getName());
+            muteButton->setToggleState(t->isMute(), juce::NotificationType::dontSendNotification);
+            soloButton->setToggleState(t->isSolo(), juce::NotificationType::dontSendNotification);
+            volumeSlider->setValue(t->getVolume(),  juce::NotificationType::dontSendNotification);
+            balanceSlider->setValue(t->getPan(),  juce::NotificationType::dontSendNotification);
+        }
+
     }
 }
 
 void TrackPropertyPanel::buttonClicked (Button* buttonThatWasClicked) {
+    Mixer::getInstance()->setSource(Mixer::Source::PROPERTYVIEW);
     if (buttonThatWasClicked == muteButton->getButton()) {
         track->setMute(muteButton->getButton()->getToggleState());
     }
     else if(buttonThatWasClicked == soloButton->getButton()) {
-        
+        track->setSolo(soloButton->getButton()->getToggleState());
     }
     else if(buttonThatWasClicked == recButton->getButton()) {
         track->setRecording(recButton->getButton()->getToggleState());
     }
-
+    Mixer::getInstance()->sendChangeMessage();
 }
 
 

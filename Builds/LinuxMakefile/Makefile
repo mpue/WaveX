@@ -65,6 +65,7 @@ OBJECTS := \
   $(JUCE_OBJDIR)/ToolbarPanel_8e4ee752.o \
   $(JUCE_OBJDIR)/TransportPanel_18909a64.o \
   $(JUCE_OBJDIR)/MasterChannelPanel_b4b7ea4c.o \
+  $(JUCE_OBJDIR)/Mixer_d95e2aea.o \
   $(JUCE_OBJDIR)/MixerPanel_f7050b84.o \
   $(JUCE_OBJDIR)/WaveSelector_5f1b5681.o \
   $(JUCE_OBJDIR)/AudioRegion_46364bcb.o \
@@ -151,6 +152,11 @@ $(JUCE_OBJDIR)/TransportPanel_18909a64.o: ../../Source/TransportPanel.cpp
 $(JUCE_OBJDIR)/MasterChannelPanel_b4b7ea4c.o: ../../Source/MasterChannelPanel.cpp
 	-@mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling MasterChannelPanel.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/Mixer_d95e2aea.o: ../../Source/Mixer.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling Mixer.cpp"
 	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/MixerPanel_f7050b84.o: ../../Source/MixerPanel.cpp

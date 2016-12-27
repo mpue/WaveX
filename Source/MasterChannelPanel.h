@@ -64,8 +64,11 @@ public:
     void setMagnitude(int channel, float magnitude);
     void setMute(bool mute);
     void setSolo(bool solo);
+    bool getMute();
+    bool getSolo();
     double getVolume();
     double getPan();
+    void setTrack(Track* t);
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -95,6 +98,8 @@ private:
     double volume = 1.0f;
     double pan = 0.0f;
 
+    Track* track = NULL;
+    
     ScopedPointer<CustomLookAndFeel> clf;
     //[/UserVariables]
 

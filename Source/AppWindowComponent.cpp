@@ -68,19 +68,12 @@ AppWindowComponent::AppWindowComponent()
 	addAndMakeVisible(trackProperties);
     addAndMakeVisible(mixerViewport);
 
-    mcc->getNavigator()->addChangeListener(this->trackProperties);
+    // mcc->getNavigator()->addChangeListener(this->trackProperties);
     mcc->getNavigator()->addChangeListener(this->mixer);
     
 	menu->toFront(true);
     
     addMouseListener(this,true);
-
-    /*
-    this->masterPanel = new MasterChannelPanel(mcc);
-    this->masterPanel->setTopLeftPosition(getWidth() - this->masterPanel->getWidth() - 50, getHeight() - this->masterPanel->getHeight() - 50);
-    mcc->addChangeListener(this->masterPanel);
-    addAndMakeVisible(masterPanel);
-     */
      
     this->transport = new TransportPanel(mcc);
     this->transport->setBounds(450,0,320,50);
@@ -114,7 +107,6 @@ AppWindowComponent::~AppWindowComponent()
     menu = nullptr;
     mcc = nullptr;
     viewport = nullptr;
-    masterPanel = nullptr;
     transport = nullptr;
     toolbar = nullptr;
 	infoPanel = nullptr;

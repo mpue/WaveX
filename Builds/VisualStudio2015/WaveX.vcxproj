@@ -136,6 +136,7 @@
     <ClCompile Include="..\..\Source\ToolbarPanel.cpp"/>
     <ClCompile Include="..\..\Source\TransportPanel.cpp"/>
     <ClCompile Include="..\..\Source\MasterChannelPanel.cpp"/>
+    <ClCompile Include="..\..\Source\Mixer.cpp"/>
     <ClCompile Include="..\..\Source\MixerPanel.cpp"/>
     <ClCompile Include="..\..\Source\WaveSelector.cpp"/>
     <ClCompile Include="..\..\Source\AudioRegion.cpp"/>
@@ -1733,6 +1734,7 @@
     <ClInclude Include="..\..\Source\ToolbarPanel.h"/>
     <ClInclude Include="..\..\Source\TransportPanel.h"/>
     <ClInclude Include="..\..\Source\MasterChannelPanel.h"/>
+    <ClInclude Include="..\..\Source\Mixer.h"/>
     <ClInclude Include="..\..\Source\MixerPanel.h"/>
     <ClInclude Include="..\..\Source\WaveSelector.h"/>
     <ClInclude Include="..\..\Source\DragConstrainer.h"/>

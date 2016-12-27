@@ -288,7 +288,7 @@ void Track::setGain(float gain)
 void Track::setVolume(float volume)
 {
 	this->volume = volume;
-    sendChangeMessage();
+    // sendChangeMessage();
 }
 
 float Track::getVolume()
@@ -299,7 +299,7 @@ float Track::getVolume()
 void Track::setPan(float pan)
 {
     this->pan = pan;
-    sendChangeMessage();
+    // sendChangeMessage();
 }
 
 float Track::getPan()
@@ -354,9 +354,9 @@ double Track::getMagnitude(int channel) {
     }
 }
 
-void Track::updateMagnitude(int sample, int buffersize) {
-    this->magnitudeLeft = audioBuffer->getMagnitude(0, sample, buffersize);
-    this->magnitudeRight = audioBuffer->getMagnitude(1, sample, buffersize);
+void Track::updateMagnitude(int sample, int buffersize,  float gainLeft, float gainRight) {
+    this->magnitudeLeft = audioBuffer->getMagnitude(0, sample, buffersize) * gainLeft;
+    this->magnitudeRight = audioBuffer->getMagnitude(1, sample, buffersize) * gainRight;
 }
 
 const float * Track::getReadBuffer(int channel) {
@@ -439,7 +439,6 @@ void Track::setMidiChannel(int channel) {
 void Track::changeListenerCallback(ChangeBroadcaster * source) {
     
     if(AudioRegion* r = dynamic_cast<AudioRegion*>(source)){
-        audioBuffer->clear(r->getOldOffset(), r->getBuffer()->getNumSamples());
         audioBuffer->copyFrom(0, r->getSampleOffset(), *r->getBuffer(), 0, 0, r->getBuffer()->getNumSamples());
         audioBuffer->copyFrom(1, r->getSampleOffset(), *r->getBuffer(), 1, 0, r->getBuffer()->getNumSamples());
         
@@ -462,6 +461,7 @@ void Track::setTrackLength(long length) {
 
 void Track::setRecording(bool recording) {
     this->recording = recording;
+    // sendChangeMessage();
 }
 
 bool Track::isRecording() {
@@ -470,6 +470,7 @@ bool Track::isRecording() {
 
 void Track::setSolo(bool solo) {
     this->solo = solo;
+    // sendChangeMessage();
 }
 
 bool Track::isSolo() {
@@ -479,6 +480,7 @@ bool Track::isSolo() {
 
 void Track::setMute(bool mute) {
     this->mute = mute;
+    // sendChangeMessage();
 }
 
 bool Track::isMute() {

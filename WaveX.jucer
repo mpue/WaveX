@@ -57,6 +57,8 @@
               file="Source/MasterChannelPanel.cpp"/>
         <FILE id="QdxXmZ" name="MasterChannelPanel.h" compile="0" resource="0"
               file="Source/MasterChannelPanel.h"/>
+        <FILE id="rZUw7d" name="Mixer.cpp" compile="1" resource="0" file="Source/Mixer.cpp"/>
+        <FILE id="ft5IS2" name="Mixer.h" compile="0" resource="0" file="Source/Mixer.h"/>
         <FILE id="K2XNSj" name="MixerPanel.cpp" compile="1" resource="0" file="Source/MixerPanel.cpp"/>
         <FILE id="bJpUsc" name="MixerPanel.h" compile="0" resource="0" file="Source/MixerPanel.h"/>
       </GROUP>

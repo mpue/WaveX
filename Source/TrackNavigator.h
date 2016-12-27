@@ -22,7 +22,10 @@
 //==============================================================================
 /*
 */
-class TrackNavigator    : public Component, public ChangeListener, public ChangeBroadcaster, public KeyListener
+class TrackNavigator    : public Component,
+                          public ChangeListener,
+                          public ChangeBroadcaster,
+public KeyListener
 {
 public:
     TrackNavigator(PositionMarker* marker);
@@ -54,8 +57,10 @@ public:
 	void updateTrackLayout(ChangeBroadcaster * source);
 	void adjustHeight();
 
-
-
+    inline void addChangeListener (ChangeListener* listener) {
+        ChangeBroadcaster::addChangeListener(listener);
+    }
+    
 private:
     
     // ComponentDragger dragger;

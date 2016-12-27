@@ -403,6 +403,9 @@
     <ClCompile Include="..\..\Source\MasterChannelPanel.cpp">
       <Filter>WaveX\Source\MIxer</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Mixer.cpp">
+      <Filter>WaveX\Source\MIxer</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\MixerPanel.cpp">
       <Filter>WaveX\Source\MIxer</Filter>
     </ClCompile>
@@ -2191,6 +2194,9 @@
       <Filter>WaveX\Source\MainUI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\MasterChannelPanel.h">
+      <Filter>WaveX\Source\MIxer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Mixer.h">
       <Filter>WaveX\Source\MIxer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\MixerPanel.h">

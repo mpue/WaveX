@@ -12,6 +12,7 @@
 #include "AppWindowComponent.h"
 #include "CustomLookAndFeel.h"
 #include "Project.h"
+#include "Mixer.h"
 
 //==============================================================================
 class WaveXApplication  : public JUCEApplication
@@ -39,6 +40,7 @@ public:
 
         mainWindow = nullptr; // (deletes our window)
         Project::getInstance()->destroy();
+        Mixer::getInstance()->destroy();
     }
 
     //==============================================================================
