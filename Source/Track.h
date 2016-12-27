@@ -88,9 +88,22 @@ public:
     
     bool isMute();
     void setMute(bool mute);
+
+    bool isMono();
+    void setMono(bool mono);
+    
     
     inline void addChangeListener (ChangeListener* listener)  {
         ChangeBroadcaster::addChangeListener(listener);
+    }
+    
+    inline void setInputChannels(int* channels) {
+        this->inputChannels[0] = channels[0];
+        this->inputChannels[1] = channels[1];
+    }
+    
+    inline int* getInputChannels() {
+        return &this->inputChannels[0];
     }
     
 private:
@@ -118,9 +131,12 @@ private:
     bool recording = false;
     bool solo = false;
     bool mute = false;
+    bool mono = false;
     
     double magnitudeLeft = 0;
     double magnitudeRight = 0;
+    
+    int inputChannels[2] = { 0 };
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Track)
 };

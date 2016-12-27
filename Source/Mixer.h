@@ -21,12 +21,7 @@ using namespace std;
 class Mixer : public ChangeBroadcaster, public ChangeListener {
     
 public:
-    
-    enum Source {
-        MIXER,
-        PROPERTYVIEW
-    };
-    
+        
     static Mixer* getInstance() {
         if (instance == NULL) {
             instance = new Mixer();
@@ -42,14 +37,6 @@ public:
         this->tracks.push_back(track);
         track->addChangeListener(this);
         sendChangeMessage();
-    }
-    
-    inline void setSource(Source source) {
-        this->source = source;
-    }
-    
-    inline Source getSource() {
-        return source;
     }
     
     vector<Track*> getTracks() {
@@ -73,6 +60,14 @@ public:
         ChangeBroadcaster::addChangeListener(listener);
     }
     
+    void setAvailableInputChannelNames(StringArray channels) {
+        this->availableInputChannels = channels;
+    }
+    
+    StringArray getInputChannels() {
+        return this->availableInputChannels;
+    }
+    
     
 private:
     Mixer() {
@@ -87,7 +82,7 @@ private:
     static Mixer* instance;
     vector<Track*> tracks;
     Track* lastModified = NULL;
-    Source source;
+    StringArray availableInputChannels;
     
 };
 

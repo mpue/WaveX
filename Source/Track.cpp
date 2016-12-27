@@ -486,3 +486,12 @@ void Track::setMute(bool mute) {
 bool Track::isMute() {
     return mute;
 }
+
+void Track::setMono(bool mono) {
+    this->mono = mono;
+    // sendChangeMessage();
+}
+
+bool Track::isMono() {
+    return mono;
+}

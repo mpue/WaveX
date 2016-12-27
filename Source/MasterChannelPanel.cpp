@@ -205,7 +205,6 @@ void MasterChannelPanel::resized()
 void MasterChannelPanel::sliderValueChanged (Slider* sliderThatWasMoved)
 {
     //[UsersliderValueChanged_Pre]
-    Mixer::getInstance()->setSource(Mixer::Source::MIXER);
     //[/UsersliderValueChanged_Pre]
 
     if (sliderThatWasMoved == vuSliderL)
@@ -251,7 +250,6 @@ void MasterChannelPanel::sliderValueChanged (Slider* sliderThatWasMoved)
 void MasterChannelPanel::buttonClicked (Button* buttonThatWasClicked)
 {
     //[UserbuttonClicked_Pre]
-    Mixer::getInstance()->setSource(Mixer::Source::MIXER);
     //[/UserbuttonClicked_Pre]
 
     if (buttonThatWasClicked == muteButton)
@@ -307,10 +305,6 @@ void MasterChannelPanel::setMagnitude(int channel, float magnitude) {
 void MasterChannelPanel::changeListenerCallback(ChangeBroadcaster * source) {
 
     if(Mixer::getInstance() == source){
-        
-        if (Mixer::getInstance()->getSource() == Mixer::Source::MIXER) {
-            return;
-        }
         
         if (Mixer::getInstance()->getLastModifiedTrack() == this->track) {
             setName(track->getName());

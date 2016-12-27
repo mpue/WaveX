@@ -99,6 +99,16 @@ TrackPropertyPanel::TrackPropertyPanel ()
     addAndMakeVisible (recButton = new ImageToggleButton());
     recButton->setName ("recButton");
 
+    addAndMakeVisible (inputCombo = new ComboBox ("inputCombo"));
+    inputCombo->setEditableText (false);
+    inputCombo->setJustificationType (Justification::centredLeft);
+    inputCombo->setTextWhenNothingSelected (String());
+    inputCombo->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
+    inputCombo->addListener (this);
+
+    addAndMakeVisible (monoButton = new ImageToggleButton());
+    monoButton->setName ("monoButton");
+
 
     //[UserPreSize]
 
@@ -120,6 +130,7 @@ TrackPropertyPanel::TrackPropertyPanel ()
     muteButton->setText("M");
     soloButton->setText("S");
     recButton->setText("R");
+    monoButton->setText("O");
 
     muteButton->setImages (false, true, true,
                           ImageCache::getFromMemory (ImageToggleButton::round_button_png, ImageToggleButton::round_button_pngSize), 1.000f, Colour (0x00000000),
@@ -137,11 +148,25 @@ TrackPropertyPanel::TrackPropertyPanel ()
                            Image(), 1.000f, Colour (0x00000000),
                            ImageCache::getFromMemory (ImageToggleButton::round_button_pushed_png, ImageToggleButton::round_button_pushed_pngSize), 1.000f, Colours::darkred);
 
+    monoButton->setImages (false, true, true,
+                          ImageCache::getFromMemory (ImageToggleButton::round_button_png, ImageToggleButton::round_button_pngSize), 1.000f, Colour (0x00000000),
+                          Image(), 1.000f, Colour (0x00000000),
+                          ImageCache::getFromMemory (ImageToggleButton::round_button_pushed_png, ImageToggleButton::round_button_pushed_pngSize), 1.000f, Colours::green);
+    
 
     muteButton->getButton()->addListener(this);
     soloButton->getButton()->addListener(this);
     recButton->getButton()->addListener(this);
+    monoButton->getButton()->addListener(this);
+
+
+    StringArray channels = Mixer::getInstance()->getInputChannels();
     
+    for (int i = 0; i < channels.size() - 1; i+=2) {
+        inputCombo->addItem(channels.getReference(i) + " + " + channels.getReference(i + 1), i + 1);
+    }
+    
+    inputCombo->setSelectedId(1);
     
     //[/Constructor]
 }
@@ -160,6 +185,8 @@ TrackPropertyPanel::~TrackPropertyPanel()
     muteButton = nullptr;
     soloButton = nullptr;
     recButton = nullptr;
+    inputCombo = nullptr;
+    monoButton = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -209,6 +236,8 @@ void TrackPropertyPanel::resized()
     muteButton->setBounds (16, 112, 24, 24);
     soloButton->setBounds (48, 112, 24, 24);
     recButton->setBounds (80, 112, 24, 24);
+    inputCombo->setBounds (16, 144, 128, 24);
+    monoButton->setBounds (112, 112, 24, 24);
     //[UserResized] Add your own custom resize handling here..
     resizer->setBounds(0,getHeight()-5, getWidth(),5);
 
@@ -255,11 +284,8 @@ void TrackPropertyPanel::labelTextChanged (Label* labelThatHasChanged)
 void TrackPropertyPanel::sliderValueChanged (Slider* sliderThatWasMoved)
 {
     //[UsersliderValueChanged_Pre]
-    Mixer::getInstance()->setSource(Mixer::Source::PROPERTYVIEW);
     //[/UsersliderValueChanged_Pre]
 
-
-    
     if (sliderThatWasMoved == volumeViewSlider)
     {
         //[UserSliderCode_volumeViewSlider] -- add your slider handling code here..
@@ -281,6 +307,35 @@ void TrackPropertyPanel::sliderValueChanged (Slider* sliderThatWasMoved)
     //[UsersliderValueChanged_Post]
     Mixer::getInstance()->sendChangeMessage();
     //[/UsersliderValueChanged_Post]
+}
+
+void TrackPropertyPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
+{
+    //[UsercomboBoxChanged_Pre]
+    //[/UsercomboBoxChanged_Pre]
+
+    if (comboBoxThatHasChanged == inputCombo)
+    {
+        //[UserComboBoxCode_inputCombo] -- add your combo box handling code here..
+        
+        if (this->track != NULL) {
+            
+            if (track->isMono()) {
+                int input[2] =  { inputCombo->getSelectedId() - 1, inputCombo->getSelectedId() - 1 };
+                track->setInputChannels(input);
+            }
+            else {
+                int input[2] =  { inputCombo->getSelectedId() - 1, inputCombo->getSelectedId() };
+                track->setInputChannels(input);
+            }
+            
+        }
+        
+        //[/UserComboBoxCode_inputCombo]
+    }
+
+    //[UsercomboBoxChanged_Post]
+    //[/UsercomboBoxChanged_Post]
 }
 
 
@@ -331,13 +386,9 @@ void TrackPropertyPanel::changeListenerCallback(ChangeBroadcaster * source) {
         muteButton->setToggleState(false, juce::NotificationType::dontSendNotification);
     }
     else if (Mixer::getInstance() == source) {
-        
-        if (Mixer::getInstance()->getSource() == Mixer::Source::PROPERTYVIEW) {
-            return;
-        }
-        
+
         Track* t = Mixer::getInstance()->getLastModifiedTrack();
-        
+
         if (track == t) {
             setName(t->getName());
             muteButton->setToggleState(t->isMute(), juce::NotificationType::dontSendNotification);
@@ -350,7 +401,7 @@ void TrackPropertyPanel::changeListenerCallback(ChangeBroadcaster * source) {
 }
 
 void TrackPropertyPanel::buttonClicked (Button* buttonThatWasClicked) {
-    Mixer::getInstance()->setSource(Mixer::Source::PROPERTYVIEW);
+
     if (buttonThatWasClicked == muteButton->getButton()) {
         track->setMute(muteButton->getButton()->getToggleState());
     }
@@ -360,6 +411,27 @@ void TrackPropertyPanel::buttonClicked (Button* buttonThatWasClicked) {
     else if(buttonThatWasClicked == recButton->getButton()) {
         track->setRecording(recButton->getButton()->getToggleState());
     }
+    else if(buttonThatWasClicked == monoButton->getButton()) {
+        track->setMono(monoButton->getButton()->getToggleState());
+        
+        StringArray channels = Mixer::getInstance()->getInputChannels();
+        
+        inputCombo->clear();
+        
+        if (track->isMono()) {
+            for (int i = 0; i < channels.size(); i++) {
+                inputCombo->addItem(channels.getReference(i) + "("+ String(i) + ")", i + 1);
+            }
+        }
+        else {
+            for (int i = 0; i < channels.size() - 1; i+=2) {
+                inputCombo->addItem(channels.getReference(i) + "|" + channels.getReference(i + 1)+ "("+ String(i) + ")" , i + 1);
+            }
+        }
+        inputCombo->setSelectedId(1);
+        
+    }
+
     Mixer::getInstance()->sendChangeMessage();
 }
 
@@ -422,6 +494,12 @@ BEGIN_JUCER_METADATA
                     class="ImageToggleButton" params=""/>
   <GENERICCOMPONENT name="recButton" id="8a55a8aa642c1153" memberName="recButton"
                     virtualName="ImageToggleButton" explicitFocusOrder="0" pos="80 112 24 24"
+                    class="ImageToggleButton" params=""/>
+  <COMBOBOX name="inputCombo" id="8fa7ef2d51e455d3" memberName="inputCombo"
+            virtualName="" explicitFocusOrder="0" pos="16 144 128 24" editable="0"
+            layout="33" items="" textWhenNonSelected="" textWhenNoItems="(no choices)"/>
+  <GENERICCOMPONENT name="monoButton" id="c1da9de25247e565" memberName="monoButton"
+                    virtualName="ImageToggleButton" explicitFocusOrder="0" pos="112 112 24 24"
                     class="ImageToggleButton" params=""/>
 </JUCER_COMPONENT>
 

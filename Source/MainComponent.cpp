@@ -18,6 +18,7 @@
 #include "TimeLine.h"
 #include "MixerPanel.h"
 #include "Project.h"
+#include "Mixer.h"
 
 using namespace std;
 //==============================================================================
@@ -73,10 +74,11 @@ public:
         this->leftVolume = 1.0;
         this->rightVolume = 1.0;
         
-        setAudioChannels(2,2);
+        setAudioChannels(4,2);
         
-        deviceManager.setMidiInputEnabled("MPKmini2", true);
-        deviceManager.addMidiInputCallback("MPKmini2",this);
+        deviceManager.setMidiInputEnabled("Oxygen 49", true);
+        deviceManager.addMidiInputCallback("Oxygen 49",this);
+        deviceManager.setDefaultMidiOutput("MIDI4x4 Midi Out 1");
     
         apfm = new AudioPluginFormatManager();
         apfm->addDefaultFormats();
@@ -146,6 +148,7 @@ public:
         this->buffer->clear(0, this->buffersize);
         
         Project::getInstance()->setSampleRate(sampleRate);
+        Mixer::getInstance()->setAvailableInputChannelNames(deviceManager.getCurrentAudioDevice()->getInputChannelNames());
 
     }
     
@@ -198,23 +201,24 @@ public:
                 float gainLeft = cos((M_PI*(pan + 1) / 4));
                 float gainRight = sin((M_PI*(pan + 1) / 4));
                 
+                Track* t = navigator->getTracks().at(i);
+                
                 for (int j = numSamples; j < numSamples + _numSamples;j++) {
                     
-                    if (navigator->getTracks().at(i)->isRecording()) {
-                        navigator->getTracks().at(i)->getRecordingBuffer()->addSample(0, j,inputChannelData[0][j%this->buffersize] * leftVolume * gainLeft);
-                        navigator->getTracks().at(i)->getRecordingBuffer()->addSample(1, j,inputChannelData[0][j%this->buffersize] * rightVolume * gainRight);
+                    if (t->isRecording()) {
+                        t->getRecordingBuffer()->addSample(0, j,inputChannelData[t->getInputChannels()[0]][j%this->buffersize] * leftVolume * gainLeft);
+                        t->getRecordingBuffer()->addSample(1, j,inputChannelData[t->getInputChannels()[1]][j%this->buffersize] * rightVolume * gainRight);
                     }
                 }
                 
                 for (int j = 0; j < _numSamples;j++) {
-                    buffer->copyFrom(0, numSamples % this->buffersize, *navigator->getTracks().at(i)->getRecordingBuffer(), 0, numSamples , _numSamples);
-                    buffer->copyFrom(1, numSamples % this->buffersize, *navigator->getTracks().at(i)->getRecordingBuffer(), 0, numSamples , _numSamples);
+                    buffer->copyFrom(0, numSamples % this->buffersize, *t->getRecordingBuffer(), 0, numSamples , _numSamples);
+                    buffer->copyFrom(1, numSamples % this->buffersize, *t->getRecordingBuffer(), 0, numSamples , _numSamples);
                     
                 }
-                
         
-                navigator->getTracks().at(i)->updateMagnitude(numSamples, _numSamples, gainLeft, gainRight);
-                navigator->getTracks().at(i)->setOffset(numSamples);
+                t->updateMagnitude(numSamples, _numSamples, gainLeft, gainRight);
+                t->setOffset(numSamples);
  
             }
             
@@ -319,7 +323,20 @@ public:
 
     virtual void handleIncomingMidiMessage (MidiInput* source, const MidiMessage& message) override {
         midiBuffer.addEvent(message, numSamples);
-        getMidiMessageCollector().addMessageToQueue(message);
+        
+        /*
+        MidiMessage out;
+        out.setChannel(1);
+        out.setVelocity(message.getVelocity());
+        out.setNoteNumber(message.getNoteNumber());
+        out.setTimeStamp(message.getTimeStamp());
+         */
+        
+        deviceManager.getDefaultMidiOutput()->sendMessageNow(message);
+        
+        Logger::getCurrentLogger()->writeToLog(String(message.getNoteNumber())+ " on channel "+String(message.getChannel()));
+
+        // getMidiMessageCollector().addMessageToQueue(message);
     }
     
     void releaseResources() override

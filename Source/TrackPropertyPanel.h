@@ -44,7 +44,8 @@ class TrackPropertyPanel  : public Component,
                             public KeyListener,
                             public ButtonListener,
                             public LabelListener,
-                            public SliderListener
+                            public SliderListener,
+                            public ComboBoxListener
 {
 public:
     //==============================================================================
@@ -68,6 +69,8 @@ public:
     void resized() override;
     void labelTextChanged (Label* labelThatHasChanged) override;
     void sliderValueChanged (Slider* sliderThatWasMoved) override;
+    void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
+
 
 
 private:
@@ -90,6 +93,8 @@ private:
     ScopedPointer<ImageToggleButton> muteButton;
     ScopedPointer<ImageToggleButton> soloButton;
     ScopedPointer<ImageToggleButton> recButton;
+    ScopedPointer<ComboBox> inputCombo;
+    ScopedPointer<ImageToggleButton> monoButton;
 
 
     //==============================================================================
