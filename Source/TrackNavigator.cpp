@@ -45,6 +45,7 @@ TrackNavigator::~TrackNavigator()
         delete *it;
     }
     
+    delete midiBuffer;
     delete dragger;
 }
 

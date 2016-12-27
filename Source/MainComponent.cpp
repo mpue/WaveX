@@ -1,10 +1,10 @@
 /*
-  ==============================================================================
-
-    This file was auto-generated!
-
-  ==============================================================================
-*/
+ ==============================================================================
+ 
+ This file was auto-generated!
+ 
+ ==============================================================================
+ */
 
 #ifndef MAINCOMPONENT_H_INCLUDED
 #define MAINCOMPONENT_H_INCLUDED
@@ -22,54 +22,54 @@
 
 //==============================================================================
 /*
-    This component lives inside our window, and this is where you should put all
-    your controls and content.
-*/
+ This component lives inside our window, and this is where you should put all
+ your controls and content.
+ */
 class MainContentComponent : public AudioAppComponent,
-                             public AudioProcessorPlayer,
-                             public MenuBarModel,
-                             public ChangeListener,
-                             public ChangeBroadcaster,
-                             public TimeSliceClient,
-                             public Timer {
+public AudioProcessorPlayer,
+public MenuBarModel,
+public ChangeListener,
+public ChangeBroadcaster,
+public TimeSliceClient,
+public Timer {
 public:
     //============================================================================
     MainContentComponent(TimeLine* timeLine, TrackPropertyView* trackProperties, MixerPanel* mixer) : thread("main")
-    {		
+    {
         this->zoom = 21.0f;
-
+        
         this->tracklength = Project::getInstance()->getTrackLength();;
         
         this->mixer = mixer;
-		this->timeLine = timeLine;
-		this->trackProperties = trackProperties;
-
-		this->marker = new PositionMarker(tracklength);
+        this->timeLine = timeLine;
+        this->trackProperties = trackProperties;
+        
+        this->marker = new PositionMarker(tracklength);
         this->navigator = new TrackNavigator(marker);
-
+        
         this->navigator->setSize(getWidth(), getHeight());
         this->navigator->setBounds(0, 0, getWidth(), getHeight());
         
         // this->marker->setSize(getWidth(), getHeight());
         this->marker->setBounds(0, 0, 2, getHeight());
-		
+        
         addAndMakeVisible(navigator);
-		// addChildComponent(timeLine);
-		addAndMakeVisible(marker);
+        // addChildComponent(timeLine);
+        addAndMakeVisible(marker);
         
         navigator->addChangeListener(this);
-		setWantsKeyboardFocus(true);
+        setWantsKeyboardFocus(true);
         addKeyListener(navigator);
         addMouseListener(navigator,true);
-
+        
         this->navigator->repaint();
         thread.startThread(3);
         // thread.addTimeSliceClient(this);
-
+        
         this->leftShiftPressed = false;
         this->ctrlPressed = false;
         this->masterVisible = true;
-    
+        
         this->leftVolume = 1.0;
         this->rightVolume = 1.0;
         
@@ -77,39 +77,39 @@ public:
         deviceManager.setMidiInputEnabled("Oxygen 49", true);
         deviceManager.addMidiInputCallback("Oxygen 49",this);
         deviceManager.setDefaultMidiOutput("MIDI4x4 Midi Out 1");
-    
+        
         apfm = new AudioPluginFormatManager();
         apfm->addDefaultFormats();
         
-		this->numSamples = 0;
-
+        this->numSamples = 0;
+        
         setupIO();
         
         startTimer(50);
         
     }
-
+    
     ~MainContentComponent()
     {
-		/*
-        for (int i = 0; i < navigator->getTracks().size();i++) {
-            navigator->getTracks().at(i)->getBuffer()->clear();
-        }
-		*/
-
+        /*
+         for (int i = 0; i < navigator->getTracks().size();i++) {
+         navigator->getTracks().at(i)->getBuffer()->clear();
+         }
+         */
+        
         for (std::vector<AudioSampleBuffer*>::iterator it = outputBuffers.begin(); it != outputBuffers.end(); ++it) {
             delete *it;
         }
         
         
         shutdownAudio();
-		// readerSource = nullptr;
+        // readerSource = nullptr;
         navigator = nullptr;
         marker = nullptr;
-		timeLine = nullptr;
+        timeLine = nullptr;
         buffer = nullptr;
         apfm = nullptr;
-    
+        
     }
     
     void setupIO() {
@@ -126,19 +126,19 @@ public:
         int requestedOutputChannelSize = numActiveHostOutputs;
         
         /*
-        for (std::vector<AudioSampleBuffer*>::iterator it = outputBuffers.begin(); it != outputBuffers.end(); ++it) {
-            delete *it;
-        }
+         for (std::vector<AudioSampleBuffer*>::iterator it = outputBuffers.begin(); it != outputBuffers.end(); ++it) {
+         delete *it;
+         }
          */
         
         AudioDeviceManager::AudioDeviceSetup config;
         deviceManager.getAudioDeviceSetup (config);
-
+        
         config.useDefaultInputChannels = false;
         config.useDefaultOutputChannels = false;
         config.inputChannels.setRange(0, numInputChannels, true);
         config.outputChannels.setRange(0, numOutputChannels, true);
-
+        
         
         String error = deviceManager.setAudioDeviceSetup(config,true);
         
@@ -166,7 +166,58 @@ public:
         }
         
     }
-                                 
+    
+    void setupIO(int inchannels, int outchannels) {
+        juce::BigInteger activeInputChannels = deviceManager.getCurrentAudioDevice()->getActiveInputChannels();
+        juce::BigInteger activeOutputChannels = deviceManager.getCurrentAudioDevice()->getActiveOutputChannels();
+        
+        int numInputChannels = deviceManager.getCurrentAudioDevice()->getInputChannelNames().size();
+        int numOutputChannels = deviceManager.getCurrentAudioDevice()->getOutputChannelNames().size();
+        
+        int numActiveHostInputs = getNumActiveChannels(activeInputChannels.toInteger());
+        int numActiveHostOutputs = getNumActiveChannels(activeOutputChannels.toInteger());
+        
+        int requestedInputChannelSize = inchannels;
+        int requestedOutputChannelSize = outchannels;
+        
+        
+        AudioDeviceManager::AudioDeviceSetup config;
+        deviceManager.getAudioDeviceSetup (config);
+        
+        config.useDefaultInputChannels = false;
+        config.useDefaultOutputChannels = false;
+        config.inputChannels.setRange(0, numInputChannels, true);
+        config.outputChannels.setRange(0, numOutputChannels, true);
+        
+        
+        String error = deviceManager.setAudioDeviceSetup(config,true);
+        
+        setAudioChannels(numInputChannels, numOutputChannels);
+        
+        activeInputChannels = deviceManager.getCurrentAudioDevice()->getActiveInputChannels();
+        activeOutputChannels = deviceManager.getCurrentAudioDevice()->getActiveOutputChannels();
+        
+        numActiveHostInputs = getNumActiveChannels(activeInputChannels.toInteger());
+        numActiveHostOutputs = getNumActiveChannels(activeOutputChannels.toInteger());
+        
+        if (error != "") {
+            Logger::getCurrentLogger()->writeToLog(error);
+        }
+        else {
+            Logger::getCurrentLogger()->writeToLog("Initialized audio device with " + String(numActiveHostInputs) + " inputs and " + String(numActiveHostInputs) + " outputs.");
+        }
+        
+        outputBuffers.clear();
+        
+        for (int i = 0; i < numOutputChannels;i++) { // Only Stereo channels for the moment
+            AudioSampleBuffer* buffer = new AudioSampleBuffer(1,this->buffersize);
+            buffer->clear(0, this->buffersize);
+            outputBuffers.push_back(buffer);
+        }
+        
+    }
+    
+    
     void timerCallback() override {
         trackProperties->timerCallback();
         for (int i = 0; i < navigator->getTracks().size();i++) {
@@ -182,16 +233,16 @@ public:
     int useTimeSlice() override {
         return 1000;
     }
-
+    
     //==============================================================================
     void prepareToPlay (int samplesPerBlockExpected, double sampleRate) override
     {
         // This function will be called when the audio device is started, or when
         // its settings (i.e. sample rate, block size, etc) are changed.
-
+        
         // You can use this function to initialise any resources you might need,
         // but be careful - it will be called on the audio thread, not the GUI thread.
-
+        
         // For more details, see the help for AudioProcessor::prepareToPlay()
         this->sampleRate = sampleRate;
         this->buffersize = samplesPerBlockExpected;
@@ -229,7 +280,7 @@ public:
                 
                 float gainLeft = cos((M_PI*(pan + 1) / 4));
                 float gainRight = sin((M_PI*(pan + 1) / 4));
-
+                
                 for (int j = numSamples; j < numSamples + _numSamples;j++) {
                     
                     float sampleL = navigator->getTracks().at(i)->getSample(0, j) * navigator->getTracks().at(i)->getVolume() * gainLeft;
@@ -242,14 +293,14 @@ public:
                 
                 navigator->getTracks().at(i)->setOffset(numSamples);
                 navigator->getTracks().at(i)->updateMagnitude(numSamples, _numSamples, gainLeft, gainRight);
-
+                
             }
             
-
+            
             numSamples += _numSamples;
             navigator->setPosition(numSamples / this->sampleRate);
             
-
+            
         }
         else if (navigator->isRecording()){
             
@@ -282,10 +333,10 @@ public:
                 if (t->isRecording()) {
                     t->getCurrentRecorder()->getThumbnail()->addBlock(numSamples,  *t->getRecordingBuffer(),numSamples,_numSamples);
                 }
-        
+                
                 t->updateMagnitude(numSamples, _numSamples, gainLeft, gainRight);
                 t->setOffset(numSamples);
- 
+                
             }
             
             numSamples += _numSamples;
@@ -313,15 +364,15 @@ public:
                     
                     float magLeftIn  = outL->getMagnitude(0, 0, _numSamples);
                     float magRightIn = outR->getMagnitude(0, 0, _numSamples);
-
+                    
                     navigator->getTracks().at(i)->setMagnitude(0, magLeftIn);
                     navigator->getTracks().at(i)->setMagnitude(1, magRightIn);
                     
                     /*
-                    for (int i = 0; i < navigator->getTracks().size();i++) {
-                        navigator->getTracks().at(i)->setMagnitude(0, 0);
-                        navigator->getTracks().at(i)->setMagnitude(1, 0);
-                    }
+                     for (int i = 0; i < navigator->getTracks().size();i++) {
+                     navigator->getTracks().at(i)->setMagnitude(0, 0);
+                     navigator->getTracks().at(i)->setMagnitude(1, 0);
+                     }
                      */
                     
                 }
@@ -331,7 +382,7 @@ public:
         }
         
         for (int i = 0; i < navigator->getTracks().size();i++) {
-      
+            
             Track* t = navigator->getTracks().at(i);
             
             AudioSampleBuffer* outL = outputBuffers.at(navigator->getTracks().at(i)->getOutputChannels()[0]);
@@ -343,7 +394,7 @@ public:
             for (int sample = 0; sample < outL->getNumSamples(); ++sample) {
                 outputChannelData[t->getOutputChannels()[0]][sample] = left[sample] * leftVolume;
                 outputChannelData[t->getOutputChannels()[1]][sample] = right[sample] * rightVolume;
-
+                
             }
             
             this->magnitudeLeft = outL->getMagnitude(0, 0, _numSamples);
@@ -360,10 +411,10 @@ public:
              */
             
             /*
-            if (i == navigator->getTracks().size() - 1) {
-                outL->clear();
-                outR->clear();
-            }
+             if (i == navigator->getTracks().size() - 1) {
+             outL->clear();
+             outR->clear();
+             }
              */
             
         }
@@ -376,13 +427,13 @@ public:
             }
             
         }
-
+        
         for (int i = 0; i < outputBuffers.size();i++) {
             outputBuffers.at(i)->clear();
         }
- 
+        
         if (navigator->isPlaying()) {
-
+            
             MidiMessage* m = navigator->getMessage(numSamples);
             
             if (m != NULL)
@@ -394,35 +445,39 @@ public:
     {
         
     }
-
+    
     virtual void handleIncomingMidiMessage (MidiInput* source, const MidiMessage& message) override {
         
         if (navigator->isRecording())
             navigator->getMidiBuffer()->addEvent(message, numSamples);
- 
-        deviceManager.getDefaultMidiOutput()->sendMessageNow(message);
-
-
-        // getMidiMessageCollector().addMessageToQueue(message);
+        
+        if(win->isVisible()) {
+            getMidiMessageCollector().addMessageToQueue(message);
+        }
+        
+        else {
+            deviceManager.getDefaultMidiOutput()->sendMessageNow(message);
+        }
+        
     }
     
     void releaseResources() override
     {
     }
-
+    
     //==============================================================================
     void paint (Graphics& g) override
     {
         // (Our component is opaque, so we must completely fill the background with a solid colour)
         g.fillAll (Colours::grey);
-
+        
     }
-
-     
+    
+    
     void resized() override
-	{
+    {
     }
-
+    
     double getRms(int channel) {
         if (channel == 0)
             return this->rmsLeft;
@@ -436,7 +491,7 @@ public:
         else
             return this->magnitudeRight;
     }
-
+    
     bool isMasterVisible() {
         return this->masterVisible;
     }
@@ -506,7 +561,7 @@ public:
             }
             
             setAudioChannels(requestedInputChannelSize, requestedOutputChannelSize);
-
+            
             Logger::getCurrentLogger()->writeToLog("Active output channels "+String(numActiveHostOutputs));
             Logger::getCurrentLogger()->writeToLog("Active input channels "+String(numActiveHostInputs));
             
@@ -515,7 +570,7 @@ public:
             win = new PluginWindow(name,editor);
         }
         
-
+        
         win->setVisible(true);
     }
     
@@ -527,36 +582,36 @@ public:
     
     void scanPlugins() {
         /*
-        AudioPluginFormatManager apfm;
-        apfm.addDefaultFormats();
-        
-        for (int i = 0; i < apfm.getNumFormats();i++) {
-            AudioPluginFormat* format = apfm.getFormat(i);
-            Logger::getCurrentLogger()->writeToLog(format->getName());
-            
-            KnownPluginList *pluginList = new KnownPluginList();
-            
-            FileSearchPath* path = new FileSearchPath("/Users/mpue/Library/Audio/Plug-Ins/Components/");
-            
-            PluginDirectoryScanner* scanner = new PluginDirectoryScanner(*pluginList,*apfm.getFormat(0),*path,false,File(),false);
-            
-            String name;
-            
-            while(scanner->scanNextFile(false, name) != false) {
-                Logger::getCurrentLogger()->writeToLog("Found plugin : "+name);
-            }
-            
-            
-            delete scanner;
-            delete path;
-            delete pluginList;
-            
-        }
+         AudioPluginFormatManager apfm;
+         apfm.addDefaultFormats();
+         
+         for (int i = 0; i < apfm.getNumFormats();i++) {
+         AudioPluginFormat* format = apfm.getFormat(i);
+         Logger::getCurrentLogger()->writeToLog(format->getName());
+         
+         KnownPluginList *pluginList = new KnownPluginList();
+         
+         FileSearchPath* path = new FileSearchPath("/Users/mpue/Library/Audio/Plug-Ins/Components/");
+         
+         PluginDirectoryScanner* scanner = new PluginDirectoryScanner(*pluginList,*apfm.getFormat(0),*path,false,File(),false);
+         
+         String name;
+         
+         while(scanner->scanNextFile(false, name) != false) {
+         Logger::getCurrentLogger()->writeToLog("Found plugin : "+name);
+         }
+         
+         
+         delete scanner;
+         delete path;
+         delete pluginList;
+         
+         }
          */
         
         AudioPluginFormatManager* apfm = new AudioPluginFormatManager();
         apfm->addDefaultFormats();
-
+        
         KnownPluginList *pluginList = new KnownPluginList();
         PropertiesFile::Options options;
         File file = File("/Users/mpue/plugin.properties");
@@ -574,7 +629,7 @@ public:
         launchOptions.content.setOwned(pluginListComponent);
         launchOptions.content->setSize(600, 580);
         launchOptions.runModal();
-     
+        
         for (int i = 0; i < pluginList->getNumTypes();i++) {
             pluginList->getType(i)->createXml()->writeToFile(File("/Users/mpue/plugins/"+pluginList->getType(i)->name),"");
         }
@@ -592,16 +647,16 @@ public:
         
     }
     
-	void removeSelectedTrack() {
-		navigator->removeSelectedTrack();
-	}
-
+    void removeSelectedTrack() {
+        navigator->removeSelectedTrack();
+    }
+    
     void addTrack() {
-		navigator->addTrack(this->sampleRate);
+        navigator->addTrack(this->sampleRate);
     }
     
     void openSettings() {
-        AudioDeviceSelectorComponent* selector = new AudioDeviceSelectorComponent(deviceManager, 2, 2, 2, 2, true, true, true, false);
+        AudioDeviceSelectorComponent* selector = new AudioDeviceSelectorComponent(deviceManager, 2, 16, 2, 16, true, true, true, false);
         
         DialogWindow::LaunchOptions launchOptions;
         launchOptions.dialogTitle = ("Audio Settings");
@@ -614,9 +669,9 @@ public:
         launchOptions.content->setSize(600, 580);
         launchOptions.runModal();
         
-        setupIO();
+        // setupIO();
     }
-
+    
     void setTracklength(long length) {
         this->tracklength = length;
     }
@@ -627,13 +682,13 @@ public:
     
 private:
     //==============================================================================
-
+    
     class PluginWindow    : public DocumentWindow
     {
     public:
         PluginWindow (String name, AudioProcessorEditor* editor)  : DocumentWindow (name,
-                                                    Colours::lightgrey,
-                                                    DocumentWindow::allButtons)
+                                                                                    Colours::lightgrey,
+                                                                                    DocumentWindow::allButtons)
         {
             setUsingNativeTitleBar(true);
             this->plugin = editor;
@@ -654,32 +709,32 @@ private:
             this->setVisible(false);
         }
         
-        private:
-            ScopedPointer<AudioProcessorEditor> plugin;
+    private:
+        ScopedPointer<AudioProcessorEditor> plugin;
     };
     
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainContentComponent)
-
+    
     ScopedPointer<AudioPluginFormatManager> apfm;
     ScopedPointer<AudioPluginInstance> plugin = nullptr;
     AudioProcessorPlayer* player;
-
+    
     MidiMessageSequence midiSequence;
-                                 
+    
     vector<AudioSampleBuffer*> outputBuffers;
-                                 
+    
     ScopedPointer<AudioSampleBuffer> buffer;
     ScopedPointer<PluginWindow> win = nullptr;
-
     
-	TimeSliceThread thread;
+    
+    TimeSliceThread thread;
     ScopedPointer<TrackNavigator> navigator;
     ScopedPointer<PositionMarker> marker;
-	ScopedPointer<TimeLine> timeLine;
+    ScopedPointer<TimeLine> timeLine;
     MixerPanel* mixer;
-	TrackPropertyView* trackProperties;
-
+    TrackPropertyView* trackProperties;
+    
     // track length in seconds
     long tracklength = 0;
     
@@ -698,20 +753,20 @@ private:
     
     float leftVolume;
     float rightVolume;
-                                 
+    
     float zoom;
-
-                
-                                 
+    
+    
+    
     vector<String> availableInstruments;
     
-	virtual StringArray getMenuBarNames() override
-	{
-		const char* const names[] = { "File", "View", "Plugins", nullptr };
-
-		return StringArray(names);
-
-	}
+    virtual StringArray getMenuBarNames() override
+    {
+        const char* const names[] = { "File", "View", "Plugins", nullptr };
+        
+        return StringArray(names);
+        
+    }
     
     virtual void buildPluginMenu(PopupMenu &menu) {
         String appDataPath = File::getSpecialLocation(File::userApplicationDataDirectory).getFullPathName();
@@ -741,15 +796,15 @@ private:
     }
     
     virtual PopupMenu getMenuForIndex(int index, const String & menuName) override
-	{
-		PopupMenu menu;
-
-		if (index == 0) {
-			menu.addItem(1, "Add track", true, false, nullptr);
-			menu.addItem(2, "Play/Stop", true, false, nullptr);
-			menu.addItem(7, "Settings", true, false, nullptr);
-			menu.addItem(3, "Exit", true, false, nullptr);
-		}
+    {
+        PopupMenu menu;
+        
+        if (index == 0) {
+            menu.addItem(1, "Add track", true, false, nullptr);
+            menu.addItem(2, "Play/Stop", true, false, nullptr);
+            menu.addItem(7, "Settings", true, false, nullptr);
+            menu.addItem(3, "Exit", true, false, nullptr);
+        }
         else if (index == 1) {
             menu.addItem(4, "Show/hide master", true, false, nullptr);
             menu.addItem(5, "Zoom in", true, false, nullptr);
@@ -760,27 +815,27 @@ private:
             buildPluginMenu(menu);
         }
         
-		return menu;
-	}
+        return menu;
+    }
     
-
     
-	virtual void menuItemSelected(int menuItemID, int topLevelMenuIndex) override
-	{
-		if (menuItemID == 1) {
+    
+    virtual void menuItemSelected(int menuItemID, int topLevelMenuIndex) override
+    {
+        if (menuItemID == 1) {
             addTrack();
-		}
-		else if (menuItemID == 2) {
-			if (navigator->isPlaying())
-			{
+        }
+        else if (menuItemID == 2) {
+            if (navigator->isPlaying())
+            {
                 navigator->setPlaying(false);
-			}
-			else
-			{
-				// transportSource.setPosition(0);
-				navigator->setPlaying(true);
-			}
-		}
+            }
+            else
+            {
+                // transportSource.setPosition(0);
+                navigator->setPlaying(true);
+            }
+        }
         else if (menuItemID == 3) {
             JUCEApplication::getInstance()->shutdown();
         }
@@ -802,14 +857,14 @@ private:
                 return;
             }
             if (this->zoom - 20 >= 1)
-            this->zoom -= 20;
-
+                this->zoom -= 20;
+            
             // setSize(navigator->getMaxLength() * this->zoom, getHeight());
             navigator->setZoom(zoom);
         }
-		else if (menuItemID == 7) {
+        else if (menuItemID == 7) {
             openSettings();
-		}
+        }
         else if (menuItemID == 8) {
             scanPlugins();
         }
@@ -817,23 +872,23 @@ private:
             addPlugin(availableInstruments.at(menuItemID - 100));
         }
         
-	}
-
-	virtual void changeListenerCallback(ChangeBroadcaster * source) override
-	{
+    }
+    
+    virtual void changeListenerCallback(ChangeBroadcaster * source) override
+    {
         if (source == navigator || source == Project::getInstance())
-		{
+        {
             long trackLength = Project::getInstance()->getTrackLength();
             
             // we need to snap the position on a multiple of the block size, to prevent the buffer being accessed in a odd way
             // because this leads to a broken audio stream
             
             this->numSamples = navigator->getPosition() * this->sampleRate - ((long)(navigator->getPosition() * this->sampleRate) % this->buffersize) ;
-        
+            
             // marker->setPosition(navigator->getPosition());
             
-			this->zoom = navigator->getZoom();
-			int newWidth = trackLength * this->zoom;
+            this->zoom = navigator->getZoom();
+            int newWidth = trackLength * this->zoom;
             
             if (getHeight() < navigator->getTracks().size() * 200)
                 setSize(newWidth, navigator->getTracks().size() * 200);
@@ -841,17 +896,17 @@ private:
                 setSize(newWidth, getHeight());
             }
             
-			this->timeLine->setLength(trackLength);
-			this->timeLine->setSize(trackLength * zoom, 25);
-			this->marker->setDrawingBounds(0,0,navigator->getWidth(),getHeight());
-			this->marker->setSize(navigator->getWidth(), getHeight());
-			repaint();
-		}
+            this->timeLine->setLength(trackLength);
+            this->timeLine->setSize(trackLength * zoom, 25);
+            this->marker->setDrawingBounds(0,0,navigator->getWidth(),getHeight());
+            this->marker->setSize(navigator->getWidth(), getHeight());
+            repaint();
+        }
         
-	}
-
-
-
+    }
+    
+    
+    
 };
 
 #endif  // MAINCOMPONENT_H_INCLUDED
