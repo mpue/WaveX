@@ -54,6 +54,9 @@ public:
     // the timer is needed to updat the thumbnail during record
     virtual void timerCallback() override;
     
+    virtual void startRecording() = 0;
+    virtual void stopRecording() = 0;
+    
     // component dragger used to drag and drop regions
     void setDragger(MultiComponentDragger* dragger);
     

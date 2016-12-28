@@ -54,19 +54,6 @@ public:
 	float getZoom();
     void setZoom(float zoom);
     
-    inline MidiBuffer* getMidiBuffer() {
-        return midiBuffer;
-    }
-    
-    inline MidiMessage* getMessage(int sampleNum) {
-        std::map<int,MidiMessage*>::iterator it;
-        it = midiMessages.find(sampleNum);
-        if (it != midiMessages.end()) {
-            return it->second;
-        }
-        return NULL;
-    }
-    
 	void updateTrackLayout(ChangeBroadcaster * source);
 	void adjustHeight();
 
@@ -99,11 +86,7 @@ private:
     long recordStart = 0;
     long recordStop = 0;
     
-    MidiBuffer* midiBuffer;
-    MidiBuffer::Iterator* iterator = NULL;
     MidiMessage message;
-
-    std::map<int, MidiMessage*> midiMessages;
     
     virtual void changeListenerCallback(ChangeBroadcaster * source) override;
     virtual void mouseDown (const MouseEvent& event) override;

@@ -175,6 +175,38 @@ void Track::addRegion(File file, double sampleRate) {
 	repaint();
 }
 
+void Track::addMidiRegion(double sampleRate, long samplePosition,long regionLength) {
+    
+    MidiRegion* region = new MidiRegion(samplePosition, regionLength, sampleRate);
+    region->setDragger(dragger);
+    Rectangle<int>* bounds = new Rectangle<int>(0, 0, region->getThumbnail()->getTotalLength() * 20, getHeight());
+    region->setBounds(markerPosition, 0, region->getWidth(), getHeight());
+    region->setThumbnailBounds(bounds);
+    region->setLoopCount(0);
+    
+    if (regions.size() == 0) {
+        setName(region->getName());
+    }
+    
+    this->regions.push_back(region);
+    this->currentRegion = region;
+    region->addChangeListener(this);
+    
+    this->currentRegion->toFront(true);
+    addAndMakeVisible(region);
+    
+    clearSelection();
+    region->setSelected(true);
+    
+    region->setSampleOffset(samplePosition,false,false);
+    region->setOffset(samplePosition / sampleRate);
+    
+    if (zoom > 0)
+        region->setZoom(zoom);
+    
+    repaint();
+}
+
 void Track::addRegion(AudioSampleBuffer* source, double sampleRate, long samplePosition,long regionLength) {
     
     AudioRegion* region = new AudioRegion(source, *manager, samplePosition, regionLength, sampleRate);
@@ -344,6 +376,35 @@ const float Track::getSample(int channel, long sample) {
     return audioBuffer->getSample(channel,sample);
 }
 
+void Track::addMessage(MidiMessage* message,int sampleNum) {
+
+    Region* r;
+    
+    if (regions.size() == 1) {
+        r = regions.at(0);
+    }
+    else {
+        r = getCurrentRegion(sampleNum);
+    }
+
+    MidiRegion* midiRegion = static_cast<MidiRegion*>(r);
+    midiRegion->addMessage(sampleNum, message);
+    this->numSamples = sampleNum;
+}
+
+MidiMessage* Track::getMessage(int sampleNum) {
+    
+    Region* r = getCurrentRegion(sampleNum);
+    
+    if(r == NULL) {
+        return NULL;
+    }
+    
+    MidiRegion* midiRegion = static_cast<MidiRegion*>(r);
+    return midiRegion->getMessage(sampleNum);
+    
+}
+
 void Track::setMagnitude(int channel, double magnitude) {
     if (channel == 0) {
         this->magnitudeLeft = magnitude;
@@ -369,7 +430,12 @@ void Track::updateMagnitude(int sample, int buffersize,  float gainLeft, float g
 
 const float * Track::getReadBuffer(int channel) {
 
-	return this->currentRegion->getBuffer()->getReadPointer(channel);
+    if (type == AUDIO) {
+        AudioRegion* region = static_cast<AudioRegion*>(currentRegion);
+        return region->getBuffer()->getReadPointer(channel);
+    }
+    
+    return NULL;
 }
 
 int Track::getNumSamples() {
@@ -424,7 +490,12 @@ int Track::getOffset()
 
 AudioSampleBuffer * Track::getBuffer()
 {
-	return this->currentRegion->getBuffer();
+    if (type == AUDIO) {
+        AudioRegion* region = static_cast<AudioRegion*>(currentRegion);
+        return region->getBuffer();
+    }
+    
+    return NULL;
 }
 
 AudioSampleBuffer * Track::getRecordingBuffer()

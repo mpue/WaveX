@@ -255,6 +255,8 @@ public:
         this->buffer->clear(0, this->buffersize);
         
         Project::getInstance()->setSampleRate(sampleRate);
+        Project::getInstance()->setBufferSize(buffersize);
+        
         Mixer::getInstance()->setAvailableInputChannelNames(deviceManager.getCurrentAudioDevice()->getInputChannelNames());
         Mixer::getInstance()->setAvailableOutputChannelNames(deviceManager.getCurrentAudioDevice()->getOutputChannelNames());
 
@@ -286,9 +288,10 @@ public:
         
         if (plugin != NULL) {
             
-            plugin->processBlock(*buffer, *navigator->getMidiBuffer());
-            
             if (navigator->getTracks().size() == 1) {
+                
+                // plugin->processBlock(*buffer, *navigator->getMidiBuffer());
+                
                 AudioSampleBuffer* outL = outputBuffers.at(navigator->getTracks().at(0)->getOutputChannels()[0]);
                 AudioSampleBuffer* outR = outputBuffers.at(navigator->getTracks().at(0)->getOutputChannels()[1]);
                 
@@ -316,29 +319,47 @@ public:
         
         if (navigator->isPlaying()) {
             
-            
             for (int i = 0; i < navigator->getTracks().size();i++) {
+            
+                Track* t = navigator->getTracks().at(i);
                 
-                AudioSampleBuffer* outL = outputBuffers.at(navigator->getTracks().at(i)->getOutputChannels()[0]);
-                AudioSampleBuffer* outR = outputBuffers.at(navigator->getTracks().at(i)->getOutputChannels()[1]);
-                
-                double pan = navigator->getTracks().at(i)->getPan();
-                
-                float gainLeft = cos((M_PI*(pan + 1) / 4));
-                float gainRight = sin((M_PI*(pan + 1) / 4));
-                
-                for (int j = numSamples; j < numSamples + _numSamples;j++) {
+                if (t->getType() == Track::Type::AUDIO) {
+                    AudioSampleBuffer* outL = outputBuffers.at(t->getOutputChannels()[0]);
+                    AudioSampleBuffer* outR = outputBuffers.at(t->getOutputChannels()[1]);
                     
-                    float sampleL = navigator->getTracks().at(i)->getSample(0, j) * navigator->getTracks().at(i)->getVolume() * gainLeft;
-                    float sampleR = navigator->getTracks().at(i)->getSample(1, j) * navigator->getTracks().at(i)->getVolume() * gainRight;
+                    double pan = t->getPan();
                     
-                    outL->addSample(0, j%this->buffersize, sampleL);
-                    outR->addSample(0, j%this->buffersize, sampleR);
+                    float gainLeft = cos((M_PI*(pan + 1) / 4));
+                    float gainRight = sin((M_PI*(pan + 1) / 4));
+                    
+                    for (int j = numSamples; j < numSamples + _numSamples;j++) {
+                        
+                        float sampleL = t->getSample(0, j) * t->getVolume() * gainLeft;
+                        float sampleR = t->getSample(1, j) * t->getVolume() * gainRight;
+                        
+                        outL->addSample(0, j%this->buffersize, sampleL);
+                        outR->addSample(0, j%this->buffersize, sampleR);
+                        
+                    }
+                    
+                    t->setOffset(numSamples);
+                    t->updateMagnitude(numSamples, _numSamples, gainLeft, gainRight);
                     
                 }
-                
-                navigator->getTracks().at(i)->setOffset(numSamples);
-                navigator->getTracks().at(i)->updateMagnitude(numSamples, _numSamples, gainLeft, gainRight);
+                else if (t->getType() == Track::Type::MIDI) {
+
+                    MidiMessage* m = t->getMessage(numSamples);
+                    
+                    if (m != NULL) {
+                        deviceManager.getDefaultMidiOutput()->sendMessageNow(*m);
+                    }
+                    else {
+                        m = new MidiMessage();
+                        m->allNotesOff(t->getMidiChannel());
+                        deviceManager.getDefaultMidiOutput()->sendMessageNow(*m);
+                    }
+                }
+
                 
             }
             
@@ -352,36 +373,40 @@ public:
             
             for (int i = 0; i < navigator->getTracks().size();i++) {
                 
-                AudioSampleBuffer* outL = outputBuffers.at(navigator->getTracks().at(i)->getOutputChannels()[0]);
-                AudioSampleBuffer* outR = outputBuffers.at(navigator->getTracks().at(i)->getOutputChannels()[1]);
-                
-                double pan = navigator->getTracks().at(i)->getPan();
-                
-                float gainLeft = cos((M_PI*(pan + 1) / 4));
-                float gainRight = sin((M_PI*(pan + 1) / 4));
-                
                 Track* t = navigator->getTracks().at(i);
                 
-                for (int j = numSamples; j < numSamples + _numSamples;j++) {
+                if (t->getType() == Track::Type::AUDIO) {
+                    
+                    AudioSampleBuffer* outL = outputBuffers.at(navigator->getTracks().at(i)->getOutputChannels()[0]);
+                    AudioSampleBuffer* outR = outputBuffers.at(navigator->getTracks().at(i)->getOutputChannels()[1]);
+                    
+                    double pan = navigator->getTracks().at(i)->getPan();
+                    
+                    float gainLeft = cos((M_PI*(pan + 1) / 4));
+                    float gainRight = sin((M_PI*(pan + 1) / 4));
+                    
+                    for (int j = numSamples; j < numSamples + _numSamples;j++) {
+                        
+                        if (t->isRecording()) {
+                            t->getRecordingBuffer()->addSample(0, j,inputChannelData[t->getInputChannels()[0]][j%this->buffersize] * leftVolume * gainLeft);
+                            t->getRecordingBuffer()->addSample(1, j,inputChannelData[t->getInputChannels()[1]][j%this->buffersize] * rightVolume * gainRight);
+                        }
+                    }
+                    
+                    for (int j = 0; j < _numSamples;j++) {
+                        outL->copyFrom(0, numSamples % this->buffersize, *t->getRecordingBuffer(), 0, numSamples , _numSamples);
+                        outR->copyFrom(0, numSamples % this->buffersize, *t->getRecordingBuffer(), 1, numSamples , _numSamples);
+                        
+                    }
                     
                     if (t->isRecording()) {
-                        t->getRecordingBuffer()->addSample(0, j,inputChannelData[t->getInputChannels()[0]][j%this->buffersize] * leftVolume * gainLeft);
-                        t->getRecordingBuffer()->addSample(1, j,inputChannelData[t->getInputChannels()[1]][j%this->buffersize] * rightVolume * gainRight);
+                        AudioRegion* region = static_cast<AudioRegion*>(t->getCurrentRecorder());
+                        region->getThumbnail()->addBlock(numSamples,  *t->getRecordingBuffer(),numSamples,_numSamples);
                     }
-                }
-                
-                for (int j = 0; j < _numSamples;j++) {
-                    outL->copyFrom(0, numSamples % this->buffersize, *t->getRecordingBuffer(), 0, numSamples , _numSamples);
-                    outR->copyFrom(0, numSamples % this->buffersize, *t->getRecordingBuffer(), 1, numSamples , _numSamples);
                     
+                    t->updateMagnitude(numSamples, _numSamples, gainLeft, gainRight);
+                    t->setOffset(numSamples);
                 }
-                
-                if (t->isRecording()) {
-                    t->getCurrentRecorder()->getThumbnail()->addBlock(numSamples,  *t->getRecordingBuffer(),numSamples,_numSamples);
-                }
-                
-                t->updateMagnitude(numSamples, _numSamples, gainLeft, gainRight);
-                t->setOffset(numSamples);
                 
             }
             
@@ -478,13 +503,7 @@ public:
             outputBuffers.at(i)->clear();
         }
         
-        if (navigator->isPlaying()) {
-            
-            MidiMessage* m = navigator->getMessage(numSamples);
-            
-            if (m != NULL)
-                deviceManager.getDefaultMidiOutput()->sendMessageNow(*m);
-        }
+
     }
     
     void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill) override
@@ -494,13 +513,33 @@ public:
     
     virtual void handleIncomingMidiMessage (MidiInput* source, const MidiMessage& message) override {
         
-        if (navigator->isRecording())
-            navigator->getMidiBuffer()->addEvent(message, numSamples);
-    
-        MidiMessage messageToSend = MidiMessage(message);
-        messageToSend.setChannel(navigator->getCurrentTrack()->getMidiChannel());
+        if (navigator->getTracks().size() == 0) {
+            return;
+        }
         
-        deviceManager.getDefaultMidiOutput()->sendMessageNow(messageToSend);
+        if (navigator->isRecording()) {
+            
+            for (int i = 0; i < navigator->getTracks().size();i++) {
+                
+                Track* t = navigator->getTracks().at(i);
+                
+                // check each track if its in record mode and MIDI type
+                if (t->getType() == Track::Type::MIDI && t->isRecording()) {
+                    MidiMessage* messageToSend = new MidiMessage(message);
+                    // adjust channel according to track
+                    messageToSend->setChannel(t->getMidiChannel());
+                    // add the message to the track, which will pass the message to the current recording region
+                    t->addMessage(messageToSend, numSamples);
+                    deviceManager.getDefaultMidiOutput()->sendMessageNow(*messageToSend);
+                }
+            }
+            
+        }
+        else {
+            MidiMessage* messageToSend = new MidiMessage(message);
+            messageToSend->setChannel(navigator->getCurrentTrack()->getMidiChannel());
+            deviceManager.getDefaultMidiOutput()->sendMessageNow(*messageToSend);
+        }
         
         /*
         if(win->isVisible()) {
@@ -955,20 +994,24 @@ private:
             this->marker->setSize(navigator->getWidth(), getHeight());
             repaint();
             
-            
-            for (int i = 0; i < navigator->getTracks().size();i++) {
-                
-                Track* t = navigator->getTracks().at(i);
-                
-                if (t->isSelected() && t->getType() == Track::Type::MIDI){
-                    deviceManager.addMidiInputCallback(t->getMidiInputDevice(),this);
-                    deviceManager.setDefaultMidiOutput(t->getMidiOutputDevice());
+            if (!navigator->isPlaying()) {
+                for (int i = 0; i < navigator->getTracks().size();i++) {
+                    
+                    Track* t = navigator->getTracks().at(i);
+                    
+                    if (t->isSelected() && t->getType() == Track::Type::MIDI){
+                        deviceManager.addMidiInputCallback(t->getMidiInputDevice(),this);
+                        deviceManager.setDefaultMidiOutput(t->getMidiOutputDevice());
+                    }
+                    
+                    MidiMessage m;
+                    
+                    if (deviceManager.getDefaultMidiOutput() != NULL) {
+                        deviceManager.getDefaultMidiOutput()->sendMessageNow(m.allNotesOff(t->getMidiChannel()));
+                    }
                 }
-                
             }
-            
         }
-        
     }
     
 };

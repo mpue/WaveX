@@ -11,6 +11,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "TrackNavigator.h"
 #include "AudioRegion.h"
+#include "MidiRegion.h"
 #include "Project.h"
 #include "Mixer.h"
 #include <iterator>
@@ -33,7 +34,6 @@ TrackNavigator::TrackNavigator(PositionMarker* marker, AudioDeviceManager *devic
     this->dragger = new MultiComponentDragger();
     Project::getInstance()->addChangeListener(this);
     addChangeListener(Mixer::getInstance());
-    midiBuffer = new MidiBuffer();
     
     // setInterceptsMouseClicks(true, true);
 }
@@ -45,8 +45,6 @@ TrackNavigator::~TrackNavigator()
     for(std::vector<Track*>::iterator it = tracks.begin(); it != tracks.end(); ++it) {
         delete *it;
     }
-    
-    delete midiBuffer;
     delete dragger;
 }
 
@@ -138,6 +136,7 @@ double TrackNavigator::getMaxLength() {
 
 void TrackNavigator::setPlaying(bool playing) {
     this->playing = playing;
+    sendChangeMessage();
 }
 
 bool TrackNavigator::isPlaying() {
@@ -149,9 +148,15 @@ void TrackNavigator::setRecording(bool recording) {
         recordStart = marker->getPosition() * Project::getInstance()->getSampleRate();
         for (int i = 0; i < tracks.size();i++) {
             if (tracks.at(i)->isRecording()) {
-                tracks.at(i)->addRegion(tracks.at(i)->getRecordingBuffer(),Project::getInstance()->getSampleRate(), recordStart, 0);
-                tracks.at(i)->getCurrentRecorder()->getThumbnail()->reset(2, Project::getInstance()->getSampleRate());
-                tracks.at(i)->getCurrentRecorder()->startTimer(500);
+                
+                if(tracks.at(i)->getType() == Track::Type::MIDI) {
+                    tracks.at(i)->addMidiRegion(Project::getInstance()->getSampleRate(), recordStart, 0);
+                }
+                else if(tracks.at(i)->getType() == Track::Type::AUDIO) {
+                    tracks.at(i)->addRegion(tracks.at(i)->getRecordingBuffer(),Project::getInstance()->getSampleRate(), recordStart, 0);
+                }
+                
+                tracks.at(i)->getCurrentRecorder()->startRecording();
             }
         }
     }
@@ -160,32 +165,12 @@ void TrackNavigator::setRecording(bool recording) {
         for (int i = 0; i < tracks.size();i++) {
             if (tracks.at(i)->isRecording()) {
                 // tracks.at(i)->addRegion(tracks.at(i)->getRecordingBuffer(),Project::getInstance()->getSampleRate(), recordStart, recordStop - recordStart);
-                tracks.at(i)->getCurrentRecorder()->stopTimer();
+                
+                
+                tracks.at(i)->getCurrentRecorder()->stopRecording();
+                
             }
         }
-        
-        MidiMessage message;
-        int sampleNumber;
-        
-        midiMessages.clear();
-        
-        if (iterator == NULL) {
-            iterator = new MidiBuffer::Iterator(*midiBuffer);
-        }
-        
-        while(iterator->getNextEvent(message, sampleNumber)) {
-            
-            MidiMessage* m = new MidiMessage(message);
-            
-            m->setTimeStamp(dragger->snap(m->getTimeStamp(),512));
-            
-            if (m->getRawDataSize() > 0)
-                midiMessages.insert(std::make_pair(sampleNumber,m ));
-            
-            
-        }
-
-        midiBuffer->clear();
     }
 
     this->recording = recording;

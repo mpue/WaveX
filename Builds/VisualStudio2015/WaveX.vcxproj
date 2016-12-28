@@ -139,6 +139,8 @@
     <ClCompile Include="..\..\Source\Mixer.cpp"/>
     <ClCompile Include="..\..\Source\MixerPanel.cpp"/>
     <ClCompile Include="..\..\Source\AudioRegion.cpp"/>
+    <ClCompile Include="..\..\Source\MidiRegion.cpp"/>
+    <ClCompile Include="..\..\Source\MidiThumbnail.cpp"/>
     <ClCompile Include="..\..\Source\PositionMarker.cpp"/>
     <ClCompile Include="..\..\Source\Region.cpp"/>
     <ClCompile Include="..\..\Source\TimeLine.cpp"/>
@@ -1739,6 +1741,8 @@
     <ClInclude Include="..\..\Source\MixerPanel.h"/>
     <ClInclude Include="..\..\Source\AudioRegion.h"/>
     <ClInclude Include="..\..\Source\DragConstrainer.h"/>
+    <ClInclude Include="..\..\Source\MidiRegion.h"/>
+    <ClInclude Include="..\..\Source\MidiThumbnail.h"/>
     <ClInclude Include="..\..\Source\PositionMarker.h"/>
     <ClInclude Include="..\..\Source\Region.h"/>
     <ClInclude Include="..\..\Source\TimeLine.h"/>
@@ -2367,7 +2371,9 @@
     <None Include="..\..\Resources\Fader.png"/>
     <None Include="..\..\Resources\font-awesome_4-7-0_copy_24_0_000000_none.png"/>
     <None Include="..\..\Resources\font-awesome_4-7-0_file-audio-o_32_0_000000_none.png"/>
+    <None Include="..\..\Resources\font-awesome_4-7-0_music_32_0_000000_none.png"/>
     <None Include="..\..\Resources\font-awesome_4-7-0_pencil_24_0_000000_none.png"/>
+    <None Include="..\..\Resources\foundation-icon-fonts_2015-02-16_loop_32_0_000000_none.png"/>
     <None Include="..\..\Resources\iconic_1-1-1_audio-spectrum_32_0_000000_none.png"/>
     <None Include="..\..\Resources\iconic_1-1-1_audio-spectrum_128_0_000000_none.png"/>
     <None Include="..\..\Resources\ionicons_2-0-1_android-add-circle_24_0_000000_none.png"/>

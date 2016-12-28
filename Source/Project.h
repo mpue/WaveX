@@ -57,7 +57,15 @@ public:
     inline double getSampleRate() {
         return sampleRate;
     }
-
+    
+    inline void setBufferSize(double bufferSize) {
+        this->bufferSize = bufferSize;
+    }
+    
+    inline double getBufferSize() {
+        return bufferSize;
+    }
+    
     inline void addChangeListener (ChangeListener* listener) {
         ChangeBroadcaster::addChangeListener(listener);
     }
@@ -112,6 +120,7 @@ protected:
     String name;
     long tracklength;
     double sampleRate;
+    int bufferSize;
     std::vector<Region*> regionsClipboard;
     AudioFormatManager* manager;
     

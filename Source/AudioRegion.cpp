@@ -163,7 +163,14 @@ void AudioRegion::setDragger(MultiComponentDragger *dragger) {
     this->dragger = dragger;
 }
 
+void AudioRegion::startRecording() {
+    getThumbnail()->reset(2, Project::getInstance()->getSampleRate());
+    startTimer(100);
+}
 
+void AudioRegion::stopRecording() {
+    stopTimer();
+}
 
 void AudioRegion::setLoop(bool loop)
 {
@@ -177,8 +184,6 @@ void AudioRegion::setLoop(bool loop)
     this->loop = loop;
     repaint();
 }
-
-
 
 const float* AudioRegion::getReadBuffer(int channel) {
     return audioBuffer->getReadPointer(channel);

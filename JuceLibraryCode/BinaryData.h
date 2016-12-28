@@ -18,8 +18,14 @@ namespace BinaryData
     extern const char*   fontawesome_470_fileaudioo_32_0_000000_none_png;
     const int            fontawesome_470_fileaudioo_32_0_000000_none_pngSize = 622;
 
+    extern const char*   fontawesome_470_music_32_0_000000_none_png;
+    const int            fontawesome_470_music_32_0_000000_none_pngSize = 549;
+
     extern const char*   fontawesome_470_pencil_24_0_000000_none_png;
     const int            fontawesome_470_pencil_24_0_000000_none_pngSize = 285;
+
+    extern const char*   foundationiconfonts_20150216_loop_32_0_000000_none_png;
+    const int            foundationiconfonts_20150216_loop_32_0_000000_none_pngSize = 781;
 
     extern const char*   iconic_111_audiospectrum_32_0_000000_none_png;
     const int            iconic_111_audiospectrum_32_0_000000_none_pngSize = 119;
@@ -40,7 +46,7 @@ namespace BinaryData
     extern const char* namedResourceList[];
 
     // Number of elements in the namedResourceList array.
-    const int namedResourceListSize = 9;
+    const int namedResourceListSize = 11;
 
     // If you provide the name of one of the binary resource variables above, this function will
     // return the corresponding data and its size (or a null pointer if the name isn't found).

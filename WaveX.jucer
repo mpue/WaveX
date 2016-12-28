@@ -10,8 +10,12 @@
             compile="0" resource="1" file="Resources/font-awesome_4-7-0_copy_24_0_000000_none.png"/>
       <FILE id="fAiRiR" name="font-awesome_4-7-0_file-audio-o_32_0_000000_none.png"
             compile="0" resource="1" file="Resources/font-awesome_4-7-0_file-audio-o_32_0_000000_none.png"/>
+      <FILE id="A1Ntmk" name="font-awesome_4-7-0_music_32_0_000000_none.png"
+            compile="0" resource="1" file="Resources/font-awesome_4-7-0_music_32_0_000000_none.png"/>
       <FILE id="sCU1d4" name="font-awesome_4-7-0_pencil_24_0_000000_none.png"
             compile="0" resource="1" file="Resources/font-awesome_4-7-0_pencil_24_0_000000_none.png"/>
+      <FILE id="oOphir" name="foundation-icon-fonts_2015-02-16_loop_32_0_000000_none.png"
+            compile="0" resource="1" file="Resources/foundation-icon-fonts_2015-02-16_loop_32_0_000000_none.png"/>
       <FILE id="TGdhNR" name="iconic_1-1-1_audio-spectrum_32_0_000000_none.png"
             compile="0" resource="1" file="Resources/iconic_1-1-1_audio-spectrum_32_0_000000_none.png"/>
       <FILE id="zaLFOJ" name="iconic_1-1-1_audio-spectrum_128_0_000000_none.png"
@@ -67,6 +71,11 @@
         <FILE id="KzQ23Z" name="AudioRegion.h" compile="0" resource="0" file="Source/AudioRegion.h"/>
         <FILE id="pfyDAQ" name="DragConstrainer.h" compile="0" resource="0"
               file="Source/DragConstrainer.h"/>
+        <FILE id="hcAmQO" name="MidiRegion.cpp" compile="1" resource="0" file="Source/MidiRegion.cpp"/>
+        <FILE id="ZWhXQ8" name="MidiRegion.h" compile="0" resource="0" file="Source/MidiRegion.h"/>
+        <FILE id="Xd828I" name="MidiThumbnail.cpp" compile="1" resource="0"
+              file="Source/MidiThumbnail.cpp"/>
+        <FILE id="M2fplj" name="MidiThumbnail.h" compile="0" resource="0" file="Source/MidiThumbnail.h"/>
         <FILE id="UCX2Se" name="PositionMarker.cpp" compile="1" resource="0"
               file="Source/PositionMarker.cpp"/>
         <FILE id="RTkmEH" name="PositionMarker.h" compile="0" resource="0"

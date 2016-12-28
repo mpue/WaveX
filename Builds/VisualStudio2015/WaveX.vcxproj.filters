@@ -412,6 +412,12 @@
     <ClCompile Include="..\..\Source\AudioRegion.cpp">
       <Filter>WaveX\Source\Tracks</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\MidiRegion.cpp">
+      <Filter>WaveX\Source\Tracks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\MidiThumbnail.cpp">
+      <Filter>WaveX\Source\Tracks</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\PositionMarker.cpp">
       <Filter>WaveX\Source\Tracks</Filter>
     </ClCompile>
@@ -2209,6 +2215,12 @@
       <Filter>WaveX\Source\Tracks</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\DragConstrainer.h">
+      <Filter>WaveX\Source\Tracks</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\MidiRegion.h">
+      <Filter>WaveX\Source\Tracks</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\MidiThumbnail.h">
       <Filter>WaveX\Source\Tracks</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\PositionMarker.h">
@@ -4091,7 +4103,13 @@
     <None Include="..\..\Resources\font-awesome_4-7-0_file-audio-o_32_0_000000_none.png">
       <Filter>WaveX\Resources</Filter>
     </None>
+    <None Include="..\..\Resources\font-awesome_4-7-0_music_32_0_000000_none.png">
+      <Filter>WaveX\Resources</Filter>
+    </None>
     <None Include="..\..\Resources\font-awesome_4-7-0_pencil_24_0_000000_none.png">
+      <Filter>WaveX\Resources</Filter>
+    </None>
+    <None Include="..\..\Resources\foundation-icon-fonts_2015-02-16_loop_32_0_000000_none.png">
       <Filter>WaveX\Resources</Filter>
     </None>
     <None Include="..\..\Resources\iconic_1-1-1_audio-spectrum_32_0_000000_none.png">

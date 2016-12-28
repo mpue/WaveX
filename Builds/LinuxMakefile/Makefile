@@ -68,6 +68,8 @@ OBJECTS := \
   $(JUCE_OBJDIR)/Mixer_d95e2aea.o \
   $(JUCE_OBJDIR)/MixerPanel_f7050b84.o \
   $(JUCE_OBJDIR)/AudioRegion_46364bcb.o \
+  $(JUCE_OBJDIR)/MidiRegion_c91a6c7e.o \
+  $(JUCE_OBJDIR)/MidiThumbnail_900644ac.o \
   $(JUCE_OBJDIR)/PositionMarker_20eac8cc.o \
   $(JUCE_OBJDIR)/Region_b2b8ac7d.o \
   $(JUCE_OBJDIR)/TimeLine_e3c86a6a.o \
@@ -168,6 +170,16 @@ $(JUCE_OBJDIR)/MixerPanel_f7050b84.o: ../../Source/MixerPanel.cpp
 $(JUCE_OBJDIR)/AudioRegion_46364bcb.o: ../../Source/AudioRegion.cpp
 	-@mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling AudioRegion.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/MidiRegion_c91a6c7e.o: ../../Source/MidiRegion.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling MidiRegion.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/MidiThumbnail_900644ac.o: ../../Source/MidiThumbnail.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling MidiThumbnail.cpp"
 	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/PositionMarker_20eac8cc.o: ../../Source/PositionMarker.cpp

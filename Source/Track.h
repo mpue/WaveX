@@ -13,6 +13,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "AudioRegion.h"
+#include "MidiRegion.h"
 #include "Region.h"
 #include <vector>
 #include "MultiComponentDragger.h"
@@ -53,6 +54,7 @@ public:
 	bool isSelected();
 	double getMaxLength();
 	void addRegion(File file, double sampleRate);
+    void addMidiRegion(double sampleRate, long samplePosition,long regionLength);
     void addRegion(AudioSampleBuffer* source, double sampleRate, long samplePosition, long regionLength);
 
     void paint (Graphics&) override;
@@ -99,7 +101,7 @@ public:
     bool isMono();
     void setMono(bool mono);
     
-    inline AudioRegion* getCurrentRecorder() {
+    inline Region* getCurrentRecorder() {
         return currentRegion;
     }
     
@@ -151,6 +153,9 @@ public:
         return midiOutputDevice;
     }
     
+    MidiMessage* getMessage(int sampleNum);
+    void addMessage(MidiMessage* message, int sampleNum);
+    
 private:
 
 	float zoom = 20;
@@ -160,7 +165,7 @@ private:
     float pan = 0.0f;
 	double sampleRate;
 	bool selected = false;
-	AudioRegion* currentRegion = NULL;
+	Region* currentRegion = NULL;
 	AudioFormatManager* manager;
 	vector<Region*> regions;
 	long numSamples = 0;
