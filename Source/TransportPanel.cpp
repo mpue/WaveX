@@ -142,7 +142,7 @@ TransportPanel::TransportPanel (MainContentComponent* mcc)
     playButton->setClickingTogglesState(true);
     loopButton->setClickingTogglesState(true);
 
-    recordButton->setToggleState(false, juce::NotificationType::dontSendNotification);
+    // recordButton->setToggleState(false, juce::NotificationType::dontSendNotification);
 
     //[/Constructor]
 }
@@ -214,11 +214,11 @@ void TransportPanel::buttonClicked (Button* buttonThatWasClicked)
         mode = STOP;
         stopTimer();
         playButton->setToggleState(false, juce::NotificationType::sendNotification);
+        recordButton->setToggleState(false, juce::NotificationType::sendNotification);
         mcc->getNavigator()->setPlaying(false);
         if (mcc->getNavigator()->isRecording()){
             mcc->getNavigator()->setRecording(false);
         }
-
         //[/UserButtonCode_stopButton]
     }
     else if (buttonThatWasClicked == playButton)
@@ -263,17 +263,11 @@ void TransportPanel::buttonClicked (Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == recordButton)
     {
         //[UserButtonCode_recordButton] -- add your button handler code here..
-
-        if (!recordButton->getToggleState()) {
-            mode = STOP;
-            stopTimer();
-            mcc->getNavigator()->setRecording(false);
-        }
-        else {
-            mode = RECORD;
-            startTimer(100);
-            mcc->getNavigator()->setRecording(true);
-        }
+        
+        mode = RECORD;
+        startTimer(100);
+        mcc->getNavigator()->setRecording(true);
+        
         //[/UserButtonCode_recordButton]
     }
     else if (buttonThatWasClicked == loopButton)

@@ -220,7 +220,7 @@ TrackPropertyPanel::TrackPropertyPanel ()
     monoButton->getButton()->addListener(this);
 
     channelCombo->setSelectedId(1);
-    
+
     //[/Constructor]
 }
 

@@ -158,6 +158,10 @@ public:
             Logger::getCurrentLogger()->writeToLog("Initialized audio device with " + String(numActiveHostInputs) + " inputs and " + String(numActiveHostInputs) + " outputs.");
         }
         
+        for (std::vector<AudioSampleBuffer*>::iterator it = outputBuffers.begin(); it != outputBuffers.end(); ++it) {
+            delete *it;
+        }
+        
         outputBuffers.clear();
         
         for (int i = 0; i < numOutputChannels;i++) { // Only Stereo channels for the moment
@@ -208,6 +212,9 @@ public:
             Logger::getCurrentLogger()->writeToLog("Initialized audio device with " + String(numActiveHostInputs) + " inputs and " + String(numActiveHostInputs) + " outputs.");
         }
         
+        for (std::vector<AudioSampleBuffer*>::iterator it = outputBuffers.begin(); it != outputBuffers.end(); ++it) {
+            delete *it;
+        }
         outputBuffers.clear();
         
         for (int i = 0; i < numOutputChannels;i++) { // Only Stereo channels for the moment
@@ -407,6 +414,19 @@ public:
                     t->updateMagnitude(numSamples, _numSamples, gainLeft, gainRight);
                     t->setOffset(numSamples);
                 }
+                else if (t->getType() == Track::Type::MIDI) {
+                    
+                    MidiMessage* m = t->getMessage(numSamples);
+                    
+                    if (m != NULL) {
+                        deviceManager.getDefaultMidiOutput()->sendMessageNow(*m);
+                    }
+                    else {
+                        m = new MidiMessage();
+                        m->allNotesOff(t->getMidiChannel());
+                        deviceManager.getDefaultMidiOutput()->sendMessageNow(*m);
+                    }
+                }
                 
             }
             
@@ -499,8 +519,11 @@ public:
             
         }
         
-        for (int i = 0; i < outputBuffers.size();i++) {
-            outputBuffers.at(i)->clear();
+        if (navigator->getTracks().size() > 0) {
+            for (int i = 0; i < outputBuffers.size();i++) {
+                outputBuffers.at(i)->clear();
+            }
+            
         }
         
 

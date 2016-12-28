@@ -19,6 +19,13 @@
 class MidiThumbnail    : public Component
 {
 public:
+    
+    enum ReadState {
+        NOTE_START,
+        NOTE_IN,
+        NOTE_END
+    };
+    
     MidiThumbnail(double sampleRate);
     ~MidiThumbnail();
 
@@ -36,7 +43,9 @@ private:
     double sampleRate;
     long totalSamples;
     MidiBuffer* midiBuffer;
+    ReadState state = NOTE_START;
     
+    long maxSampleNum = 0;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MidiThumbnail)
 };

@@ -21,9 +21,8 @@ MidiThumbnail::MidiThumbnail(double sampleRate)
 
 MidiThumbnail::~MidiThumbnail()
 {
+    delete midiBuffer;
 }
-
-
 
 void MidiThumbnail::paint (Graphics& g)
 {
@@ -58,11 +57,42 @@ double MidiThumbnail::getTotalLength()
 }
 
 void MidiThumbnail::drawChannels (Graphics& g, const Rectangle<int>& area, double startTimeSeconds, double endTimeSeconds, float verticalZoomFactor) {
+
+    int sampleNum;
+    MidiMessage message;
+    
+    MidiBuffer::Iterator* iterator = new MidiBuffer::Iterator(*midiBuffer);
+   
+    g.setColour(Colours::white);
+    
+    int notelen = 0;
+    int start = 0;
+    int end = 0;
+    
+    
+    while(iterator->getNextEvent(message, sampleNum)) {
+        if (message.isNoteOn()) {
+            notelen = 0;
+            start = sampleNum;
+        }
+        else if (message.isNoteOff()) {
+            end = sampleNum;
+            int x = ((double)area.getWidth() / (double)totalSamples) * start;
+            int notelen = ((double)area.getWidth() / (double)totalSamples) * (end - start);
+            g.fillRect(x, area.getHeight()  - (area.getHeight() / 127 * message.getNoteNumber()), notelen, 3);
+        }
+    
+    }
     
 }
 
 void MidiThumbnail::addMessage(int sampleNum, MidiMessage* message) {
     midiBuffer->addEvent(*message, sampleNum);
-    totalSamples = sampleNum;
+    
+    if (sampleNum > maxSampleNum) {
+        maxSampleNum = sampleNum;
+    }
+    
+    totalSamples = maxSampleNum;
     repaint();
 }

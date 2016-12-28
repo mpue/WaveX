@@ -154,7 +154,7 @@ void MidiRegion::stopRecording() {
         
         MidiMessage* m = new MidiMessage(message);
         
-        m->setTimeStamp(dragger->snap(m->getTimeStamp(),512));
+        m->setTimeStamp(dragger->snap(m->getTimeStamp(),Project::getInstance()->getBufferSize()));
         
         if (m->getRawDataSize() > 0)
             midiMessages.insert(std::make_pair(sampleNumber,m ));        
