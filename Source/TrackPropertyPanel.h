@@ -99,6 +99,8 @@ private:
     ScopedPointer<Label> inputsLabel;
     ScopedPointer<ComboBox> outputCombo;
     ScopedPointer<Label> inputsLabel2;
+    ScopedPointer<ComboBox> channelCombo;
+    ScopedPointer<Label> inputsLabel3;
 
 
     //==============================================================================

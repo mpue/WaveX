@@ -45,7 +45,7 @@ public:
         this->trackProperties = trackProperties;
         
         this->marker = new PositionMarker(tracklength);
-        this->navigator = new TrackNavigator(marker);
+        this->navigator = new TrackNavigator(marker,&deviceManager);
         
         this->navigator->setSize(getWidth(), getHeight());
         this->navigator->setBounds(0, 0, getWidth(), getHeight());
@@ -496,9 +496,11 @@ public:
         
         if (navigator->isRecording())
             navigator->getMidiBuffer()->addEvent(message, numSamples);
+    
+        MidiMessage messageToSend = MidiMessage(message);
+        messageToSend.setChannel(navigator->getCurrentTrack()->getMidiChannel());
         
-        
-        deviceManager.getDefaultMidiOutput()->sendMessageNow(message);
+        deviceManager.getDefaultMidiOutput()->sendMessageNow(messageToSend);
         
         /*
         if(win->isVisible()) {
@@ -707,6 +709,7 @@ public:
     
     void openSettings() {
         AudioDeviceSelectorComponent* selector = new AudioDeviceSelectorComponent(deviceManager, 2, 16, 2, 16, true, true, true, false);
+        selector->setLookAndFeel(Project::getInstance()->getLookAndFeel());
         
         DialogWindow::LaunchOptions launchOptions;
         launchOptions.dialogTitle = ("Audio Settings");
@@ -719,7 +722,7 @@ public:
         launchOptions.content->setSize(600, 580);
         launchOptions.runModal();
         
-        // setupIO();
+        setupIO();
     }
     
     void setTracklength(long length) {

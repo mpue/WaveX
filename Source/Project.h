@@ -15,6 +15,7 @@
 #include <vector>
 #include "AudioRegion.h"
 #include "Region.h"
+#include "CustomLookAndFeel.h"
 
 class Project : public ChangeBroadcaster {
     
@@ -85,6 +86,10 @@ public:
         return manager;
     }
     
+    inline CustomLookAndFeel* getLookAndFeel() {
+        return &lookAndFeel;
+    };
+    
     static long DEFAULT_TRACK_LENGTH;
     static int  DEFAULT_TRACK_HEIGHT;
     
@@ -94,7 +99,7 @@ protected:
         name = "empty Project";
         manager = new AudioFormatManager();
         manager->registerBasicFormats();
-    };
+            };
     
     ~Project() {
         delete manager;
@@ -103,6 +108,7 @@ protected:
     
     static Project* instance;
     
+    CustomLookAndFeel lookAndFeel;
     String name;
     long tracklength;
     double sampleRate;

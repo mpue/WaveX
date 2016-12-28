@@ -378,6 +378,7 @@ int Track::getNumSamples() {
 
 void Track::setSelected(bool selected) {
 	this->selected = selected;
+    sendChangeMessage();
 	repaint();
 }
 
@@ -442,6 +443,7 @@ int Track::getMidiChannel() {
 
 void Track::setMidiChannel(int channel) {
     this->midiChannel = channel;
+    sendChangeMessage();
 }
 
 void Track::changeListenerCallback(ChangeBroadcaster * source) {

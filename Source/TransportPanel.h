@@ -82,6 +82,8 @@ public:
     static const int fontawesome_470_pause_32_0_000000_none_pngSize;
     static const char* fontawesome_470_circle_32_0_000000_none_png;
     static const int fontawesome_470_circle_32_0_000000_none_pngSize;
+    static const char* foundationiconfonts_20150216_loop_32_0_000000_none_png;
+    static const int foundationiconfonts_20150216_loop_32_0_000000_none_pngSize;
 
 
 private:
@@ -102,6 +104,8 @@ private:
     ScopedPointer<ImageButton> pauseButton;
     ScopedPointer<Label> timeLabel;
     ScopedPointer<ImageButton> recordButton;
+    ScopedPointer<ImageButton> loopButton;
+    ScopedPointer<Label> midiLabel;
 
 
     //==============================================================================

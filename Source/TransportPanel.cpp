@@ -34,70 +34,97 @@ TransportPanel::TransportPanel (MainContentComponent* mcc)
     //[/Constructor_pre]
 
     addAndMakeVisible (stopButton = new ImageButton ("stopButton"));
+    stopButton->setTooltip (TRANS("Stop playing"));
     stopButton->setButtonText (TRANS("Stop"));
     stopButton->addListener (this);
 
     stopButton->setImages (false, true, true,
-                           ImageCache::getFromMemory (fontawesome_470_stop_32_0_000000_none_png, fontawesome_470_stop_32_0_000000_none_pngSize), 1.000f, Colour (0x00ffffff),
+                           ImageCache::getFromMemory (fontawesome_470_stop_32_0_000000_none_png, fontawesome_470_stop_32_0_000000_none_pngSize), 1.000f, Colours::white,
                            Image(), 1.000f, Colours::cornflowerblue,
                            Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (playButton = new ImageButton ("playButton"));
+    playButton->setTooltip (TRANS("Play"));
     playButton->setButtonText (TRANS("Play"));
     playButton->addListener (this);
 
     playButton->setImages (false, true, true,
-                           ImageCache::getFromMemory (fontawesome_470_play_32_0_000000_none_png, fontawesome_470_play_32_0_000000_none_pngSize), 1.000f, Colour (0x00ffffff),
+                           ImageCache::getFromMemory (fontawesome_470_play_32_0_000000_none_png, fontawesome_470_play_32_0_000000_none_pngSize), 1.000f, Colours::white,
                            Image(), 1.000f, Colours::green,
                            Image(), 1.000f, Colours::green);
     addAndMakeVisible (backButton = new ImageButton ("backButton"));
+    backButton->setTooltip (TRANS("To track start"));
     backButton->setButtonText (TRANS("Back"));
     backButton->addListener (this);
 
     backButton->setImages (false, true, true,
-                           ImageCache::getFromMemory (ionicons_201_iosskipbackward_32_0_000000_none_png, ionicons_201_iosskipbackward_32_0_000000_none_pngSize), 1.000f, Colour (0x00ffffff),
+                           ImageCache::getFromMemory (ionicons_201_iosskipbackward_32_0_000000_none_png, ionicons_201_iosskipbackward_32_0_000000_none_pngSize), 1.000f, Colours::white,
                            Image(), 1.000f, Colours::cornflowerblue,
                            Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (endButton = new ImageButton ("endButton"));
+    endButton->setTooltip (TRANS("Jump to track end"));
     endButton->setButtonText (TRANS("End"));
     endButton->addListener (this);
 
     endButton->setImages (false, true, true,
-                          ImageCache::getFromMemory (ionicons_201_iosskipforward_32_0_000000_none_png, ionicons_201_iosskipforward_32_0_000000_none_pngSize), 1.000f, Colour (0x00000000),
+                          ImageCache::getFromMemory (ionicons_201_iosskipforward_32_0_000000_none_png, ionicons_201_iosskipforward_32_0_000000_none_pngSize), 1.000f, Colours::white,
                           Image(), 1.000f, Colours::cornflowerblue,
                           Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (pauseButton = new ImageButton ("pauseButton"));
+    pauseButton->setTooltip (TRANS("Pause"));
     pauseButton->setButtonText (TRANS("Pause"));
     pauseButton->addListener (this);
 
     pauseButton->setImages (false, true, true,
-                            ImageCache::getFromMemory (fontawesome_470_pause_32_0_000000_none_png, fontawesome_470_pause_32_0_000000_none_pngSize), 1.000f, Colour (0x00000000),
+                            ImageCache::getFromMemory (fontawesome_470_pause_32_0_000000_none_png, fontawesome_470_pause_32_0_000000_none_pngSize), 1.000f, Colours::white,
                             Image(), 1.000f, Colours::cornflowerblue,
                             Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (timeLabel = new Label ("timeLabel",
-                                              TRANS("00:00:00\n")));
-    timeLabel->setFont (Font (24.00f, Font::plain));
+                                              TRANS("00:00:00")));
+    timeLabel->setTooltip (TRANS("Time information"));
+    timeLabel->setFont (Font (16.00f, Font::plain));
     timeLabel->setJustificationType (Justification::centred);
     timeLabel->setEditable (false, false, false);
     timeLabel->setColour (Label::backgroundColourId, Colour (0xff0c0b0b));
-    timeLabel->setColour (Label::textColourId, Colours::white);
+    timeLabel->setColour (Label::textColourId, Colours::cornflowerblue);
     timeLabel->setColour (Label::outlineColourId, Colours::white);
     timeLabel->setColour (TextEditor::textColourId, Colours::black);
     timeLabel->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
     addAndMakeVisible (recordButton = new ImageButton ("recordButton"));
+    recordButton->setTooltip (TRANS("Start / stop recording"));
     recordButton->setButtonText (TRANS("Back"));
     recordButton->addListener (this);
 
     recordButton->setImages (false, true, true,
-                             ImageCache::getFromMemory (fontawesome_470_circle_32_0_000000_none_png, fontawesome_470_circle_32_0_000000_none_pngSize), 1.000f, Colour (0x00000000),
+                             ImageCache::getFromMemory (fontawesome_470_circle_32_0_000000_none_png, fontawesome_470_circle_32_0_000000_none_pngSize), 1.000f, Colours::white,
                              Image(), 1.000f, Colours::red,
                              Image(), 1.000f, Colours::red);
+    addAndMakeVisible (loopButton = new ImageButton ("loopButton"));
+    loopButton->setTooltip (TRANS("Turn cycle mode on/off"));
+    loopButton->setButtonText (TRANS("End"));
+    loopButton->addListener (this);
+
+    loopButton->setImages (false, true, true,
+                           ImageCache::getFromMemory (foundationiconfonts_20150216_loop_32_0_000000_none_png, foundationiconfonts_20150216_loop_32_0_000000_none_pngSize), 1.000f, Colours::white,
+                           Image(), 1.000f, Colours::cornflowerblue,
+                           Image(), 1.000f, Colour (0xffff9700));
+    addAndMakeVisible (midiLabel = new Label ("midiLabel",
+                                              TRANS("no input")));
+    midiLabel->setTooltip (TRANS("Midi input"));
+    midiLabel->setFont (Font (16.00f, Font::plain));
+    midiLabel->setJustificationType (Justification::centred);
+    midiLabel->setEditable (false, false, false);
+    midiLabel->setColour (Label::backgroundColourId, Colour (0xff0c0b0b));
+    midiLabel->setColour (Label::textColourId, Colours::cornflowerblue);
+    midiLabel->setColour (Label::outlineColourId, Colours::white);
+    midiLabel->setColour (TextEditor::textColourId, Colours::black);
+    midiLabel->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+
 
     //[UserPreSize]
-    setSize (250, 60);
     //[/UserPreSize]
 
-    setSize (420, 40);
+    setSize (520, 40);
 
 
     //[Constructor] You can add your own custom stuff here..
@@ -113,6 +140,7 @@ TransportPanel::TransportPanel (MainContentComponent* mcc)
 
     recordButton->setClickingTogglesState(true);
     playButton->setClickingTogglesState(true);
+    loopButton->setClickingTogglesState(true);
 
     recordButton->setToggleState(false, juce::NotificationType::dontSendNotification);
 
@@ -131,6 +159,8 @@ TransportPanel::~TransportPanel()
     pauseButton = nullptr;
     timeLabel = nullptr;
     recordButton = nullptr;
+    loopButton = nullptr;
+    midiLabel = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -165,8 +195,10 @@ void TransportPanel::resized()
     backButton->setBounds (42, 14, 22, 24);
     endButton->setBounds (162, 14, 24, 24);
     pauseButton->setBounds (130, 14, 24, 24);
-    timeLabel->setBounds (194, 8, 112, 32);
+    timeLabel->setBounds (224, 14, 112, 24);
     recordButton->setBounds (8, 14, 24, 24);
+    loopButton->setBounds (192, 14, 24, 24);
+    midiLabel->setBounds (344, 14, 112, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -244,6 +276,11 @@ void TransportPanel::buttonClicked (Button* buttonThatWasClicked)
         }
         //[/UserButtonCode_recordButton]
     }
+    else if (buttonThatWasClicked == loopButton)
+    {
+        //[UserButtonCode_loopButton] -- add your button handler code here..
+        //[/UserButtonCode_loopButton]
+    }
 
     //[UserbuttonClicked_Post]
     //[/UserbuttonClicked_Post]
@@ -292,50 +329,62 @@ BEGIN_JUCER_METADATA
                  parentClasses="public Component, public ChangeListener, public Timer"
                  constructorParams="MainContentComponent* mcc" variableInitialisers=""
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="0" initialWidth="420" initialHeight="40">
+                 fixedSize="0" initialWidth="520" initialHeight="40">
   <BACKGROUND backgroundColour="808080"/>
   <IMAGEBUTTON name="stopButton" id="4cd37851bb11a613" memberName="stopButton"
-               virtualName="" explicitFocusOrder="0" pos="74 14 24 24" buttonText="Stop"
-               connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
-               resourceNormal="fontawesome_470_stop_32_0_000000_none_png" opacityNormal="1"
-               colourNormal="ffffff" resourceOver="" opacityOver="1" colourOver="ff6495ed"
-               resourceDown="" opacityDown="1" colourDown="0"/>
+               virtualName="" explicitFocusOrder="0" pos="74 14 24 24" tooltip="Stop playing"
+               buttonText="Stop" connectedEdges="0" needsCallback="1" radioGroupId="0"
+               keepProportions="1" resourceNormal="fontawesome_470_stop_32_0_000000_none_png"
+               opacityNormal="1" colourNormal="ffffffff" resourceOver="" opacityOver="1"
+               colourOver="ff6495ed" resourceDown="" opacityDown="1" colourDown="0"/>
   <IMAGEBUTTON name="playButton" id="c8555f308f9d15ec" memberName="playButton"
-               virtualName="" explicitFocusOrder="0" pos="106 14 24 24" buttonText="Play"
-               connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
-               resourceNormal="fontawesome_470_play_32_0_000000_none_png" opacityNormal="1"
-               colourNormal="ffffff" resourceOver="" opacityOver="1" colourOver="ff008000"
-               resourceDown="" opacityDown="1" colourDown="ff008000"/>
+               virtualName="" explicitFocusOrder="0" pos="106 14 24 24" tooltip="Play"
+               buttonText="Play" connectedEdges="0" needsCallback="1" radioGroupId="0"
+               keepProportions="1" resourceNormal="fontawesome_470_play_32_0_000000_none_png"
+               opacityNormal="1" colourNormal="ffffffff" resourceOver="" opacityOver="1"
+               colourOver="ff008000" resourceDown="" opacityDown="1" colourDown="ff008000"/>
   <IMAGEBUTTON name="backButton" id="c457ade9e0c0c98f" memberName="backButton"
-               virtualName="" explicitFocusOrder="0" pos="42 14 22 24" buttonText="Back"
-               connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
-               resourceNormal="ionicons_201_iosskipbackward_32_0_000000_none_png"
-               opacityNormal="1" colourNormal="ffffff" resourceOver="" opacityOver="1"
+               virtualName="" explicitFocusOrder="0" pos="42 14 22 24" tooltip="To track start"
+               buttonText="Back" connectedEdges="0" needsCallback="1" radioGroupId="0"
+               keepProportions="1" resourceNormal="ionicons_201_iosskipbackward_32_0_000000_none_png"
+               opacityNormal="1" colourNormal="ffffffff" resourceOver="" opacityOver="1"
                colourOver="ff6495ed" resourceDown="" opacityDown="1" colourDown="0"/>
   <IMAGEBUTTON name="endButton" id="b649d3250331ad42" memberName="endButton"
-               virtualName="" explicitFocusOrder="0" pos="162 14 24 24" buttonText="End"
-               connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
-               resourceNormal="ionicons_201_iosskipforward_32_0_000000_none_png"
-               opacityNormal="1" colourNormal="0" resourceOver="" opacityOver="1"
+               virtualName="" explicitFocusOrder="0" pos="162 14 24 24" tooltip="Jump to track end"
+               buttonText="End" connectedEdges="0" needsCallback="1" radioGroupId="0"
+               keepProportions="1" resourceNormal="ionicons_201_iosskipforward_32_0_000000_none_png"
+               opacityNormal="1" colourNormal="ffffffff" resourceOver="" opacityOver="1"
                colourOver="ff6495ed" resourceDown="" opacityDown="1" colourDown="0"/>
   <IMAGEBUTTON name="pauseButton" id="bc895af41d57982" memberName="pauseButton"
-               virtualName="" explicitFocusOrder="0" pos="130 14 24 24" buttonText="Pause"
-               connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
-               resourceNormal="fontawesome_470_pause_32_0_000000_none_png" opacityNormal="1"
-               colourNormal="0" resourceOver="" opacityOver="1" colourOver="ff6495ed"
-               resourceDown="" opacityDown="1" colourDown="0"/>
+               virtualName="" explicitFocusOrder="0" pos="130 14 24 24" tooltip="Pause"
+               buttonText="Pause" connectedEdges="0" needsCallback="1" radioGroupId="0"
+               keepProportions="1" resourceNormal="fontawesome_470_pause_32_0_000000_none_png"
+               opacityNormal="1" colourNormal="ffffffff" resourceOver="" opacityOver="1"
+               colourOver="ff6495ed" resourceDown="" opacityDown="1" colourDown="0"/>
   <LABEL name="timeLabel" id="4b26497a62774d79" memberName="timeLabel"
-         virtualName="" explicitFocusOrder="0" pos="194 8 112 32" bkgCol="ff0c0b0b"
-         textCol="ffffffff" outlineCol="ffffffff" edTextCol="ff000000"
-         edBkgCol="0" labelText="00:00:00&#10;" editableSingleClick="0"
-         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="24" bold="0" italic="0" justification="36"/>
+         virtualName="" explicitFocusOrder="0" pos="224 14 112 24" tooltip="Time information"
+         bkgCol="ff0c0b0b" textCol="ff6495ed" outlineCol="ffffffff" edTextCol="ff000000"
+         edBkgCol="0" labelText="00:00:00" editableSingleClick="0" editableDoubleClick="0"
+         focusDiscardsChanges="0" fontname="Default font" fontsize="16"
+         bold="0" italic="0" justification="36"/>
   <IMAGEBUTTON name="recordButton" id="7521828dc05bc048" memberName="recordButton"
-               virtualName="" explicitFocusOrder="0" pos="8 14 24 24" buttonText="Back"
-               connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
-               resourceNormal="fontawesome_470_circle_32_0_000000_none_png"
-               opacityNormal="1" colourNormal="0" resourceOver="" opacityOver="1"
+               virtualName="" explicitFocusOrder="0" pos="8 14 24 24" tooltip="Start / stop recording"
+               buttonText="Back" connectedEdges="0" needsCallback="1" radioGroupId="0"
+               keepProportions="1" resourceNormal="fontawesome_470_circle_32_0_000000_none_png"
+               opacityNormal="1" colourNormal="ffffffff" resourceOver="" opacityOver="1"
                colourOver="ffff0000" resourceDown="" opacityDown="1" colourDown="ffff0000"/>
+  <IMAGEBUTTON name="loopButton" id="aaf66c812391dd97" memberName="loopButton"
+               virtualName="" explicitFocusOrder="0" pos="192 14 24 24" tooltip="Turn cycle mode on/off"
+               buttonText="End" connectedEdges="0" needsCallback="1" radioGroupId="0"
+               keepProportions="1" resourceNormal="foundationiconfonts_20150216_loop_32_0_000000_none_png"
+               opacityNormal="1" colourNormal="ffffffff" resourceOver="" opacityOver="1"
+               colourOver="ff6495ed" resourceDown="" opacityDown="1" colourDown="ffff9700"/>
+  <LABEL name="midiLabel" id="34b33f8ded844f10" memberName="midiLabel"
+         virtualName="" explicitFocusOrder="0" pos="344 14 112 24" tooltip="Midi input"
+         bkgCol="ff0c0b0b" textCol="ff6495ed" outlineCol="ffffffff" edTextCol="ff000000"
+         edBkgCol="0" labelText="no input" editableSingleClick="0" editableDoubleClick="0"
+         focusDiscardsChanges="0" fontname="Default font" fontsize="16"
+         bold="0" italic="0" justification="36"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA
@@ -412,6 +461,23 @@ static const unsigned char resource_TransportPanel_fontawesome_470_circle_32_0_0
 
 const char* TransportPanel::fontawesome_470_circle_32_0_000000_none_png = (const char*) resource_TransportPanel_fontawesome_470_circle_32_0_000000_none_png;
 const int TransportPanel::fontawesome_470_circle_32_0_000000_none_pngSize = 603;
+
+// JUCER_RESOURCE: foundationiconfonts_20150216_loop_32_0_000000_none_png, 781, "../Resources/foundation-icon-fonts_2015-02-16_loop_32_0_000000_none.png"
+static const unsigned char resource_TransportPanel_foundationiconfonts_20150216_loop_32_0_000000_none_png[] = { 137,80,78,71,13,10,26,10,0,0,0,13,73,72,68,82,0,0,0,32,0,0,0,32,8,3,0,0,0,68,164,138,198,
+0,0,1,29,80,76,84,69,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,197,222,130,
+97,0,0,0,94,116,82,78,83,0,1,2,3,4,5,6,7,8,10,13,14,15,17,20,22,23,26,27,28,30,31,33,35,37,41,47,49,50,55,56,57,58,60,61,63,65,69,71,74,75,77,78,81,89,91,95,97,99,104,108,109,115,116,119,124,137,139,140,
+152,155,162,165,168,170,175,176,178,180,181,190,193,195,199,202,204,206,209,217,218,220,224,228,230,232,233,239,241,243,245,247,249,251,253,136,23,246,219,0,0,1,65,73,68,65,84,24,25,117,193,137,66,18,
+81,24,134,225,247,252,160,226,154,75,46,153,65,11,216,130,154,45,46,153,154,180,153,152,137,6,42,148,223,253,95,134,195,192,156,25,100,120,30,18,108,58,255,106,189,252,124,126,136,52,110,229,64,145,227,
+82,134,251,242,53,37,221,148,29,73,185,35,221,87,29,3,247,254,198,209,54,85,87,191,230,194,196,137,100,4,30,52,149,230,246,159,36,3,114,117,13,102,192,119,117,125,43,140,155,203,76,150,206,20,51,120,161,
+142,139,69,34,79,174,20,49,248,172,208,239,17,188,209,95,138,24,100,63,42,112,53,138,87,104,202,51,2,19,135,210,83,188,29,37,24,161,197,18,177,213,115,197,140,52,83,155,23,234,50,6,152,126,247,87,109,
+198,229,207,82,142,84,51,31,26,146,161,192,143,226,8,169,230,138,160,142,202,179,97,210,201,251,82,200,18,115,116,41,161,229,136,88,245,207,35,66,138,93,46,225,125,146,116,56,78,64,222,110,22,239,165,
+66,107,128,34,85,35,226,182,212,113,10,200,171,229,29,161,165,99,117,61,4,148,208,218,127,251,122,109,175,161,200,54,1,13,118,228,8,72,218,223,86,154,74,134,54,253,95,133,178,250,237,58,66,143,39,9,204,
+156,169,87,99,153,94,174,88,83,172,254,198,232,55,187,241,245,90,82,171,178,57,199,64,206,28,189,238,0,112,113,186,136,149,236,230,14,0,0,0,0,73,69,78,68,174,66,96,130,0,0};
+
+const char* TransportPanel::foundationiconfonts_20150216_loop_32_0_000000_none_png = (const char*) resource_TransportPanel_foundationiconfonts_20150216_loop_32_0_000000_none_png;
+const int TransportPanel::foundationiconfonts_20150216_loop_32_0_000000_none_pngSize = 781;
 
 
 //[EndFile] You can add extra defines here...

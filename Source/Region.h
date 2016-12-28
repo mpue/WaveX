@@ -28,6 +28,7 @@ public:
     String getName();
 
     virtual int getNumSamples() = 0;
+    virtual void setThumbnailBounds(Rectangle<int>* bounds) = 0;
     
     void setSelected(bool selected);
     bool isSelected();

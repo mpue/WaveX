@@ -33,7 +33,7 @@ public:
     virtual void resized() override;
 
     AudioThumbnail* getThumbnail();
-    void setThumbnailBounds(Rectangle<int>* bounds);
+    virtual void setThumbnailBounds(Rectangle<int>* bounds) override;
     
     virtual int getNumSamples() override;
     

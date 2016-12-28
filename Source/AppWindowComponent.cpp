@@ -18,7 +18,7 @@ AppWindowComponent::AppWindowComponent()
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
-    
+        
     this->offsetBottom = 350;
     
     Rectangle<int> r = Desktop::getInstance().getDisplays().getMainDisplay().userArea;
@@ -76,7 +76,7 @@ AppWindowComponent::AppWindowComponent()
     addMouseListener(this,true);
      
     this->transport = new TransportPanel(mcc);
-    this->transport->setBounds(450,0,320,50);
+    this->transport->setBounds(500,0,520,50);
     
     mcc->getNavigator()->addChangeListener(transport);
     
@@ -116,7 +116,7 @@ AppWindowComponent::~AppWindowComponent()
 
 void AppWindowComponent::paint (Graphics& g)
 {
-    g.fillAll(Colours::lightgrey);
+    g.fillAll(Colours::darkgrey);
 }
 
 void AppWindowComponent::resized()

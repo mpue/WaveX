@@ -20,6 +20,7 @@
 //[Headers] You can add your own extra header files here...
 #include "CustomLookAndFeel.h"
 #include "Mixer.h"
+#include "Project.h"
 //[/Headers]
 
 #include "MasterChannelPanel.h"
@@ -128,7 +129,7 @@ MasterChannelPanel::MasterChannelPanel ()
     channelVolume->setValue(1.0);
 
     link = false;
-    clf = new CustomLookAndFeel();
+    clf = Project::getInstance()->getLookAndFeel();
 
     channelVolume->setLookAndFeel(clf);
     vuSliderL->setLookAndFeel(clf);
@@ -163,7 +164,6 @@ MasterChannelPanel::~MasterChannelPanel()
 
 
     //[Destructor]. You can add your own custom destruction code here..
-	clf = nullptr;
     //[/Destructor]
 }
 

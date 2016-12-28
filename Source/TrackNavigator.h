@@ -28,7 +28,7 @@ class TrackNavigator    : public Component,
 public KeyListener
 {
 public:
-    TrackNavigator(PositionMarker* marker);
+    TrackNavigator(PositionMarker* marker, AudioDeviceManager* manager);
     ~TrackNavigator();
 
     void paint (Graphics&) override;
@@ -80,6 +80,7 @@ private:
     // DragConstrainer constrainer;
     
     MultiComponentDragger* dragger = NULL;
+    AudioDeviceManager* deviceManager;
     
     Track* currentTrack = NULL;
     PositionMarker* marker;

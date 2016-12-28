@@ -19,8 +19,9 @@
 using namespace std;
 
 //==============================================================================
-TrackNavigator::TrackNavigator(PositionMarker* marker)
+TrackNavigator::TrackNavigator(PositionMarker* marker, AudioDeviceManager *deviceManager)
 {
+    this->deviceManager = deviceManager;
     this->selector = new WaveSelector();
     this->selector->addChangeListener(this);
     this->selector->setSize(getWidth(), getHeight());
@@ -215,7 +216,7 @@ void TrackNavigator::addTrack(Track::Type type, double sampleRate) {
     }
     
     track->setSelected(true);
-    track->setMidiChannel(tracks.size() % 16);
+    track->setMidiChannel((tracks.size() % 16) + 1);
 
 	int yPos = 0;
 
@@ -425,6 +426,7 @@ void TrackNavigator::mouseDown (const MouseEvent& event) {
 
         r->setSelected(true);
         currentTrack = r;
+        deviceManager->setDefaultMidiOutput(currentTrack->getMidiOutputDevice());
         
         sendChangeMessage();
         repaint();

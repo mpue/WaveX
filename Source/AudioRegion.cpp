@@ -234,7 +234,7 @@ void AudioRegion::paint (Graphics& g)
 	}
 
     g.fillRoundedRectangle(b.getX(),b.getY(),b.getWidth(),b.getHeight(),10);
-    g.setColour(Colours::white);
+    g.setColour(Colours::lightgrey);
     
     const double audioLength(this->thumbnail->getTotalLength());
     this->thumbnail->drawChannels(g, b, 0.0, audioLength, 1.0f);
@@ -251,7 +251,7 @@ void AudioRegion::paint (Graphics& g)
             g.setColour(Colours::steelblue);
             Rectangle<int> loopBounds(b.getX() + i * getWidth() / (loopCount + 1),b.getY(),b.getWidth(),b.getHeight());
             g.fillRoundedRectangle(b.getX() + i * getWidth() / (loopCount + 1) ,b.getY(),b.getWidth(),b.getHeight(),10);
-            g.setColour(Colours::white);
+            g.setColour(Colours::grey);
 
             const double audioLength(this->thumbnail->getTotalLength());
             this->thumbnail->drawChannels(g, loopBounds,0.0,audioLength, 1.0f);

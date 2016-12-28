@@ -100,7 +100,7 @@ private:
 
     Track* track = NULL;
 
-    ScopedPointer<CustomLookAndFeel> clf;
+    CustomLookAndFeel* clf;
     //[/UserVariables]
 
     //==============================================================================

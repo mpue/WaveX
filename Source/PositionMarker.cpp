@@ -32,7 +32,7 @@ void PositionMarker::paint (Graphics& g)
 		this->drawPosition = (audioPosition / length) * this->width + this->x;
 	}
     setTopLeftPosition(this->drawPosition, 0);
-    g.setColour(Colours::green);    
+    g.setColour(Colours::steelblue.darker());
     g.fillAll();
 }
 

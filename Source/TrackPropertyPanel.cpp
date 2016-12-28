@@ -136,6 +136,39 @@ TrackPropertyPanel::TrackPropertyPanel ()
     inputsLabel2->setColour (TextEditor::textColourId, Colours::black);
     inputsLabel2->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
+    addAndMakeVisible (channelCombo = new ComboBox ("channelCombo"));
+    channelCombo->setEditableText (true);
+    channelCombo->setJustificationType (Justification::centredRight);
+    channelCombo->setTextWhenNothingSelected (String());
+    channelCombo->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
+    channelCombo->addItem (TRANS("1"), 1);
+    channelCombo->addItem (TRANS("2"), 2);
+    channelCombo->addItem (TRANS("3"), 3);
+    channelCombo->addItem (TRANS("4"), 4);
+    channelCombo->addItem (TRANS("5"), 5);
+    channelCombo->addItem (TRANS("6"), 6);
+    channelCombo->addItem (TRANS("7"), 7);
+    channelCombo->addItem (TRANS("8"), 8);
+    channelCombo->addItem (TRANS("9"), 9);
+    channelCombo->addItem (TRANS("10"), 10);
+    channelCombo->addItem (TRANS("11"), 11);
+    channelCombo->addItem (TRANS("12"), 12);
+    channelCombo->addItem (TRANS("13"), 13);
+    channelCombo->addItem (TRANS("14"), 14);
+    channelCombo->addItem (TRANS("15"), 15);
+    channelCombo->addItem (TRANS("16"), 16);
+    channelCombo->addListener (this);
+
+    addAndMakeVisible (inputsLabel3 = new Label ("inputsLabel",
+                                                 TRANS("Channel")));
+    inputsLabel3->setFont (Font (12.00f, Font::plain));
+    inputsLabel3->setJustificationType (Justification::centredLeft);
+    inputsLabel3->setEditable (false, false, false);
+    inputsLabel3->setColour (Label::textColourId, Colours::white);
+    inputsLabel3->setColour (Label::outlineColourId, Colour (0x00ffffff));
+    inputsLabel3->setColour (TextEditor::textColourId, Colours::black);
+    inputsLabel3->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+
 
     //[UserPreSize]
 
@@ -150,7 +183,7 @@ TrackPropertyPanel::TrackPropertyPanel ()
 
     //[Constructor] You can add your own custom stuff here..
     setSize(150,Project::DEFAULT_TRACK_HEIGHT);
-    clf = new CustomLookAndFeel();
+    clf = Project::getInstance()->getLookAndFeel();
     volumeViewSlider->setLookAndFeel(clf);
 	addKeyListener(this);
 
@@ -186,7 +219,8 @@ TrackPropertyPanel::TrackPropertyPanel ()
     recButton->getButton()->addListener(this);
     monoButton->getButton()->addListener(this);
 
-
+    channelCombo->setSelectedId(1);
+    
     //[/Constructor]
 }
 
@@ -209,10 +243,11 @@ TrackPropertyPanel::~TrackPropertyPanel()
     inputsLabel = nullptr;
     outputCombo = nullptr;
     inputsLabel2 = nullptr;
+    channelCombo = nullptr;
+    inputsLabel3 = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
-    delete clf;
     delete resizer;
     delete constrainer;
     //[/Destructor]
@@ -237,7 +272,7 @@ void TrackPropertyPanel::paint (Graphics& g)
 		g.fillRect(0, 0, 150, getHeight());
 	}
 
-	g.setColour(Colours::darkgrey);
+	g.setColour(Colours::steelblue);
 	g.drawLine(0, getHeight(), 150, getHeight(),0.5);
 
     //[/UserPaint]
@@ -263,6 +298,8 @@ void TrackPropertyPanel::resized()
     inputsLabel->setBounds (16, 144, 55, 16);
     outputCombo->setBounds (16, 208, 128, 24);
     inputsLabel2->setBounds (16, 192, 55, 16);
+    channelCombo->setBounds (80, 240, 63, 24);
+    inputsLabel3->setBounds (16, 244, 55, 16);
     //[UserResized] Add your own custom resize handling here..
     resizer->setBounds(0,getHeight()-5, getWidth(),5);
 
@@ -377,15 +414,21 @@ void TrackPropertyPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
                     int output[2] =  { outputCombo->getSelectedId() - 1, outputCombo->getSelectedId() };
                     track->setOutputChannels(output);
                 }
-                
+
             }
             else if(track->getType() == Track::Type::MIDI) {
                 track->setMidiOutputDevice(Mixer::getInstance()->getMidiOutputs().at(outputCombo->getSelectedId() - 1));
             }
-            
+
 
         }
         //[/UserComboBoxCode_outputCombo]
+    }
+    else if (comboBoxThatHasChanged == channelCombo)
+    {
+        //[UserComboBoxCode_channelCombo] -- add your combo box handling code here..
+        track->setMidiChannel(channelCombo->getSelectedId());
+        //[/UserComboBoxCode_channelCombo]
     }
 
     //[UsercomboBoxChanged_Post]
@@ -401,6 +444,7 @@ void TrackPropertyPanel::setName(juce::String name ) {
 
 void TrackPropertyPanel::setTrack(Track *track) {
     this->track = track;
+    this->channelCombo->setSelectedId(track->getMidiChannel());
     this->volumeSlider->setValue(track->getVolume());
 }
 
@@ -455,16 +499,16 @@ void TrackPropertyPanel::changeListenerCallback(ChangeBroadcaster * source) {
 }
 
 void TrackPropertyPanel::updateChannels() {
-    
+
     if (track->getType() == Track::Type::AUDIO) {
         StringArray channels = Mixer::getInstance()->getInputChannels();
-        
+
         for (int i = 0; i < channels.size() - 1; i+=2) {
             inputCombo->addItem(channels.getReference(i) + " + " + channels.getReference(i + 1), i + 1);
         }
 
         channels = Mixer::getInstance()->getOutputChannels();
-        
+
         for (int i = 0; i < channels.size() - 1; i+=2) {
             outputCombo->addItem(channels.getReference(i) + " + " + channels.getReference(i + 1), i + 1);
         }
@@ -481,7 +525,7 @@ void TrackPropertyPanel::updateChannels() {
     inputCombo->setSelectedId(1);
     outputCombo->setSelectedId(1);
 
-    
+
 }
 
 void TrackPropertyPanel::buttonClicked (Button* buttonThatWasClicked) {
@@ -612,6 +656,15 @@ BEGIN_JUCER_METADATA
   <LABEL name="inputsLabel" id="42c156b7729e159e" memberName="inputsLabel2"
          virtualName="" explicitFocusOrder="0" pos="16 192 55 16" textCol="ffffffff"
          outlineCol="ffffff" edTextCol="ff000000" edBkgCol="0" labelText="Output"
+         editableSingleClick="0" editableDoubleClick="0" focusDiscardsChanges="0"
+         fontname="Default font" fontsize="12" bold="0" italic="0" justification="33"/>
+  <COMBOBOX name="channelCombo" id="9700632144ac1491" memberName="channelCombo"
+            virtualName="" explicitFocusOrder="0" pos="80 240 63 24" editable="1"
+            layout="34" items="1&#10;2&#10;3&#10;4&#10;5&#10;6&#10;7&#10;8&#10;9&#10;10&#10;11&#10;12&#10;13&#10;14&#10;15&#10;16"
+            textWhenNonSelected="" textWhenNoItems="(no choices)"/>
+  <LABEL name="inputsLabel" id="d0368078a1a9d2b8" memberName="inputsLabel3"
+         virtualName="" explicitFocusOrder="0" pos="16 244 55 16" textCol="ffffffff"
+         outlineCol="ffffff" edTextCol="ff000000" edBkgCol="0" labelText="Channel"
          editableSingleClick="0" editableDoubleClick="0" focusDiscardsChanges="0"
          fontname="Default font" fontsize="12" bold="0" italic="0" justification="33"/>
 </JUCER_COMPONENT>
