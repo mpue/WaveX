@@ -138,14 +138,15 @@
     <ClCompile Include="..\..\Source\MasterChannelPanel.cpp"/>
     <ClCompile Include="..\..\Source\Mixer.cpp"/>
     <ClCompile Include="..\..\Source\MixerPanel.cpp"/>
-    <ClCompile Include="..\..\Source\WaveSelector.cpp"/>
     <ClCompile Include="..\..\Source\AudioRegion.cpp"/>
     <ClCompile Include="..\..\Source\PositionMarker.cpp"/>
+    <ClCompile Include="..\..\Source\Region.cpp"/>
     <ClCompile Include="..\..\Source\TimeLine.cpp"/>
     <ClCompile Include="..\..\Source\Track.cpp"/>
     <ClCompile Include="..\..\Source\TrackNavigator.cpp"/>
     <ClCompile Include="..\..\Source\TrackPropertyPanel.cpp"/>
     <ClCompile Include="..\..\Source\TrackPropertyView.cpp"/>
+    <ClCompile Include="..\..\Source\WaveSelector.cpp"/>
     <ClCompile Include="..\..\Source\Main.cpp"/>
     <ClCompile Include="..\..\Source\Project.cpp"/>
     <ClCompile Include="..\..\..\..\..\vst\JUCE\modules\juce_audio_basics\buffers\juce_AudioChannelSet.cpp">
@@ -1736,10 +1737,10 @@
     <ClInclude Include="..\..\Source\MasterChannelPanel.h"/>
     <ClInclude Include="..\..\Source\Mixer.h"/>
     <ClInclude Include="..\..\Source\MixerPanel.h"/>
-    <ClInclude Include="..\..\Source\WaveSelector.h"/>
-    <ClInclude Include="..\..\Source\DragConstrainer.h"/>
     <ClInclude Include="..\..\Source\AudioRegion.h"/>
+    <ClInclude Include="..\..\Source\DragConstrainer.h"/>
     <ClInclude Include="..\..\Source\PositionMarker.h"/>
+    <ClInclude Include="..\..\Source\Region.h"/>
     <ClInclude Include="..\..\Source\TimeLine.h"/>
     <ClInclude Include="..\..\Source\Track.h"/>
     <ClInclude Include="..\..\Source\TrackNavigator.h"/>
@@ -1747,6 +1748,7 @@
     <ClInclude Include="..\..\Source\TrackPropertyPanel.h"/>
     <ClInclude Include="..\..\Source\TrackPropertyView.h"/>
     <ClInclude Include="..\..\Source\TrackResizer.h"/>
+    <ClInclude Include="..\..\Source\WaveSelector.h"/>
     <ClInclude Include="..\..\Source\Project.h"/>
     <ClInclude Include="..\..\..\..\..\vst\JUCE\modules\juce_audio_basics\buffers\juce_AudioChannelSet.h"/>
     <ClInclude Include="..\..\..\..\..\vst\JUCE\modules\juce_audio_basics\buffers\juce_AudioDataConverters.h"/>

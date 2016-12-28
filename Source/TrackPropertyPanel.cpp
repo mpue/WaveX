@@ -194,15 +194,15 @@ TrackPropertyPanel::TrackPropertyPanel ()
     }
 
     inputCombo->setSelectedId(1);
-    
+
     channels = Mixer::getInstance()->getOutputChannels();
-    
+
     for (int i = 0; i < channels.size() - 1; i+=2) {
         outputCombo->addItem(channels.getReference(i) + " + " + channels.getReference(i + 1), i + 1);
     }
-    
+
     outputCombo->setSelectedId(1);
-    
+
     //[/Constructor]
 }
 
@@ -377,9 +377,9 @@ void TrackPropertyPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
     else if (comboBoxThatHasChanged == outputCombo)
     {
         //[UserComboBoxCode_outputCombo] -- add your combo box handling code here..
-        
+
         if (this->track != NULL) {
-            
+
             if (track->isMono()) {
                 int output[2] =  { outputCombo->getSelectedId() - 1, outputCombo->getSelectedId() - 1 };
                 track->setOutputChannels(output);
@@ -388,7 +388,7 @@ void TrackPropertyPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
                 int output[2] =  { outputCombo->getSelectedId() - 1, outputCombo->getSelectedId() };
                 track->setOutputChannels(output);
             }
-            
+
         }
         //[/UserComboBoxCode_outputCombo]
     }
@@ -488,11 +488,11 @@ void TrackPropertyPanel::buttonClicked (Button* buttonThatWasClicked) {
             }
         }
         inputCombo->setSelectedId(1);
-        
+
         channels = Mixer::getInstance()->getOutputChannels();
-        
+
         outputCombo->clear();
-        
+
         if (track->isMono()) {
             for (int i = 0; i < channels.size(); i++) {
                 outputCombo->addItem(channels.getReference(i) + "("+ String(i) + ")", i + 1);
@@ -504,9 +504,9 @@ void TrackPropertyPanel::buttonClicked (Button* buttonThatWasClicked) {
             }
         }
         outputCombo->setSelectedId(1);
-        
+
     }
-    
+
     Mixer::getInstance()->sendChangeMessage();
 }
 

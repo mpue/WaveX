@@ -63,17 +63,16 @@
         <FILE id="bJpUsc" name="MixerPanel.h" compile="0" resource="0" file="Source/MixerPanel.h"/>
       </GROUP>
       <GROUP id="{2E2208A3-6110-3D07-5582-EAAF8EB5E967}" name="Tracks">
-        <FILE id="NLXUko" name="WaveSelector.cpp" compile="1" resource="0"
-              file="Source/WaveSelector.cpp"/>
-        <FILE id="Ym2ilz" name="WaveSelector.h" compile="0" resource="0" file="Source/WaveSelector.h"/>
-        <FILE id="pfyDAQ" name="DragConstrainer.h" compile="0" resource="0"
-              file="Source/DragConstrainer.h"/>
         <FILE id="etRReE" name="AudioRegion.cpp" compile="1" resource="0" file="Source/AudioRegion.cpp"/>
         <FILE id="KzQ23Z" name="AudioRegion.h" compile="0" resource="0" file="Source/AudioRegion.h"/>
+        <FILE id="pfyDAQ" name="DragConstrainer.h" compile="0" resource="0"
+              file="Source/DragConstrainer.h"/>
         <FILE id="UCX2Se" name="PositionMarker.cpp" compile="1" resource="0"
               file="Source/PositionMarker.cpp"/>
         <FILE id="RTkmEH" name="PositionMarker.h" compile="0" resource="0"
               file="Source/PositionMarker.h"/>
+        <FILE id="VkYXmw" name="Region.cpp" compile="1" resource="0" file="Source/Region.cpp"/>
+        <FILE id="nz357Q" name="Region.h" compile="0" resource="0" file="Source/Region.h"/>
         <FILE id="pTCHo3" name="TimeLine.cpp" compile="1" resource="0" file="Source/TimeLine.cpp"/>
         <FILE id="jwjM4l" name="TimeLine.h" compile="0" resource="0" file="Source/TimeLine.h"/>
         <FILE id="aA40hC" name="Track.cpp" compile="1" resource="0" file="Source/Track.cpp"/>
@@ -93,6 +92,9 @@
         <FILE id="Y8VraN" name="TrackPropertyView.h" compile="0" resource="0"
               file="Source/TrackPropertyView.h"/>
         <FILE id="e2QMbW" name="TrackResizer.h" compile="0" resource="0" file="Source/TrackResizer.h"/>
+        <FILE id="NLXUko" name="WaveSelector.cpp" compile="1" resource="0"
+              file="Source/WaveSelector.cpp"/>
+        <FILE id="Ym2ilz" name="WaveSelector.h" compile="0" resource="0" file="Source/WaveSelector.h"/>
       </GROUP>
       <FILE id="ei4XjV" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
       <FILE id="BLUnCU" name="Project.cpp" compile="1" resource="0" file="Source/Project.cpp"/>

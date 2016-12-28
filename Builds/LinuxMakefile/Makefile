@@ -67,14 +67,15 @@ OBJECTS := \
   $(JUCE_OBJDIR)/MasterChannelPanel_b4b7ea4c.o \
   $(JUCE_OBJDIR)/Mixer_d95e2aea.o \
   $(JUCE_OBJDIR)/MixerPanel_f7050b84.o \
-  $(JUCE_OBJDIR)/WaveSelector_5f1b5681.o \
   $(JUCE_OBJDIR)/AudioRegion_46364bcb.o \
   $(JUCE_OBJDIR)/PositionMarker_20eac8cc.o \
+  $(JUCE_OBJDIR)/Region_b2b8ac7d.o \
   $(JUCE_OBJDIR)/TimeLine_e3c86a6a.o \
   $(JUCE_OBJDIR)/Track_c9ac1f2c.o \
   $(JUCE_OBJDIR)/TrackNavigator_897222d5.o \
   $(JUCE_OBJDIR)/TrackPropertyPanel_23c5992d.o \
   $(JUCE_OBJDIR)/TrackPropertyView_42f565e6.o \
+  $(JUCE_OBJDIR)/WaveSelector_5f1b5681.o \
   $(JUCE_OBJDIR)/Main_90ebc5c2.o \
   $(JUCE_OBJDIR)/Project_cc5166fa.o \
   $(JUCE_OBJDIR)/BinaryData_ce4232d4.o \
@@ -164,11 +165,6 @@ $(JUCE_OBJDIR)/MixerPanel_f7050b84.o: ../../Source/MixerPanel.cpp
 	@echo "Compiling MixerPanel.cpp"
 	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/WaveSelector_5f1b5681.o: ../../Source/WaveSelector.cpp
-	-@mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling WaveSelector.cpp"
-	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
-
 $(JUCE_OBJDIR)/AudioRegion_46364bcb.o: ../../Source/AudioRegion.cpp
 	-@mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling AudioRegion.cpp"
@@ -177,6 +173,11 @@ $(JUCE_OBJDIR)/AudioRegion_46364bcb.o: ../../Source/AudioRegion.cpp
 $(JUCE_OBJDIR)/PositionMarker_20eac8cc.o: ../../Source/PositionMarker.cpp
 	-@mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling PositionMarker.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/Region_b2b8ac7d.o: ../../Source/Region.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling Region.cpp"
 	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/TimeLine_e3c86a6a.o: ../../Source/TimeLine.cpp
@@ -202,6 +203,11 @@ $(JUCE_OBJDIR)/TrackPropertyPanel_23c5992d.o: ../../Source/TrackPropertyPanel.cp
 $(JUCE_OBJDIR)/TrackPropertyView_42f565e6.o: ../../Source/TrackPropertyView.cpp
 	-@mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling TrackPropertyView.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/WaveSelector_5f1b5681.o: ../../Source/WaveSelector.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling WaveSelector.cpp"
 	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/Main_90ebc5c2.o: ../../Source/Main.cpp

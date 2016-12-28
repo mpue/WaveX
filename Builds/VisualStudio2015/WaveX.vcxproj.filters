@@ -409,13 +409,13 @@
     <ClCompile Include="..\..\Source\MixerPanel.cpp">
       <Filter>WaveX\Source\MIxer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\WaveSelector.cpp">
-      <Filter>WaveX\Source\Tracks</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\AudioRegion.cpp">
       <Filter>WaveX\Source\Tracks</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\PositionMarker.cpp">
+      <Filter>WaveX\Source\Tracks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Region.cpp">
       <Filter>WaveX\Source\Tracks</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\TimeLine.cpp">
@@ -431,6 +431,9 @@
       <Filter>WaveX\Source\Tracks</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\TrackPropertyView.cpp">
+      <Filter>WaveX\Source\Tracks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\WaveSelector.cpp">
       <Filter>WaveX\Source\Tracks</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Main.cpp">
@@ -2202,16 +2205,16 @@
     <ClInclude Include="..\..\Source\MixerPanel.h">
       <Filter>WaveX\Source\MIxer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\WaveSelector.h">
+    <ClInclude Include="..\..\Source\AudioRegion.h">
       <Filter>WaveX\Source\Tracks</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\DragConstrainer.h">
       <Filter>WaveX\Source\Tracks</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\AudioRegion.h">
+    <ClInclude Include="..\..\Source\PositionMarker.h">
       <Filter>WaveX\Source\Tracks</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\PositionMarker.h">
+    <ClInclude Include="..\..\Source\Region.h">
       <Filter>WaveX\Source\Tracks</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\TimeLine.h">
@@ -2233,6 +2236,9 @@
       <Filter>WaveX\Source\Tracks</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\TrackResizer.h">
+      <Filter>WaveX\Source\Tracks</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\WaveSelector.h">
       <Filter>WaveX\Source\Tracks</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Project.h">
