@@ -220,7 +220,7 @@ void MasterChannelPanel::sliderValueChanged (Slider* sliderThatWasMoved)
             track->setVolume(volume);
         }
         else {
-            sendChangeMessage();        
+            sendChangeMessage();
         }
         //[/UserSliderCode_channelVolume]
     }
@@ -305,7 +305,7 @@ void MasterChannelPanel::setMagnitude(int channel, float magnitude) {
 void MasterChannelPanel::changeListenerCallback(ChangeBroadcaster * source) {
 
     if(Mixer::getInstance() == source){
-        
+
         if (Mixer::getInstance()->getLastModifiedTrack() == this->track) {
             setName(track->getName());
             nameLabel->setText(track->getName(), juce::NotificationType::dontSendNotification);

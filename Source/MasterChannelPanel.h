@@ -99,7 +99,7 @@ private:
     double pan = 0.0f;
 
     Track* track = NULL;
-    
+
     ScopedPointer<CustomLookAndFeel> clf;
     //[/UserVariables]
 

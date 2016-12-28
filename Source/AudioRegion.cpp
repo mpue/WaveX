@@ -149,6 +149,23 @@ AudioRegion::~AudioRegion()
     // delete this->resizerR;
 }
 
+void AudioRegion::timerCallback() {
+    updateThumb();
+}
+
+void AudioRegion::updateThumb()
+{
+    double length = this->thumbnail->getTotalLength();
+    setSize(length * this->zoom, getHeight());
+    this->thumbnailBounds->setWidth(length * this->zoom);
+    repaint();
+}
+
+
+void AudioRegion::setDragger(MultiComponentDragger *dragger) {
+    this->dragger = dragger;
+}
+
 int AudioRegion::getNumSamples() {
     return audioBuffer->getNumSamples();
 }
@@ -280,24 +297,7 @@ void AudioRegion::setThumbnailBounds(Rectangle<int>* bounds) {
 
 void AudioRegion::paint (Graphics& g)
 {    
-    if (this->thumbnail->getNumChannels() == 0)
-        paintIfNoFileLoaded(g, *this->thumbnailBounds);
-    else
-        paintIfFileLoaded(g, *this->thumbnailBounds);
-    
-}
-
-void AudioRegion::paintIfNoFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds)
-{
-	g.setColour(Colours::cadetblue);
-    g.fillRect(thumbnailBounds);
-    g.setColour(Colours::white);
-    g.setFont (Font (30.00f, Font::plain));
-    g.drawFittedText("No File Loaded", thumbnailBounds, Justification::centred, 1.0f);
-}
-
-void AudioRegion::paintIfFileLoaded(Graphics& g, const Rectangle<int>& b)
-{
+    Rectangle<int> b = *this->thumbnailBounds;
     
 	if (dragger->isSelected(this)) {
 		g.setColour(Colours::steelblue.brighter());
@@ -333,9 +333,7 @@ void AudioRegion::paintIfFileLoaded(Graphics& g, const Rectangle<int>& b)
 }
 
 void AudioRegion::resized()
-{
-    // Logger::getCurrentLogger()->writeToLog(String(getHeight()));
-    
+{   
     if (this->thumbnailBounds != NULL)
         this->thumbnailBounds->setHeight(getHeight());
 }

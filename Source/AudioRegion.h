@@ -14,6 +14,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MultiComponentDragger.h"
 
+
 //==============================================================================
 /*
 */
@@ -60,25 +61,15 @@ public:
     void mouseUp(const MouseEvent & e) override;
     void mouseDrag(const MouseEvent & e) override;
     
-    inline virtual void timerCallback() override {
-        updateThumb();
-    }
+    // the timer is needed to updat the thumbnail during record
+    virtual void timerCallback() override;
     
-    inline void setDragger(MultiComponentDragger* dragger) {
-        this->dragger = dragger;
-    }
+    // component dragger used to drag and drop regions
+    void setDragger(MultiComponentDragger* dragger);
     
-    inline void updateThumb()
-    {
-        double length = this->thumbnail->getTotalLength();
-        setSize(length * this->zoom, getHeight());
-        this->thumbnailBounds->setWidth(length * this->zoom);
-        repaint();
-    }
+    void updateThumb();
     
-    virtual void componentMovedOrResized (Component& component,
-                                          bool wasMoved,
-                                          bool wasResized) override;
+    virtual void componentMovedOrResized (Component& component,bool wasMoved, bool wasResized) override;
     
 private:
 
@@ -99,8 +90,6 @@ private:
 	bool selected = false;
     bool loop = false;
     virtual void changeListenerCallback(ChangeBroadcaster * source) override;
-    void paintIfNoFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds);
-    void paintIfFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds);
     ResizableEdgeComponent* resizerR;
     ResizableEdgeComponent* resizerL;
     MultiComponentDragger* dragger = NULL;
