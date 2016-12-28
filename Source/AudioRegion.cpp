@@ -33,7 +33,6 @@ AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double
     double length = this->thumbnail->getTotalLength();
     setSize(length * this->zoom, other->getHeight());
     
-    this->volume = 1;
     this->offset = 0;
     
     addComponentListener(this);
@@ -65,7 +64,6 @@ AudioRegion::AudioRegion(AudioSampleBuffer* source, AudioFormatManager& manager,
     double length = this->thumbnail->getTotalLength();
     setSize(length * this->zoom, Project::DEFAULT_TRACK_HEIGHT);
     
-    this->volume = 1;
     this->offset = 0;
     
     // addAndMakeVisible(resizerL);
@@ -97,8 +95,7 @@ AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double
     
     double length = this->thumbnail->getTotalLength();
     setSize(length * this->zoom, other->getHeight());
-    
-    this->volume = 1;
+
     this->offset = 0;
     
     // addAndMakeVisible(resizerL);
@@ -131,7 +128,7 @@ AudioRegion::AudioRegion(File file, AudioFormatManager& manager, double sampleRa
     this->name = file.getFileNameWithoutExtension();
     this->zoom = 20;
     setSize(this->thumbnail->getTotalLength() * this->zoom, Project::DEFAULT_TRACK_HEIGHT);
-    this->volume = 1;
+
 	this->offset = 0;
     
     addComponentListener(this);
@@ -166,29 +163,7 @@ void AudioRegion::setDragger(MultiComponentDragger *dragger) {
     this->dragger = dragger;
 }
 
-int AudioRegion::getNumSamples() {
-    return audioBuffer->getNumSamples();
-}
 
-void AudioRegion::setSelected(bool selected)
-{
-	this->selected = selected;
-    this->dragger->setSelected(this, false);
-	repaint();
-}
-
-bool AudioRegion::isSelected()
-{
-	return this->selected;
-}
-
-int AudioRegion::getLoopCount() {
-    return this->loopCount;
-}
-
-void AudioRegion::setLoopCount(int count) {
-    this->loopCount = count;
-}
 
 void AudioRegion::setLoop(bool loop)
 {
@@ -203,43 +178,7 @@ void AudioRegion::setLoop(bool loop)
     repaint();
 }
 
-bool AudioRegion::isLoop()
-{
-    return this->loop;
-}
 
-void AudioRegion::setSampleOffset(long offset, bool reminder, bool notify)
-{
-    if (reminder)
-        this->oldOffset = this->sampleOffset;
-    
-    this->sampleOffset = offset;
-    
-    if (!reminder)
-        this->oldOffset = this->sampleOffset;
-    
-    if (notify)
-        sendChangeMessage();
-}
-
-long AudioRegion::getSampleOffset() {
-    return this->sampleOffset;
-}
-
-
-void AudioRegion::setOffset(int offset)
-{
-	this->offset = offset;
-}
-
-double AudioRegion::getSampleRate() {
-    return this->sampleRate;
-}
-
-int AudioRegion::getOffset()
-{
-	return offset;
-}
 
 const float* AudioRegion::getReadBuffer(int channel) {
     return audioBuffer->getReadPointer(channel);
@@ -247,18 +186,6 @@ const float* AudioRegion::getReadBuffer(int channel) {
 
 AudioSampleBuffer* AudioRegion::getBuffer() {
     return audioBuffer;
-}
-
-void AudioRegion::setGain(float gain) {
-    this->gain = gain;
-}
-
-void AudioRegion::setVolume(float volume) {
-    this->volume = volume * gain;
-}
-
-float AudioRegion::getVolume() {
-    return volume * gain;
 }
 
 void AudioRegion::setZoom(float zoom) {
@@ -349,26 +276,8 @@ void AudioRegion::changeListenerCallback(ChangeBroadcaster * source)
     }
 }
 
-String AudioRegion::getName(){
-    return this->name;
-}
-
-void AudioRegion::mouseDown(const MouseEvent & e) 
-{
-    if (dragger != NULL)
-        dragger->handleMouseDown(this, e);
-}
-
-void AudioRegion::mouseUp(const MouseEvent & e)
-{
-    if (dragger != NULL)
-        dragger->handleMouseUp(this, e);
-}
-
-void AudioRegion::mouseDrag(const MouseEvent & e)
-{
-    if (dragger != NULL)
-        dragger->handleMouseDrag(e);
+int AudioRegion::getNumSamples() {
+    return audioBuffer->getNumSamples();
 }
 
 void AudioRegion::componentMovedOrResized (Component& component, bool wasMoved, bool wasResized) {

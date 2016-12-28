@@ -74,16 +74,17 @@ public:
         this->rightVolume = 1.0;
         
         setAudioChannels(2,2);
+        
         deviceManager.setMidiInputEnabled("Oxygen 49", true);
-        deviceManager.addMidiInputCallback("Oxygen 49",this);
-        deviceManager.setDefaultMidiOutput("MIDI4x4 Midi Out 1");
+        // deviceManager.addMidiInputCallback("Oxygen 49",this);
+        // deviceManager.setDefaultMidiOutput("MIDI4x4 Midi Out 1");
         
         apfm = new AudioPluginFormatManager();
         apfm->addDefaultFormats();
         
         this->numSamples = 0;
         
-        setupIO();
+        setupIO(2,2);
         
         startTimer(50);
         
@@ -186,8 +187,8 @@ public:
         
         config.useDefaultInputChannels = false;
         config.useDefaultOutputChannels = false;
-        config.inputChannels.setRange(0, numInputChannels, true);
-        config.outputChannels.setRange(0, numOutputChannels, true);
+        config.inputChannels.setRange(0, inchannels, true);
+        config.outputChannels.setRange(0, outchannels, true);
         
         
         String error = deviceManager.setAudioDeviceSetup(config,true);
@@ -256,6 +257,24 @@ public:
         Project::getInstance()->setSampleRate(sampleRate);
         Mixer::getInstance()->setAvailableInputChannelNames(deviceManager.getCurrentAudioDevice()->getInputChannelNames());
         Mixer::getInstance()->setAvailableOutputChannelNames(deviceManager.getCurrentAudioDevice()->getOutputChannelNames());
+
+        Mixer::getInstance()->clearMidiInputs();
+        Mixer::getInstance()->clearMidiOutputs();
+
+        StringArray midiInputDevices = MidiInput::getDevices();
+        
+        for (int i = 0; i < midiInputDevices.size();i++) {
+            if (deviceManager.isMidiInputEnabled(midiInputDevices.getReference(i))) {
+                Mixer::getInstance()->addMidiInput(midiInputDevices.getReference(i));
+            }
+        }
+
+        StringArray midiOutputDevices = MidiOutput::getDevices();
+        
+        for (int i = 0; i < midiOutputDevices.size();i++) {
+            Mixer::getInstance()->addMidiOutput(midiOutputDevices.getReference(i));
+        }
+
         
     }
     
@@ -265,8 +284,35 @@ public:
                                         int numOutputChannels,
                                         int _numSamples) override {
         
-        if (plugin != NULL)
+        if (plugin != NULL) {
+            
             plugin->processBlock(*buffer, *navigator->getMidiBuffer());
+            
+            if (navigator->getTracks().size() == 1) {
+                AudioSampleBuffer* outL = outputBuffers.at(navigator->getTracks().at(0)->getOutputChannels()[0]);
+                AudioSampleBuffer* outR = outputBuffers.at(navigator->getTracks().at(0)->getOutputChannels()[1]);
+                
+                double pan = navigator->getTracks().at(0)->getPan();
+                
+                float gainLeft = cos((M_PI*(pan + 1) / 4));
+                float gainRight = sin((M_PI*(pan + 1) / 4));
+                
+                for (int j = 0; j <  _numSamples;j++) {
+                    
+                    float sampleL = buffer->getSample(0, j) * navigator->getTracks().at(0)->getVolume() * gainLeft;
+                    float sampleR = buffer->getSample(1, j) * navigator->getTracks().at(0)->getVolume() * gainRight;
+                    
+                    outL->addSample(0, j, sampleL);
+                    outR->addSample(0, j, sampleR);
+                    
+                }
+
+                navigator->getTracks().at(0)->updateMagnitude(0, _numSamples, gainLeft, gainRight);
+            }
+            
+            buffer->clear();
+            
+        }
         
         if (navigator->isPlaying()) {
             
@@ -451,13 +497,17 @@ public:
         if (navigator->isRecording())
             navigator->getMidiBuffer()->addEvent(message, numSamples);
         
+        
+        deviceManager.getDefaultMidiOutput()->sendMessageNow(message);
+        
+        /*
         if(win->isVisible()) {
             getMidiMessageCollector().addMessageToQueue(message);
-        }
-        
+        }        
         else {
             deviceManager.getDefaultMidiOutput()->sendMessageNow(message);
         }
+         */
         
     }
     
@@ -651,8 +701,8 @@ public:
         navigator->removeSelectedTrack();
     }
     
-    void addTrack() {
-        navigator->addTrack(this->sampleRate);
+    void addTrack(Track::Type type) {
+        navigator->addTrack(type, this->sampleRate);
     }
     
     void openSettings() {
@@ -823,7 +873,7 @@ private:
     virtual void menuItemSelected(int menuItemID, int topLevelMenuIndex) override
     {
         if (menuItemID == 1) {
-            addTrack();
+            addTrack(Track::Type::AUDIO);
         }
         else if (menuItemID == 2) {
             if (navigator->isPlaying())
@@ -901,11 +951,22 @@ private:
             this->marker->setDrawingBounds(0,0,navigator->getWidth(),getHeight());
             this->marker->setSize(navigator->getWidth(), getHeight());
             repaint();
+            
+            
+            for (int i = 0; i < navigator->getTracks().size();i++) {
+                
+                Track* t = navigator->getTracks().at(i);
+                
+                if (t->isSelected() && t->getType() == Track::Type::MIDI){
+                    deviceManager.addMidiInputCallback(t->getMidiInputDevice(),this);
+                    deviceManager.setDefaultMidiOutput(t->getMidiOutputDevice());
+                }
+                
+            }
+            
         }
         
     }
-    
-    
     
 };
 

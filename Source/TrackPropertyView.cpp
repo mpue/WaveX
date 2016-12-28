@@ -113,6 +113,7 @@ void TrackPropertyView::setOffset(int offset)
 void TrackPropertyView::addTrack(Track* track)
 {
 	TrackPropertyPanel* panel = new TrackPropertyPanel();
+
     panel->setName(track->getName());
 
     Mixer::getInstance()->addChangeListener(panel);
@@ -126,7 +127,9 @@ void TrackPropertyView::addTrack(Track* track)
 
 	panel->setBounds(0, yPos, 150, Project::DEFAULT_TRACK_HEIGHT);
     panel->setTrack(track);
-	addAndMakeVisible(panel);
+    panel->updateChannels();
+	
+    addAndMakeVisible(panel);
 	trackProperties.push_back(panel);
 
 	panel->addMouseListener(this, true);

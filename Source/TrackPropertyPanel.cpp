@@ -187,22 +187,6 @@ TrackPropertyPanel::TrackPropertyPanel ()
     monoButton->getButton()->addListener(this);
 
 
-    StringArray channels = Mixer::getInstance()->getInputChannels();
-
-    for (int i = 0; i < channels.size() - 1; i+=2) {
-        inputCombo->addItem(channels.getReference(i) + " + " + channels.getReference(i + 1), i + 1);
-    }
-
-    inputCombo->setSelectedId(1);
-
-    channels = Mixer::getInstance()->getOutputChannels();
-
-    for (int i = 0; i < channels.size() - 1; i+=2) {
-        outputCombo->addItem(channels.getReference(i) + " + " + channels.getReference(i + 1), i + 1);
-    }
-
-    outputCombo->setSelectedId(1);
-
     //[/Constructor]
 }
 
@@ -361,13 +345,18 @@ void TrackPropertyPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 
         if (this->track != NULL) {
 
-            if (track->isMono()) {
-                int input[2] =  { inputCombo->getSelectedId() - 1, inputCombo->getSelectedId() - 1 };
-                track->setInputChannels(input);
+            if (track->getType() == Track::Type::AUDIO) {
+                if (track->isMono()) {
+                    int input[2] =  { inputCombo->getSelectedId() - 1, inputCombo->getSelectedId() - 1 };
+                    track->setInputChannels(input);
+                }
+                else {
+                    int input[2] =  { inputCombo->getSelectedId() - 1, inputCombo->getSelectedId() };
+                    track->setInputChannels(input);
+                }
             }
-            else {
-                int input[2] =  { inputCombo->getSelectedId() - 1, inputCombo->getSelectedId() };
-                track->setInputChannels(input);
+            else if(track->getType() == Track::Type::MIDI) {
+                track->setMidiInputDevice(Mixer::getInstance()->getMidiInputs().at(inputCombo->getSelectedId() - 1));
             }
 
         }
@@ -379,15 +368,21 @@ void TrackPropertyPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
         //[UserComboBoxCode_outputCombo] -- add your combo box handling code here..
 
         if (this->track != NULL) {
-
-            if (track->isMono()) {
-                int output[2] =  { outputCombo->getSelectedId() - 1, outputCombo->getSelectedId() - 1 };
-                track->setOutputChannels(output);
+            if (track->getType() == Track::Type::AUDIO) {
+                if (track->isMono()) {
+                    int output[2] =  { outputCombo->getSelectedId() - 1, outputCombo->getSelectedId() - 1 };
+                    track->setOutputChannels(output);
+                }
+                else {
+                    int output[2] =  { outputCombo->getSelectedId() - 1, outputCombo->getSelectedId() };
+                    track->setOutputChannels(output);
+                }
+                
             }
-            else {
-                int output[2] =  { outputCombo->getSelectedId() - 1, outputCombo->getSelectedId() };
-                track->setOutputChannels(output);
+            else if(track->getType() == Track::Type::MIDI) {
+                track->setMidiOutputDevice(Mixer::getInstance()->getMidiOutputs().at(outputCombo->getSelectedId() - 1));
             }
+            
 
         }
         //[/UserComboBoxCode_outputCombo]
@@ -457,6 +452,36 @@ void TrackPropertyPanel::changeListenerCallback(ChangeBroadcaster * source) {
         }
 
     }
+}
+
+void TrackPropertyPanel::updateChannels() {
+    
+    if (track->getType() == Track::Type::AUDIO) {
+        StringArray channels = Mixer::getInstance()->getInputChannels();
+        
+        for (int i = 0; i < channels.size() - 1; i+=2) {
+            inputCombo->addItem(channels.getReference(i) + " + " + channels.getReference(i + 1), i + 1);
+        }
+
+        channels = Mixer::getInstance()->getOutputChannels();
+        
+        for (int i = 0; i < channels.size() - 1; i+=2) {
+            outputCombo->addItem(channels.getReference(i) + " + " + channels.getReference(i + 1), i + 1);
+        }
+    }
+    else if (track->getType() == Track::Type::MIDI) {
+        for (int i = 0; i < Mixer::getInstance()->getMidiInputs().size();i++) {
+            inputCombo->addItem(Mixer::getInstance()->getMidiInputs().at(i), i + 1);
+        }
+        for (int i = 0; i < Mixer::getInstance()->getMidiOutputs().size();i++) {
+            outputCombo->addItem(Mixer::getInstance()->getMidiOutputs().at(i), i + 1);
+        }
+    }
+
+    inputCombo->setSelectedId(1);
+    outputCombo->setSelectedId(1);
+
+    
 }
 
 void TrackPropertyPanel::buttonClicked (Button* buttonThatWasClicked) {

@@ -34,6 +34,7 @@ ToolbarPanel::ToolbarPanel (MainContentComponent* mcc)
     //[/Constructor_pre]
 
     addAndMakeVisible (addTrackButton = new ImageButton ("addTrackButton"));
+    addTrackButton->setTooltip (TRANS("Add a new audio track"));
     addTrackButton->setButtonText (TRANS("new button"));
     addTrackButton->addListener (this);
 
@@ -42,6 +43,7 @@ ToolbarPanel::ToolbarPanel (MainContentComponent* mcc)
                                Image(), 1.000f, Colours::cornflowerblue,
                                Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (removeTrackButton = new ImageButton ("removeTrackButton"));
+    removeTrackButton->setTooltip (TRANS("Remove selected track"));
     removeTrackButton->setButtonText (TRANS("new button"));
     removeTrackButton->addListener (this);
 
@@ -50,6 +52,7 @@ ToolbarPanel::ToolbarPanel (MainContentComponent* mcc)
                                   Image(), 1.000f, Colours::cornflowerblue,
                                   Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (copyButton = new ImageButton ("copyButton"));
+    copyButton->setTooltip (TRANS("Copy "));
     copyButton->setButtonText (TRANS("new button"));
     copyButton->addListener (this);
 
@@ -58,6 +61,7 @@ ToolbarPanel::ToolbarPanel (MainContentComponent* mcc)
                            Image(), 1.000f, Colours::cornflowerblue,
                            Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (editButton = new ImageButton ("editButton"));
+    editButton->setTooltip (TRANS("Edit"));
     editButton->setButtonText (TRANS("new button"));
     editButton->addListener (this);
 
@@ -66,6 +70,7 @@ ToolbarPanel::ToolbarPanel (MainContentComponent* mcc)
                            Image(), 1.000f, Colours::cornflowerblue,
                            Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (settingsButton = new ImageButton ("settingsButton"));
+    settingsButton->setTooltip (TRANS("Settings"));
     settingsButton->setButtonText (TRANS("new button"));
     settingsButton->addListener (this);
 
@@ -74,6 +79,7 @@ ToolbarPanel::ToolbarPanel (MainContentComponent* mcc)
                                Image(), 1.000f, Colours::cornflowerblue,
                                Image(), 1.000f, Colour (0x00000000));
     addAndMakeVisible (importAudioButton = new ImageButton ("importAudioButton"));
+    importAudioButton->setTooltip (TRANS("Import audio on selected track"));
     importAudioButton->setButtonText (TRANS("new button"));
     importAudioButton->addListener (this);
 
@@ -89,6 +95,15 @@ ToolbarPanel::ToolbarPanel (MainContentComponent* mcc)
                               ImageCache::getFromMemory (fontawesome_470_plug_32_0_000000_none_png, fontawesome_470_plug_32_0_000000_none_pngSize), 1.000f, Colour (0x00000000),
                               Image(), 1.000f, Colours::cornflowerblue,
                               Image(), 1.000f, Colour (0x00000000));
+    addAndMakeVisible (addMidiTrackButton = new ImageButton ("addMidiTrackButton"));
+    addMidiTrackButton->setTooltip (TRANS("Add a new Midi track"));
+    addMidiTrackButton->setButtonText (TRANS("new button"));
+    addMidiTrackButton->addListener (this);
+
+    addMidiTrackButton->setImages (false, true, true,
+                                   ImageCache::getFromMemory (fontawesome_470_music_32_0_000000_none_png, fontawesome_470_music_32_0_000000_none_pngSize), 1.000f, Colour (0x00000000),
+                                   Image(), 1.000f, Colours::cornflowerblue,
+                                   Image(), 1.000f, Colour (0x00000000));
 
     //[UserPreSize]
     //[/UserPreSize]
@@ -112,6 +127,7 @@ ToolbarPanel::~ToolbarPanel()
     settingsButton = nullptr;
     importAudioButton = nullptr;
     pluginsButton = nullptr;
+    addMidiTrackButton = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -135,11 +151,12 @@ void ToolbarPanel::resized()
 
     addTrackButton->setBounds (10, 14, 24, 24);
     removeTrackButton->setBounds (40, 14, 24, 24);
-    copyButton->setBounds (72, 14, 24, 24);
-    editButton->setBounds (104, 14, 24, 24);
-    settingsButton->setBounds (136, 14, 24, 24);
-    importAudioButton->setBounds (168, 14, 24, 24);
-    pluginsButton->setBounds (200, 14, 24, 24);
+    copyButton->setBounds (104, 14, 24, 24);
+    editButton->setBounds (136, 14, 24, 24);
+    settingsButton->setBounds (168, 14, 24, 24);
+    importAudioButton->setBounds (200, 14, 24, 24);
+    pluginsButton->setBounds (232, 14, 24, 24);
+    addMidiTrackButton->setBounds (72, 14, 24, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -152,7 +169,7 @@ void ToolbarPanel::buttonClicked (Button* buttonThatWasClicked)
     if (buttonThatWasClicked == addTrackButton)
     {
         //[UserButtonCode_addTrackButton] -- add your button handler code here..
-        mcc->addTrack();
+        mcc->addTrack(Track::Type::AUDIO);
         //[/UserButtonCode_addTrackButton]
     }
     else if (buttonThatWasClicked == removeTrackButton)
@@ -189,6 +206,12 @@ void ToolbarPanel::buttonClicked (Button* buttonThatWasClicked)
         mcc->addPlugin("Trio");
         //[/UserButtonCode_pluginsButton]
     }
+    else if (buttonThatWasClicked == addMidiTrackButton)
+    {
+        //[UserButtonCode_addMidiTrackButton] -- add your button handler code here..
+        mcc->addTrack(Track::Type::MIDI);        
+        //[/UserButtonCode_addMidiTrackButton]
+    }
 
     //[UserbuttonClicked_Post]
     //[/UserbuttonClicked_Post]
@@ -215,47 +238,53 @@ BEGIN_JUCER_METADATA
                  overlayOpacity="0.330" fixedSize="0" initialWidth="130" initialHeight="50">
   <BACKGROUND backgroundColour="ffffff"/>
   <IMAGEBUTTON name="addTrackButton" id="b040fab84432c089" memberName="addTrackButton"
-               virtualName="" explicitFocusOrder="0" pos="10 14 24 24" buttonText="new button"
-               connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
-               resourceNormal="ionicons_201_androidaddcircle_24_0_000000_none_png"
+               virtualName="" explicitFocusOrder="0" pos="10 14 24 24" tooltip="Add a new audio track"
+               buttonText="new button" connectedEdges="0" needsCallback="1"
+               radioGroupId="0" keepProportions="1" resourceNormal="ionicons_201_androidaddcircle_24_0_000000_none_png"
                opacityNormal="1" colourNormal="0" resourceOver="" opacityOver="1"
                colourOver="ff6495ed" resourceDown="" opacityDown="1" colourDown="0"/>
   <IMAGEBUTTON name="removeTrackButton" id="70f6412688935645" memberName="removeTrackButton"
-               virtualName="" explicitFocusOrder="0" pos="40 14 24 24" buttonText="new button"
-               connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
-               resourceNormal="ionicons_201_androidremovecircle_24_0_000000_none_png"
+               virtualName="" explicitFocusOrder="0" pos="40 14 24 24" tooltip="Remove selected track"
+               buttonText="new button" connectedEdges="0" needsCallback="1"
+               radioGroupId="0" keepProportions="1" resourceNormal="ionicons_201_androidremovecircle_24_0_000000_none_png"
                opacityNormal="1" colourNormal="0" resourceOver="" opacityOver="1"
                colourOver="ff6495ed" resourceDown="" opacityDown="1" colourDown="0"/>
   <IMAGEBUTTON name="copyButton" id="14fb30dd46ca0d9a" memberName="copyButton"
-               virtualName="" explicitFocusOrder="0" pos="72 14 24 24" buttonText="new button"
-               connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
-               resourceNormal="fontawesome_470_copy_24_0_000000_none_png" opacityNormal="1"
-               colourNormal="0" resourceOver="" opacityOver="1" colourOver="ff6495ed"
-               resourceDown="" opacityDown="1" colourDown="0"/>
+               virtualName="" explicitFocusOrder="0" pos="104 14 24 24" tooltip="Copy "
+               buttonText="new button" connectedEdges="0" needsCallback="1"
+               radioGroupId="0" keepProportions="1" resourceNormal="fontawesome_470_copy_24_0_000000_none_png"
+               opacityNormal="1" colourNormal="0" resourceOver="" opacityOver="1"
+               colourOver="ff6495ed" resourceDown="" opacityDown="1" colourDown="0"/>
   <IMAGEBUTTON name="editButton" id="aae00a5880931a24" memberName="editButton"
-               virtualName="" explicitFocusOrder="0" pos="104 14 24 24" buttonText="new button"
-               connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
-               resourceNormal="fontawesome_470_pencil_24_0_000000_none_png"
+               virtualName="" explicitFocusOrder="0" pos="136 14 24 24" tooltip="Edit"
+               buttonText="new button" connectedEdges="0" needsCallback="1"
+               radioGroupId="0" keepProportions="1" resourceNormal="fontawesome_470_pencil_24_0_000000_none_png"
                opacityNormal="1" colourNormal="0" resourceOver="" opacityOver="1"
                colourOver="ff6495ed" resourceDown="" opacityDown="1" colourDown="0"/>
   <IMAGEBUTTON name="settingsButton" id="291742b3ea36a25e" memberName="settingsButton"
-               virtualName="" explicitFocusOrder="0" pos="136 14 24 24" buttonText="new button"
-               connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
-               resourceNormal="ionicons_201_settings_24_0_000000_none_png" opacityNormal="1"
-               colourNormal="0" resourceOver="" opacityOver="1" colourOver="ff6495ed"
-               resourceDown="" opacityDown="1" colourDown="0"/>
+               virtualName="" explicitFocusOrder="0" pos="168 14 24 24" tooltip="Settings"
+               buttonText="new button" connectedEdges="0" needsCallback="1"
+               radioGroupId="0" keepProportions="1" resourceNormal="ionicons_201_settings_24_0_000000_none_png"
+               opacityNormal="1" colourNormal="0" resourceOver="" opacityOver="1"
+               colourOver="ff6495ed" resourceDown="" opacityDown="1" colourDown="0"/>
   <IMAGEBUTTON name="importAudioButton" id="1584ca1f93618745" memberName="importAudioButton"
-               virtualName="" explicitFocusOrder="0" pos="168 14 24 24" buttonText="new button"
-               connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
-               resourceNormal="fontawesome_470_fileaudioo_32_0_000000_none_png"
+               virtualName="" explicitFocusOrder="0" pos="200 14 24 24" tooltip="Import audio on selected track"
+               buttonText="new button" connectedEdges="0" needsCallback="1"
+               radioGroupId="0" keepProportions="1" resourceNormal="fontawesome_470_fileaudioo_32_0_000000_none_png"
                opacityNormal="1" colourNormal="0" resourceOver="" opacityOver="1"
                colourOver="ff6495ed" resourceDown="" opacityDown="1" colourDown="0"/>
   <IMAGEBUTTON name="pluginsButton" id="3f2551fd0588fd22" memberName="pluginsButton"
-               virtualName="" explicitFocusOrder="0" pos="200 14 24 24" buttonText="new button"
+               virtualName="" explicitFocusOrder="0" pos="232 14 24 24" buttonText="new button"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
                resourceNormal="fontawesome_470_plug_32_0_000000_none_png" opacityNormal="1"
                colourNormal="0" resourceOver="" opacityOver="1" colourOver="ff6495ed"
                resourceDown="" opacityDown="1" colourDown="0"/>
+  <IMAGEBUTTON name="addMidiTrackButton" id="db543ed06f17880d" memberName="addMidiTrackButton"
+               virtualName="" explicitFocusOrder="0" pos="72 14 24 24" tooltip="Add a new Midi track"
+               buttonText="new button" connectedEdges="0" needsCallback="1"
+               radioGroupId="0" keepProportions="1" resourceNormal="fontawesome_470_music_32_0_000000_none_png"
+               opacityNormal="1" colourNormal="0" resourceOver="" opacityOver="1"
+               colourOver="ff6495ed" resourceDown="" opacityDown="1" colourDown="0"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA
@@ -357,6 +386,20 @@ static const unsigned char resource_ToolbarPanel_fontawesome_470_plug_32_0_00000
 
 const char* ToolbarPanel::fontawesome_470_plug_32_0_000000_none_png = (const char*) resource_ToolbarPanel_fontawesome_470_plug_32_0_000000_none_png;
 const int ToolbarPanel::fontawesome_470_plug_32_0_000000_none_pngSize = 522;
+
+// JUCER_RESOURCE: fontawesome_470_music_32_0_000000_none_png, 549, "../Resources/font-awesome_4-7-0_music_32_0_000000_none.png"
+static const unsigned char resource_ToolbarPanel_fontawesome_470_music_32_0_000000_none_png[] = { 137,80,78,71,13,10,26,10,0,0,0,13,73,72,68,82,0,0,0,32,0,0,0,32,8,3,0,0,0,68,164,138,198,0,0,0,195,80,
+76,84,69,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,64,
+112,171,32,0,0,0,64,116,82,78,83,0,1,2,3,4,5,6,8,11,12,15,16,17,20,23,27,28,41,42,53,60,61,70,75,80,84,95,103,104,109,117,128,130,131,136,140,142,146,151,157,160,162,165,166,170,173,181,186,188,193,197,
+209,215,217,220,222,226,232,235,241,243,247,251,253,112,253,127,32,0,0,0,209,73,68,65,84,56,203,197,146,215,18,130,48,16,69,67,48,34,86,192,222,123,23,17,123,103,255,255,171,156,80,148,146,224,155,222,
+167,236,158,51,201,78,18,132,184,17,181,74,146,79,165,210,220,2,216,113,104,182,102,130,19,18,133,130,210,58,193,59,97,65,212,250,119,240,39,40,40,244,88,224,11,228,9,16,43,228,224,215,130,53,109,199,
+8,183,174,138,105,131,45,28,155,5,193,109,48,4,179,150,241,53,194,194,178,44,5,27,97,33,120,179,255,22,4,28,39,168,189,43,192,115,214,230,8,100,195,127,11,187,30,193,23,225,234,19,18,46,195,114,154,176,
+118,216,58,180,106,208,226,48,246,102,48,60,190,151,105,157,138,254,114,109,112,3,120,76,138,246,155,162,5,115,38,140,223,203,139,79,16,17,35,157,15,95,177,56,18,134,30,215,9,98,39,83,215,207,151,117,
+35,207,132,47,184,32,91,213,63,98,137,50,0,0,0,0,73,69,78,68,174,66,96,130,0,0};
+
+const char* ToolbarPanel::fontawesome_470_music_32_0_000000_none_png = (const char*) resource_ToolbarPanel_fontawesome_470_music_32_0_000000_none_png;
+const int ToolbarPanel::fontawesome_470_music_32_0_000000_none_pngSize = 549;
 
 
 //[EndFile] You can add extra defines here...

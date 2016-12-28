@@ -76,6 +76,29 @@ public:
         return this->availableOutputChannels;
     }
     
+    vector<String> getMidiInputs() {
+        return midiInputs;
+    }
+    
+    vector<String> getMidiOutputs() {
+        return midiOutputs;
+    }
+    
+    void clearMidiInputs() {
+        this->midiInputs.clear();
+    }
+
+    void clearMidiOutputs() {
+        this->midiOutputs.clear();
+    }
+    
+    void addMidiInput(String name) {
+        this->midiInputs.push_back(name);
+    }
+
+    void addMidiOutput(String name) {
+        this->midiOutputs.push_back(name);
+    }
     
 private:
     Mixer() {
@@ -92,6 +115,9 @@ private:
     Track* lastModified = NULL;
     StringArray availableInputChannels;
     StringArray availableOutputChannels;
+    
+    vector<String> midiInputs;
+    vector<String> midiOutputs;
     
 };
 

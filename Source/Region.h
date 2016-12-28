@@ -22,7 +22,7 @@ public:
     virtual void paint (Graphics&) override = 0;
     virtual void resized() override = 0;
 
-    void setZoom(float zoom);
+    virtual void setZoom(float zoom);
 
     void setName(String name);
     String getName();
@@ -32,13 +32,13 @@ public:
     void setSelected(bool selected);
     bool isSelected();
     
-    void setLoop(bool loop);
+    virtual void setLoop(bool loop);
     bool isLoop();
     
     void setOffset(int offset);
     int getOffset();
     
-    void setLoopCount(int count);
+    virtual void setLoopCount(int count);
     int getLoopCount();
     
     long getSampleOffset();
@@ -71,7 +71,7 @@ protected:
     int loopCount = 1;
     bool selected = false;
     bool loop = false;
-    virtual void changeListenerCallback(ChangeBroadcaster * source) = 0;
+    virtual void changeListenerCallback(ChangeBroadcaster * source) override = 0;
 
     ResizableEdgeComponent* resizerR;
     ResizableEdgeComponent* resizerL;

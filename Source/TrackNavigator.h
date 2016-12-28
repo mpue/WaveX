@@ -36,7 +36,7 @@ public:
 
     WaveSelector* getSelector();
     
-    void addTrack(double sampleRate);
+    void addTrack(Track::Type type,double sampleRate);
 	void removeSelectedTrack();
     Track* getCurrentTrack();
     std::vector<Track*> getTracks();

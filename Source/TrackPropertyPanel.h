@@ -63,6 +63,7 @@ public:
 	virtual bool keyStateChanged(bool isKeyDown, Component* originatingComponent) override;
     virtual void changeListenerCallback(ChangeBroadcaster * source) override;
     void buttonClicked (Button* buttonThatWasClicked) override;
+    void updateChannels();
     //[/UserMethods]
 
     void paint (Graphics& g) override;

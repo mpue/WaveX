@@ -13,6 +13,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "AudioRegion.h"
+#include "Region.h"
 #include <vector>
 #include "MultiComponentDragger.h"
 
@@ -22,12 +23,19 @@
 
 using namespace std;
 
-class Track    : public Component, public ChangeBroadcaster, public ChangeListener
+class Track : public Component, public ChangeBroadcaster, public ChangeListener
 {
 public:
-    Track(double sampleRate, MultiComponentDragger* dragger);
+    
+    enum Type {
+        AUDIO,
+        MIDI,
+        INSTRUMENT
+    };
+    
+    Track(Type type,double sampleRate, MultiComponentDragger* dragger);
     ~Track();
-
+    
 	void setZoom(float zoom);
 	String getName();
     void setName(String name);
@@ -56,17 +64,16 @@ public:
     void clearSelection();
     
 	AudioSampleBuffer* getBuffer();
-    
   	AudioSampleBuffer* getRecordingBuffer();
     
     void updateMagnitude(int sample, int buffersize, float gainLeft, float gainRight);
 
-    AudioRegion* getCurrentRegion(long sample);
+    Region* getCurrentRegion(long sample);
     
     void removeSelectedRegions(bool clear);
     void duplicateSelectedRegions();
     void copySelectedRegions();
-    void duplicateRegion(AudioRegion* region);
+    void duplicateRegion(Region* region);
     void splitRegion();
     
     void setCurrentMarkerPosition(int position);
@@ -74,7 +81,7 @@ public:
     int getMidiChannel();
     void setMidiChannel(int channel);
     
-    vector<AudioRegion*> getRegions();
+    vector<Region*> getRegions();
     
     void setTrackLength(long trackLength);
     void setMagnitude(int channel, double magnitude);
@@ -118,6 +125,32 @@ public:
         return &this->outputChannels[0];
     }
     
+    inline Type getType() {
+        return this->type;
+    }
+    
+    inline void setType(Type type) {
+        this->type = type;
+    }
+    
+    inline void setMidiInputDevice(String name) {
+        this->midiInputDevice = name;
+        sendChangeMessage();
+    }
+
+    inline void setMidiOutputDevice(String name) {
+        this->midiOutputDevice = name;
+        sendChangeMessage();
+    }
+
+    inline String getMidiInputDevice() {
+        return midiInputDevice;
+    }
+    
+    inline String getMidiOutputDevice() {
+        return midiOutputDevice;
+    }
+    
 private:
 
 	float zoom = 20;
@@ -129,11 +162,12 @@ private:
 	bool selected = false;
 	AudioRegion* currentRegion = NULL;
 	AudioFormatManager* manager;
-	vector<AudioRegion*> regions;
+	vector<Region*> regions;
 	long numSamples = 0;
 	double maxLength = 600 * this->sampleRate;
 	int offset = 0;
 	AudioSampleBuffer* audioBuffer;
+    MidiBuffer* midiBuffer;
     int markerPosition = 0;
     int bufferSize;
     int midiChannel = 1;
@@ -150,6 +184,11 @@ private:
     
     int inputChannels[2] = { 0 };
     int outputChannels[2] = { 0 };
+    
+    String midiInputDevice;
+    String midiOutputDevice;
+    
+    Type type = AUDIO;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Track)
 };

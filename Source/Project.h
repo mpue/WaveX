@@ -14,6 +14,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include <vector>
 #include "AudioRegion.h"
+#include "Region.h"
 
 class Project : public ChangeBroadcaster {
     
@@ -60,14 +61,20 @@ public:
         ChangeBroadcaster::addChangeListener(listener);
     }
     
-    inline void copyRegion(AudioRegion* region) {
+    inline void copyRegion(Region* region) {
         regionsClipboard.push_back(region);
     }
     
-    inline AudioRegion* pasteRegion(long position) {
-        AudioRegion* copy = new AudioRegion(regionsClipboard.back(),*manager,sampleRate);
-        copy->setSampleOffset(position, false, false);
-        return copy;
+    inline Region* pasteRegion(long position) {
+        
+        if (AudioRegion* region = dynamic_cast<AudioRegion*>(regionsClipboard.back())) {
+            AudioRegion* copy = new AudioRegion(region,*manager,sampleRate);
+            copy->setSampleOffset(position, false, false);
+            return copy;
+        }
+        
+        return NULL;
+
     }
     
     inline void clearRegionsClipboard() {
@@ -99,7 +106,7 @@ protected:
     String name;
     long tracklength;
     double sampleRate;
-    std::vector<AudioRegion*> regionsClipboard;
+    std::vector<Region*> regionsClipboard;
     AudioFormatManager* manager;
     
 };

@@ -198,9 +198,9 @@ std::vector<Track*> TrackNavigator::getTracks() {
     return this->tracks;
 }
 
-void TrackNavigator::addTrack(double sampleRate) {
+void TrackNavigator::addTrack(Track::Type type, double sampleRate) {
     
-	Track* track = new Track(sampleRate, this->dragger);
+	Track* track = new Track(type, sampleRate, this->dragger);
     addAndMakeVisible(track);
 	
 	track->addChangeListener(this);
@@ -306,7 +306,9 @@ void TrackNavigator::changeListenerCallback(ChangeBroadcaster * source)
             tracks.at(i)->setTrackLength(tracklength);
         }
     }
-	
+    if (Track* track = dynamic_cast<Track*>(source)){
+        sendChangeMessage();
+    }
 
 }
 
@@ -423,6 +425,7 @@ void TrackNavigator::mouseDown (const MouseEvent& event) {
 
         r->setSelected(true);
         currentTrack = r;
+        
         sendChangeMessage();
         repaint();
     }
