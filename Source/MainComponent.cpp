@@ -293,11 +293,15 @@ public:
                                         int numOutputChannels,
                                         int _numSamples) override {
         
+
+        
+        //  Logger::getCurrentLogger()->writeToLog("Time elapsed :"+String(time));
+        
         if (plugin != NULL) {
             
             if (navigator->getTracks().size() == 1) {
                 
-                // plugin->processBlock(*buffer, *navigator->getMidiBuffer());
+                // plugin->processBlock(*buffer, navigator->getTracks().at(0)->get);
                 
                 AudioSampleBuffer* outL = outputBuffers.at(navigator->getTracks().at(0)->getOutputChannels()[0]);
                 AudioSampleBuffer* outR = outputBuffers.at(navigator->getTracks().at(0)->getOutputChannels()[1]);
@@ -354,8 +358,12 @@ public:
                     
                 }
                 else if (t->getType() == Track::Type::MIDI) {
+                    
+                    double seconds = Time::getMillisecondCounterHiRes() * 0.001 ;
+                    double time = seconds - Project::getInstance()->getRecordingStartTime();
 
-                    MidiMessage* m = t->getMessage(numSamples);
+                    MidiMessage* m = t->getMessage(time, numSamples);
+                    
                     
                     if (m != NULL) {
                         deviceManager.getDefaultMidiOutput()->sendMessageNow(*m);
@@ -416,7 +424,10 @@ public:
                 }
                 else if (t->getType() == Track::Type::MIDI) {
                     
-                    MidiMessage* m = t->getMessage(numSamples);
+                    double seconds = Time::getMillisecondCounterHiRes() * 0.001 ;
+                    double time = seconds - Project::getInstance()->getRecordingStartTime();
+                    
+                    MidiMessage* m = t->getMessage(time, numSamples);
                     
                     if (m != NULL) {
                         deviceManager.getDefaultMidiOutput()->sendMessageNow(*m);
@@ -536,6 +547,9 @@ public:
     
     virtual void handleIncomingMidiMessage (MidiInput* source, const MidiMessage& message) override {
         
+        double seconds = Time::getMillisecondCounterHiRes() * 0.001;
+        double currentTime = seconds - Project::getInstance()->getRecordingStartTime();
+        
         if (navigator->getTracks().size() == 0) {
             return;
         }
@@ -551,8 +565,9 @@ public:
                     MidiMessage* messageToSend = new MidiMessage(message);
                     // adjust channel according to track
                     messageToSend->setChannel(t->getMidiChannel());
+                    messageToSend->setTimeStamp(currentTime);
                     // add the message to the track, which will pass the message to the current recording region
-                    t->addMessage(messageToSend, numSamples);
+                    t->addMessage(messageToSend, currentTime, numSamples);
                     deviceManager.getDefaultMidiOutput()->sendMessageNow(*messageToSend);
                 }
             }

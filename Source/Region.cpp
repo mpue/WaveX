@@ -75,6 +75,14 @@ void Region::setSampleOffset(long offset, bool reminder, bool notify)
     if (notify)
         sendChangeMessage();
 }
+/**
+ * Returns the offset before this region was moved or resized, this is needed in order to clear 
+ * a range of samples of the tracks audio buffer.
+ */
+
+long Region::getOldOffset() {
+    return this->oldOffset;
+}
 
 long Region::getSampleOffset() {
     return this->sampleOffset;

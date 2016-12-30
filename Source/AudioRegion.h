@@ -13,6 +13,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MultiComponentDragger.h"
+#include "ResizeConstrainer.h"
 #include "Region.h"
 
 
@@ -34,6 +35,7 @@ public:
 
     AudioThumbnail* getThumbnail();
     virtual void setThumbnailBounds(Rectangle<int>* bounds) override;
+    virtual Rectangle<int>* getThumbnailBounds() override;
     
     virtual int getNumSamples() override;
     
@@ -61,6 +63,8 @@ private:
     AudioThumbnail* thumbnail;
     AudioThumbnailCache* thumbnailCache;
     ScopedPointer<AudioFormatReaderSource> readerSource;
+    ResizeConstrainer* constrainer;
+    
     Rectangle<int>* thumbnailBounds = NULL;
     virtual void changeListenerCallback(ChangeBroadcaster * source) override;
 

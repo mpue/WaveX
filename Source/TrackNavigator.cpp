@@ -136,6 +136,7 @@ double TrackNavigator::getMaxLength() {
 
 void TrackNavigator::setPlaying(bool playing) {
     this->playing = playing;
+    Project::getInstance()->setRecordingStartTime();
     sendChangeMessage();
 }
 
@@ -145,6 +146,7 @@ bool TrackNavigator::isPlaying() {
 
 void TrackNavigator::setRecording(bool recording) {
     if (recording) {
+        Project::getInstance()->setRecordingStartTime();
         recordStart = marker->getPosition() * Project::getInstance()->getSampleRate();
         for (int i = 0; i < tracks.size();i++) {
             if (tracks.at(i)->isRecording()) {
@@ -161,6 +163,7 @@ void TrackNavigator::setRecording(bool recording) {
         }
     }
     else {
+        Project::getInstance()->setRecordingStopTime();
         recordStop  = marker->getPosition() * Project::getInstance()->getSampleRate();
         for (int i = 0; i < tracks.size();i++) {
             if (tracks.at(i)->isRecording()) {

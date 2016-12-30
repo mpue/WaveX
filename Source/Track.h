@@ -153,8 +153,8 @@ public:
         return midiOutputDevice;
     }
     
-    MidiMessage* getMessage(int sampleNum);
-    void addMessage(MidiMessage* message, int sampleNum);
+    MidiMessage* getMessage(double time, int sampleNum);
+    void addMessage(MidiMessage* message, double time, int sampleNUm);
     
 private:
 

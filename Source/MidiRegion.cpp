@@ -20,11 +20,13 @@ MidiRegion::MidiRegion(long startSample, long sampleLength, double sampleRate) {
     double length = this->midiThumbnail->getTotalLength();
     setSize(length * this->zoom, Project::DEFAULT_TRACK_HEIGHT);
     this->offset = 0;
+    this->sequence = new MidiMessageSequence();
 }
 
 MidiRegion::~MidiRegion() {
     delete midiThumbnail;
     delete midiBuffer;
+    delete sequence;
 }
 
 void MidiRegion::paint (Graphics& g) {
@@ -72,6 +74,10 @@ void MidiRegion::resized() {
 void MidiRegion::setThumbnailBounds(Rectangle<int>* bounds) {
     this->thumbnailBounds = bounds;
 }
+
+Rectangle<int>*  MidiRegion::getThumbnailBounds() {
+    return new Rectangle<int>(*this->thumbnailBounds);
+};
 
 void MidiRegion::setNumSamples(int numSamples) {
     this->numSamples = numSamples;
@@ -154,7 +160,7 @@ void MidiRegion::stopRecording() {
         
         MidiMessage* m = new MidiMessage(message);
         
-        m->setTimeStamp(dragger->snap(m->getTimeStamp(),Project::getInstance()->getBufferSize()));
+        // m->setTimeStamp(dragger->snap(m->getTimeStamp(),Project::getInstance()->getBufferSize()));
         
         if (m->getRawDataSize() > 0)
             midiMessages.insert(std::make_pair(sampleNumber,m ));        
@@ -200,19 +206,48 @@ void MidiRegion::changeListenerCallback(ChangeBroadcaster * source) {
 void MidiRegion::clear() {
     midiMessages.clear();
     midiBuffer->clear();
+    sequence->clear();
 }
 
-void MidiRegion::addMessage(int sampleNum, MidiMessage* m) {
-    midiMessages.insert(std::make_pair(sampleNum,m));
+void MidiRegion::addMessage(MidiMessage* m, double time, int sampleNum) {
+    Logger::getCurrentLogger()->writeToLog("Adding message at time "+String(time));
+    // midiMessages.insert(std::make_pair(time,m));
+    sequence->addEvent(*m);
+    if (m->isNoteOn()) {
+        sequence->updateMatchedPairs();
+    }
     numSamples = sampleNum;
-    this->midiThumbnail->addMessage(sampleNum,m);
+    this->midiThumbnail->addMessage(time * Project::getInstance()->getSampleRate(),m);
 }
 
-MidiMessage* MidiRegion::getMessage(int sampleNum) {
-    std::map<int,MidiMessage*>::iterator it;
-    it = midiMessages.find(sampleNum);
+MidiMessage* MidiRegion::getMessage(double time) {
+
+    int index = sequence->getNextIndexAtTime(time);
+    
+    if (index > lastIndex) {
+
+        lastIndex = index;
+        
+        juce::MidiMessageSequence::MidiEventHolder* current = sequence->getEventPointer(index);
+        
+        if (current != NULL) {
+            MidiMessage* m = new MidiMessage(current->message);
+            return m;
+        }
+        
+        
+    }
+    
+    return NULL;
+    
+    /*
+    std::map<double,MidiMessage*>::iterator it;
+    it = midiMessages.find(time);
     if (it != midiMessages.end()) {
         return it->second;
     }
-    return NULL;
+     return 0;
+     */
+
+     
 }

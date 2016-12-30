@@ -25,6 +25,14 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "Track::changeListenerCallback(juce::ChangeBroadcaster*):Track.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "r-&gt;getNumSamples();">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "AudioRegion::paintIfFileLoaded(juce::Graphics&amp;, juce::Rectangle&lt;int&gt; const&amp;):AudioRegion.cpp">
       </ContextState>
    </ContextStates>

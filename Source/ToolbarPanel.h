@@ -36,6 +36,7 @@
                                                                     //[/Comments]
 */
 class ToolbarPanel  : public Component,
+                      public ChangeBroadcaster,
                       public ButtonListener
 {
 public:
@@ -45,6 +46,9 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
+    ImageButton* getMixerButton () {
+        return this->mixerButton.get();
+    }
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -68,6 +72,8 @@ public:
     static const int fontawesome_470_plug_32_0_000000_none_pngSize;
     static const char* fontawesome_470_music_32_0_000000_none_png;
     static const int fontawesome_470_music_32_0_000000_none_pngSize;
+    static const char* mixer_128px_png;
+    static const int mixer_128px_pngSize;
 
 
 private:
@@ -84,6 +90,7 @@ private:
     ScopedPointer<ImageButton> importAudioButton;
     ScopedPointer<ImageButton> pluginsButton;
     ScopedPointer<ImageButton> addMidiTrackButton;
+    ScopedPointer<ImageButton> mixerButton;
 
 
     //==============================================================================

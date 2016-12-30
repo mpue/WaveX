@@ -25,7 +25,7 @@
 //==============================================================================
 /*
 */
-class AppWindowComponent    : public Component
+class AppWindowComponent : public Component, public ChangeListener
 {
 public:
     AppWindowComponent();
@@ -44,6 +44,7 @@ private:
 	TrackPropertyView* trackProperties = NULL;
     ScopedPointer<ToolbarPanel> toolbar;
 	ScopedPointer<InfoPanel> infoPanel;
+    ScopedPointer<InfoPanel> dummyPanel;
     ScopedPointer<MixerPanel> mixer;
 	TimeLine* timeLine;
 
@@ -53,6 +54,8 @@ private:
     
     virtual void mouseDown (const MouseEvent& event) override;
     virtual void mouseDrag (const MouseEvent& event) override;
+    
+    virtual void changeListenerCallback (ChangeBroadcaster* source) override;
 
     int offsetBottom;
     

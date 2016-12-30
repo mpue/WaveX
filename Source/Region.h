@@ -29,7 +29,7 @@ public:
 
     virtual int getNumSamples() = 0;
     virtual void setThumbnailBounds(Rectangle<int>* bounds) = 0;
-    
+    virtual Rectangle<int>* getThumbnailBounds() = 0;
     void setSelected(bool selected);
     bool isSelected();
     
@@ -44,6 +44,8 @@ public:
     
     long getSampleOffset();
     void setSampleOffset(long offset,bool reminder, bool notify);
+    
+    long getOldOffset();
     
     double getSampleRate();
     

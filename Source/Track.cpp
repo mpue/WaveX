@@ -129,8 +129,8 @@ void Track::duplicateRegion(Region *region) {
             duplicate->setZoom(zoom);
         
         
-        audioBuffer->copyFrom(0, duplicate->getSampleOffset(), *_region->getBuffer(), 0, 0, _region->getBuffer()->getNumSamples());
-        audioBuffer->copyFrom(1, duplicate->getSampleOffset(), *_region->getBuffer(), 1, 0, _region->getBuffer()->getNumSamples());
+        audioBuffer->copyFrom(0, duplicate->getSampleOffset(), *_region->getBuffer(), 0, 0, _region->getNumSamples());
+        audioBuffer->copyFrom(1, duplicate->getSampleOffset(), *_region->getBuffer(), 1, 0, _region->getNumSamples());
         
         repaint();
         
@@ -365,6 +365,12 @@ Region* Track::getCurrentRegion(long sample) {
         
     }
     
+    /*
+    if (current == NULL) {
+        Logger::getCurrentLogger()->writeToLog("No region found.");
+    }
+     */
+    
     return current;
     
 }
@@ -376,7 +382,7 @@ const float Track::getSample(int channel, long sample) {
     return audioBuffer->getSample(channel,sample);
 }
 
-void Track::addMessage(MidiMessage* message,int sampleNum) {
+void Track::addMessage(MidiMessage* message,double time, int sampleNum) {
 
     Region* r;
     
@@ -388,11 +394,11 @@ void Track::addMessage(MidiMessage* message,int sampleNum) {
     }
 
     MidiRegion* midiRegion = static_cast<MidiRegion*>(r);
-    midiRegion->addMessage(sampleNum, message);
+    midiRegion->addMessage(message,time, sampleNum);
     this->numSamples = sampleNum;
 }
 
-MidiMessage* Track::getMessage(int sampleNum) {
+MidiMessage* Track::getMessage(double time,int sampleNum) {
     
     Region* r = getCurrentRegion(sampleNum);
     
@@ -401,7 +407,7 @@ MidiMessage* Track::getMessage(int sampleNum) {
     }
     
     MidiRegion* midiRegion = static_cast<MidiRegion*>(r);
-    return midiRegion->getMessage(sampleNum);
+    return midiRegion->getMessage(time);
     
 }
 
@@ -520,9 +526,12 @@ void Track::setMidiChannel(int channel) {
 void Track::changeListenerCallback(ChangeBroadcaster * source) {
     
     if(AudioRegion* r = dynamic_cast<AudioRegion*>(source)){
-        audioBuffer->copyFrom(0, r->getSampleOffset(), *r->getBuffer(), 0, 0, r->getBuffer()->getNumSamples());
-        audioBuffer->copyFrom(1, r->getSampleOffset(), *r->getBuffer(), 1, 0, r->getBuffer()->getNumSamples());
-        
+        // cleanup old range first
+        audioBuffer->clear(r->getOldOffset(), r->getBuffer()->getNumSamples());
+        // copy data from region to tracks audio buffer
+        long numSamples = r->getNumSamples();
+        audioBuffer->copyFrom(0, r->getSampleOffset(), *r->getBuffer(), 0, 0, numSamples);
+        audioBuffer->copyFrom(1, r->getSampleOffset(), *r->getBuffer(), 1, 0, numSamples);
     }
     if(MasterChannelPanel* panel = dynamic_cast<MasterChannelPanel*>(source)){
         setVolume(panel->getVolume());

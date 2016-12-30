@@ -14,11 +14,8 @@
 #include "Project.h"
 
 //==============================================================================
-AppWindowComponent::AppWindowComponent()
-{
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
-        
+AppWindowComponent::AppWindowComponent() {
+    
     this->offsetBottom = 350;
     
     Rectangle<int> r = Desktop::getInstance().getDisplays().getMainDisplay().userArea;
@@ -81,7 +78,9 @@ AppWindowComponent::AppWindowComponent()
     mcc->getNavigator()->addChangeListener(transport);
     
     this->toolbar = new ToolbarPanel(mcc);
-    this->toolbar->setBounds(150, 0, 300, 50);
+    this->toolbar->setBounds(150, 0, 320, 50);
+    
+    this->toolbar->addChangeListener(this);
     
 	this->infoPanel = new InfoPanel();
 	this->infoPanel->setBounds(0, 0, 150, 75);
@@ -90,10 +89,18 @@ AppWindowComponent::AppWindowComponent()
     addAndMakeVisible(toolbar);
 	addAndMakeVisible(infoPanel);
     
+    this->dummyPanel = new InfoPanel();
+    this->dummyPanel->setFillColour(Colours::darkgrey);
+    this->dummyPanel->setBounds(0, viewport->getHeight() + 30, 153, this->offsetBottom);
+    addAndMakeVisible(dummyPanel);
+    
     setSize(r.getWidth(), r.getHeight());
     setBounds(0,0,r.getWidth(),r.getHeight());
     
     timeLine->toFront(false);
+    toolbar->toFront(false);
+    dummyPanel->toFront(false);
+    mixerViewport->toFront(false);
     
     // transport->setTopLeftPosition(50, r.getHeight() - (this->transport->getHeight() + 50));
 
@@ -121,14 +128,14 @@ void AppWindowComponent::paint (Graphics& g)
 
 void AppWindowComponent::resized()
 {
-    // This method is where you should set the bounds of any child
-    // components that your component contains..
     Rectangle<int> area(getLocalBounds());
     // this->menu->setBounds(area.removeFromTop(LookAndFeel::getDefaultLookAndFeel().getDefaultMenuBarHeight()));
     viewport->setSize(getWidth() - 150, getHeight() - this->offsetBottom - 3);
     this->trackProperties->setBounds(0, 75, 150, getHeight() - this->offsetBottom - 75);
     this->mixerViewport->setBounds(0,getHeight() - this->offsetBottom + 75 ,getWidth(), this->offsetBottom - 75);
     this->mixer->setBounds(0,50,getWidth()* 2 ,800);
+    this->trackProperties->resized();
+    this->trackProperties->repaint();
     // viewport->setBounds(getX(), getY()  ,getWidth(),getHeight() - this->offsetBottom);
 
 }
@@ -150,5 +157,24 @@ void AppWindowComponent::mouseDrag (const MouseEvent& event) {
     
 }
 
+void AppWindowComponent::changeListenerCallback (ChangeBroadcaster* source) {
+    
+    bool mixerVisible = toolbar->getMixerButton()->getToggleState();
+    
+    Rectangle<int> area(getLocalBounds());
+    if (mixerVisible) {
+        this->offsetBottom = 350;
+    }
+    else {
+        this->offsetBottom = 0;
+    }
+    
+    this->mixerViewport->setVisible(mixerVisible);
+    this->dummyPanel->setVisible(mixerVisible);
+    
+    resized();
+    repaint();
+
+}
 
 

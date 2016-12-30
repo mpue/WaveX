@@ -31,11 +31,12 @@ public:
     virtual void resized() override;
 
     virtual void setThumbnailBounds(Rectangle<int>* bounds) override;
+    virtual Rectangle<int>* getThumbnailBounds() override;
     void setNumSamples(int numSamples);
     virtual int getNumSamples() override;
     
     MidiBuffer* getBuffer();
-    
+    MidiMessageSequence* getSequence();
     MidiThumbnail* getThumbnail();
     
     virtual void setZoom(float zoom) override;
@@ -47,8 +48,8 @@ public:
     virtual void startRecording() override;
     
     void clear();
-    MidiMessage* getMessage(int sampleNum);
-    void addMessage(int sampleNum, MidiMessage* m);
+    MidiMessage* getMessage(double time);
+    void addMessage(MidiMessage* m, double time, int sampleNum);
     
     // component dragger used to drag and drop regions
     void setDragger(MultiComponentDragger* dragger);
@@ -64,8 +65,9 @@ private:
     int numSamples;
     MidiBuffer::Iterator* iterator = NULL;
     MidiMessage message;
-    std::map<int, MidiMessage*> midiMessages;
-    
+    std::map<double, MidiMessage*> midiMessages;
+    MidiMessageSequence* sequence;
+    int lastIndex = -1;
 };
 
 

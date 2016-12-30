@@ -15,6 +15,11 @@
 AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double sampleRate, long startSample, long numSamples) {
 
     this->sampleRate = sampleRate;
+    this->zoom = 20;
+    this->constrainer = new ResizeConstrainer(this->zoom / 4);
+    
+    resizerR = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::rightEdge);
+    resizerL = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::leftEdge);
     
     this->thumbnailCache = new AudioThumbnailCache(1);
     this->thumbnail = new AudioThumbnail(512, manager, *this->thumbnailCache);
@@ -28,12 +33,18 @@ AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double
     this->thumbnail->addBlock(0, *audioBuffer, 0,numSamples);
     
     this->name = other->getName();
-    this->zoom = 20;
     
+    /*
     double length = this->thumbnail->getTotalLength();
     setSize(length * this->zoom, other->getHeight());
+    */
     
+    setSize((audioBuffer->getNumSamples() / sampleRate) * this->zoom, Project::DEFAULT_TRACK_HEIGHT);
+
     this->offset = 0;
+    
+    addAndMakeVisible(resizerL);
+    addAndMakeVisible(resizerR);
     
     addComponentListener(this);
     
@@ -41,9 +52,12 @@ AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double
 
 
 AudioRegion::AudioRegion(AudioSampleBuffer* source, AudioFormatManager& manager, long startSample, long sampleLength, double sampleRate) {
+
+    this->zoom = 20;
+    this->constrainer = new ResizeConstrainer(this->zoom / 4);
     
-    // resizerR = new ResizableEdgeComponent(this,nullptr,ResizableEdgeComponent::rightEdge);
-    // resizerL = new ResizableEdgeComponent(this,nullptr,ResizableEdgeComponent::leftEdge);
+    resizerR = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::rightEdge);
+    resizerL = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::leftEdge);
     
     this->sampleRate = sampleRate;
     
@@ -59,47 +73,57 @@ AudioRegion::AudioRegion(AudioSampleBuffer* source, AudioFormatManager& manager,
     this->thumbnail->addBlock(0, *audioBuffer, 0, sampleLength);
     
     this->name = "new";
-    this->zoom = 20;
     
+    /*
     double length = this->thumbnail->getTotalLength();
     setSize(length * this->zoom, Project::DEFAULT_TRACK_HEIGHT);
+    */
     
+    setSize((audioBuffer->getNumSamples() / sampleRate) * this->zoom, Project::DEFAULT_TRACK_HEIGHT);
+
     this->offset = 0;
     
-    // addAndMakeVisible(resizerL);
-    // addAndMakeVisible(resizerR);
+    addAndMakeVisible(resizerL);
+    addAndMakeVisible(resizerR);
     
     addComponentListener(this);
 }
 
 AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double sampleRate) {
     
-    // resizerR = new ResizableEdgeComponent(this,nullptr,ResizableEdgeComponent::rightEdge);
-    // resizerL = new ResizableEdgeComponent(this,nullptr,ResizableEdgeComponent::leftEdge);
+    this->zoom = 20;
+    this->constrainer = new ResizeConstrainer(this->zoom / 4);
+    
+    resizerR = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::rightEdge);
+    resizerL = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::leftEdge);
     
     this->sampleRate = sampleRate;
     
     this->thumbnailCache = new AudioThumbnailCache(1);
     this->thumbnail = new AudioThumbnail(512, manager, *this->thumbnailCache);
     this->thumbnail->addChangeListener(this);
+    this->setThumbnailBounds(other->getThumbnailBounds());
     
     audioBuffer = new AudioSampleBuffer(2, other->getBuffer()->getNumSamples());
-    audioBuffer->copyFrom(0, 0, *other->getBuffer(), 0, 0, other->getNumSamples());
-    audioBuffer->copyFrom(1, 0, *other->getBuffer(), 1, 0, other->getNumSamples());
+    audioBuffer->copyFrom(0, 0, *other->getBuffer(), 0, 0, other->getBuffer()->getNumSamples());
+    audioBuffer->copyFrom(1, 0, *other->getBuffer(), 1, 0, other->getBuffer()->getNumSamples());
     
     this->thumbnail->reset(2, sampleRate);
-    this->thumbnail->addBlock(0, *audioBuffer, 0,other->getNumSamples());
+    this->thumbnail->addBlock(0, *audioBuffer, 0,other->getBuffer()->getNumSamples());
     
     this->name = other->getName();
-    this->zoom = 20;
     
+    /*
     double length = this->thumbnail->getTotalLength();
     setSize(length * this->zoom, other->getHeight());
+     */
+    
+    setSize((getNumSamples() / sampleRate) * this->zoom, Project::DEFAULT_TRACK_HEIGHT);
 
     this->offset = 0;
     
-    // addAndMakeVisible(resizerL);
-    // addAndMakeVisible(resizerR);
+    addAndMakeVisible(resizerL);
+    addAndMakeVisible(resizerR);
    
     addComponentListener(this);
 }
@@ -107,8 +131,11 @@ AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double
 //==============================================================================
 AudioRegion::AudioRegion(File file, AudioFormatManager& manager, double sampleRate)
 {
-    // resizerR = new ResizableEdgeComponent(this,nullptr,ResizableEdgeComponent::rightEdge);
-    // resizerL = new ResizableEdgeComponent(this,nullptr,ResizableEdgeComponent::leftEdge);
+    this->zoom = 20;
+    this->constrainer = new ResizeConstrainer(this->zoom / 4);
+
+    resizerR = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::rightEdge);
+    resizerL = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::leftEdge);
 
 	this->sampleRate = sampleRate;
 
@@ -126,15 +153,15 @@ AudioRegion::AudioRegion(File file, AudioFormatManager& manager, double sampleRa
     this->thumbnail->addBlock(0, *audioBuffer, 0,reader->lengthInSamples);
      
     this->name = file.getFileNameWithoutExtension();
-    this->zoom = 20;
-    setSize(this->thumbnail->getTotalLength() * this->zoom, Project::DEFAULT_TRACK_HEIGHT);
+
+    setSize((audioBuffer->getNumSamples() / sampleRate) * this->zoom, Project::DEFAULT_TRACK_HEIGHT);
 
 	this->offset = 0;
     
     addComponentListener(this);
     
-    // addAndMakeVisible(resizerL);
-    // addAndMakeVisible(resizerR);
+    addAndMakeVisible(resizerL);
+    addAndMakeVisible(resizerR);
 }
 
 AudioRegion::~AudioRegion()
@@ -142,8 +169,9 @@ AudioRegion::~AudioRegion()
     delete this->thumbnailCache;
     delete this->thumbnail;
     delete this->audioBuffer;
-    // delete this->resizerL;
-    // delete this->resizerR;
+    delete this->resizerL;
+    delete this->resizerR;
+    delete this->constrainer;
 }
 
 void AudioRegion::timerCallback() {
@@ -152,7 +180,8 @@ void AudioRegion::timerCallback() {
 
 void AudioRegion::updateThumb()
 {
-    double length = this->thumbnail->getTotalLength();
+    // double length = this->thumbnail->getTotalLength();
+    double length = getNumSamples() / sampleRate;
     setSize(length * this->zoom, getHeight());
     this->thumbnailBounds->setWidth(length * this->zoom);
     repaint();
@@ -197,10 +226,15 @@ void AudioRegion::setZoom(float zoom) {
     this->zoom = zoom;
     
     if (loop) {
-        setSize(this->thumbnail->getTotalLength() * (loopCount + 1) * this->zoom, getHeight());
+        // setSize(this->thumbnail->getTotalLength() * (loopCount + 1) * this->zoom, getHeight());
+        setSize(getNumSamples() / sampleRate * (loopCount + 1) * this->zoom, getHeight());
+
     }
     else {
-        setSize(this->thumbnail->getTotalLength() * this->zoom, getHeight());
+        // setSize(this->thumbnail->getTotalLength() * this->zoom, getHeight());
+        // setSize(getNumSamples() / sampleRate * this->zoom, getHeight());
+        setSize(getNumSamples() / sampleRate * this->zoom, getHeight());
+
     }
     
     int newOffset = (this->sampleOffset / this->sampleRate) * zoom;
@@ -208,17 +242,18 @@ void AudioRegion::setZoom(float zoom) {
 
     this->setTopLeftPosition(newOffset, 0);
     
-    /*
     resizerR->setSize(5, getHeight());
     resizerR->setTopLeftPosition(getWidth() - 5, 0);
     
     resizerL->setSize(5, getHeight());
     resizerL->setTopLeftPosition(0, 0);
-    */
+    
     // setBounds(0,0,this->thumbnail->getTotalLength() * this->zoom, 200);
     this->thumbnailBounds->setSize(this->thumbnail->getTotalLength() * this->zoom, getHeight());
     
     dragger->setRaster(this->zoom / 4);
+    constrainer->setRaster(this->zoom / 4);
+    constrainer->setMaxWidth((audioBuffer->getNumSamples() / sampleRate) * this->zoom);
     
     repaint();
 }
@@ -227,9 +262,14 @@ void AudioRegion::setThumbnailBounds(Rectangle<int>* bounds) {
     this->thumbnailBounds = bounds;
 }
 
+Rectangle<int>*  AudioRegion::getThumbnailBounds() {
+    return new Rectangle<int>(*this->thumbnailBounds);
+};
+
 void AudioRegion::paint (Graphics& g)
 {    
     Rectangle<int> b = *this->thumbnailBounds;
+    int effectiveWidth = getWidth() ;//(this->getNumSamples() / sampleRate) * this->zoom;
     
 	if (dragger->isSelected(this)) {
 		g.setColour(Colours::steelblue.brighter());
@@ -238,14 +278,14 @@ void AudioRegion::paint (Graphics& g)
 		g.setColour(Colours::steelblue);
 	}
 
-    g.fillRoundedRectangle(b.getX(),b.getY(),b.getWidth(),b.getHeight(),10);
-    g.setColour(Colours::lightgrey);
+    g.fillRoundedRectangle(b.getX(),b.getY(),effectiveWidth,b.getHeight(),10);
+    g.setColour(Colours::white);
     
     const double audioLength(this->thumbnail->getTotalLength());
     this->thumbnail->drawChannels(g, b, 0.0, audioLength, 1.0f);
     
     g.setColour(Colours::steelblue.darker());    
-    g.drawRoundedRectangle(b.getX(),b.getY(),b.getWidth(),b.getHeight(),10,1.0f);
+    g.drawRoundedRectangle(b.getX(),b.getY(),effectiveWidth,b.getHeight(),10,1.0f);
     
     g.setColour(Colours::darkblue);
     g.setFont(14.0);
@@ -254,8 +294,8 @@ void AudioRegion::paint (Graphics& g)
     if(loop) {
         for (int i = 1; i <= loopCount;i++) {
             g.setColour(Colours::steelblue);
-            Rectangle<int> loopBounds(b.getX() + i * getWidth() / (loopCount + 1),b.getY(),b.getWidth(),b.getHeight());
-            g.fillRoundedRectangle(b.getX() + i * getWidth() / (loopCount + 1) ,b.getY(),b.getWidth(),b.getHeight(),10);
+            Rectangle<int> loopBounds(b.getX() + i * effectiveWidth / (loopCount + 1),b.getY(),effectiveWidth,b.getHeight());
+            g.fillRoundedRectangle(b.getX() + i * effectiveWidth / (loopCount + 1) ,b.getY(),effectiveWidth,b.getHeight(),10);
             g.setColour(Colours::grey);
 
             const double audioLength(this->thumbnail->getTotalLength());
@@ -266,8 +306,15 @@ void AudioRegion::paint (Graphics& g)
 
 void AudioRegion::resized()
 {   
-    if (this->thumbnailBounds != NULL)
+    if (this->thumbnailBounds != NULL) {
         this->thumbnailBounds->setHeight(getHeight());
+        // this->thumbnailBounds->setWidth(getWidth());
+    }
+    
+    constrainer->setRaster(zoom / 4);
+    int maxWidth = (audioBuffer->getNumSamples() / sampleRate) * this->zoom;
+    constrainer->setMaxWidth(maxWidth);
+    resizerR->setTopLeftPosition(getWidth() - 5, 0);
 }
 
 AudioThumbnail* AudioRegion::getThumbnail() {
@@ -282,6 +329,16 @@ void AudioRegion::changeListenerCallback(ChangeBroadcaster * source)
 }
 
 int AudioRegion::getNumSamples() {
+    
+    int originalSize = thumbnailBounds->getWidth();
+    int reducedSize = getWidth();
+    
+    // region has been resized with resizer component, thus wee need to report another smaple size
+    if (reducedSize > 0 && reducedSize  < originalSize) {
+        int effectiveSamples = (getWidth() / zoom) * sampleRate;
+        return effectiveSamples;
+    }
+    
     return audioBuffer->getNumSamples();
 }
 
@@ -292,6 +349,9 @@ void AudioRegion::componentMovedOrResized (Component& component, bool wasMoved, 
         double sampleRate = Project::getInstance()->getSampleRate();
         
         long sampleNum = (tracklen / (tracklen * zoom)) * getBounds().getX() * getSampleRate();
+        
+        oldOffset = sampleNum;
+        
         if (sampleNum != getSampleOffset()) {
             setSampleOffset(sampleNum, true, true);
         }
@@ -303,4 +363,9 @@ void AudioRegion::componentMovedOrResized (Component& component, bool wasMoved, 
         
         Logger::getCurrentLogger()->writeToLog("AudioRegion sampleOffset " + String(sampleOffset));
     }
+    if (wasResized) {
+        // track needs to be notified about resizing in order to adjust the sample buffer
+        sendChangeMessage();
+    }
+    
 }

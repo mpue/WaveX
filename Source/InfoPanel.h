@@ -24,8 +24,15 @@ public:
 
     void paint (Graphics&) override;
     void resized() override;
+    
+    void setFillColour(Colour c) {
+        this->fillColour = c;
+    }
 
 private:
+    
+    Colour fillColour = Colours::darkgrey;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (InfoPanel)
 };
 

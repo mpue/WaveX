@@ -24,7 +24,7 @@ InfoPanel::~InfoPanel()
 void InfoPanel::paint (Graphics& g)
 {
 
-    g.fillAll (Colours::darkgrey);
+    g.fillAll (this->fillColour);
 	g.setColour(Colours::steelblue);
 
 	g.drawLine(0, getHeight(), getWidth(), getHeight(), 1.0f);

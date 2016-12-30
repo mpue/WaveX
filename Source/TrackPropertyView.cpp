@@ -91,6 +91,20 @@ void TrackPropertyView::resized()
     //[/UserPreResize]
 
     //[UserResized] Add your own custom resize handling here..
+    for(std::vector<TrackPropertyPanel*>::iterator it = trackProperties.begin(); it != trackProperties.end();it++) {
+        (*it)->resized();
+        (*it)->repaint();
+    }
+    
+    int height = 0;
+    
+    for (int i = 0; i < this->trackProperties.size();i++) {
+        trackProperties.at(i)->setTopLeftPosition(trackProperties.at(i)->getX(), trackProperties.at(i)->getTrack()->getY());
+        height += trackProperties.at(i)->getHeight();
+    }
+    
+    setSize(getWidth(), height);
+    
     //[/UserResized]
 }
 
