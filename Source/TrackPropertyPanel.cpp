@@ -159,15 +159,15 @@ TrackPropertyPanel::TrackPropertyPanel ()
     channelCombo->addItem (TRANS("16"), 16);
     channelCombo->addListener (this);
 
-    addAndMakeVisible (inputsLabel3 = new Label ("inputsLabel",
+    addAndMakeVisible (channelLabel = new Label ("channelLabel",
                                                  TRANS("Channel")));
-    inputsLabel3->setFont (Font (12.00f, Font::plain));
-    inputsLabel3->setJustificationType (Justification::centredLeft);
-    inputsLabel3->setEditable (false, false, false);
-    inputsLabel3->setColour (Label::textColourId, Colours::white);
-    inputsLabel3->setColour (Label::outlineColourId, Colour (0x00ffffff));
-    inputsLabel3->setColour (TextEditor::textColourId, Colours::black);
-    inputsLabel3->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+    channelLabel->setFont (Font (12.00f, Font::plain));
+    channelLabel->setJustificationType (Justification::centredLeft);
+    channelLabel->setEditable (false, false, false);
+    channelLabel->setColour (Label::textColourId, Colours::white);
+    channelLabel->setColour (Label::outlineColourId, Colour (0x00ffffff));
+    channelLabel->setColour (TextEditor::textColourId, Colours::black);
+    channelLabel->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
 
     //[UserPreSize]
@@ -244,7 +244,7 @@ TrackPropertyPanel::~TrackPropertyPanel()
     outputCombo = nullptr;
     inputsLabel2 = nullptr;
     channelCombo = nullptr;
-    inputsLabel3 = nullptr;
+    channelLabel = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -299,7 +299,7 @@ void TrackPropertyPanel::resized()
     outputCombo->setBounds (16, 208, 128, 24);
     inputsLabel2->setBounds (16, 192, 55, 16);
     channelCombo->setBounds (80, 240, 63, 24);
-    inputsLabel3->setBounds (16, 244, 55, 16);
+    channelLabel->setBounds (16, 244, 55, 16);
     //[UserResized] Add your own custom resize handling here..
     resizer->setBounds(0,getHeight()-5, getWidth(),5);
 
@@ -444,7 +444,17 @@ void TrackPropertyPanel::setName(juce::String name ) {
 
 void TrackPropertyPanel::setTrack(Track *track) {
     this->track = track;
-    this->channelCombo->setSelectedId(track->getMidiChannel());
+
+    if (this->track->getType() == Track::Type::MIDI) {
+        this->channelCombo->setSelectedId(track->getMidiChannel());
+        this->channelCombo->setVisible(true);
+        this->channelLabel->setVisible(false);
+    }
+    else {
+        this->channelLabel->setVisible(false);
+        this->channelCombo->setVisible(false);
+    }
+
     this->volumeSlider->setValue(track->getVolume());
 }
 
@@ -662,7 +672,7 @@ BEGIN_JUCER_METADATA
             virtualName="" explicitFocusOrder="0" pos="80 240 63 24" editable="1"
             layout="34" items="1&#10;2&#10;3&#10;4&#10;5&#10;6&#10;7&#10;8&#10;9&#10;10&#10;11&#10;12&#10;13&#10;14&#10;15&#10;16"
             textWhenNonSelected="" textWhenNoItems="(no choices)"/>
-  <LABEL name="inputsLabel" id="d0368078a1a9d2b8" memberName="inputsLabel3"
+  <LABEL name="channelLabel" id="d0368078a1a9d2b8" memberName="channelLabel"
          virtualName="" explicitFocusOrder="0" pos="16 244 55 16" textCol="ffffffff"
          outlineCol="ffffff" edTextCol="ff000000" edBkgCol="0" labelText="Channel"
          editableSingleClick="0" editableDoubleClick="0" focusDiscardsChanges="0"

@@ -60,7 +60,7 @@ AppWindowComponent::AppWindowComponent() {
 	this->viewport->setPropertyView(this->trackProperties);
 
     // addAndMakeVisible(menu);
-	addAndMakeVisible(timeLine);
+	addChildComponent(timeLine);
     addAndMakeVisible(viewport);
 	addAndMakeVisible(trackProperties);
     addAndMakeVisible(mixerViewport);
@@ -83,7 +83,7 @@ AppWindowComponent::AppWindowComponent() {
     this->toolbar->addChangeListener(this);
     
 	this->infoPanel = new InfoPanel();
-	this->infoPanel->setBounds(0, 0, 150, 75);
+	this->infoPanel->setBounds(0, 0, 155, 75);
 
     addAndMakeVisible(transport);
     addAndMakeVisible(toolbar);
@@ -91,7 +91,7 @@ AppWindowComponent::AppWindowComponent() {
     
     this->dummyPanel = new InfoPanel();
     this->dummyPanel->setFillColour(Colours::darkgrey);
-    this->dummyPanel->setBounds(0, viewport->getHeight() + 30, 153, this->offsetBottom);
+    this->dummyPanel->setBounds(0, viewport->getHeight() + 25, 150, this->offsetBottom);
     addAndMakeVisible(dummyPanel);
     
     setSize(r.getWidth(), r.getHeight());
@@ -100,8 +100,10 @@ AppWindowComponent::AppWindowComponent() {
     timeLine->toFront(false);
     toolbar->toFront(false);
     dummyPanel->toFront(false);
-    mixerViewport->toFront(false);
     
+    mixerViewport->toFront(false);
+    viewport->addComponentListener(trackProperties);
+
     // transport->setTopLeftPosition(50, r.getHeight() - (this->transport->getHeight() + 50));
 
 }

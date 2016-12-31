@@ -32,6 +32,8 @@
 MixerPanel::MixerPanel ()
 {
     //[Constructor_pre] You can add your own custom stuff here..
+
+
     //[/Constructor_pre]
 
     addAndMakeVisible (masterChannel = new MasterChannelPanel());
@@ -60,7 +62,6 @@ MixerPanel::~MixerPanel()
 
     masterChannel = nullptr;
     aux1 = nullptr;
-
 
     //[Destructor]. You can add your own custom destruction code here..
 	for (std::vector<MasterChannelPanel*>::iterator it = channels.begin(); it != channels.end(); ++it) {

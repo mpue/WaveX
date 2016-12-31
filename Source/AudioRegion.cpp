@@ -19,7 +19,7 @@ AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double
     this->constrainer = new ResizeConstrainer(this->zoom / 4);
     
     resizerR = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::rightEdge);
-    resizerL = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::leftEdge);
+    // resizerL = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::leftEdge);
     
     this->thumbnailCache = new AudioThumbnailCache(1);
     this->thumbnail = new AudioThumbnail(512, manager, *this->thumbnailCache);
@@ -43,7 +43,7 @@ AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double
 
     this->offset = 0;
     
-    addAndMakeVisible(resizerL);
+    //addAndMakeVisible(resizerL);
     addAndMakeVisible(resizerR);
     
     addComponentListener(this);
@@ -57,7 +57,7 @@ AudioRegion::AudioRegion(AudioSampleBuffer* source, AudioFormatManager& manager,
     this->constrainer = new ResizeConstrainer(this->zoom / 4);
     
     resizerR = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::rightEdge);
-    resizerL = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::leftEdge);
+    // resizerL = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::leftEdge);
     
     this->sampleRate = sampleRate;
     
@@ -83,7 +83,7 @@ AudioRegion::AudioRegion(AudioSampleBuffer* source, AudioFormatManager& manager,
 
     this->offset = 0;
     
-    addAndMakeVisible(resizerL);
+    // addAndMakeVisible(resizerL);
     addAndMakeVisible(resizerR);
     
     addComponentListener(this);
@@ -95,7 +95,7 @@ AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double
     this->constrainer = new ResizeConstrainer(this->zoom / 4);
     
     resizerR = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::rightEdge);
-    resizerL = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::leftEdge);
+    //resizerL = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::leftEdge);
     
     this->sampleRate = sampleRate;
     
@@ -122,7 +122,7 @@ AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double
 
     this->offset = 0;
     
-    addAndMakeVisible(resizerL);
+    //addAndMakeVisible(resizerL);
     addAndMakeVisible(resizerR);
    
     addComponentListener(this);
@@ -135,7 +135,7 @@ AudioRegion::AudioRegion(File file, AudioFormatManager& manager, double sampleRa
     this->constrainer = new ResizeConstrainer(this->zoom / 4);
 
     resizerR = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::rightEdge);
-    resizerL = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::leftEdge);
+    //resizerL = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::leftEdge);
 
 	this->sampleRate = sampleRate;
 
@@ -160,7 +160,7 @@ AudioRegion::AudioRegion(File file, AudioFormatManager& manager, double sampleRa
     
     addComponentListener(this);
     
-    addAndMakeVisible(resizerL);
+    // addAndMakeVisible(resizerL);
     addAndMakeVisible(resizerR);
 }
 
@@ -169,7 +169,7 @@ AudioRegion::~AudioRegion()
     delete this->thumbnailCache;
     delete this->thumbnail;
     delete this->audioBuffer;
-    delete this->resizerL;
+    // delete this->resizerL;
     delete this->resizerR;
     delete this->constrainer;
 }
@@ -245,8 +245,8 @@ void AudioRegion::setZoom(float zoom) {
     resizerR->setSize(5, getHeight());
     resizerR->setTopLeftPosition(getWidth() - 5, 0);
     
-    resizerL->setSize(5, getHeight());
-    resizerL->setTopLeftPosition(0, 0);
+    // resizerL->setSize(5, getHeight());
+    // resizerL->setTopLeftPosition(0, 0);
     
     // setBounds(0,0,this->thumbnail->getTotalLength() * this->zoom, 200);
     this->thumbnailBounds->setSize(this->thumbnail->getTotalLength() * this->zoom, getHeight());

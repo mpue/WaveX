@@ -263,11 +263,11 @@ void TransportPanel::buttonClicked (Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == recordButton)
     {
         //[UserButtonCode_recordButton] -- add your button handler code here..
-        
+
         mode = RECORD;
         startTimer(100);
         mcc->getNavigator()->setRecording(true);
-        
+
         //[/UserButtonCode_recordButton]
     }
     else if (buttonThatWasClicked == loopButton)

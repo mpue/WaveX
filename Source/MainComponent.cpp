@@ -243,15 +243,8 @@ public:
     }
     
     //==============================================================================
-    void prepareToPlay (int samplesPerBlockExpected, double sampleRate) override
-    {
-        // This function will be called when the audio device is started, or when
-        // its settings (i.e. sample rate, block size, etc) are changed.
+    void prepareToPlay (int samplesPerBlockExpected, double sampleRate) override {
         
-        // You can use this function to initialise any resources you might need,
-        // but be careful - it will be called on the audio thread, not the GUI thread.
-        
-        // For more details, see the help for AudioProcessor::prepareToPlay()
         this->sampleRate = sampleRate;
         this->buffersize = samplesPerBlockExpected;
         
@@ -284,7 +277,6 @@ public:
             Mixer::getInstance()->addMidiOutput(midiOutputDevices.getReference(i));
         }
 
-        
     }
     
     virtual void audioDeviceIOCallback (const float** inputChannelData,
@@ -293,9 +285,6 @@ public:
                                         int numOutputChannels,
                                         int _numSamples) override {
         
-
-        
-        //  Logger::getCurrentLogger()->writeToLog("Time elapsed :"+String(time));
         
         if (plugin != NULL) {
             
@@ -496,7 +485,6 @@ public:
             for (int sample = 0; sample < outL->getNumSamples(); ++sample) {
                 outputChannelData[t->getOutputChannels()[0]][sample] = left[sample] * leftVolume;
                 outputChannelData[t->getOutputChannels()[1]][sample] = right[sample] * rightVolume;
-                
             }
             
             this->magnitudeLeft = outL->getMagnitude(0, 0, _numSamples);
@@ -504,6 +492,9 @@ public:
             
             this->rmsLeft = outL->getRMSLevel(0, 0,_numSamples);
             this->rmsRight = outR->getRMSLevel(0, 0,_numSamples);
+            
+            outL->clear();
+            outR->clear();
             
             // Maybe we can use this later to display the peak at a specific sample point
             /*
@@ -527,16 +518,13 @@ public:
                     outputChannelData[i][sample] = 0;
                 }
             }
-            
         }
-        
-        if (navigator->getTracks().size() > 0) {
+        else {
             for (int i = 0; i < outputBuffers.size();i++) {
                 outputBuffers.at(i)->clear();
             }
             
         }
-        
 
     }
     
@@ -877,8 +865,8 @@ private:
     bool leftShiftPressed;
     double rmsLeft;
     double rmsRight;
-    double magnitudeLeft;
-    double magnitudeRight;
+    double magnitudeLeft = 0;
+    double magnitudeRight = 0;
     bool masterVisible;
     
     float leftVolume;
@@ -1026,10 +1014,18 @@ private:
                 setSize(newWidth, getHeight());
             }
             
-            this->timeLine->setLength(trackLength);
-            this->timeLine->setSize(trackLength * zoom, 25);
+            if (navigator->getTracks().size() == 0) {
+                this->timeLine->setVisible(false);
+            }
+            else {
+                this->timeLine->setVisible(true);
+                this->timeLine->setLength(trackLength);
+                this->timeLine->setSize(trackLength * zoom, 25);
+            }
+
             this->marker->setDrawingBounds(0,0,navigator->getWidth(),getHeight());
             this->marker->setSize(navigator->getWidth(), getHeight());
+            
             repaint();
             
             if (!navigator->isPlaying()) {

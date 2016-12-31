@@ -38,6 +38,8 @@ TrackPropertyView::TrackPropertyView ()
 
 
     //[UserPreSize]
+
+    hResizer = new ResizableEdgeComponent(this, nullptr, ResizableEdgeComponent::rightEdge);
     //[/UserPreSize]
 
     setSize (600, 400);
@@ -49,8 +51,10 @@ TrackPropertyView::TrackPropertyView ()
     dropShadow = new DropShadow(Colour::fromFloatRGBA(0,0,0,0.5),3,Point<int>(2,0));
     dropShadower = new DropShadower(*dropShadow);
     dropShadower->setOwner(this);
-    
+
     Mixer::getInstance()->addChangeListener(this);
+    addAndMakeVisible(hResizer);
+
     //[/Constructor]
 }
 
@@ -69,7 +73,7 @@ TrackPropertyView::~TrackPropertyView()
 
     dropShadow = nullptr;
     dropShadower = nullptr;
-
+    delete hResizer;
     //[/Destructor]
 }
 
@@ -95,16 +99,18 @@ void TrackPropertyView::resized()
         (*it)->resized();
         (*it)->repaint();
     }
-    
-    int height = 0;
-    
+
+    int height = Project::DEFAULT_TRACK_HEIGHT;
+
     for (int i = 0; i < this->trackProperties.size();i++) {
         trackProperties.at(i)->setTopLeftPosition(trackProperties.at(i)->getX(), trackProperties.at(i)->getTrack()->getY());
         height += trackProperties.at(i)->getHeight();
     }
-    
+
     setSize(getWidth(), height);
-    
+
+    hResizer->setBounds(getWidth() - 2, 0, 2, getHeight());
+
     //[/UserResized]
 }
 
@@ -131,7 +137,7 @@ void TrackPropertyView::addTrack(Track* track)
     panel->setName(track->getName());
 
     Mixer::getInstance()->addChangeListener(panel);
-    
+
 	int yPos = 0;
 
 	for (int i = 0; i < this->trackProperties.size();i++) {
@@ -142,14 +148,14 @@ void TrackPropertyView::addTrack(Track* track)
 	panel->setBounds(0, yPos, 150, Project::DEFAULT_TRACK_HEIGHT);
     panel->setTrack(track);
     panel->updateChannels();
-	
+
     addAndMakeVisible(panel);
 	trackProperties.push_back(panel);
 
 	panel->addMouseListener(this, true);
 
-    
     setSize(getWidth(), this->trackProperties.size() * Project::DEFAULT_TRACK_HEIGHT);
+    hResizer->toFront(false);
 }
 
 void TrackPropertyView::changeListenerCallback (ChangeBroadcaster* source) {
@@ -212,7 +218,7 @@ void TrackPropertyView::mouseDown(const MouseEvent& event) {
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="TrackPropertyView" componentName=""
-                 parentClasses="public Component, public ChangeListener, public Timer"
+                 parentClasses="public Component, public ChangeListener, public Timer, public ComponentListener"
                  constructorParams="" variableInitialisers="" snapPixels="8" snapActive="1"
                  snapShown="1" overlayOpacity="0.330" fixedSize="0" initialWidth="600"
                  initialHeight="400">

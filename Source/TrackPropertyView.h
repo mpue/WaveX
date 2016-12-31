@@ -39,7 +39,8 @@
 */
 class TrackPropertyView  : public Component,
                            public ChangeListener,
-                           public Timer
+                           public Timer,
+                           public ComponentListener
 {
 public:
     //==============================================================================
@@ -67,7 +68,7 @@ private:
 	int offset = 0;
     ScopedPointer<DropShadow> dropShadow;
     ScopedPointer<DropShadower> dropShadower;
-
+    ResizableEdgeComponent* hResizer;
     //[/UserVariables]
 
     //==============================================================================

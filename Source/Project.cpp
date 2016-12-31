@@ -13,4 +13,4 @@
 
 Project *Project::instance = NULL;
 long Project::DEFAULT_TRACK_LENGTH = 600;
-int  Project::DEFAULT_TRACK_HEIGHT = 200;
+int  Project::DEFAULT_TRACK_HEIGHT = 280;
