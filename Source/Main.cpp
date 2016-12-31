@@ -13,6 +13,7 @@
 #include "CustomLookAndFeel.h"
 #include "Project.h"
 #include "Mixer.h"
+#include "Session.h"
 
 //==============================================================================
 class WaveXApplication  : public JUCEApplication
@@ -31,7 +32,7 @@ public:
         // This method is where you should put your application's initialisation code..
 
         mainWindow = new MainWindow (getApplicationName());
-        mainWindow->setLookAndFeel(Project::getInstance()->getLookAndFeel());
+        mainWindow->setLookAndFeel(Session::getInstance()->getLookAndFeel());
 	    TooltipWindow tooltipWindow;
     }
 
@@ -42,6 +43,7 @@ public:
         mainWindow = nullptr; // (deletes our window)
         Project::getInstance()->destroy();
         Mixer::getInstance()->destroy();
+        Session::getInstance()->destroy();
     }
 
     //==============================================================================

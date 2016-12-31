@@ -18,6 +18,7 @@
 #include "TimeLine.h"
 #include "MixerPanel.h"
 #include "Project.h"
+#include "Session.h"
 #include "Mixer.h"
 
 //==============================================================================
@@ -349,7 +350,7 @@ public:
                 else if (t->getType() == Track::Type::MIDI) {
                     
                     double seconds = Time::getMillisecondCounterHiRes() * 0.001 ;
-                    double time = seconds - Project::getInstance()->getRecordingStartTime();
+                    double time = seconds - Session::getInstance()->getRecordingStartTime();
 
                     MidiMessage* m = t->getMessage(time, numSamples);
                     
@@ -414,7 +415,7 @@ public:
                 else if (t->getType() == Track::Type::MIDI) {
                     
                     double seconds = Time::getMillisecondCounterHiRes() * 0.001 ;
-                    double time = seconds - Project::getInstance()->getRecordingStartTime();
+                    double time = seconds - Session::getInstance()->getRecordingStartTime();
                     
                     MidiMessage* m = t->getMessage(time, numSamples);
                     
@@ -536,7 +537,7 @@ public:
     virtual void handleIncomingMidiMessage (MidiInput* source, const MidiMessage& message) override {
         
         double seconds = Time::getMillisecondCounterHiRes() * 0.001;
-        double currentTime = seconds - Project::getInstance()->getRecordingStartTime();
+        double currentTime = seconds - Session::getInstance()->getRecordingStartTime();
         
         if (navigator->getTracks().size() == 0) {
             return;
@@ -774,7 +775,7 @@ public:
     
     void openSettings() {
         AudioDeviceSelectorComponent* selector = new AudioDeviceSelectorComponent(deviceManager, 2, 16, 2, 16, true, true, true, false);
-        selector->setLookAndFeel(Project::getInstance()->getLookAndFeel());
+        selector->setLookAndFeel(Session::getInstance()->getLookAndFeel());
         
         DialogWindow::LaunchOptions launchOptions;
         launchOptions.dialogTitle = ("Audio Settings");

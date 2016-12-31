@@ -9,6 +9,15 @@
 
 namespace BinaryData
 {
+    extern const char*   WaveX_zargo;
+    const int            WaveX_zargoSize = 9207;
+
+    extern const char*   WaveX_Project_png;
+    const int            WaveX_Project_pngSize = 18102;
+
+    extern const char*   WaveX_Project_zargo;
+    const int            WaveX_Project_zargoSize = 6768;
+
     extern const char*   Fader_png;
     const int            Fader_pngSize = 19460;
 
@@ -46,7 +55,7 @@ namespace BinaryData
     extern const char* namedResourceList[];
 
     // Number of elements in the namedResourceList array.
-    const int namedResourceListSize = 11;
+    const int namedResourceListSize = 14;
 
     // If you provide the name of one of the binary resource variables above, this function will
     // return the corresponding data and its size (or a null pointer if the name isn't found).

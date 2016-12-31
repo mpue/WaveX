@@ -128,6 +128,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\Project.cpp"/>
     <ClCompile Include="..\..\Source\AppWindowComponent.cpp"/>
     <ClCompile Include="..\..\Source\CustomLookAndFeel.cpp"/>
     <ClCompile Include="..\..\Source\ImageToggleButton.cpp"/>
@@ -150,7 +151,7 @@
     <ClCompile Include="..\..\Source\TrackPropertyView.cpp"/>
     <ClCompile Include="..\..\Source\WaveSelector.cpp"/>
     <ClCompile Include="..\..\Source\Main.cpp"/>
-    <ClCompile Include="..\..\Source\Project.cpp"/>
+    <ClCompile Include="..\..\Source\Session.cpp"/>
     <ClCompile Include="..\..\..\..\..\vst\JUCE\modules\juce_audio_basics\buffers\juce_AudioChannelSet.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
@@ -1728,6 +1729,7 @@
     <ClCompile Include="..\..\JuceLibraryCode\juce_video.cpp"/>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\Project.h"/>
     <ClInclude Include="..\..\Source\AppViewPort.h"/>
     <ClInclude Include="..\..\Source\AppWindowComponent.h"/>
     <ClInclude Include="..\..\Source\CustomLookAndFeel.h"/>
@@ -1753,7 +1755,7 @@
     <ClInclude Include="..\..\Source\TrackPropertyView.h"/>
     <ClInclude Include="..\..\Source\TrackResizer.h"/>
     <ClInclude Include="..\..\Source\WaveSelector.h"/>
-    <ClInclude Include="..\..\Source\Project.h"/>
+    <ClInclude Include="..\..\Source\Session.h"/>
     <ClInclude Include="..\..\..\..\..\vst\JUCE\modules\juce_audio_basics\buffers\juce_AudioChannelSet.h"/>
     <ClInclude Include="..\..\..\..\..\vst\JUCE\modules\juce_audio_basics\buffers\juce_AudioDataConverters.h"/>
     <ClInclude Include="..\..\..\..\..\vst\JUCE\modules\juce_audio_basics\buffers\juce_AudioSampleBuffer.h"/>
@@ -2368,6 +2370,9 @@
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h"/>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\Documentation\WaveX.zargo"/>
+    <None Include="..\..\Documentation\WaveX_Project.png"/>
+    <None Include="..\..\Documentation\WaveX_Project.zargo"/>
     <None Include="..\..\Resources\Fader.png"/>
     <None Include="..\..\Resources\font-awesome_4-7-0_copy_24_0_000000_none.png"/>
     <None Include="..\..\Resources\font-awesome_4-7-0_file-audio-o_32_0_000000_none.png"/>

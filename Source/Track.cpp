@@ -10,14 +10,14 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "Track.h"
-#include "Project.h"
+#include "Session.h"
 #include "MasterChannelPanel.h"
 #include <iostream>
 
 //==============================================================================
 Track::Track(Type type, double sampleRate, MultiComponentDragger* dragger)
 {
-    manager = Project::getInstance()->getAudioFormatManager();
+    manager = Session::getInstance()->getAudioFormatManager();
     
     this->type = type;
 	this->sampleRate = sampleRate;
@@ -79,7 +79,7 @@ void Track::copySelectedRegions() {
     
     for (std::vector<Region*>::iterator it = regions.begin(); it != regions.end(); ++it) {
         if (dragger->isSelected((*it)))
-            Project::getInstance()->copyRegion((*it));
+            Session::getInstance()->copyRegion((*it));
     }
     
 }

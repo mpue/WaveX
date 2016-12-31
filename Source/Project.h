@@ -12,10 +12,11 @@
 #define PROJECT_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include <vector>
-#include "AudioRegion.h"
-#include "Region.h"
+
 #include "CustomLookAndFeel.h"
+#include <vector>
+
+using namespace std;
 
 class Project : public ChangeBroadcaster {
     
@@ -70,54 +71,6 @@ public:
         ChangeBroadcaster::addChangeListener(listener);
     }
     
-    inline void copyRegion(Region* region) {
-        regionsClipboard.push_back(region);
-    }
-    
-    inline Region* pasteRegion(long position) {
-        
-        if (AudioRegion* region = dynamic_cast<AudioRegion*>(regionsClipboard.back())) {
-            AudioRegion* copy = new AudioRegion(region,*manager,sampleRate);
-            copy->setSampleOffset(position, false, false);
-            return copy;
-        }
-        
-        return NULL;
-
-    }
-    
-    inline double getCurrentTime() {
-        return Time::getMillisecondCounterHiRes() * 0.001;
-    }
-    
-    void setRecordingStartTime() {
-        recordingStartTicks = getCurrentTime();
-    }
-    
-    void setRecordingStopTime() {
-        recordingStopTicks = getCurrentTime();
-    }
-    
-    double getRecordingStartTime() {
-        return recordingStartTicks;
-    }
-    
-    double getRecordingStopTime() {
-        return recordingStopTicks;
-    }
-    
-    inline void clearRegionsClipboard() {
-        regionsClipboard.clear();
-    }
-    
-    inline AudioFormatManager* getAudioFormatManager() {
-        return manager;
-    }
-    
-    inline CustomLookAndFeel* getLookAndFeel() {
-        return &lookAndFeel;
-    };
-    
     static long DEFAULT_TRACK_LENGTH;
     static int  DEFAULT_TRACK_HEIGHT;
     
@@ -151,29 +104,21 @@ protected:
     Project() {
         this->tracklength = DEFAULT_TRACK_LENGTH;
         name = "empty Project";
-        manager = new AudioFormatManager();
-        manager->registerBasicFormats();
     };
     
     ~Project() {
-        delete manager;
-        removeAllChangeListeners();
+
     }
     
     static Project* instance;
-    
-    long recordingStartTicks = 0;
-    long recordingStopTicks = 0;
-    
+        
     int tolerance = 1;
     
-    CustomLookAndFeel lookAndFeel;
+
     String name;
     long tracklength;
     double sampleRate;
     int bufferSize;
-    std::vector<Region*> regionsClipboard;
-    AudioFormatManager* manager;
     
 };
 

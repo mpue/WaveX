@@ -57,6 +57,7 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS := \
+  $(JUCE_OBJDIR)/Project_cc5166fa.o \
   $(JUCE_OBJDIR)/AppWindowComponent_c01bc215.o \
   $(JUCE_OBJDIR)/CustomLookAndFeel_ab3d772e.o \
   $(JUCE_OBJDIR)/ImageToggleButton_895fbd82.o \
@@ -79,7 +80,7 @@ OBJECTS := \
   $(JUCE_OBJDIR)/TrackPropertyView_42f565e6.o \
   $(JUCE_OBJDIR)/WaveSelector_5f1b5681.o \
   $(JUCE_OBJDIR)/Main_90ebc5c2.o \
-  $(JUCE_OBJDIR)/Project_cc5166fa.o \
+  $(JUCE_OBJDIR)/Session_2ff97f7.o \
   $(JUCE_OBJDIR)/BinaryData_ce4232d4.o \
   $(JUCE_OBJDIR)/juce_audio_basics_6b797ca1.o \
   $(JUCE_OBJDIR)/juce_audio_devices_a742c38b.o \
@@ -116,6 +117,11 @@ clean:
 strip:
 	@echo Stripping WaveX
 	-@$(STRIP) --strip-unneeded $(JUCE_OUTDIR)/$(TARGET)
+
+$(JUCE_OBJDIR)/Project_cc5166fa.o: ../../Source/Project.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling Project.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/AppWindowComponent_c01bc215.o: ../../Source/AppWindowComponent.cpp
 	-@mkdir -p $(JUCE_OBJDIR)
@@ -227,9 +233,9 @@ $(JUCE_OBJDIR)/Main_90ebc5c2.o: ../../Source/Main.cpp
 	@echo "Compiling Main.cpp"
 	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/Project_cc5166fa.o: ../../Source/Project.cpp
+$(JUCE_OBJDIR)/Session_2ff97f7.o: ../../Source/Session.cpp
 	-@mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling Project.cpp"
+	@echo "Compiling Session.cpp"
 	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/BinaryData_ce4232d4.o: ../../JuceLibraryCode/BinaryData.cpp

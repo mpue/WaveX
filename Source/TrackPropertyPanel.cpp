@@ -22,6 +22,7 @@
 #include "ImageToggleButton.h"
 #include "Project.h"
 #include "Mixer.h"
+#include "Session.h"
 //[/Headers]
 
 #include "TrackPropertyPanel.h"
@@ -183,7 +184,7 @@ TrackPropertyPanel::TrackPropertyPanel ()
 
     //[Constructor] You can add your own custom stuff here..
     setSize(150,Project::DEFAULT_TRACK_HEIGHT);
-    clf = Project::getInstance()->getLookAndFeel();
+    clf = Session::getInstance()->getLookAndFeel();
     volumeViewSlider->setLookAndFeel(clf);
 	addKeyListener(this);
 

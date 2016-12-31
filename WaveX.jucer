@@ -4,6 +4,13 @@
               bundleIdentifier="de.pueski.WaveX" includeBinaryInAppConfig="1"
               jucerVersion="4.3.0" companyName="pueski.de" companyWebsite="www.pueski.de">
   <MAINGROUP id="oMZ4Yu" name="WaveX">
+    <GROUP id="{B67EC8D6-D8A9-C95F-BAAF-8D1AE92B6AD6}" name="Documentation">
+      <FILE id="BWRGTz" name="WaveX.zargo" compile="0" resource="1" file="Documentation/WaveX.zargo"/>
+      <FILE id="rCFcex" name="WaveX_Project.png" compile="0" resource="1"
+            file="Documentation/WaveX_Project.png"/>
+      <FILE id="Kgwlnx" name="WaveX_Project.zargo" compile="0" resource="1"
+            file="Documentation/WaveX_Project.zargo"/>
+    </GROUP>
     <GROUP id="{5BB27121-C9C8-56C1-0BC5-68883A472AD8}" name="Resources">
       <FILE id="HFpZBB" name="Fader.png" compile="0" resource="1" file="Resources/Fader.png"/>
       <FILE id="x8j2Oy" name="font-awesome_4-7-0_copy_24_0_000000_none.png"
@@ -28,6 +35,10 @@
             compile="0" resource="1" file="Resources/ionicons_2-0-1_settings_24_0_000000_none.png"/>
     </GROUP>
     <GROUP id="{4EC8E705-56D1-3A9F-9C5F-6B92CD6412F1}" name="Source">
+      <GROUP id="{0D618D59-5E90-81D2-6FB5-07BAFD5E5EE4}" name="Project">
+        <FILE id="BLUnCU" name="Project.cpp" compile="1" resource="0" file="Source/Project.cpp"/>
+        <FILE id="REXQ28" name="Project.h" compile="0" resource="0" file="Source/Project.h"/>
+      </GROUP>
       <GROUP id="{39B17561-85F6-8D15-A90B-46048549C696}" name="MainUI">
         <FILE id="SsoNTP" name="AppViewPort.h" compile="0" resource="0" file="Source/AppViewPort.h"/>
         <FILE id="eBDgTg" name="AppWindowComponent.cpp" compile="1" resource="0"
@@ -56,7 +67,7 @@
         <FILE id="JrlRtk" name="TransportPanel.h" compile="0" resource="0"
               file="Source/TransportPanel.h"/>
       </GROUP>
-      <GROUP id="{9E898010-581C-B2DE-4979-62196708FD0D}" name="MIxer">
+      <GROUP id="{9E898010-581C-B2DE-4979-62196708FD0D}" name="Mixer">
         <FILE id="GCrTcW" name="MasterChannelPanel.cpp" compile="1" resource="0"
               file="Source/MasterChannelPanel.cpp"/>
         <FILE id="QdxXmZ" name="MasterChannelPanel.h" compile="0" resource="0"
@@ -106,8 +117,8 @@
         <FILE id="Ym2ilz" name="WaveSelector.h" compile="0" resource="0" file="Source/WaveSelector.h"/>
       </GROUP>
       <FILE id="ei4XjV" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
-      <FILE id="BLUnCU" name="Project.cpp" compile="1" resource="0" file="Source/Project.cpp"/>
-      <FILE id="REXQ28" name="Project.h" compile="0" resource="0" file="Source/Project.h"/>
+      <FILE id="xTOk2L" name="Session.cpp" compile="1" resource="0" file="Source/Session.cpp"/>
+      <FILE id="URyqHt" name="Session.h" compile="0" resource="0" file="Source/Session.h"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>

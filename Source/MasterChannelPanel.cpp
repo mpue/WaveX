@@ -21,6 +21,7 @@
 #include "CustomLookAndFeel.h"
 #include "Mixer.h"
 #include "Project.h"
+#include "Session.h"
 //[/Headers]
 
 #include "MasterChannelPanel.h"
@@ -129,7 +130,7 @@ MasterChannelPanel::MasterChannelPanel ()
     channelVolume->setValue(1.0);
 
     link = false;
-    clf = Project::getInstance()->getLookAndFeel();
+    clf = Session::getInstance()->getLookAndFeel();
 
     channelVolume->setLookAndFeel(clf);
     vuSliderL->setLookAndFeel(clf);

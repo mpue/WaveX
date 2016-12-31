@@ -5,17 +5,23 @@
     <Filter Include="WaveX">
       <UniqueIdentifier>{00C53569-0FBB-AB09-00E4-FC2192E52CE6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="WaveX\Documentation">
+      <UniqueIdentifier>{15849177-0B94-9843-1E80-940976754C40}</UniqueIdentifier>
+    </Filter>
     <Filter Include="WaveX\Resources">
       <UniqueIdentifier>{F20808AA-46DD-9644-9A96-037B9AB3B6CD}</UniqueIdentifier>
     </Filter>
     <Filter Include="WaveX\Source">
       <UniqueIdentifier>{07503C86-7209-8659-F842-53F09E5A33C9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="WaveX\Source\Project">
+      <UniqueIdentifier>{480680DC-53D2-27B0-2D89-12F69FDD1A67}</UniqueIdentifier>
+    </Filter>
     <Filter Include="WaveX\Source\MainUI">
       <UniqueIdentifier>{6DB46652-79D2-C459-366F-40608A7BA3C5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="WaveX\Source\MIxer">
-      <UniqueIdentifier>{4E2CB2A8-56A5-EB70-B96B-27D25379133F}</UniqueIdentifier>
+    <Filter Include="WaveX\Source\Mixer">
+      <UniqueIdentifier>{00528817-494C-6618-0917-3F94D4B9899A}</UniqueIdentifier>
     </Filter>
     <Filter Include="WaveX\Source\Tracks">
       <UniqueIdentifier>{3CEB0619-D951-4E85-F82D-665F614E4C38}</UniqueIdentifier>
@@ -379,6 +385,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\Project.cpp">
+      <Filter>WaveX\Source\Project</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\AppWindowComponent.cpp">
       <Filter>WaveX\Source\MainUI</Filter>
     </ClCompile>
@@ -401,13 +410,13 @@
       <Filter>WaveX\Source\MainUI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\MasterChannelPanel.cpp">
-      <Filter>WaveX\Source\MIxer</Filter>
+      <Filter>WaveX\Source\Mixer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Mixer.cpp">
-      <Filter>WaveX\Source\MIxer</Filter>
+      <Filter>WaveX\Source\Mixer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\MixerPanel.cpp">
-      <Filter>WaveX\Source\MIxer</Filter>
+      <Filter>WaveX\Source\Mixer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\AudioRegion.cpp">
       <Filter>WaveX\Source\Tracks</Filter>
@@ -445,7 +454,7 @@
     <ClCompile Include="..\..\Source\Main.cpp">
       <Filter>WaveX\Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Project.cpp">
+    <ClCompile Include="..\..\Source\Session.cpp">
       <Filter>WaveX\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\vst\JUCE\modules\juce_audio_basics\buffers\juce_AudioChannelSet.cpp">
@@ -2178,6 +2187,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\Project.h">
+      <Filter>WaveX\Source\Project</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\AppViewPort.h">
       <Filter>WaveX\Source\MainUI</Filter>
     </ClInclude>
@@ -2203,13 +2215,13 @@
       <Filter>WaveX\Source\MainUI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\MasterChannelPanel.h">
-      <Filter>WaveX\Source\MIxer</Filter>
+      <Filter>WaveX\Source\Mixer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Mixer.h">
-      <Filter>WaveX\Source\MIxer</Filter>
+      <Filter>WaveX\Source\Mixer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\MixerPanel.h">
-      <Filter>WaveX\Source\MIxer</Filter>
+      <Filter>WaveX\Source\Mixer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\AudioRegion.h">
       <Filter>WaveX\Source\Tracks</Filter>
@@ -2253,7 +2265,7 @@
     <ClInclude Include="..\..\Source\WaveSelector.h">
       <Filter>WaveX\Source\Tracks</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Project.h">
+    <ClInclude Include="..\..\Source\Session.h">
       <Filter>WaveX\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\vst\JUCE\modules\juce_audio_basics\buffers\juce_AudioChannelSet.h">
@@ -4094,6 +4106,15 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\Documentation\WaveX.zargo">
+      <Filter>WaveX\Documentation</Filter>
+    </None>
+    <None Include="..\..\Documentation\WaveX_Project.png">
+      <Filter>WaveX\Documentation</Filter>
+    </None>
+    <None Include="..\..\Documentation\WaveX_Project.zargo">
+      <Filter>WaveX\Documentation</Filter>
+    </None>
     <None Include="..\..\Resources\Fader.png">
       <Filter>WaveX\Resources</Filter>
     </None>

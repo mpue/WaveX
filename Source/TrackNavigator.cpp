@@ -13,6 +13,7 @@
 #include "AudioRegion.h"
 #include "MidiRegion.h"
 #include "Project.h"
+#include "Session.h"
 #include "Mixer.h"
 #include <iterator>
 #include <iostream>
@@ -136,7 +137,7 @@ double TrackNavigator::getMaxLength() {
 
 void TrackNavigator::setPlaying(bool playing) {
     this->playing = playing;
-    Project::getInstance()->setRecordingStartTime();
+    Session::getInstance()->setRecordingStartTime();
     sendChangeMessage();
 }
 
@@ -146,7 +147,7 @@ bool TrackNavigator::isPlaying() {
 
 void TrackNavigator::setRecording(bool recording) {
     if (recording) {
-        Project::getInstance()->setRecordingStartTime();
+        Session::getInstance()->setRecordingStartTime();
         recordStart = marker->getPosition() * Project::getInstance()->getSampleRate();
         for (int i = 0; i < tracks.size();i++) {
             if (tracks.at(i)->isRecording()) {
@@ -163,7 +164,7 @@ void TrackNavigator::setRecording(bool recording) {
         }
     }
     else {
-        Project::getInstance()->setRecordingStopTime();
+        Session::getInstance()->setRecordingStopTime();
         recordStop  = marker->getPosition() * Project::getInstance()->getSampleRate();
         for (int i = 0; i < tracks.size();i++) {
             if (tracks.at(i)->isRecording()) {
