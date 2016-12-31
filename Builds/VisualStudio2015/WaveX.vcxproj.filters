@@ -385,7 +385,34 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\AudioClip.cpp">
+      <Filter>WaveX\Source\Project</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\AuxBusConfig.cpp">
+      <Filter>WaveX\Source\Project</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\AuxSendConfig.cpp">
+      <Filter>WaveX\Source\Project</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\EffectConfig.cpp">
+      <Filter>WaveX\Source\Project</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\InstrumentConfig.cpp">
+      <Filter>WaveX\Source\Project</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\MixerConfig.cpp">
+      <Filter>WaveX\Source\Project</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Project.cpp">
+      <Filter>WaveX\Source\Project</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ProjectConfig.cpp">
+      <Filter>WaveX\Source\Project</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\RegionConfig.cpp">
+      <Filter>WaveX\Source\Project</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TrackConfig.cpp">
       <Filter>WaveX\Source\Project</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\AppWindowComponent.cpp">
@@ -2187,7 +2214,34 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\AudioClip.h">
+      <Filter>WaveX\Source\Project</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\AuxBusConfig.h">
+      <Filter>WaveX\Source\Project</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\AuxSendConfig.h">
+      <Filter>WaveX\Source\Project</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\EffectConfig.h">
+      <Filter>WaveX\Source\Project</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\InstrumentConfig.h">
+      <Filter>WaveX\Source\Project</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\MixerConfig.h">
+      <Filter>WaveX\Source\Project</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\Project.h">
+      <Filter>WaveX\Source\Project</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ProjectConfig.h">
+      <Filter>WaveX\Source\Project</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\RegionConfig.h">
+      <Filter>WaveX\Source\Project</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TrackConfig.h">
       <Filter>WaveX\Source\Project</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\AppViewPort.h">

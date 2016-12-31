@@ -36,8 +36,33 @@
     </GROUP>
     <GROUP id="{4EC8E705-56D1-3A9F-9C5F-6B92CD6412F1}" name="Source">
       <GROUP id="{0D618D59-5E90-81D2-6FB5-07BAFD5E5EE4}" name="Project">
+        <FILE id="MgjIHE" name="AudioClip.cpp" compile="1" resource="0" file="Source/AudioClip.cpp"/>
+        <FILE id="OyAdne" name="AudioClip.h" compile="0" resource="0" file="Source/AudioClip.h"/>
+        <FILE id="gvRnfe" name="AuxBusConfig.cpp" compile="1" resource="0"
+              file="Source/AuxBusConfig.cpp"/>
+        <FILE id="nF9zN2" name="AuxBusConfig.h" compile="0" resource="0" file="Source/AuxBusConfig.h"/>
+        <FILE id="eewBpB" name="AuxSendConfig.cpp" compile="1" resource="0"
+              file="Source/AuxSendConfig.cpp"/>
+        <FILE id="AO1bot" name="AuxSendConfig.h" compile="0" resource="0" file="Source/AuxSendConfig.h"/>
+        <FILE id="wqobKV" name="EffectConfig.cpp" compile="1" resource="0"
+              file="Source/EffectConfig.cpp"/>
+        <FILE id="Kxda4x" name="EffectConfig.h" compile="0" resource="0" file="Source/EffectConfig.h"/>
+        <FILE id="NMYOiE" name="InstrumentConfig.cpp" compile="1" resource="0"
+              file="Source/InstrumentConfig.cpp"/>
+        <FILE id="fpvoG6" name="InstrumentConfig.h" compile="0" resource="0"
+              file="Source/InstrumentConfig.h"/>
+        <FILE id="i1zrsw" name="MixerConfig.cpp" compile="1" resource="0" file="Source/MixerConfig.cpp"/>
+        <FILE id="D9NNdu" name="MixerConfig.h" compile="0" resource="0" file="Source/MixerConfig.h"/>
         <FILE id="BLUnCU" name="Project.cpp" compile="1" resource="0" file="Source/Project.cpp"/>
         <FILE id="REXQ28" name="Project.h" compile="0" resource="0" file="Source/Project.h"/>
+        <FILE id="BoLSIn" name="ProjectConfig.cpp" compile="1" resource="0"
+              file="Source/ProjectConfig.cpp"/>
+        <FILE id="H0mIiv" name="ProjectConfig.h" compile="0" resource="0" file="Source/ProjectConfig.h"/>
+        <FILE id="hYkBXO" name="RegionConfig.cpp" compile="1" resource="0"
+              file="Source/RegionConfig.cpp"/>
+        <FILE id="jPMn5q" name="RegionConfig.h" compile="0" resource="0" file="Source/RegionConfig.h"/>
+        <FILE id="gI6cUz" name="TrackConfig.cpp" compile="1" resource="0" file="Source/TrackConfig.cpp"/>
+        <FILE id="nkyu3y" name="TrackConfig.h" compile="0" resource="0" file="Source/TrackConfig.h"/>
       </GROUP>
       <GROUP id="{39B17561-85F6-8D15-A90B-46048549C696}" name="MainUI">
         <FILE id="SsoNTP" name="AppViewPort.h" compile="0" resource="0" file="Source/AppViewPort.h"/>

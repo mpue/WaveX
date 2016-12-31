@@ -13,10 +13,10 @@ namespace BinaryData
     const int            WaveX_zargoSize = 9207;
 
     extern const char*   WaveX_Project_png;
-    const int            WaveX_Project_pngSize = 18102;
+    const int            WaveX_Project_pngSize = 18680;
 
     extern const char*   WaveX_Project_zargo;
-    const int            WaveX_Project_zargoSize = 6768;
+    const int            WaveX_Project_zargoSize = 6863;
 
     extern const char*   Fader_png;
     const int            Fader_pngSize = 19460;

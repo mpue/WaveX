@@ -57,7 +57,16 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS := \
+  $(JUCE_OBJDIR)/AudioClip_4d79daa7.o \
+  $(JUCE_OBJDIR)/AuxBusConfig_85c8d107.o \
+  $(JUCE_OBJDIR)/AuxSendConfig_944e732f.o \
+  $(JUCE_OBJDIR)/EffectConfig_8cedd73c.o \
+  $(JUCE_OBJDIR)/InstrumentConfig_45bd0412.o \
+  $(JUCE_OBJDIR)/MixerConfig_d0725d8c.o \
   $(JUCE_OBJDIR)/Project_cc5166fa.o \
+  $(JUCE_OBJDIR)/ProjectConfig_c56c4d9c.o \
+  $(JUCE_OBJDIR)/RegionConfig_225c24df.o \
+  $(JUCE_OBJDIR)/TrackConfig_a6d4984e.o \
   $(JUCE_OBJDIR)/AppWindowComponent_c01bc215.o \
   $(JUCE_OBJDIR)/CustomLookAndFeel_ab3d772e.o \
   $(JUCE_OBJDIR)/ImageToggleButton_895fbd82.o \
@@ -118,9 +127,54 @@ strip:
 	@echo Stripping WaveX
 	-@$(STRIP) --strip-unneeded $(JUCE_OUTDIR)/$(TARGET)
 
+$(JUCE_OBJDIR)/AudioClip_4d79daa7.o: ../../Source/AudioClip.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling AudioClip.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/AuxBusConfig_85c8d107.o: ../../Source/AuxBusConfig.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling AuxBusConfig.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/AuxSendConfig_944e732f.o: ../../Source/AuxSendConfig.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling AuxSendConfig.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/EffectConfig_8cedd73c.o: ../../Source/EffectConfig.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling EffectConfig.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/InstrumentConfig_45bd0412.o: ../../Source/InstrumentConfig.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling InstrumentConfig.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/MixerConfig_d0725d8c.o: ../../Source/MixerConfig.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling MixerConfig.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
 $(JUCE_OBJDIR)/Project_cc5166fa.o: ../../Source/Project.cpp
 	-@mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling Project.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ProjectConfig_c56c4d9c.o: ../../Source/ProjectConfig.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ProjectConfig.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/RegionConfig_225c24df.o: ../../Source/RegionConfig.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling RegionConfig.cpp"
+	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/TrackConfig_a6d4984e.o: ../../Source/TrackConfig.cpp
+	-@mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling TrackConfig.cpp"
 	@$(CXX) $(JUCE_CXXFLAGS) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/AppWindowComponent_c01bc215.o: ../../Source/AppWindowComponent.cpp

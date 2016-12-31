@@ -14,6 +14,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 
 #include "CustomLookAndFeel.h"
+#include "AudioClip.h"
 #include <vector>
 
 using namespace std;
@@ -33,6 +34,10 @@ public:
         delete instance;
     }
 
+    vector<AudioClip*> getAudioClips() {
+        return audioClips;
+    }
+    
     inline void setTracklength(long length) {
         this->tracklength = length;
         sendChangeMessage();
@@ -70,6 +75,8 @@ public:
     inline void addChangeListener (ChangeListener* listener) {
         ChangeBroadcaster::addChangeListener(listener);
     }
+    
+
     
     static long DEFAULT_TRACK_LENGTH;
     static int  DEFAULT_TRACK_HEIGHT;
@@ -119,6 +126,8 @@ protected:
     long tracklength;
     double sampleRate;
     int bufferSize;
+    
+    vector<AudioClip*> audioClips;
     
 };
 

@@ -128,7 +128,16 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\AudioClip.cpp"/>
+    <ClCompile Include="..\..\Source\AuxBusConfig.cpp"/>
+    <ClCompile Include="..\..\Source\AuxSendConfig.cpp"/>
+    <ClCompile Include="..\..\Source\EffectConfig.cpp"/>
+    <ClCompile Include="..\..\Source\InstrumentConfig.cpp"/>
+    <ClCompile Include="..\..\Source\MixerConfig.cpp"/>
     <ClCompile Include="..\..\Source\Project.cpp"/>
+    <ClCompile Include="..\..\Source\ProjectConfig.cpp"/>
+    <ClCompile Include="..\..\Source\RegionConfig.cpp"/>
+    <ClCompile Include="..\..\Source\TrackConfig.cpp"/>
     <ClCompile Include="..\..\Source\AppWindowComponent.cpp"/>
     <ClCompile Include="..\..\Source\CustomLookAndFeel.cpp"/>
     <ClCompile Include="..\..\Source\ImageToggleButton.cpp"/>
@@ -1729,7 +1738,16 @@
     <ClCompile Include="..\..\JuceLibraryCode\juce_video.cpp"/>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\AudioClip.h"/>
+    <ClInclude Include="..\..\Source\AuxBusConfig.h"/>
+    <ClInclude Include="..\..\Source\AuxSendConfig.h"/>
+    <ClInclude Include="..\..\Source\EffectConfig.h"/>
+    <ClInclude Include="..\..\Source\InstrumentConfig.h"/>
+    <ClInclude Include="..\..\Source\MixerConfig.h"/>
     <ClInclude Include="..\..\Source\Project.h"/>
+    <ClInclude Include="..\..\Source\ProjectConfig.h"/>
+    <ClInclude Include="..\..\Source\RegionConfig.h"/>
+    <ClInclude Include="..\..\Source\TrackConfig.h"/>
     <ClInclude Include="..\..\Source\AppViewPort.h"/>
     <ClInclude Include="..\..\Source\AppWindowComponent.h"/>
     <ClInclude Include="..\..\Source\CustomLookAndFeel.h"/>
