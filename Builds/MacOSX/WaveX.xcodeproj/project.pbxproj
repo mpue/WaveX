@@ -1354,6 +1354,7 @@
 		0546DE32CEE0E2673373E866 /* WaveX */ = {
 			isa = PBXGroup;
 			children = (
+				BF5658F61E17A55300E15E4B /* Documentation */,
 				6D43F589DB9509E7AF235DD6 /* Resources */,
 				AF51C8453630B695B49B468D /* Source */,
 			);
@@ -3023,6 +3024,13 @@
 				EC8A16A0FC43A12DF16C8AD6 /* win_utf8_io.h */,
 			);
 			name = flac;
+			sourceTree = "<group>";
+		};
+		BF5658F61E17A55300E15E4B /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Documentation;
 			sourceTree = "<group>";
 		};
 		BFF6C4F568A689F4CD9BE547 /* windows */ = {
