@@ -48,24 +48,19 @@ public:
     void setPan(float pan);
     
     void setInputChannels(int* channels);
-    
     int* getInputChannels();
     
     void setOutputChannels(int* channels);
-    
     int* getOutputChannels();
     
     String getType();
-    
     void setType(String type);
     
+    String getMidiInputDevice();
     void setMidiInputDevice(String name);
     
-    void setMidiOutputDevice(String name);
-    
-    String getMidiInputDevice();
-    
     String getMidiOutputDevice();
+    void setMidiOutputDevice(String name);
     
     bool isSolo();
     void setSolo(bool solo);
@@ -75,6 +70,9 @@ public:
     
     bool isMono();
     void setMono(bool mono);
+    
+    void setHeight(int height);
+    int getHeight();
     
     ValueTree getConfig();
     
@@ -102,7 +100,9 @@ private:
     vector<RegionConfig*> regions;
     vector<EffectConfig*> effects;
     vector<AuxSendConfig*> auxSendConfigs;
-    InstrumentConfig* instrument;
+    InstrumentConfig* instrument = NULL;
+    
+    int height = 0;
     
 };
 

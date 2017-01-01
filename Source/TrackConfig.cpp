@@ -24,8 +24,14 @@ TrackConfig::~TrackConfig() {
     for(std::vector<AuxSendConfig*>::iterator it = auxSendConfigs.begin(); it != auxSendConfigs.end();it++) {
         delete *it;
     }
-    delete instrument;
+    if (instrument != NULL) {
+        delete instrument;
+    }
     
+}
+
+void TrackConfig::setName(juce::String name) {
+    this->name = name;
 }
 
 String TrackConfig::getName()
@@ -142,13 +148,22 @@ String TrackConfig::getMidiOutputDevice() {
     return midiOutputDevice;
 }
 
+int TrackConfig::getHeight() {
+    return height;
+}
+
+void TrackConfig::setHeight(int height) {
+    this->height = height;
+}
+
 ValueTree TrackConfig::getConfig() {
     
-    ValueTree config = ValueTree("Tracks");
+    ValueTree config = ValueTree("Track");
     
     config.setProperty("volume", volume, nullptr);
     config.setProperty("gain", gain, nullptr);
     config.setProperty("pan", pan, nullptr);
+    config.setProperty("height", height, nullptr);
     config.setProperty("midiChannel", midiChannel, nullptr);
     config.setProperty("solo", solo, nullptr);
     config.setProperty("mute", mute, nullptr);

@@ -89,13 +89,9 @@ ValueTree ProjectConfig::getProjectConfig() {
     config.setProperty("sampleRate", sampleRate,nullptr);
     config.setProperty("bufferSize", bufferSize, nullptr);
     
-    ValueTree trackConfig = ValueTree("Tracks");
-    
     for(int i = 0; i < tracks.size(); i++) {
-        trackConfig.addChild(tracks.at(i)->getConfig(), -1, nullptr);
+        config.addChild(tracks.at(i)->getConfig(), -1, nullptr);
     }
-    
-    config.addChild(trackConfig, -1, nullptr);
     
     return config;
     

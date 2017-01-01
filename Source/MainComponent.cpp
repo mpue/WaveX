@@ -760,7 +760,8 @@ public:
         
         if (chooser.browseForFileToOpen()) {
             File file = chooser.getResult();
-            navigator->getCurrentTrack()->addRegion(file, this->sampleRate);
+            navigator->getCurrentTrack()->addRegion(file.getFileNameWithoutExtension(),file, this->sampleRate);
+            Project::getInstance()->addAudioFile(file.getFileNameWithoutExtension(), file.getFullPathName());
         }
         
     }
@@ -996,6 +997,38 @@ private:
             FileChooser chooser("Select target file...", File::nonexistent, "*.*");
             
             if (chooser.browseForFileToSave(true)) {
+                
+                Project::getInstance()->getConfig()->getTracks().clear();
+                
+                for (int i = 0; i < navigator->getTracks().size();i++) {
+                    Track* t = navigator->getTracks().at(i);
+                    TrackConfig* tc = new TrackConfig();
+                    tc->setName(t->getName());
+                    tc->setPan(t->getPan());
+                    tc->setGain(t->getGain());
+                    tc->setMono(t->isMono());
+                    tc->setMute(t->isMute());
+                    tc->setSolo(t->isSolo());
+                    
+                    if (t->getType() == Track::Type::AUDIO)
+                        tc->setType("audio");
+                    else if (t->getType() == Track::Type::MIDI)
+                        tc->setType("midi");
+                    
+                    for (int j = 0; j < t->getRegions().size();j++) {
+                        Region* r = t->getRegions().at(j);
+                        RegionConfig* rc = new RegionConfig();
+                        AudioClip* ac = new AudioClip();
+                        ac->setName(r->getName());
+                        ac->setLength(r->getNumSamples());
+                        ac->setOffset(r->getSampleOffset());
+                        rc->setAudioClip(ac);
+                        tc->addRegion(rc);
+                    }
+                    
+                    Project::getInstance()->getConfig()->addTrack(tc);
+                }
+                
                 File file = chooser.getResult();
                 Project::getInstance()->save(file);
             }

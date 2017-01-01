@@ -27,7 +27,7 @@ public:
     AudioRegion(AudioRegion* other, AudioFormatManager& manager, double sampleRate, long startSample, long numSamples);
     AudioRegion(AudioRegion* other, AudioFormatManager& manager, double sampleRate);
     AudioRegion(AudioSampleBuffer* source, AudioFormatManager& manager, long startSample, long sampleLength, double sampleRate);
-    AudioRegion(File file, AudioFormatManager& manager,double sampleRate);
+    AudioRegion(File file, String refId, AudioFormatManager& manager,double sampleRate);
     ~AudioRegion();
 
     virtual void paint (Graphics&) override;
@@ -54,8 +54,10 @@ public:
     void setDragger(MultiComponentDragger* dragger);
     
     virtual void updateThumb() override;
-    
     virtual void componentMovedOrResized (Component& component,bool wasMoved, bool wasResized) override;
+    
+    void setClipRefId(String id);
+    String getClipRefid();
     
 private:
 
@@ -67,6 +69,9 @@ private:
     
     Rectangle<int>* thumbnailBounds = NULL;
     virtual void changeListenerCallback(ChangeBroadcaster * source) override;
+    
+    // reference to original file
+    String clipRefId;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioRegion)
 };

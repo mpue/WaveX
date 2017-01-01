@@ -16,6 +16,7 @@
 #include "ProjectConfig.h"
 #include "CustomLookAndFeel.h"
 #include <vector>
+#include <map>
 
 using namespace std;
 
@@ -72,6 +73,10 @@ public:
         ChangeBroadcaster::addChangeListener(listener);
     }
 
+    ProjectConfig* getConfig() {
+        return config;
+    }
+    
     void createNew(String name) {
         this->name = name;
         
@@ -80,6 +85,7 @@ public:
         }
         
         config = new ProjectConfig();
+        clear();
     }
     
     void save(File output) {
@@ -88,13 +94,7 @@ public:
         config->setBufferSize(bufferSize);
         config->setSampleRate(sampleRate);
         config->setTracklength(tracklength);
-        
-        config->getTracks().clear();
-        
-        for(int i = 0; i < config->getTracks().size();i++) {
-            
-        }
-        
+
         ValueTree v = config->getProjectConfig();
         
         XmlElement* xml = v.createXml();
@@ -105,6 +105,14 @@ public:
     
     void load() {
         
+    }
+    
+    void clear() {
+        projectAudio.clear();
+    }
+    
+    void addAudioFile(String id, String path) {
+        projectAudio.insert(make_pair(id, path));
     }
     
     static long DEFAULT_TRACK_LENGTH;
@@ -156,6 +164,8 @@ protected:
     long tracklength;
     double sampleRate;
     int bufferSize;
+    
+    map<String, String> projectAudio;
     
     ProjectConfig* config = NULL;
     

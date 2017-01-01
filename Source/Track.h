@@ -42,6 +42,7 @@ public:
     void setName(String name);
 	
     void setGain(float gain);
+    float getGain();
 	void setVolume(float volume);
 	float getVolume();
     float getPan();
@@ -53,7 +54,7 @@ public:
 	void setSelected(bool selected);
 	bool isSelected();
 	double getMaxLength();
-	void addRegion(File file, double sampleRate);
+	void addRegion(String refId, File file, double sampleRate);
     void addMidiRegion(double sampleRate, long samplePosition,long regionLength);
     void addRegion(AudioSampleBuffer* source, double sampleRate, long samplePosition, long regionLength);
 

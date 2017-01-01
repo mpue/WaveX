@@ -129,7 +129,7 @@ AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double
 }
 
 //==============================================================================
-AudioRegion::AudioRegion(File file, AudioFormatManager& manager, double sampleRate)
+AudioRegion::AudioRegion(File file, String refId, AudioFormatManager& manager, double sampleRate)
 {
     this->zoom = 20;
     this->constrainer = new ResizeConstrainer(this->zoom / 4);
@@ -368,4 +368,12 @@ void AudioRegion::componentMovedOrResized (Component& component, bool wasMoved, 
         sendChangeMessage();
     }
     
+}
+
+void AudioRegion::setClipRefId(String id) {
+    this->clipRefId = id;
+}
+
+String AudioRegion::getClipRefid() {
+    return clipRefId;
 }

@@ -23,7 +23,7 @@ class AudioClip {
     
 public:
     
-    AudioClip(String name, String path, long length, long offset);
+    AudioClip(String refId, String name, long length, long offset);
     AudioClip();
     ~AudioClip();
     
@@ -33,8 +33,8 @@ public:
     String getName();
     void setName(String name);
     
-    String getPath();
-    void setPath(String path);
+    String getRefId();
+    void setRefId(String path);
     
     long getOffset();
     void setOffset(long offset);
@@ -48,8 +48,8 @@ private:
     // the name of the clip
     String name;
     
-    // the origin of this clip, which is the absolute path
-    String path;
+    // the origin of this clip, which is id of the project audio file
+    String refId;
     
     // the offset of this clip relative to the track start in samples
     long offset;

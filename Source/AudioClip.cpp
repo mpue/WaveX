@@ -10,9 +10,8 @@
 
 #include "AudioClip.h"
 
-AudioClip::AudioClip(String name, String path, long length, long offset) {
-    this->name = name;
-    this->path = path;
+AudioClip::AudioClip(String refId, String name, long length, long offset) {
+    this->refId = refId;
     this->length = length;
     this->offset = offset;
 }
@@ -49,12 +48,12 @@ String AudioClip::getName() {
     return name;
 }
 
-void AudioClip::setPath(juce::String path) {
-    this->path = path;
+void AudioClip::setRefId(juce::String id) {
+    this->refId = id;
 }
 
-String AudioClip::getPath() {
-    return path;
+String AudioClip::getRefId() {
+    return refId;
 }
 
 ValueTree AudioClip::getConfig() {
@@ -62,9 +61,9 @@ ValueTree AudioClip::getConfig() {
     ValueTree config = ValueTree("AudioClip");
     
     config.setProperty("name", name, nullptr);
-    config.setProperty("path", path, nullptr);
+    config.setProperty("refId", refId, nullptr);
     config.setProperty("length", (int)length, nullptr);
-    config.setProperty("offset", name, nullptr);
+    config.setProperty("offset", (int)offset, nullptr);
 
     return config;
 }

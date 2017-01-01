@@ -138,9 +138,9 @@ void Track::duplicateRegion(Region *region) {
     
 }
 
-void Track::addRegion(File file, double sampleRate) {
+void Track::addRegion(String refId, File file, double sampleRate) {
 
-	AudioRegion* region = new AudioRegion(file, *manager, sampleRate);
+	AudioRegion* region = new AudioRegion(file, refId, *manager, sampleRate);
     region->setDragger(dragger);
 	Rectangle<int>* bounds = new Rectangle<int>(0, 0, region->getThumbnail()->getTotalLength() * 20, getHeight());
     region->setBounds(markerPosition, 0, region->getWidth(), getHeight());
@@ -318,6 +318,10 @@ void Track::setZoom(float zoom)
 String Track::getName()
 {
 	return name;
+}
+
+float Track::getGain() {
+    return gain;
 }
 
 void Track::setGain(float gain)
@@ -566,7 +570,6 @@ void Track::setSolo(bool solo) {
 bool Track::isSolo() {
     return solo;
 }
-
 
 void Track::setMute(bool mute) {
     this->mute = mute;
