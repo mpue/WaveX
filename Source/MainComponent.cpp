@@ -919,6 +919,8 @@ private:
         PopupMenu menu;
         
         if (index == 0) {
+            menu.addItem(9, "Load project", true, false, nullptr);
+            menu.addItem(10, "Save project as", true, false, nullptr);
             menu.addItem(1, "Add track", true, false, nullptr);
             menu.addItem(2, "Play/Stop", true, false, nullptr);
             menu.addItem(7, "Settings", true, false, nullptr);
@@ -986,6 +988,18 @@ private:
         }
         else if (menuItemID == 8) {
             scanPlugins();
+        }
+        else if (menuItemID == 9) {
+            Project::getInstance()->load();
+        }
+        else if (menuItemID == 10) {
+            FileChooser chooser("Select target file...", File::nonexistent, "*.*");
+            
+            if (chooser.browseForFileToSave(true)) {
+                File file = chooser.getResult();
+                Project::getInstance()->save(file);
+            }
+            
         }
         else if (menuItemID >= 100) {
             addPlugin(availableInstruments.at(menuItemID - 100));

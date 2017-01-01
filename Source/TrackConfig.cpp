@@ -62,7 +62,6 @@ float TrackConfig::getPan()
 
 void TrackConfig::setSolo(bool solo) {
     this->solo = solo;
-    // sendChangeMessage();
 }
 
 bool TrackConfig::isSolo() {
@@ -71,7 +70,6 @@ bool TrackConfig::isSolo() {
 
 void TrackConfig::setMute(bool mute) {
     this->mute = mute;
-    // sendChangeMessage();
 }
 
 bool TrackConfig::isMute() {
@@ -80,7 +78,6 @@ bool TrackConfig::isMute() {
 
 void TrackConfig::setMono(bool mono) {
     this->mono = mono;
-    // sendChangeMessage();
 }
 
 bool TrackConfig::isMono() {
@@ -121,11 +118,11 @@ int* TrackConfig::getOutputChannels() {
     return &this->outputChannels[0];
 }
 
-Track::Type TrackConfig::getType() {
+String TrackConfig::getType() {
     return this->type;
 }
 
-void TrackConfig::setType(Track::Type type) {
+void TrackConfig::setType(String type) {
     this->type = type;
 }
 
@@ -143,4 +140,29 @@ String TrackConfig::getMidiInputDevice() {
 
 String TrackConfig::getMidiOutputDevice() {
     return midiOutputDevice;
+}
+
+ValueTree TrackConfig::getConfig() {
+    
+    ValueTree config = ValueTree("Tracks");
+    
+    config.setProperty("volume", volume, nullptr);
+    config.setProperty("gain", gain, nullptr);
+    config.setProperty("pan", pan, nullptr);
+    config.setProperty("midiChannel", midiChannel, nullptr);
+    config.setProperty("solo", solo, nullptr);
+    config.setProperty("mute", mute, nullptr);
+    config.setProperty("mono", mono, nullptr);
+    config.setProperty("inputChannels", String(inputChannels[0])+","+String(inputChannels[1]), nullptr);
+    config.setProperty("outputChannels", String(outputChannels[0])+","+String(outputChannels[1]), nullptr);
+    config.setProperty("midiInputDevice", midiInputDevice, nullptr);
+    config.setProperty("midiOutputDevice", midiOutputDevice, nullptr);
+    config.setProperty("type", type, nullptr);
+    config.setProperty("midiOutputDevice", midiOutputDevice, nullptr);
+    
+    for (int i = 0; i < regions.size();i++) {
+        config.addChild(regions.at(i)->getConfig(), -1, nullptr);
+    }
+    
+    return config;
 }

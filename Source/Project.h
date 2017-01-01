@@ -13,8 +13,8 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
+#include "ProjectConfig.h"
 #include "CustomLookAndFeel.h"
-#include "AudioClip.h"
 #include <vector>
 
 using namespace std;
@@ -33,50 +33,79 @@ public:
     static void destroy() {
         delete instance;
     }
-
-    vector<AudioClip*> getAudioClips() {
-        return audioClips;
-    }
     
-    inline void setTracklength(long length) {
+    void setTracklength(long length) {
         this->tracklength = length;
         sendChangeMessage();
     };
     
-    inline long getTrackLength() {
+    long getTrackLength() {
         return this->tracklength;
     }
 
-    inline void setName(String name) {
+    void setName(String name) {
         this->name = name;
         sendChangeMessage();
     }
     
-    inline String getName() {
+    String getName() {
         return name;
     }
     
-    inline void setSampleRate(double sampleRate) {
+    void setSampleRate(double sampleRate) {
         this->sampleRate = sampleRate;
     }
     
-    inline double getSampleRate() {
+    double getSampleRate() {
         return sampleRate;
     }
     
-    inline void setBufferSize(double bufferSize) {
+    void setBufferSize(double bufferSize) {
         this->bufferSize = bufferSize;
     }
     
-    inline double getBufferSize() {
+    double getBufferSize() {
         return bufferSize;
     }
     
     inline void addChangeListener (ChangeListener* listener) {
         ChangeBroadcaster::addChangeListener(listener);
     }
-    
 
+    void createNew(String name) {
+        this->name = name;
+        
+        if (config != NULL) {
+            delete config;
+        }
+        
+        config = new ProjectConfig();
+    }
+    
+    void save(File output) {
+ 
+        config->setName(name);
+        config->setBufferSize(bufferSize);
+        config->setSampleRate(sampleRate);
+        config->setTracklength(tracklength);
+        
+        config->getTracks().clear();
+        
+        for(int i = 0; i < config->getTracks().size();i++) {
+            
+        }
+        
+        ValueTree v = config->getProjectConfig();
+        
+        XmlElement* xml = v.createXml();
+        xml->writeToFile(output, "");
+        delete xml;
+        
+    }
+    
+    void load() {
+        
+    }
     
     static long DEFAULT_TRACK_LENGTH;
     static int  DEFAULT_TRACK_HEIGHT;
@@ -111,10 +140,11 @@ protected:
     Project() {
         this->tracklength = DEFAULT_TRACK_LENGTH;
         name = "empty Project";
+        this->config = new ProjectConfig();
     };
     
     ~Project() {
-
+        delete config;
     }
     
     static Project* instance;
@@ -127,7 +157,7 @@ protected:
     double sampleRate;
     int bufferSize;
     
-    vector<AudioClip*> audioClips;
+    ProjectConfig* config = NULL;
     
 };
 

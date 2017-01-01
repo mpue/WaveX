@@ -8,6 +8,8 @@
   ==============================================================================
 */
 
+#include "../JuceLibraryCode/JuceHeader.h"
+
 #include "RegionConfig.h"
 
 RegionConfig::RegionConfig() {
@@ -29,4 +31,14 @@ void RegionConfig::setAudioClip(AudioClip* clip) {
 
 void RegionConfig::addMessage(MidiMessage* message) {
     midiSequence->addEvent(*message);
+}
+
+ValueTree RegionConfig::getConfig() {
+    
+    ValueTree config = ValueTree("Region");
+    
+    config.addChild(audioClip->getConfig(), -1, nullptr);
+    
+    return config;
+    
 }

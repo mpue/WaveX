@@ -17,7 +17,6 @@
 #include "EffectConfig.h"
 #include "InstrumentConfig.h"
 #include "AuxSendConfig.h"
-#include "Track.h"
 
 #include <vector>
 
@@ -56,9 +55,9 @@ public:
     
     int* getOutputChannels();
     
-    Track::Type getType();
+    String getType();
     
-    void setType(Track::Type type);
+    void setType(String type);
     
     void setMidiInputDevice(String name);
     
@@ -77,6 +76,7 @@ public:
     bool isMono();
     void setMono(bool mono);
     
+    ValueTree getConfig();
     
 private:
 
@@ -98,7 +98,7 @@ private:
     String midiInputDevice;
     String midiOutputDevice;
     
-    Track::Type type = Track::Type::AUDIO;
+    String type;
     vector<RegionConfig*> regions;
     vector<EffectConfig*> effects;
     vector<AuxSendConfig*> auxSendConfigs;

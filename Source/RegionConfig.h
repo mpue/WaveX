@@ -27,6 +27,8 @@ public:
     void setAudioClip(AudioClip* clip);
     void addMessage(MidiMessage* message);
     
+    ValueTree getConfig();
+    
 private:
     AudioClip* audioClip;
     MidiMessageSequence* midiSequence;

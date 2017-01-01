@@ -39,6 +39,8 @@ public:
     long getOffset();
     void setOffset(long offset);
     
+    ValueTree getConfig();
+    
 private:
     // the length of this clip in samples
     long length;

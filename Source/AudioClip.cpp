@@ -56,3 +56,15 @@ void AudioClip::setPath(juce::String path) {
 String AudioClip::getPath() {
     return path;
 }
+
+ValueTree AudioClip::getConfig() {
+    
+    ValueTree config = ValueTree("AudioClip");
+    
+    config.setProperty("name", name, nullptr);
+    config.setProperty("path", path, nullptr);
+    config.setProperty("length", (int)length, nullptr);
+    config.setProperty("offset", name, nullptr);
+
+    return config;
+}
