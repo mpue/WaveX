@@ -63,6 +63,10 @@ public:
 
 	void setOffset(int offset);
 	int getOffset();
+    
+    void setHeight(int height);
+    int getHeight();
+    
     void toggleLoopSelection();
     void clearSelection();
     
@@ -195,6 +199,8 @@ private:
     String midiOutputDevice;
     
     Type type = AUDIO;
+    
+    int height = Project::DEFAULT_TRACK_HEIGHT;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Track)
 };

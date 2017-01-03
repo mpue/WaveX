@@ -47,7 +47,6 @@ void TrackConfig::setGain(float gain)
 void TrackConfig::setVolume(float volume)
 {
     this->volume = volume;
-    // sendChangeMessage();
 }
 
 float TrackConfig::getVolume()
@@ -58,7 +57,6 @@ float TrackConfig::getVolume()
 void TrackConfig::setPan(float pan)
 {
     this->pan = pan;
-    // sendChangeMessage();
 }
 
 float TrackConfig::getPan()
@@ -104,6 +102,14 @@ void TrackConfig::addAuxSend(AuxSendConfig* aux) {
 
 void TrackConfig::setInstrument(InstrumentConfig* instrument) {
     this->instrument = instrument;
+}
+
+void TrackConfig::setMidiChannel(int channel) {
+    this->midiChannel = channel;
+};
+
+float TrackConfig::getMidiChannel() {
+    return this->midiChannel;
 }
 
 void TrackConfig::setInputChannels(int* channels) {

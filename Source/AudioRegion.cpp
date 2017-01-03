@@ -15,7 +15,7 @@
 AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double sampleRate, long startSample, long numSamples) {
 
     this->sampleRate = sampleRate;
-    this->zoom = 20;
+    this->zoom = other->zoom;
     this->constrainer = new ResizeConstrainer(this->zoom / 4);
     
     resizerR = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::rightEdge);
@@ -39,7 +39,7 @@ AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double
     setSize(length * this->zoom, other->getHeight());
     */
     
-    setSize((audioBuffer->getNumSamples() / sampleRate) * this->zoom, Project::DEFAULT_TRACK_HEIGHT);
+    setSize((other->getBuffer()->getNumSamples() / sampleRate) * this->zoom, Project::DEFAULT_TRACK_HEIGHT);
 
     this->offset = 0;
     
@@ -53,7 +53,7 @@ AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double
 
 AudioRegion::AudioRegion(AudioSampleBuffer* source, AudioFormatManager& manager, long startSample, long sampleLength, double sampleRate) {
 
-    this->zoom = 20;
+    this->zoom = Project::getInstance()->getTempo() / 8;
     this->constrainer = new ResizeConstrainer(this->zoom / 4);
     
     resizerR = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::rightEdge);
@@ -91,7 +91,7 @@ AudioRegion::AudioRegion(AudioSampleBuffer* source, AudioFormatManager& manager,
 
 AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double sampleRate) {
     
-    this->zoom = 20;
+    this->zoom = other->zoom;
     this->constrainer = new ResizeConstrainer(this->zoom / 4);
     
     resizerR = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::rightEdge);
@@ -118,7 +118,7 @@ AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double
     setSize(length * this->zoom, other->getHeight());
      */
     
-    setSize((getNumSamples() / sampleRate) * this->zoom, Project::DEFAULT_TRACK_HEIGHT);
+    setSize((other->getBuffer()->getNumSamples() / sampleRate) * this->zoom, Project::DEFAULT_TRACK_HEIGHT);
 
     this->offset = 0;
     
@@ -131,7 +131,7 @@ AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double
 //==============================================================================
 AudioRegion::AudioRegion(File file, String refId, AudioFormatManager& manager, double sampleRate)
 {
-    this->zoom = 20;
+    this->zoom = Project::getInstance()->getTempo() / 8;
     this->constrainer = new ResizeConstrainer(this->zoom / 4);
 
     resizerR = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::rightEdge);
@@ -153,6 +153,7 @@ AudioRegion::AudioRegion(File file, String refId, AudioFormatManager& manager, d
     this->thumbnail->addBlock(0, *audioBuffer, 0,reader->lengthInSamples);
      
     this->name = file.getFileNameWithoutExtension();
+    this->clipRefId = refId;
 
     setSize((audioBuffer->getNumSamples() / sampleRate) * this->zoom, Project::DEFAULT_TRACK_HEIGHT);
 
@@ -181,7 +182,7 @@ void AudioRegion::timerCallback() {
 void AudioRegion::updateThumb()
 {
     // double length = this->thumbnail->getTotalLength();
-    double length = getNumSamples() / sampleRate;
+    double length = thumbnail->getTotalLength();
     setSize(length * this->zoom, getHeight());
     this->thumbnailBounds->setWidth(length * this->zoom);
     repaint();
@@ -305,7 +306,8 @@ void AudioRegion::paint (Graphics& g)
 }
 
 void AudioRegion::resized()
-{   
+{
+    Logger::getCurrentLogger()->writeToLog(String(this->thumbnail->getTotalLength()));
     if (this->thumbnailBounds != NULL) {
         this->thumbnailBounds->setHeight(getHeight());
         // this->thumbnailBounds->setWidth(getWidth());
@@ -318,13 +320,14 @@ void AudioRegion::resized()
 }
 
 AudioThumbnail* AudioRegion::getThumbnail() {
+    
     return this->thumbnail;
 }
 
 void AudioRegion::changeListenerCallback(ChangeBroadcaster * source)
 {
     if (source == this->thumbnail) {
-        // repaint();
+        repaint();
     }
 }
 
@@ -364,6 +367,7 @@ void AudioRegion::componentMovedOrResized (Component& component, bool wasMoved, 
         Logger::getCurrentLogger()->writeToLog("AudioRegion sampleOffset " + String(sampleOffset));
     }
     if (wasResized) {
+        
         // track needs to be notified about resizing in order to adjust the sample buffer
         sendChangeMessage();
     }

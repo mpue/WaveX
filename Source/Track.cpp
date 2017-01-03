@@ -498,6 +498,16 @@ int Track::getOffset()
 	return this->offset;
 }
 
+void Track::setHeight(int height)
+{
+    this->height = height;
+}
+
+int Track::getHeight()
+{
+    return this->height;
+}
+
 AudioSampleBuffer * Track::getBuffer()
 {
     if (type == AUDIO) {
@@ -533,7 +543,7 @@ void Track::changeListenerCallback(ChangeBroadcaster * source) {
         // cleanup old range first
         audioBuffer->clear(r->getOldOffset(), r->getBuffer()->getNumSamples());
         // copy data from region to tracks audio buffer
-        long numSamples = r->getNumSamples();
+        long numSamples = r->getBuffer()->getNumSamples();
         audioBuffer->copyFrom(0, r->getSampleOffset(), *r->getBuffer(), 0, 0, numSamples);
         audioBuffer->copyFrom(1, r->getSampleOffset(), *r->getBuffer(), 1, 0, numSamples);
     }

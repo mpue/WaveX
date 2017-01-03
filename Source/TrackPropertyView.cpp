@@ -160,6 +160,7 @@ void TrackPropertyView::addTrack(Track* track)
 
 void TrackPropertyView::changeListenerCallback (ChangeBroadcaster* source) {
 
+    
     if (Mixer::getInstance() == source){
 
         int i = Mixer::getInstance()->getTracks().size() - 1;

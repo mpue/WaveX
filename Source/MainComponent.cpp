@@ -468,6 +468,10 @@ public:
                      */
                     
                 }
+                else {
+                    navigator->getTracks().at(i)->setMagnitude(0, 0);
+                    navigator->getTracks().at(i)->setMagnitude(1, 0);
+                }
                 
             }
             
@@ -493,9 +497,7 @@ public:
             
             this->rmsLeft = outL->getRMSLevel(0, 0,_numSamples);
             this->rmsRight = outR->getRMSLevel(0, 0,_numSamples);
-            
-            outL->clear();
-            outR->clear();
+        
             
             // Maybe we can use this later to display the peak at a specific sample point
             /*
@@ -991,7 +993,29 @@ private:
             scanPlugins();
         }
         else if (menuItemID == 9) {
-            Project::getInstance()->load();
+            FileChooser chooser("Select project file...", File::nonexistent, "*.xml");
+            
+            if (chooser.browseForFileToOpen()) {
+                Project::getInstance()->getConfig()->getTracks().clear();
+                File file = chooser.getResult();
+                Project::getInstance()->load(file);
+                
+                vector<TrackConfig*> _tracks = Project::getInstance()->getConfig()->getTracks();
+                
+                Logger::getCurrentLogger()->writeToLog("Found "+ String(_tracks.size())+" track(s).");
+                
+                int num = 0;
+                
+                for (int i = 0; i < _tracks.size();i++) {
+                    TrackConfig* tc = _tracks.at(i);
+                    Logger::getCurrentLogger()->writeToLog("Trying to add track "+tc->getName());
+                    navigator->addTrack(tc);
+                    num++;
+                }
+                
+                Logger::getCurrentLogger()->writeToLog("Added "+ String(num)+" track(s).");
+
+            }
         }
         else if (menuItemID == 10) {
             FileChooser chooser("Select target file...", File::nonexistent, "*.*");
@@ -1006,6 +1030,7 @@ private:
                     tc->setName(t->getName());
                     tc->setPan(t->getPan());
                     tc->setGain(t->getGain());
+                    tc->setVolume(t->getVolume());
                     tc->setMono(t->isMono());
                     tc->setMute(t->isMute());
                     tc->setSolo(t->isSolo());
@@ -1020,6 +1045,11 @@ private:
                         RegionConfig* rc = new RegionConfig();
                         AudioClip* ac = new AudioClip();
                         ac->setName(r->getName());
+                        
+                        if (AudioRegion* ar = dynamic_cast<AudioRegion*>(r)) {
+                            ac->setRefId(ar->getClipRefid());
+                        }
+                        
                         ac->setLength(r->getNumSamples());
                         ac->setOffset(r->getSampleOffset());
                         rc->setAudioClip(ac);

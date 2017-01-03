@@ -43,9 +43,12 @@ public:
     
     void setVolume(float volume);
     float getVolume();
-    
+
     float getPan();
     void setPan(float pan);
+    
+    void setMidiChannel(int channel);
+    float getMidiChannel();
     
     void setInputChannels(int* channels);
     int* getInputChannels();

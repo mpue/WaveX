@@ -88,14 +88,36 @@ public:
         clear();
     }
     
+    float getTempo() {
+        return tempo;
+    }
+    
+    void setTempo(float tempo) {
+        this->tempo = tempo;
+    }
+    
     void save(File output) {
  
         config->setName(name);
         config->setBufferSize(bufferSize);
         config->setSampleRate(sampleRate);
         config->setTracklength(tracklength);
-
-        ValueTree v = config->getProjectConfig();
+        config->setTempo(tempo);
+        
+        ValueTree v = config->getConfig();
+ 
+        std::map<String, String>::iterator it;
+        
+        ValueTree audioFiles = ValueTree("AudioFiles");
+        
+        for (it = projectAudio.begin(); it != projectAudio.end(); ++it) {
+            ValueTree file = ValueTree("File");
+            file.setProperty("refId", it->first, nullptr);
+            file.setProperty("path", it->second, nullptr);
+            audioFiles.addChild(file, -1, nullptr);
+        }
+        
+        v.addChild(audioFiles, -1, nullptr);
         
         XmlElement* xml = v.createXml();
         xml->writeToFile(output, "");
@@ -103,8 +125,11 @@ public:
         
     }
     
-    void load() {
-        
+    void load(File file) {
+        ScopedPointer<XmlElement> xml = XmlDocument(file).getDocumentElement();
+        ValueTree v = ValueTree::fromXml(*xml.get());
+        xml = nullptr;
+        config->setConfig(v);
     }
     
     void clear() {
@@ -117,6 +142,7 @@ public:
     
     static long DEFAULT_TRACK_LENGTH;
     static int  DEFAULT_TRACK_HEIGHT;
+    static float DEFAULT_TEMPO;
     
     inline double snap(double location, double raster) {
         
@@ -164,6 +190,7 @@ protected:
     long tracklength;
     double sampleRate;
     int bufferSize;
+    float tempo = DEFAULT_TEMPO;
     
     map<String, String> projectAudio;
     

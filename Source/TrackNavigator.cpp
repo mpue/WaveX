@@ -29,7 +29,7 @@ TrackNavigator::TrackNavigator(PositionMarker* marker, AudioDeviceManager *devic
     this->selector->setSize(getWidth(), getHeight());
     this->selector->setBounds(0, 0, getWidth(), getHeight());
     addAndMakeVisible(selector);
-    this->zoom = 40;
+    this->zoom = Project::getInstance()->getTempo() / 4;
     this->marker = marker;
 	this->position = 0;
     this->dragger = new MultiComponentDragger();
@@ -188,41 +188,87 @@ std::vector<Track*> TrackNavigator::getTracks() {
     return this->tracks;
 }
 
-void TrackNavigator::addTrack(Track::Type type, double sampleRate) {
+void TrackNavigator::addTrack(TrackConfig* tc) {
     
-	Track* track = new Track(type, sampleRate, this->dragger);
-    addAndMakeVisible(track);
-	
-	track->addChangeListener(this);
+    Track::Type type;
+    
+    if (tc->getType() == "audio") {
+        type = Track::Type::AUDIO;
+    }
+    else if (tc->getType() == "midi") {
+        type = Track::Type::MIDI;
+    }
+    
+    Track* track = new Track(type, Project::getInstance()->getSampleRate(), this->dragger);
+    
+    track->setName(tc->getName());
+    track->setMidiOutputDevice(tc->getMidiInputDevice());
+    track->setMidiInputDevice(tc->getMidiInputDevice());
+    track->setInputChannels(tc->getInputChannels());
+    track->setOutputChannels(tc->getOutputChannels());
+    track->setMute(tc->isMute());
+    track->setSolo(tc->isSolo());
+    track->setMono(tc->isMono());
+    track->setVolume(tc->getVolume());
+    track->setGain(1.0f);
+    track->setPan(tc->getPan());
+    track->setMidiChannel(tc->getMidiChannel());
+    track->setHeight(tc->getHeight());
+    
+    addTrack(track);
+    
+}
 
+void TrackNavigator::addTrack(Track* track) {
+
+    this->tracks.push_back(track);
+    this->currentTrack = track;
+    
+    addAndMakeVisible(track);
+    
+    track->addChangeListener(this);
+    
     Mixer::getInstance()->addTrack(track);
     
-	if (zoom > 0)
+    if (zoom > 0)
         track->setZoom(zoom);
-
+    
     for (int i = 0; i < tracks.size();i++) {
         tracks.at(i)->setSelected(false);
     }
     
     track->setSelected(true);
-    track->setMidiChannel((tracks.size() % 16) + 1);
-
-	int yPos = 0;
-
-	for (int i = 0; i < this->tracks.size();i++) {
-		yPos += tracks.at(i)->getHeight();
-	}
-
-    this->tracks.push_back(track);
-    this->currentTrack = track;
+    
+    int yPos = 0;
+    
+    for (int i = 0; i < this->tracks.size();i++) {
+        yPos += tracks.at(i)->getHeight();
+    }
+    
+    Project* p = Project::getInstance();
+    track->setBounds(0, yPos, p->getTrackLength() * this->zoom, track->getHeight());
+    
     // track->toFront(true);
     this->selector->toFront(false);
     
-    Project* p = Project::getInstance();
+    Logger::getCurrentLogger()->writeToLog("Track added to navigator.");
+}
+
+void TrackNavigator::addTrack(Track::Type type, double sampleRate) {
+    
+    Track* track = new Track(type, sampleRate, this->dragger);
+    
+    addTrack(track);
     
 	// int height = this->getParentComponent()->getHeight();
-    setBounds(getX(), getY(), getMaxLength() * this->zoom, tracks.size() * Project::DEFAULT_TRACK_HEIGHT);
-    track->setBounds(0, yPos, p->getTrackLength() * this->zoom, Project::DEFAULT_TRACK_HEIGHT);
+    
+    int height = 0;
+    
+    for (int i = 0; i < this->tracks.size();i++) {
+        height += tracks.at(i)->getHeight();
+    }
+    
+    setBounds(getX(), getY(), getMaxLength() * this->zoom, height);
 
 	this->marker->setSize(2, getHeight());
 	this->marker->setLength(getMaxLength());
@@ -319,7 +365,7 @@ bool TrackNavigator::keyPressed(const KeyPress& key, Component* originatingCompo
         if (getMaxLength() == 0) {
             return false;
         }
-        this->zoom += 20;
+        this->zoom += Project::getInstance()->getTempo() / 8;
 		setSize(getMaxLength() * this->zoom, getHeight());
         setZoom(zoom);
 		repaint();
@@ -329,7 +375,7 @@ bool TrackNavigator::keyPressed(const KeyPress& key, Component* originatingCompo
         if (getMaxLength() == 0) {
             return false;
         }
-        this->zoom -= 20;
+        this->zoom -= Project::getInstance()->getTempo() / 8;
         setSize(getMaxLength() * this->zoom, getHeight());
         setZoom(zoom);
 		repaint();

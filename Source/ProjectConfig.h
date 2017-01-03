@@ -48,7 +48,11 @@ public:
     void setBufferSize(double bufferSize);
     double getBufferSize();
     
-    ValueTree getProjectConfig();
+    float getTempo();
+    void setTempo(float tempo);
+    
+    ValueTree getConfig();
+    void setConfig(ValueTree & config);
     
 private:
     
@@ -57,6 +61,7 @@ private:
     double sampleRate;
     int bufferSize;
     long trackLength;
+    float tempo;
 
     vector<AudioClip*> audioClips;
     vector<TrackConfig*> tracks;
