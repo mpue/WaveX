@@ -91,10 +91,16 @@ void TrackNavigator::updateTrackLayout(ChangeBroadcaster * source)
 		for (int i = index + 1; i < tracks.size();i++) {
 			tracks.at(i)->setTopLeftPosition(tracks.at(i - 1)->getX(), tracks.at(i - 1)->getPosition().getY() + tracks.at(i - 1)->getHeight());
 		}
-
 	
 	}
-
+    else {
+        
+        if(tracks.size() == 1) {
+            tracks.at(0)->setTopLeftPosition(0,0);
+        }
+        
+    }
+    
 	adjustHeight();
 	sendChangeMessage();
 }
@@ -106,10 +112,8 @@ void TrackNavigator::adjustHeight()
 	for (int i = 0; i < tracks.size();i++) {
 		height += tracks.at(i)->getHeight();
 	}
-
-	if (getHeight() != height) {
-		setSize(getWidth(), height);
-	}
+    
+    setSize(getWidth(), height);
 }
 
 double TrackNavigator::getPosition() {
@@ -212,7 +216,7 @@ void TrackNavigator::addTrack(TrackConfig* tc) {
     track->setVolume(tc->getVolume());
     track->setGain(1.0f);
     track->setPan(tc->getPan());
-    track->setMidiChannel(tc->getMidiChannel());
+    track->setMidiChannel(tc->getMidiChannel(), false);
     track->setHeight(tc->getHeight());
     
     addTrack(track);
@@ -252,6 +256,7 @@ void TrackNavigator::addTrack(Track* track) {
     this->selector->toFront(false);
     
     Logger::getCurrentLogger()->writeToLog("Track added to navigator.");
+    repaint();
 }
 
 void TrackNavigator::addTrack(Track::Type type, double sampleRate) {
@@ -262,7 +267,7 @@ void TrackNavigator::addTrack(Track::Type type, double sampleRate) {
     
 	// int height = this->getParentComponent()->getHeight();
     
-    int height = 0;
+    int height = 1;
     
     for (int i = 0; i < this->tracks.size();i++) {
         height += tracks.at(i)->getHeight();
@@ -277,7 +282,7 @@ void TrackNavigator::addTrack(Track::Type type, double sampleRate) {
     // constrainer.setRaster(this->zoom / 4);
     // constrainer.setMaxX(getMaxLength() * this->zoom);
     
-    // repaint();
+    repaint();
 	sendChangeMessage();    
 }
 
@@ -306,6 +311,7 @@ void TrackNavigator::removeSelectedTrack()
 	}
 
 	adjustHeight();
+    repaint();
 	sendChangeMessage();
 
 }
@@ -325,6 +331,7 @@ void TrackNavigator::resized()
     
 	this->marker->setSize(2, getHeight());
 	this->marker->setDrawingBounds(0, 25, getWidth(), getHeight());
+    repaint();
 }
 
 WaveSelector* TrackNavigator::getSelector() {
@@ -333,6 +340,7 @@ WaveSelector* TrackNavigator::getSelector() {
 
 void TrackNavigator::changeListenerCallback(ChangeBroadcaster * source) 
 {
+    
 	updateTrackLayout(source);
 	
     if (source == Project::getInstance()) {
@@ -345,6 +353,7 @@ void TrackNavigator::changeListenerCallback(ChangeBroadcaster * source)
     if (Track* track = dynamic_cast<Track*>(source)){
         sendChangeMessage();
     }
+    
 
 }
 

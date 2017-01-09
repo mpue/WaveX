@@ -374,6 +374,7 @@ void TrackPropertyPanel::sliderValueChanged (Slider* sliderThatWasMoved)
 
 void TrackPropertyPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 {
+    
     //[UsercomboBoxChanged_Pre]
     //[/UsercomboBoxChanged_Pre]
 
@@ -394,7 +395,9 @@ void TrackPropertyPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
                 }
             }
             else if(track->getType() == Track::Type::MIDI) {
-                track->setMidiInputDevice(Mixer::getInstance()->getMidiInputs().at(inputCombo->getSelectedId() - 1));
+                if (Mixer::getInstance()->getMidiInputs().size() > 0) {
+                    track->setMidiInputDevice(Mixer::getInstance()->getMidiInputs().at(inputCombo->getSelectedId() - 1));
+                }
             }
 
         }
@@ -418,7 +421,9 @@ void TrackPropertyPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 
             }
             else if(track->getType() == Track::Type::MIDI) {
-                track->setMidiOutputDevice(Mixer::getInstance()->getMidiOutputs().at(outputCombo->getSelectedId() - 1));
+                if (Mixer::getInstance()->getMidiOutputs().size() > 0) {
+                    track->setMidiOutputDevice(Mixer::getInstance()->getMidiOutputs().at(outputCombo->getSelectedId() - 1));
+                }
             }
 
 
@@ -428,7 +433,7 @@ void TrackPropertyPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
     else if (comboBoxThatHasChanged == channelCombo)
     {
         //[UserComboBoxCode_channelCombo] -- add your combo box handling code here..
-        track->setMidiChannel(channelCombo->getSelectedId());
+        track->setMidiChannel(channelCombo->getSelectedId(), true);
         //[/UserComboBoxCode_channelCombo]
     }
 
@@ -533,8 +538,10 @@ void TrackPropertyPanel::updateChannels() {
         }
     }
 
-    inputCombo->setSelectedId(1);
-    outputCombo->setSelectedId(1);
+    if (inputCombo->getNumItems() > 0)
+        inputCombo->setSelectedId(1);
+    if (outputCombo->getNumItems() > 0)
+        outputCombo->setSelectedId(1);
 
 
 }
@@ -567,7 +574,9 @@ void TrackPropertyPanel::buttonClicked (Button* buttonThatWasClicked) {
                 inputCombo->addItem(channels.getReference(i) + "|" + channels.getReference(i + 1)+ "("+ String(i) + ")" , i + 1);
             }
         }
-        inputCombo->setSelectedId(1);
+        
+        if (inputCombo->getNumItems() > 0)
+            inputCombo->setSelectedId(1);
 
         channels = Mixer::getInstance()->getOutputChannels();
 
@@ -583,7 +592,9 @@ void TrackPropertyPanel::buttonClicked (Button* buttonThatWasClicked) {
                 outputCombo->addItem(channels.getReference(i) + "|" + channels.getReference(i + 1)+ "("+ String(i) + ")" , i + 1);
             }
         }
-        outputCombo->setSelectedId(1);
+        
+        if (outputCombo->getNumItems() > 0)
+            outputCombo->setSelectedId(1);
 
     }
 

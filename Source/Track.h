@@ -64,8 +64,11 @@ public:
 	void setOffset(int offset);
 	int getOffset();
     
+    
     void setHeight(int height);
+    /*
     int getHeight();
+     */
     
     void toggleLoopSelection();
     void clearSelection();
@@ -86,7 +89,7 @@ public:
     void setCurrentMarkerPosition(int position);
     
     int getMidiChannel();
-    void setMidiChannel(int channel);
+    void setMidiChannel(int channel, bool notify);
     
     vector<Region*> getRegions();
     

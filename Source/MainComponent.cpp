@@ -1112,13 +1112,18 @@ private:
                     Track* t = navigator->getTracks().at(i);
                     
                     if (t->isSelected() && t->getType() == Track::Type::MIDI){
-                        deviceManager.addMidiInputCallback(t->getMidiInputDevice(),this);
-                        deviceManager.setDefaultMidiOutput(t->getMidiOutputDevice());
+                    
+                        if (deviceManager.isMidiInputEnabled(t->getMidiInputDevice())) {
+                            deviceManager.addMidiInputCallback(t->getMidiInputDevice(),this);
+                        }
+                        if (t->getMidiOutputDevice() != "") {
+                            deviceManager.setDefaultMidiOutput(t->getMidiOutputDevice());
+                        }
                     }
                     
                     MidiMessage m;
                     
-                    if (deviceManager.getDefaultMidiOutput() != NULL) {
+                    if (deviceManager.getDefaultMidiOutput() != nullptr) {
                         deviceManager.getDefaultMidiOutput()->sendMessageNow(m.allNotesOff(t->getMidiChannel()));
                     }
                 }

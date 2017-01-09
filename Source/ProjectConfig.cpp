@@ -105,37 +105,43 @@ void ProjectConfig::setConfig(ValueTree & v) {
     for (int i = 0; i < v.getNumChildren(); i++) {
     
         ValueTree child = v.getChild(i);
+
+        // make sure we have a track as child, since we have other children too
         
-        TrackConfig* tc = new TrackConfig();
-        
-        tc->setVolume(child.getProperty("volume"));
-        tc->setGain(child.getProperty("gain"));
-        tc->setPan(child.getProperty("pan"));
-        tc->setHeight(child.getProperty("height"));
-        tc->setMidiChannel(child.getProperty("midiChannel"));
-        tc->setSolo(child.getProperty("solo"));
-        tc->setMute(child.getProperty("mute"));
-        tc->setMono(child.getProperty("mono"));
-        
-        int* inputChannels = new int[2];
-        String sInputChannels = child.getProperty("inputChannels");
-        inputChannels[0] = sInputChannels.substring(0, sInputChannels.indexOf(",")).getIntValue();
-        inputChannels[1] = sInputChannels.substring(sInputChannels.indexOf(",") + 1).getIntValue();
-        
-        tc->setInputChannels(inputChannels);
-        
-        int* outputChannels = new int[2];
-        String sOutputChannels = child.getProperty("outputChannels");
-        outputChannels[0] = sOutputChannels.substring(0, sOutputChannels.indexOf(",")).getIntValue();
-        outputChannels[1] = sOutputChannels.substring(sOutputChannels.indexOf(",") + 1).getIntValue();
-        
-        tc->setOutputChannels(outputChannels);
-        
-        tc->setMidiInputDevice(child.getProperty("midiInputDevice"));
-        tc->setMidiOutputDevice(child.getProperty("midiOutputDevice"));
-        tc->setType(child.getProperty("type"));
-        
-        tracks.push_back(tc);
+        if (child.hasProperty("type")) {
+            TrackConfig* tc = new TrackConfig();
+            
+            tc->setVolume(child.getProperty("volume"));
+            tc->setName(child.getProperty("name"));
+            tc->setGain(child.getProperty("gain"));
+            tc->setPan(child.getProperty("pan"));
+            tc->setHeight(child.getProperty("height"));
+            tc->setMidiChannel(child.getProperty("midiChannel"));
+            tc->setSolo(child.getProperty("solo"));
+            tc->setMute(child.getProperty("mute"));
+            tc->setMono(child.getProperty("mono"));
+            
+            int* inputChannels = new int[2];
+            String sInputChannels = child.getProperty("inputChannels");
+            inputChannels[0] = sInputChannels.substring(0, sInputChannels.indexOf(",")).getIntValue();
+            inputChannels[1] = sInputChannels.substring(sInputChannels.indexOf(",") + 1).getIntValue();
+            
+            tc->setInputChannels(inputChannels);
+            
+            int* outputChannels = new int[2];
+            String sOutputChannels = child.getProperty("outputChannels");
+            outputChannels[0] = sOutputChannels.substring(0, sOutputChannels.indexOf(",")).getIntValue();
+            outputChannels[1] = sOutputChannels.substring(sOutputChannels.indexOf(",") + 1).getIntValue();
+            
+            tc->setOutputChannels(outputChannels);
+            
+            tc->setMidiInputDevice(child.getProperty("midiInputDevice"));
+            tc->setMidiOutputDevice(child.getProperty("midiOutputDevice"));
+            tc->setType(child.getProperty("type"));
+            
+            tracks.push_back(tc);
+            
+        }
         
     }
 }

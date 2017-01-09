@@ -132,6 +132,7 @@ void TrackPropertyView::setOffset(int offset)
 
 void TrackPropertyView::addTrack(Track* track)
 {
+    
 	TrackPropertyPanel* panel = new TrackPropertyPanel();
 
     panel->setName(track->getName());

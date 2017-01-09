@@ -169,6 +169,7 @@ ValueTree TrackConfig::getConfig() {
     config.setProperty("volume", volume, nullptr);
     config.setProperty("gain", gain, nullptr);
     config.setProperty("pan", pan, nullptr);
+    config.setProperty("name", name, nullptr);
     config.setProperty("height", height, nullptr);
     config.setProperty("midiChannel", midiChannel, nullptr);
     config.setProperty("solo", solo, nullptr);

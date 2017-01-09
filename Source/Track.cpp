@@ -27,6 +27,7 @@ Track::Track(Type type, double sampleRate, MultiComponentDragger* dragger)
     this->pan = 0;
     this->audioBuffer = new AudioSampleBuffer(2,maxLength*sampleRate);
     this->dragger = dragger;
+    setHeight(Project::DEFAULT_TRACK_HEIGHT);
     
 }
 
@@ -498,16 +499,19 @@ int Track::getOffset()
 	return this->offset;
 }
 
+
 void Track::setHeight(int height)
 {
+    Component::setSize(getWidth(), height);
     this->height = height;
 }
 
+/*
 int Track::getHeight()
 {
     return this->height;
 }
-
+*/
 AudioSampleBuffer * Track::getBuffer()
 {
     if (type == AUDIO) {
@@ -532,9 +536,11 @@ int Track::getMidiChannel() {
     return midiChannel;
 }
 
-void Track::setMidiChannel(int channel) {
+void Track::setMidiChannel(int channel, bool notify) {
     this->midiChannel = channel;
-    sendChangeMessage();
+    if (notify) {
+        sendChangeMessage();
+    }
 }
 
 void Track::changeListenerCallback(ChangeBroadcaster * source) {

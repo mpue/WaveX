@@ -1,4 +1,4 @@
-/*
+ /*
   ==============================================================================
 
     This file was auto-generated!
@@ -14,6 +14,13 @@
 #include "Project.h"
 #include "Mixer.h"
 #include "Session.h"
+#include <exception>
+#include <iostream>
+#include <cstdlib>
+
+void exceptionHandler() {
+    Logger::getCurrentLogger()->writeToLog("YOU are fucked.");
+}
 
 //==============================================================================
 class WaveXApplication  : public JUCEApplication
@@ -26,11 +33,15 @@ public:
     const String getApplicationVersion() override    { return ProjectInfo::versionString; }
     bool moreThanOneInstanceAllowed() override       { return true; }
 
+
+    
     //==============================================================================
     void initialise (const String& commandLine) override
     {
         // This method is where you should put your application's initialisation code..
 
+        // std::set_terminate (exceptionHandler);
+        
         mainWindow = new MainWindow (getApplicationName());
         mainWindow->setLookAndFeel(Session::getInstance()->getLookAndFeel());
 	    TooltipWindow tooltipWindow;
