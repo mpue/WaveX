@@ -37,9 +37,9 @@ public:
 
     WaveSelector* getSelector();
     
-    void addTrack(TrackConfig* tc);
+    Track* addTrack(TrackConfig* tc);
     void addTrack(Track* t);
-    void addTrack(Track::Type type,double sampleRate);
+    Track* addTrack(Track::Type type,double sampleRate);
 	void removeSelectedTrack();
     Track* getCurrentTrack();
     std::vector<Track*> getTracks();

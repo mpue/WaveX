@@ -25,6 +25,7 @@
 #include "MasterChannelPanel.h"
 #include "TrackNavigator.h"
 #include "DragConstrainer.h"
+#include "Track.h"
 //[/Headers]
 
 
@@ -52,6 +53,7 @@ public:
     void timerCallback() override;
     vector<MasterChannelPanel*> getChannels();
     void setMasterVolume(int channel, float volume);
+    void addTrack(Track* track);
     //[/UserMethods]
 
     void paint (Graphics& g) override;

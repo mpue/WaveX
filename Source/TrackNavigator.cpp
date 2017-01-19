@@ -192,7 +192,7 @@ std::vector<Track*> TrackNavigator::getTracks() {
     return this->tracks;
 }
 
-void TrackNavigator::addTrack(TrackConfig* tc) {
+Track* TrackNavigator::addTrack(TrackConfig* tc) {
     
     Track::Type type;
     
@@ -221,10 +221,49 @@ void TrackNavigator::addTrack(TrackConfig* tc) {
     
     addTrack(track);
     
+    int height = 1;
+    
+    for (int i = 0; i < this->tracks.size();i++) {
+        height += tracks.at(i)->getHeight();
+    }
+    
+    setBounds(getX(), getY(), getMaxLength() * this->zoom, height);
+    
+    this->marker->setSize(2, getHeight());
+    this->marker->setLength(getMaxLength());
+    this->selector->setSize(getWidth(), getHeight());
+    
+    // constrainer.setRaster(this->zoom / 4);
+    // constrainer.setMaxX(getMaxLength() * this->zoom);
+    
+    repaint();
+    sendChangeMessage();
+    
+    return track;
+    
 }
 
 void TrackNavigator::addTrack(Track* track) {
 
+    // deselect all tracks before adding a new one
+    
+    for (int i = 0; i < tracks.size();i++) {
+        tracks.at(i)->setSelected(false);
+    }
+    
+    // calculate y position of new track
+    
+    int yPos = 0;
+    
+    for (int i = 0; i < this->tracks.size();i++) {
+        yPos += tracks.at(i)->getHeight();
+    }
+    
+    // set bounds accordingly
+    
+    Project* p = Project::getInstance();
+    track->setBounds(0, yPos, p->getTrackLength() * this->zoom, track->getHeight());
+    
     this->tracks.push_back(track);
     this->currentTrack = track;
     
@@ -237,29 +276,14 @@ void TrackNavigator::addTrack(Track* track) {
     if (zoom > 0)
         track->setZoom(zoom);
     
-    for (int i = 0; i < tracks.size();i++) {
-        tracks.at(i)->setSelected(false);
-    }
-    
     track->setSelected(true);
-    
-    int yPos = 0;
-    
-    for (int i = 0; i < this->tracks.size();i++) {
-        yPos += tracks.at(i)->getHeight();
-    }
-    
-    Project* p = Project::getInstance();
-    track->setBounds(0, yPos, p->getTrackLength() * this->zoom, track->getHeight());
-    
-    // track->toFront(true);
+
     this->selector->toFront(false);
     
-    Logger::getCurrentLogger()->writeToLog("Track added to navigator.");
     repaint();
 }
 
-void TrackNavigator::addTrack(Track::Type type, double sampleRate) {
+Track* TrackNavigator::addTrack(Track::Type type, double sampleRate) {
     
     Track* track = new Track(type, sampleRate, this->dragger);
     
@@ -283,7 +307,9 @@ void TrackNavigator::addTrack(Track::Type type, double sampleRate) {
     // constrainer.setMaxX(getMaxLength() * this->zoom);
     
     repaint();
-	sendChangeMessage();    
+	sendChangeMessage();
+    
+    return track;
 }
 
 void TrackNavigator::removeSelectedTrack()

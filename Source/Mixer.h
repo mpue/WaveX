@@ -35,8 +35,8 @@ public:
     
     inline void addTrack(Track* track) {
         this->tracks.push_back(track);
-        // track->addChangeListener(this);
-        // sendChangeMessage();
+        track->addChangeListener(this);
+        sendChangeMessage();
     }
     
     vector<Track*> getTracks() {

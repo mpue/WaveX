@@ -228,11 +228,18 @@ public:
     
     
     void timerCallback() override {
+        
         trackProperties->timerCallback();
+        
         for (int i = 0; i < navigator->getTracks().size();i++) {
+            
             Track* t = navigator->getTracks().at(i);
-            mixer->getChannels().at(i)->setMagnitude(0,t->getMagnitude(0));
-            mixer->getChannels().at(i)->setMagnitude(1,t->getMagnitude(1));
+            
+            if (i < mixer->getChannels().size()) {
+                mixer->getChannels().at(i)->setMagnitude(0,t->getMagnitude(0));
+                mixer->getChannels().at(i)->setMagnitude(1,t->getMagnitude(1));
+            }
+            
         }
         
         mixer->setMasterVolume(0, magnitudeLeft);
@@ -773,7 +780,8 @@ public:
     }
     
     void addTrack(Track::Type type) {
-        navigator->addTrack(type, this->sampleRate);
+        Track* t = navigator->addTrack(type, this->sampleRate);
+        mixer->addTrack(t);
     }
     
     void openSettings() {
@@ -1000,6 +1008,8 @@ private:
                 File file = chooser.getResult();
                 Project::getInstance()->load(file);
                 
+            
+                
                 vector<TrackConfig*> _tracks = Project::getInstance()->getConfig()->getTracks();
                 
                 Logger::getCurrentLogger()->writeToLog("Found "+ String(_tracks.size())+" track(s).");
@@ -1009,13 +1019,13 @@ private:
                 for (int i = 0; i < _tracks.size();i++) {
                     TrackConfig* tc = _tracks.at(i);
                     Logger::getCurrentLogger()->writeToLog("Trying to add track "+tc->getName());
-                    navigator->addTrack(tc);
+                    Track* t = navigator->addTrack(tc);
+                    mixer->addTrack(t);
                     num++;
                 }
-                
-                Logger::getCurrentLogger()->writeToLog("Added "+ String(num)+" track(s).");
-
+        
             }
+            
         }
         else if (menuItemID == 10) {
             FileChooser chooser("Select target file...", File::nonexistent, "*.*");
@@ -1034,6 +1044,7 @@ private:
                     tc->setMono(t->isMono());
                     tc->setMute(t->isMute());
                     tc->setSolo(t->isSolo());
+                    tc->setHeight(t->getHeight());
                     
                     if (t->getType() == Track::Type::AUDIO)
                         tc->setType("audio");

@@ -98,6 +98,7 @@ void MixerPanel::resized()
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 void MixerPanel::changeListenerCallback(ChangeBroadcaster * source) {
 
+    /*
     if (Mixer::getInstance() == source){
 
         if (Mixer::getInstance()->getTracks().size() > channels.size()){
@@ -111,6 +112,7 @@ void MixerPanel::changeListenerCallback(ChangeBroadcaster * source) {
         }
 
     }
+     */
 
 }
 
@@ -130,6 +132,15 @@ void MixerPanel::timerCallback() {
     }
     masterChannel->setMagnitude(mcc->getMagnitude(0));
     */
+}
+
+void MixerPanel::addTrack(Track* track) {
+    MasterChannelPanel* panel = new MasterChannelPanel();
+    panel->setTrack(track);
+    Mixer::getInstance()->addChangeListener(panel);
+    panel->setTopLeftPosition((channels.size() + 2) * 90, 0);
+    addAndMakeVisible(panel);
+    channels.push_back(panel);
 }
 
 //[/MiscUserCode]

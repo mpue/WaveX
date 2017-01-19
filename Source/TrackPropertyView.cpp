@@ -146,7 +146,7 @@ void TrackPropertyView::addTrack(Track* track)
 
 	}
 
-	panel->setBounds(0, yPos, 150, Project::DEFAULT_TRACK_HEIGHT);
+	panel->setBounds(0, yPos, 150, track->getHeight());
     panel->setTrack(track);
     panel->updateChannels();
 
@@ -154,13 +154,18 @@ void TrackPropertyView::addTrack(Track* track)
 	trackProperties.push_back(panel);
 
 	panel->addMouseListener(this, true);
+    
+    int height = 1;
+    
+    for (int i = 0; i < this->trackProperties.size();i++) {
+        height += this->trackProperties.at(i)->getHeight();
+    }
 
-    setSize(getWidth(), this->trackProperties.size() * Project::DEFAULT_TRACK_HEIGHT);
+    setSize(getWidth(), height);
     hResizer->toFront(false);
 }
 
 void TrackPropertyView::changeListenerCallback (ChangeBroadcaster* source) {
-
     
     if (Mixer::getInstance() == source){
 

@@ -23,7 +23,7 @@ void exceptionHandler() {
 }
 
 //==============================================================================
-class WaveXApplication  : public JUCEApplication
+class WaveXApplication  : public JUCEApplication, public ChangeListener
 {
 public:
     //==============================================================================
@@ -44,7 +44,10 @@ public:
         
         mainWindow = new MainWindow (getApplicationName());
         mainWindow->setLookAndFeel(Session::getInstance()->getLookAndFeel());
-	    TooltipWindow tooltipWindow;
+        
+        Project::getInstance()->addChangeListener(this);
+	    
+        TooltipWindow tooltipWindow;
     }
 
     void shutdown() override
@@ -70,6 +73,10 @@ public:
         // When another instance of the app is launched while this one is running,
         // this method is invoked, and the commandLine parameter tells you what
         // the other instance's command-line arguments were.
+    }
+    
+    virtual void changeListenerCallback(ChangeBroadcaster * source) override {
+        mainWindow->setName(getApplicationName()+ " - " + Project::getInstance()->getName());
     }
 
     //==============================================================================

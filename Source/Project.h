@@ -98,6 +98,8 @@ public:
     
     void save(File output) {
  
+        setName(output.getFileNameWithoutExtension());
+        
         config->setName(name);
         config->setBufferSize(bufferSize);
         config->setSampleRate(sampleRate);
@@ -130,6 +132,7 @@ public:
         ValueTree v = ValueTree::fromXml(*xml.get());
         xml = nullptr;
         config->setConfig(v);
+        setName(config->getName());
     }
     
     void clear() {
