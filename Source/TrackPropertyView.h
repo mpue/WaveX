@@ -55,6 +55,7 @@ public:
 	Track* getTrack(int i);
 	void setOffset(int offset);
 	void mouseDown(const MouseEvent& event) override;
+    void clearTracks();
     //[/UserMethods]
 
     void paint (Graphics& g) override;

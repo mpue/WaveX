@@ -33,6 +33,10 @@ public:
         delete instance;
     }
     
+    void clearTracks() {
+        this->tracks.clear();
+    }
+    
     inline void addTrack(Track* track) {
         this->tracks.push_back(track);
         track->addChangeListener(this);

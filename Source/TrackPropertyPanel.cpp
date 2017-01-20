@@ -501,6 +501,10 @@ void TrackPropertyPanel::changeListenerCallback(ChangeBroadcaster * source) {
     }
     else if (Mixer::getInstance() == source) {
 
+        if (Mixer::getInstance()->getTracks().size() == 0) {
+            return;
+        }
+        
         Track* t = Mixer::getInstance()->getLastModifiedTrack();
 
         if (track == t) {

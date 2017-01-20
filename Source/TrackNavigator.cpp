@@ -58,7 +58,13 @@ void TrackNavigator::paint (Graphics& g)
         tracks.at(i)->paint(g);
     }
      */
-    
+}
+
+void TrackNavigator::clearTracks() {
+    for(std::vector<Track*>::iterator it = tracks.begin(); it != tracks.end(); ++it) {
+        delete *it;
+    }
+    tracks.clear();
 }
 
 float TrackNavigator::getZoom()

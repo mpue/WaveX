@@ -68,7 +68,7 @@ public:
     
 protected:
     
-    float zoom;
+    float zoom = 30;
     String name;
     int offset = 0;
     double sampleRate;

@@ -156,7 +156,9 @@ AudioRegion::AudioRegion(File file, String refId, AudioFormatManager& manager, d
     this->clipRefId = refId;
 
     setSize((audioBuffer->getNumSamples() / sampleRate) * this->zoom, Project::DEFAULT_TRACK_HEIGHT);
-
+     Logger::getCurrentLogger()->writeToLog(getThumbnailBounds()->toString());
+    Logger::getCurrentLogger()->writeToLog(getBounds().toString());
+    
 	this->offset = 0;
     
     addComponentListener(this);
@@ -234,7 +236,7 @@ void AudioRegion::setZoom(float zoom) {
     else {
         // setSize(this->thumbnail->getTotalLength() * this->zoom, getHeight());
         // setSize(getNumSamples() / sampleRate * this->zoom, getHeight());
-        setSize(getNumSamples() / sampleRate * this->zoom, getHeight());
+        setSize((getNumSamples() / sampleRate) * this->zoom, getHeight());
 
     }
     
@@ -336,11 +338,12 @@ int AudioRegion::getNumSamples() {
     int originalSize = thumbnailBounds->getWidth();
     int reducedSize = getWidth();
     
-    // region has been resized with resizer component, thus wee need to report another smaple size
+    // region has been resized with resizer component, thus we need to report another smaple size
     if (reducedSize > 0 && reducedSize  < originalSize) {
         int effectiveSamples = (getWidth() / zoom) * sampleRate;
         return effectiveSamples;
     }
+    
     
     return audioBuffer->getNumSamples();
 }

@@ -50,8 +50,6 @@ MixerPanel::MixerPanel ()
 
 
     //[Constructor] You can add your own custom stuff here..
-    // startTimer(100);
-    Mixer::getInstance()->addChangeListener(this);
     //[/Constructor]
 }
 
@@ -96,24 +94,20 @@ void MixerPanel::resized()
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
-void MixerPanel::changeListenerCallback(ChangeBroadcaster * source) {
 
-    /*
-    if (Mixer::getInstance() == source){
 
-        if (Mixer::getInstance()->getTracks().size() > channels.size()){
-            MasterChannelPanel* panel = new MasterChannelPanel();
-            panel->setTrack(Mixer::getInstance()->getTracks().back());
-            Mixer::getInstance()->addChangeListener(panel);
-            panel->setTopLeftPosition((channels.size() + 2) * 90, 0);
-            addAndMakeVisible(panel);
-            channels.push_back(panel);
-
-        }
-
+void MixerPanel::clearTracks() {
+    removeAllChildren();
+    for (std::vector<MasterChannelPanel*>::iterator it = channels.begin(); it != channels.end(); ++it) {
+        delete *it;
     }
-     */
-
+    channels.clear();
+    
+    addAndMakeVisible (masterChannel = new MasterChannelPanel());
+    masterChannel->setName ("Master");
+    
+    addAndMakeVisible (aux1 = new MasterChannelPanel());
+    aux1->setName ("Aux 1");
 }
 
 vector<MasterChannelPanel*> MixerPanel::getChannels() {

@@ -39,7 +39,6 @@
                                                                     //[/Comments]
 */
 class MixerPanel  : public Component,
-                    public ChangeListener,
                     public Timer
 {
 public:
@@ -49,11 +48,11 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    virtual void changeListenerCallback(ChangeBroadcaster * source) override;
     void timerCallback() override;
     vector<MasterChannelPanel*> getChannels();
     void setMasterVolume(int channel, float volume);
     void addTrack(Track* track);
+    void clearTracks();
     //[/UserMethods]
 
     void paint (Graphics& g) override;

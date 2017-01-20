@@ -782,6 +782,7 @@ public:
     void addTrack(Track::Type type) {
         Track* t = navigator->addTrack(type, this->sampleRate);
         mixer->addTrack(t);
+        trackProperties->addTrack(t);
     }
     
     void openSettings() {
@@ -930,6 +931,7 @@ private:
         PopupMenu menu;
         
         if (index == 0) {
+            menu.addItem(11, "New project", true, false, nullptr);
             menu.addItem(9, "Load project", true, false, nullptr);
             menu.addItem(10, "Save project as", true, false, nullptr);
             menu.addItem(1, "Add track", true, false, nullptr);
@@ -1008,8 +1010,6 @@ private:
                 File file = chooser.getResult();
                 Project::getInstance()->load(file);
                 
-            
-                
                 vector<TrackConfig*> _tracks = Project::getInstance()->getConfig()->getTracks();
                 
                 Logger::getCurrentLogger()->writeToLog("Found "+ String(_tracks.size())+" track(s).");
@@ -1021,6 +1021,7 @@ private:
                     Logger::getCurrentLogger()->writeToLog("Trying to add track "+tc->getName());
                     Track* t = navigator->addTrack(tc);
                     mixer->addTrack(t);
+                    trackProperties->addTrack(t);
                     num++;
                 }
         
@@ -1073,6 +1074,17 @@ private:
                 File file = chooser.getResult();
                 Project::getInstance()->save(file);
             }
+            
+        }
+        else if (menuItemID == 11) {
+            Project::getInstance()->getConfig()->getTracks().clear();
+            navigator->clearTracks();
+            navigator->setSize(getWidth(), getHeight());
+            navigator->setBounds(0, 0, getWidth(), getHeight());
+            trackProperties->clearTracks();
+            mixer->clearTracks();
+            Mixer::getInstance()->clearTracks();
+            
             
         }
         else if (menuItemID >= 100) {

@@ -37,6 +37,8 @@ public:
 
     WaveSelector* getSelector();
     
+    void clearTracks();
+    
     Track* addTrack(TrackConfig* tc);
     void addTrack(Track* t);
     Track* addTrack(Track::Type type,double sampleRate);

@@ -64,9 +64,6 @@ AppWindowComponent::AppWindowComponent() {
     addAndMakeVisible(viewport);
 	addAndMakeVisible(trackProperties);
     addAndMakeVisible(mixerViewport);
-
-    // mcc->getNavigator()->addChangeListener(this->trackProperties);
-    mcc->getNavigator()->addChangeListener(this->mixer);
     
 	menu->toFront(true);
     

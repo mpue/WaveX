@@ -306,6 +306,10 @@ void MasterChannelPanel::setMagnitude(int channel, float magnitude) {
 void MasterChannelPanel::changeListenerCallback(ChangeBroadcaster * source) {
 
     if(Mixer::getInstance() == source){
+        
+        if (Mixer::getInstance()->getTracks().size() == 0) {
+            return;
+        }
 
         if (Mixer::getInstance()->getLastModifiedTrack() == this->track) {
             setName(track->getName());

@@ -143,7 +143,7 @@ void Track::addRegion(String refId, File file, double sampleRate) {
 
 	AudioRegion* region = new AudioRegion(file, refId, *manager, sampleRate);
     region->setDragger(dragger);
-	Rectangle<int>* bounds = new Rectangle<int>(0, 0, region->getThumbnail()->getTotalLength() * 20, getHeight());
+	Rectangle<int>* bounds = new Rectangle<int>(0, 0, region->getThumbnail()->getTotalLength() * zoom, getHeight());
     region->setBounds(markerPosition, 0, region->getWidth(), getHeight());
 	region->setThumbnailBounds(bounds);
     region->setLoopCount(0);
