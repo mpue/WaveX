@@ -166,8 +166,10 @@ void Track::addRegion(String refId, File file, double sampleRate) {
     region->setSampleOffset(sampleNum,false,false);
     region->setOffset(markerPosition);
     
+    
     if (zoom > 0)
         region->setZoom(zoom);
+    
     
     audioBuffer->copyFrom(0, region->getSampleOffset(), *region->getBuffer(), 0, 0, region->getBuffer()->getNumSamples());
     audioBuffer->copyFrom(1, region->getSampleOffset(), *region->getBuffer(), 1, 0, region->getBuffer()->getNumSamples());

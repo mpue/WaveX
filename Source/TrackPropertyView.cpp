@@ -173,8 +173,25 @@ void TrackPropertyView::addTrack(Track* track)
 }
 
 void TrackPropertyView::changeListenerCallback (ChangeBroadcaster* source) {
+    if (Mixer::getInstance() == source){
+        
+        int i = Mixer::getInstance()->getTracks().size() - 1;
+        
+        while (Mixer::getInstance()->getTracks().size() > trackProperties.size()) {
+            addTrack(Mixer::getInstance()->getTracks().at(i--));
+        }
+        
+        int height = 0;
+        
+        for (int i = 0; i < this->trackProperties.size();i++) {
+            trackProperties.at(i)->setTopLeftPosition(trackProperties.at(i)->getX(), trackProperties.at(i)->getTrack()->getY());
+            height += trackProperties.at(i)->getHeight();
+        }
+        
+        setSize(getWidth(), height);
+        
+    }
     
-
 }
 
 void TrackPropertyView::timerCallback() {

@@ -2927,7 +2927,7 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MACOSX_DEPLOYMENT_TARGET_ppc = 10.4;
-				PRODUCT_BUNDLE_IDENTIFIER = de.pueski.WaveX;
+				PRODUCT_BUNDLE_IDENTIFIER = de.pueski.wavexapp;
 				SDKROOT_ppc = macosx10.5; }; name = Debug; };
 		6E6AE986AA0D9AD4F4F8947D = {isa = XCBuildConfiguration; buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
@@ -2950,7 +2950,7 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MACOSX_DEPLOYMENT_TARGET_ppc = 10.4;
-				PRODUCT_BUNDLE_IDENTIFIER = de.pueski.WaveX;
+				PRODUCT_BUNDLE_IDENTIFIER = de.pueski.wavexapp;
 				SDKROOT_ppc = macosx10.5; }; name = Release; };
 		4D9D79D3B0780CCE20EEB749 = {isa = XCBuildConfiguration; buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;

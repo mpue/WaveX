@@ -156,7 +156,7 @@ AudioRegion::AudioRegion(File file, String refId, AudioFormatManager& manager, d
     this->clipRefId = refId;
 
     setSize((audioBuffer->getNumSamples() / sampleRate) * this->zoom, Project::DEFAULT_TRACK_HEIGHT);
-     Logger::getCurrentLogger()->writeToLog(getThumbnailBounds()->toString());
+    //  Logger::getCurrentLogger()->writeToLog(getThumbnailBounds()->toString());
     Logger::getCurrentLogger()->writeToLog(getBounds().toString());
     
 	this->offset = 0;

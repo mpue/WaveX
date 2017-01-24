@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="OlwJxO" name="WaveX" projectType="guiapp" version="1.0.0"
-              bundleIdentifier="de.pueski.WaveX" includeBinaryInAppConfig="1"
+              bundleIdentifier="de.pueski.wavexapp" includeBinaryInAppConfig="1"
               jucerVersion="4.3.0" companyName="pueski.de" companyWebsite="www.pueski.de">
   <MAINGROUP id="oMZ4Yu" name="WaveX">
     <GROUP id="{B67EC8D6-D8A9-C95F-BAAF-8D1AE92B6AD6}" name="Documentation">
@@ -215,6 +215,30 @@
         <MODULEPATH id="juce_audio_utils" path="../../../vst/JUCE/modules"/>
       </MODULEPATHS>
     </LINUX_MAKE>
+    <XCODE_IPHONE targetFolder="Builds/iOS" iosScreenOrientation="portraitlandscape"
+                  UIFileSharingEnabled="1" microphonePermissionNeeded="1" iosInAppPurchases="1"
+                  iosBackgroundAudio="1" iosBackgroundBle="1">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="WaveX"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="WaveX"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_video" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../../Downloads/JUCE/modules"/>
+      </MODULEPATHS>
+    </XCODE_IPHONE>
   </EXPORTFORMATS>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>
