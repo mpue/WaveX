@@ -793,14 +793,14 @@ public:
         launchOptions.dialogTitle = ("Audio Settings");
         launchOptions.escapeKeyTriggersCloseButton = true;
         launchOptions.resizable = true;
-        launchOptions.useNativeTitleBar = true;
+        launchOptions.useNativeTitleBar = false;
         launchOptions.useBottomRightCornerResizer = true;
         launchOptions.componentToCentreAround = this->getParentComponent()->getParentComponent()->getParentComponent();
         launchOptions.content.setOwned(selector);
         launchOptions.content->setSize(600, 580);
         launchOptions.runModal();
         
-        setupIO();
+        // setupIO();
     }
     
     void setTracklength(long length) {
@@ -935,6 +935,7 @@ private:
             menu.addItem(9, "Load project", true, false, nullptr);
             menu.addItem(10, "Save project as", true, false, nullptr);
             menu.addItem(1, "Add track", true, false, nullptr);
+            menu.addItem(12, "Remove track", true, false, nullptr);
             menu.addItem(2, "Play/Stop", true, false, nullptr);
             menu.addItem(7, "Settings", true, false, nullptr);
             menu.addItem(3, "Exit", true, false, nullptr);
@@ -1086,6 +1087,9 @@ private:
             Mixer::getInstance()->clearTracks();
             
             
+        }
+        else if (menuItemID == 12) {
+            removeSelectedTrack();
         }
         else if (menuItemID >= 100) {
             addPlugin(availableInstruments.at(menuItemID - 100));
