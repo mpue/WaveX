@@ -8,7 +8,7 @@
     <key>CFBundleIconFile</key>
     <string>Icon.icns</string>
     <key>CFBundleIdentifier</key>
-    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+    <string>de.pueski.wavexapp</string>
     <key>CFBundleName</key>
     <string>WaveX</string>
     <key>CFBundleDisplayName</key>
@@ -22,7 +22,7 @@
     <key>CFBundleVersion</key>
     <string>1.0.0</string>
     <key>NSHumanReadableCopyright</key>
-    <string>pueski.de</string>
+    <string></string>
     <key>NSHighResolutionCapable</key>
     <true/>
   </dict>

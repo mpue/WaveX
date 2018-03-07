@@ -37,7 +37,7 @@
 */
 class ToolbarPanel  : public Component,
                       public ChangeBroadcaster,
-                      public ButtonListener
+                    public Button::Listener
 {
 public:
     //==============================================================================

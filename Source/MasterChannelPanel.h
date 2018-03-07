@@ -40,8 +40,8 @@
 class MasterChannelPanel  : public Component,
                             public ChangeListener,
                             public ChangeBroadcaster,
-                            public SliderListener,
-                            public ButtonListener
+                            public Slider::Listener,
+                            public Button::Listener
 {
 public:
     //==============================================================================

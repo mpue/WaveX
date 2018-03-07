@@ -39,7 +39,7 @@
 class TransportPanel  : public Component,
                         public ChangeListener,
                         public Timer,
-                        public ButtonListener
+                        public Button::Listener
 {
 public:
     //==============================================================================

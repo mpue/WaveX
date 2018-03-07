@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="OlwJxO" name="WaveX" projectType="guiapp" version="1.0.0"
               bundleIdentifier="de.pueski.wavexapp" includeBinaryInAppConfig="1"
-              jucerVersion="4.3.0" companyName="pueski.de" companyWebsite="www.pueski.de">
+              jucerVersion="5.2.1" companyName="pueski.de" companyWebsite="www.pueski.de">
   <MAINGROUP id="oMZ4Yu" name="WaveX">
     <GROUP id="{B67EC8D6-D8A9-C95F-BAAF-8D1AE92B6AD6}" name="Documentation">
       <FILE id="BWRGTz" name="WaveX.zargo" compile="0" resource="1" file="Documentation/WaveX.zargo"/>
@@ -153,20 +153,20 @@
         <CONFIGURATION name="Release" isDebug="0" optimisation="6" targetName="WaveX"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_core" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_events" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_graphics" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_extra" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_cryptography" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_video" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_opengl" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_basics" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_processors" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_utils" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_video" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../JUCE/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
     <VS2015 targetFolder="Builds/VisualStudio2015">
@@ -223,20 +223,20 @@
         <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="WaveX"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_video" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_opengl" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_extra" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_graphics" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_events" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_cryptography" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_core" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_utils" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_processors" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../../../Downloads/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_basics" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_video" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../JUCE/modules"/>
       </MODULEPATHS>
     </XCODE_IPHONE>
   </EXPORTFORMATS>
@@ -256,5 +256,5 @@
     <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_video" showAllCode="1" useLocalCopy="0"/>
   </MODULES>
-  <JUCEOPTIONS JUCE_USE_MP3AUDIOFORMAT="enabled" JUCE_PLUGINHOST_AU="enabled"/>
+  <JUCEOPTIONS JUCE_USE_MP3AUDIOFORMAT="1" JUCE_PLUGINHOST_AU="1"/>
 </JUCERPROJECT>

@@ -244,6 +244,8 @@ public:
         
         mixer->setMasterVolume(0, magnitudeLeft);
         mixer->setMasterVolume(1, magnitudeRight);
+        
+        repaint();
     }
     
     int useTimeSlice() override {
@@ -765,7 +767,7 @@ public:
     
     void importAudio() {
         
-        FileChooser chooser("Select a file to add...", File::nonexistent, "*.*");
+        FileChooser chooser("Select a file to add...", File::nonexistent, "*");
         
         if (chooser.browseForFileToOpen()) {
             File file = chooser.getResult();

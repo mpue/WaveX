@@ -490,7 +490,7 @@ bool TrackPropertyPanel::keyPressed(const KeyPress & key, Component * originatin
 
 bool TrackPropertyPanel::keyStateChanged(bool isKeyDown, Component * originatingComponent)
 {
-	Logger::getCurrentLogger()->writeToLog("keyStateChanged to "+String(isKeyDown));
+	// Logger::getCurrentLogger()->writeToLog("keyStateChanged to "+String(isKeyDown));
 	return false;
 }
 

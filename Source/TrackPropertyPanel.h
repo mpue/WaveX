@@ -42,10 +42,10 @@
 class TrackPropertyPanel  : public Component,
                             public ChangeListener,
                             public KeyListener,
-                            public ButtonListener,
-                            public LabelListener,
-                            public SliderListener,
-                            public ComboBoxListener
+                            public Button::Listener,
+                            public Label::Listener,
+                            public Slider::Listener,
+                            public ComboBox::Listener
 {
 public:
     //==============================================================================
