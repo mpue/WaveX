@@ -338,9 +338,13 @@ int AudioRegion::getNumSamples() {
     int originalSize = thumbnailBounds->getWidth();
     int reducedSize = getWidth();
     
-    // region has been resized with resizer component, thus we need to report another smaple size
+    //cout << "Original : " << originalSize << " reduced : " << reducedSize << endl;
+    
+    // region has been resized with resizer component, thus we need to report another sample size
     if (reducedSize > 0 && reducedSize  < originalSize) {
         int effectiveSamples = (getWidth() / zoom) * sampleRate;
+        
+        // std::cout << effectiveSamples << std::endl;
         return effectiveSamples;
     }
     
@@ -370,7 +374,6 @@ void AudioRegion::componentMovedOrResized (Component& component, bool wasMoved, 
         Logger::getCurrentLogger()->writeToLog("AudioRegion sampleOffset " + String(sampleOffset));
     }
     if (wasResized) {
-        
         // track needs to be notified about resizing in order to adjust the sample buffer
         sendChangeMessage();
     }

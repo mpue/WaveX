@@ -252,7 +252,11 @@ void Track::splitRegion() {
     
     if (AudioRegion* region = dynamic_cast<AudioRegion*>(getCurrentRegion(sampleNum))) {
         
-        if (region != NULL && region->isSelected()) {
+        if (region ==  NULL) {
+            return;
+        }
+        
+        if (region->isSelected()) {
             
             long numLeftSamples = sampleNum - region->getSampleOffset();
             long numRightSamples = region->getNumSamples() - numLeftSamples;
@@ -552,8 +556,8 @@ void Track::changeListenerCallback(ChangeBroadcaster * source) {
         audioBuffer->clear(r->getOldOffset(), r->getBuffer()->getNumSamples());
         // copy data from region to tracks audio buffer
         long numSamples = r->getBuffer()->getNumSamples();
-        audioBuffer->copyFrom(0, r->getSampleOffset(), *r->getBuffer(), 0, 0, numSamples);
-        audioBuffer->copyFrom(1, r->getSampleOffset(), *r->getBuffer(), 1, 0, numSamples);
+        audioBuffer->copyFrom(0, r->getSampleOffset(), *r->getBuffer(), 0, 0, r->getNumSamples());
+        audioBuffer->copyFrom(1, r->getSampleOffset(), *r->getBuffer(), 1, 0, r->getNumSamples());
     }
     if(MasterChannelPanel* panel = dynamic_cast<MasterChannelPanel*>(source)){
         setVolume(panel->getVolume());

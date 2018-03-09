@@ -45,7 +45,7 @@ public:
     virtual void setZoom(float zoom) override;
     virtual void setLoop(bool loop) override;
     
-    // the timer is needed to updat the thumbnail during record
+    // the timer is needed to update the thumbnail during record
     virtual void timerCallback() override;
     virtual void startRecording() override;
     virtual void stopRecording() override;
