@@ -9,6 +9,7 @@
 */
 
 #include "ProjectConfig.h"
+#include "AudioRegion.h"
 
 ProjectConfig::ProjectConfig() {
     
@@ -109,6 +110,7 @@ void ProjectConfig::setConfig(ValueTree & v) {
         // make sure we have a track as child, since we have other children too
         
         if (child.hasProperty("type")) {
+            
             TrackConfig* tc = new TrackConfig();
             
             tc->setVolume(child.getProperty("volume"));
@@ -141,7 +143,54 @@ void ProjectConfig::setConfig(ValueTree & v) {
             
             tracks.push_back(tc);
             
+            for (int k = 0; k < child.getNumChildren();k++) {
+                ValueTree tchild = child.getChild(k);
+                
+                if (tchild.getType().toString() == "Region") {
+                    
+                    for (int l = 0; l < tchild.getNumChildren();l++) {
+                        
+                        ValueTree _child = tchild.getChild(l);
+                        
+                        if (_child.hasProperty("refId")) {
+                            RegionConfig* r = new RegionConfig();
+                            
+                            cout << "Found new Clip " << _child.getProperty("name").toString() << endl;
+                            
+                            AudioClip* ac = new AudioClip(_child.getProperty("refId").toString(), _child.getProperty("name").toString(), _child.getProperty("length").toString().getIntValue(),_child.getProperty("offset").toString().getIntValue());
+                        
+                            r->setAudioClip(ac);
+                            tc->addRegion(r);
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+            
         }
+        else {
+            if (child.getNumChildren() > 0) {
+                
+                for (int j = 0; j < child.getNumChildren(); j++) {
+                    
+                    ValueTree _child = child.getChild(j);
+                    
+                    if (_child.hasProperty(("refId"))) {
+                        AudioClip* clip = new AudioClip();
+                        clip->setRefId(_child.getProperty("refId"));
+                        clip->setName(_child.getProperty("path"));
+                        addClip(clip);
+                    }
+                }
+                
+
+            }
+        }
+
+    
         
     }
 }

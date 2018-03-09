@@ -178,6 +178,44 @@ void Track::addRegion(String refId, File file, double sampleRate) {
 	repaint();
 }
 
+void Track::addRegion(juce::String refId, juce::File file, double sampleRate, long samplePosition, long regionLength) {
+    AudioRegion* region = new AudioRegion(file, refId, *manager, sampleRate);
+    region->setDragger(dragger);
+    Rectangle<int>* bounds = new Rectangle<int>(0, 0, region->getThumbnail()->getTotalLength() * zoom, getHeight());
+    region->setBounds(markerPosition, 0, region->getWidth(), getHeight());
+    region->setThumbnailBounds(bounds);
+    region->setLoopCount(0);
+    
+    if (regions.size() == 0) {
+        setName(region->getName());
+    }
+    
+    this->regions.push_back(region);
+    this->currentRegion = region;
+    region->addChangeListener(this);
+    
+    this->currentRegion->toFront(true);
+    addAndMakeVisible(region);
+    
+    clearSelection();
+    region->setSelected(true);
+    
+    long sampleNum = (this->maxLength / (this->maxLength * zoom)) * markerPosition * sampleRate;
+    region->setSampleOffset(sampleNum,false,false);
+    region->setOffset(samplePosition);
+    
+    
+    if (zoom > 0)
+        region->setZoom(zoom);
+    
+    
+    audioBuffer->copyFrom(0, region->getSampleOffset(), *region->getBuffer(), 0, 0, region->getBuffer()->getNumSamples());
+    audioBuffer->copyFrom(1, region->getSampleOffset(), *region->getBuffer(), 1, 0, region->getBuffer()->getNumSamples());
+    
+    
+    repaint();
+}
+
 void Track::addMidiRegion(double sampleRate, long samplePosition,long regionLength) {
     
     MidiRegion* region = new MidiRegion(samplePosition, regionLength, sampleRate);

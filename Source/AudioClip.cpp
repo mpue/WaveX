@@ -14,6 +14,7 @@ AudioClip::AudioClip(String refId, String name, long length, long offset) {
     this->refId = refId;
     this->length = length;
     this->offset = offset;
+    this->name = name;
 }
 
 AudioClip::AudioClip() {

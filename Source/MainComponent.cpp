@@ -771,8 +771,12 @@ public:
         
         if (chooser.browseForFileToOpen()) {
             File file = chooser.getResult();
-            navigator->getCurrentTrack()->addRegion(file.getFileNameWithoutExtension(),file, this->sampleRate);
-            Project::getInstance()->addAudioFile(file.getFileNameWithoutExtension(), file.getFullPathName());
+            
+            if (file.getFileExtension() == ".wav" || file.getFileExtension() == ".aif") {
+                navigator->getCurrentTrack()->addRegion(file.getFileNameWithoutExtension(),file, this->sampleRate);
+                Project::getInstance()->addAudioFile(file.getFileNameWithoutExtension(), file.getFullPathName());
+            }
+        
         }
         
     }
@@ -1014,6 +1018,9 @@ private:
                 Project::getInstance()->load(file);
                 
                 vector<TrackConfig*> _tracks = Project::getInstance()->getConfig()->getTracks();
+                vector<AudioClip*> clips = Project::getInstance()->getConfig()->getAudioClips();
+                // Project::getInstance()->getConfig()->getAudioClips();
+                // Project::getInstance()->getConfig()->
                 
                 Logger::getCurrentLogger()->writeToLog("Found "+ String(_tracks.size())+" track(s).");
                 
@@ -1022,9 +1029,26 @@ private:
                 for (int i = 0; i < _tracks.size();i++) {
                     TrackConfig* tc = _tracks.at(i);
                     Logger::getCurrentLogger()->writeToLog("Trying to add track "+tc->getName());
+                    
                     Track* t = navigator->addTrack(tc);
                     mixer->addTrack(t);
                     trackProperties->addTrack(t);
+                    
+                    for (int j = 0; j < tc->getRegions().size();j++) {
+                        
+                        AudioClip* c = tc->getRegions().at(j)->getAudioClip();
+                        
+                        for (int k = 0; k < clips.size();k++ ) {
+                            if (c->getRefId() == clips.at(k)->getRefId()) {
+                                
+                                
+                                
+                                t->addRegion(c->getRefId(), File(clips.at(k)->getName()), Project::getInstance()->getSampleRate());
+                            }
+                        }
+                        
+                    }
+                    
                     num++;
                 }
         
@@ -1032,7 +1056,7 @@ private:
             
         }
         else if (menuItemID == 10) {
-            FileChooser chooser("Select target file...", File::nonexistent, "*.*");
+            FileChooser chooser("Select target file...", File::nonexistent, "*");
             
             if (chooser.browseForFileToSave(true)) {
                 

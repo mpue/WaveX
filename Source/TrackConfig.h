@@ -36,6 +36,9 @@ public:
     // the associated instrument if this is an instrumen track
     void setInstrument(InstrumentConfig* instrument);
     
+    vector<RegionConfig*> getRegions();
+    
+    
     String getName();
     void setName(String name);
     

@@ -162,6 +162,10 @@ void TrackConfig::setHeight(int height) {
     this->height = height;
 }
 
+vector<RegionConfig*> TrackConfig::getRegions() {
+    return regions;
+}
+
 ValueTree TrackConfig::getConfig() {
     
     ValueTree config = ValueTree("Track");

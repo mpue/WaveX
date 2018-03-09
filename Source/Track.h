@@ -57,7 +57,8 @@ public:
 	void addRegion(String refId, File file, double sampleRate);
     void addMidiRegion(double sampleRate, long samplePosition,long regionLength);
     void addRegion(AudioSampleBuffer* source, double sampleRate, long samplePosition, long regionLength);
-
+    void addRegion(String refId, File file, double sampleRate, long samplePosition, long regionLength);
+        
     void paint (Graphics&) override;
     void resized() override;
 
