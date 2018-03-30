@@ -59,6 +59,8 @@ public:
     void setClipRefId(String id);
     String getClipRefid();
     
+    void setDirty(bool dirty);
+    
 private:
 
     AudioSampleBuffer* audioBuffer;
@@ -72,6 +74,8 @@ private:
     
     // reference to original file
     String clipRefId;
+    
+    bool dirty;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioRegion)
 };

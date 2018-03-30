@@ -52,7 +52,7 @@ TrackNavigator::~TrackNavigator()
 void TrackNavigator::paint (Graphics& g)
 {
 
-    g.fillAll (Colours::lightsalmon);
+    // g.fillAll (Colours::lightsalmon);
     /*
     for(int i = 0; i < tracks.size();i++) {		
         tracks.at(i)->paint(g);

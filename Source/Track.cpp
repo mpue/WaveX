@@ -161,6 +161,7 @@ void Track::addRegion(String refId, File file, double sampleRate) {
     
     clearSelection();
     region->setSelected(true);
+    region->setDirty(true);
     
     long sampleNum = (this->maxLength / (this->maxLength * zoom)) * markerPosition * sampleRate;
     region->setSampleOffset(sampleNum,false,false);
@@ -200,8 +201,7 @@ void Track::addRegion(juce::String refId, juce::File file, double sampleRate, lo
     clearSelection();
     region->setSelected(true);
     
-    long sampleNum = (this->maxLength / (this->maxLength * zoom)) * markerPosition * sampleRate;
-    region->setSampleOffset(sampleNum,false,false);
+    // region->setSampleOffset(sampleNum,false,false);
     region->setOffset(samplePosition);
     
     
@@ -512,6 +512,7 @@ double Track::getMaxLength() {
 }
 
 void Track::paint (Graphics& g) {
+    
 	if (selected) {
 		g.setColour(Colours::lightgrey.brighter());
 	}
@@ -522,6 +523,7 @@ void Track::paint (Graphics& g) {
     g.fillAll();
     g.setColour(Colours::grey);
     g.drawLine(0,getHeight(),getWidth(),getHeight());
+    
 }
                
 

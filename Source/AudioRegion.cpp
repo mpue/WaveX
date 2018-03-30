@@ -47,6 +47,7 @@ AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double
     addAndMakeVisible(resizerR);
     
     addComponentListener(this);
+    dirty = false;
     
 }
 
@@ -87,6 +88,8 @@ AudioRegion::AudioRegion(AudioSampleBuffer* source, AudioFormatManager& manager,
     addAndMakeVisible(resizerR);
     
     addComponentListener(this);
+    
+    dirty = false;
 }
 
 AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double sampleRate) {
@@ -126,6 +129,8 @@ AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double
     addAndMakeVisible(resizerR);
    
     addComponentListener(this);
+    
+    dirty = false;
 }
 
 //==============================================================================
@@ -165,6 +170,8 @@ AudioRegion::AudioRegion(File file, String refId, AudioFormatManager& manager, d
     
     // addAndMakeVisible(resizerL);
     addAndMakeVisible(resizerR);
+    
+    dirty = false;
 }
 
 AudioRegion::~AudioRegion()
@@ -178,7 +185,8 @@ AudioRegion::~AudioRegion()
 }
 
 void AudioRegion::timerCallback() {
-    updateThumb();
+    if (dirty)
+        updateThumb();
 }
 
 void AudioRegion::updateThumb()
@@ -188,6 +196,7 @@ void AudioRegion::updateThumb()
     setSize(length * this->zoom, getHeight());
     this->thumbnailBounds->setWidth(length * this->zoom);
     repaint();
+    dirty = false;
 }
 
 
@@ -214,7 +223,7 @@ void AudioRegion::setLoop(bool loop)
     }
     
     this->loop = loop;
-    repaint();
+    dirty = true;
 }
 
 const float* AudioRegion::getReadBuffer(int channel) {
@@ -258,7 +267,7 @@ void AudioRegion::setZoom(float zoom) {
     constrainer->setRaster(this->zoom / 4);
     constrainer->setMaxWidth((audioBuffer->getNumSamples() / sampleRate) * this->zoom);
     
-    repaint();
+    dirty = true;
 }
 
 void AudioRegion::setThumbnailBounds(Rectangle<int>* bounds) {
@@ -270,7 +279,8 @@ Rectangle<int>*  AudioRegion::getThumbnailBounds() {
 };
 
 void AudioRegion::paint (Graphics& g)
-{    
+{
+    
     Rectangle<int> b = *this->thumbnailBounds;
     int effectiveWidth = getWidth() ;//(this->getNumSamples() / sampleRate) * this->zoom;
     
@@ -305,6 +315,7 @@ void AudioRegion::paint (Graphics& g)
             this->thumbnail->drawChannels(g, loopBounds,0.0,audioLength, 1.0f);
         }
     }
+    dirty = false;
 }
 
 void AudioRegion::resized()
@@ -319,6 +330,7 @@ void AudioRegion::resized()
     int maxWidth = (audioBuffer->getNumSamples() / sampleRate) * this->zoom;
     constrainer->setMaxWidth(maxWidth);
     resizerR->setTopLeftPosition(getWidth() - 5, 0);
+    dirty = true;
 }
 
 AudioThumbnail* AudioRegion::getThumbnail() {
@@ -329,7 +341,8 @@ AudioThumbnail* AudioRegion::getThumbnail() {
 void AudioRegion::changeListenerCallback(ChangeBroadcaster * source)
 {
     if (source == this->thumbnail) {
-        repaint();
+        dirty = true;
+        
     }
 }
 
@@ -378,6 +391,11 @@ void AudioRegion::componentMovedOrResized (Component& component, bool wasMoved, 
         sendChangeMessage();
     }
     
+    dirty = true;
+}
+
+void AudioRegion::setDirty(bool dirty) {
+    this->dirty = dirty;
 }
 
 void AudioRegion::setClipRefId(String id) {

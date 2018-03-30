@@ -772,7 +772,7 @@ public:
         if (chooser.browseForFileToOpen()) {
             File file = chooser.getResult();
             
-            if (file.getFileExtension() == ".wav" || file.getFileExtension() == ".aif") {
+            if (file.getFileExtension() == ".wav" || file.getFileExtension() == ".aif" || file.getFileExtension() == ".mp3") {
                 navigator->getCurrentTrack()->addRegion(file.getFileNameWithoutExtension(),file, this->sampleRate);
                 Project::getInstance()->addAudioFile(file.getFileNameWithoutExtension(), file.getFullPathName());
             }
@@ -1041,9 +1041,9 @@ private:
                         for (int k = 0; k < clips.size();k++ ) {
                             if (c->getRefId() == clips.at(k)->getRefId()) {
                                 
+                                t->addRegion(c->getRefId(), File(clips.at(k)->getName()), Project::getInstance()->getSampleRate(),c->getOffset(),c->getLength());
                                 
-                                
-                                t->addRegion(c->getRefId(), File(clips.at(k)->getName()), Project::getInstance()->getSampleRate());
+                                // t->addRegion(c->getRefId(), File(clips.at(k)->getName()), Project::getInstance()->getSampleRate());
                             }
                         }
                         
