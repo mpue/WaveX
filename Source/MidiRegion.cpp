@@ -224,7 +224,7 @@ MidiMessage* MidiRegion::getMessage(double time) {
 
     int index = sequence->getNextIndexAtTime(time);
     
-    if (index > lastIndex) {
+    // if (index > lastIndex) {
 
         lastIndex = index;
         
@@ -236,7 +236,7 @@ MidiMessage* MidiRegion::getMessage(double time) {
         }
         
         
-    }
+    // }
     
     return NULL;
     
