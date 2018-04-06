@@ -143,7 +143,7 @@ void Track::addRegion(String refId, File file, double sampleRate) {
 
 	AudioRegion* region = new AudioRegion(file, refId, *manager, sampleRate);
     region->setDragger(dragger);
-	Rectangle<int>* bounds = new Rectangle<int>(0, 0, region->getThumbnail()->getTotalLength() * zoom, getHeight());
+	Rectangle<int>* bounds = new Rectangle<int>(0, 0, region->getWidth() * zoom, getHeight());
     region->setBounds(markerPosition, 0, region->getWidth(), getHeight());
 	region->setThumbnailBounds(bounds);
     region->setLoopCount(0);
@@ -182,7 +182,7 @@ void Track::addRegion(String refId, File file, double sampleRate) {
 void Track::addRegion(juce::String refId, juce::File file, double sampleRate, long samplePosition, long regionLength) {
     AudioRegion* region = new AudioRegion(file, refId, *manager, sampleRate);
     region->setDragger(dragger);
-    Rectangle<int>* bounds = new Rectangle<int>(0, 0, region->getThumbnail()->getTotalLength() * zoom, getHeight());
+    Rectangle<int>* bounds = new Rectangle<int>(0, 0, region->getWidth() * zoom, getHeight());
     region->setBounds(markerPosition, 0, region->getWidth(), getHeight());
     region->setThumbnailBounds(bounds);
     region->setLoopCount(0);
@@ -202,8 +202,10 @@ void Track::addRegion(juce::String refId, juce::File file, double sampleRate, lo
     region->setSelected(true);
     
     // region->setSampleOffset(sampleNum,false,false);
-    region->setOffset(samplePosition);
+    // region->setOffset(samplePosition);
     
+    region->setSampleOffset(samplePosition,false,false);
+    region->setOffset(samplePosition / sampleRate);
     
     if (zoom > 0)
         region->setZoom(zoom);

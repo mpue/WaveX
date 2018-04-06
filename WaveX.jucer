@@ -70,6 +70,8 @@
               file="Source/AppWindowComponent.cpp"/>
         <FILE id="nABgQI" name="AppWindowComponent.h" compile="0" resource="0"
               file="Source/AppWindowComponent.h"/>
+        <FILE id="gI1MaA" name="Cell.cpp" compile="1" resource="0" file="Source/Cell.cpp"/>
+        <FILE id="arVo7c" name="Cell.h" compile="0" resource="0" file="Source/Cell.h"/>
         <FILE id="eqweyi" name="CustomLookAndFeel.cpp" compile="1" resource="0"
               file="Source/CustomLookAndFeel.cpp"/>
         <FILE id="TUUqVU" name="CustomLookAndFeel.h" compile="0" resource="0"
@@ -84,6 +86,10 @@
               file="Source/MainComponent.cpp"/>
         <FILE id="ngkQ9l" name="MultiComponentDragger.h" compile="0" resource="0"
               file="Source/MultiComponentDragger.h"/>
+        <FILE id="QNb8EX" name="SequenceEditor.cpp" compile="1" resource="0"
+              file="Source/SequenceEditor.cpp"/>
+        <FILE id="BCEyFg" name="SequenceEditor.h" compile="0" resource="0"
+              file="Source/SequenceEditor.h"/>
         <FILE id="kJmpPP" name="ToolbarPanel.cpp" compile="1" resource="0"
               file="Source/ToolbarPanel.cpp"/>
         <FILE id="UCNDEJ" name="ToolbarPanel.h" compile="0" resource="0" file="Source/ToolbarPanel.h"/>

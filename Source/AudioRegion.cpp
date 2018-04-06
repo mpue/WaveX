@@ -136,7 +136,7 @@ AudioRegion::AudioRegion(AudioRegion* other, AudioFormatManager& manager, double
 //==============================================================================
 AudioRegion::AudioRegion(File file, String refId, AudioFormatManager& manager, double sampleRate)
 {
-    this->zoom = Project::getInstance()->getTempo() / 8;
+    this->zoom = Project::getInstance()->getTempo() / 4;
     this->constrainer = new ResizeConstrainer(this->zoom / 4);
 
     resizerR = new ResizableEdgeComponent(this,constrainer,ResizableEdgeComponent::rightEdge);

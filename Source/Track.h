@@ -167,7 +167,7 @@ public:
     
 private:
 
-	float zoom = 20;
+	float zoom = 30;
 	String name;
 	float volume;
 	float gain = 1;

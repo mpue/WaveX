@@ -79,10 +79,12 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/RegionConfig_225c24df.o \
   $(JUCE_OBJDIR)/TrackConfig_a6d4984e.o \
   $(JUCE_OBJDIR)/AppWindowComponent_c01bc215.o \
+  $(JUCE_OBJDIR)/Cell_5abb4ceb.o \
   $(JUCE_OBJDIR)/CustomLookAndFeel_ab3d772e.o \
   $(JUCE_OBJDIR)/ImageToggleButton_895fbd82.o \
   $(JUCE_OBJDIR)/InfoPanel_a131c57.o \
   $(JUCE_OBJDIR)/MainComponent_a6ffb4a5.o \
+  $(JUCE_OBJDIR)/SequenceEditor_f0150517.o \
   $(JUCE_OBJDIR)/ToolbarPanel_8e4ee752.o \
   $(JUCE_OBJDIR)/TransportPanel_18909a64.o \
   $(JUCE_OBJDIR)/MasterChannelPanel_b4b7ea4c.o \
@@ -183,6 +185,11 @@ $(JUCE_OBJDIR)/AppWindowComponent_c01bc215.o: ../../Source/AppWindowComponent.cp
 	@echo "Compiling AppWindowComponent.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
+$(JUCE_OBJDIR)/Cell_5abb4ceb.o: ../../Source/Cell.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling Cell.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
 $(JUCE_OBJDIR)/CustomLookAndFeel_ab3d772e.o: ../../Source/CustomLookAndFeel.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling CustomLookAndFeel.cpp"
@@ -201,6 +208,11 @@ $(JUCE_OBJDIR)/InfoPanel_a131c57.o: ../../Source/InfoPanel.cpp
 $(JUCE_OBJDIR)/MainComponent_a6ffb4a5.o: ../../Source/MainComponent.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling MainComponent.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/SequenceEditor_f0150517.o: ../../Source/SequenceEditor.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling SequenceEditor.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/ToolbarPanel_8e4ee752.o: ../../Source/ToolbarPanel.cpp

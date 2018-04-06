@@ -20,6 +20,7 @@
 #include "Project.h"
 #include "Session.h"
 #include "Mixer.h"
+#include "SequenceEditor.h"
 
 //==============================================================================
 /*
@@ -791,6 +792,34 @@ public:
         trackProperties->addTrack(t);
     }
     
+    void openStepSequencer() {
+        
+        SequenceEditor* sequenceEditor = new SequenceEditor();
+        sequenceEditor->setMouseClickGrabsKeyboardFocus(true);
+        sequenceEditor->setDeviceManager(&deviceManager);
+        
+        Viewport* view = new Viewport();
+        
+        view->setSize(500,208);
+        view->setViewedComponent(sequenceEditor);
+        view->setScrollBarsShown(true,true);
+        view->setScrollOnDragEnabled(true);
+        view->setWantsKeyboardFocus(false);
+        view->setMouseClickGrabsKeyboardFocus(false);
+        
+        DialogWindow::LaunchOptions launchOptions;
+        launchOptions.dialogTitle = ("Step sequencer");
+        launchOptions.escapeKeyTriggersCloseButton = true;
+        launchOptions.resizable = true;
+        launchOptions.useNativeTitleBar = false;
+        launchOptions.useBottomRightCornerResizer = true;
+        launchOptions.componentToCentreAround = this->getParentComponent()->getParentComponent()->getParentComponent();
+        launchOptions.content.setOwned(view);
+        launchOptions.content->setSize(500, 280);
+        launchOptions.runModal();
+        
+    }
+    
     void openSettings() {
         AudioDeviceSelectorComponent* selector = new AudioDeviceSelectorComponent(deviceManager, 2, 16, 2, 16, true, true, true, false);
         selector->setLookAndFeel(Session::getInstance()->getLookAndFeel());
@@ -951,6 +980,7 @@ private:
             menu.addItem(5, "Zoom in", true, false, nullptr);
             menu.addItem(6, "Zoom out", true, false, nullptr);
             menu.addItem(8, "Manage Plugins", true, false, nullptr);
+            menu.addItem(13, "Step sequencer", true, false, nullptr);
         }
         else if (index == 2) {
             buildPluginMenu(menu);
@@ -1041,6 +1071,8 @@ private:
                         for (int k = 0; k < clips.size();k++ ) {
                             if (c->getRefId() == clips.at(k)->getRefId()) {
                                 
+                                Logger::getCurrentLogger()->writeToLog("Adding region : "+c->getName()+ " at offset "+String(c->getOffset()));
+                                
                                 t->addRegion(c->getRefId(), File(clips.at(k)->getName()), Project::getInstance()->getSampleRate(),c->getOffset(),c->getLength());
                                 
                                 // t->addRegion(c->getRefId(), File(clips.at(k)->getName()), Project::getInstance()->getSampleRate());
@@ -1117,6 +1149,10 @@ private:
         else if (menuItemID == 12) {
             removeSelectedTrack();
         }
+        else if (menuItemID == 13) {
+            openStepSequencer();
+        }
+
         else if (menuItemID >= 100) {
             addPlugin(availableInstruments.at(menuItemID - 100));
         }
