@@ -94,5 +94,8 @@ void MidiThumbnail::addMessage(int sampleNum, MidiMessage* message) {
     }
     
     totalSamples = maxSampleNum;
-    repaint();
+    std::function<void(void)> changeLambda =
+    [this]() { repaint(); };
+    juce::MessageManager::callAsync(changeLambda);
+
 }

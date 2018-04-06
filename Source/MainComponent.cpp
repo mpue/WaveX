@@ -77,9 +77,11 @@ public:
         
         setAudioChannels(2,2);
         
-        deviceManager.setMidiInputEnabled("Oxygen 49", true);
-        // deviceManager.addMidiInputCallback("Oxygen 49",this);
-        // deviceManager.setDefaultMidiOutput("MIDI4x4 Midi Out 1");
+        File configFile = File("/Users/mpue/.WaveX/config.xml");
+        if (configFile.exists()) {
+            ScopedPointer<XmlElement> xml = XmlDocument(configFile).getDocumentElement();
+            deviceManager.initialise(2,2, xml, true);
+        }
         
         apfm = new AudioPluginFormatManager();
         apfm->addDefaultFormats();
@@ -301,7 +303,10 @@ public:
             
             if (navigator->getTracks().size() == 1) {
                 
-                // plugin->processBlock(*buffer, navigator->getTracks().at(0)->get);
+                MidiBuffer midiBuffer;
+                getMidiMessageCollector().removeNextBlockOfMessages(midiBuffer, _numSamples);
+                
+                plugin->processBlock(*buffer,midiBuffer);
                 
                 AudioSampleBuffer* outL = outputBuffers.at(navigator->getTracks().at(0)->getOutputChannels()[0]);
                 AudioSampleBuffer* outR = outputBuffers.at(navigator->getTracks().at(0)->getOutputChannels()[1]);
@@ -450,39 +455,41 @@ public:
                 
                 Track* t = navigator->getTracks().at(i);
                 
-                AudioSampleBuffer* outL = outputBuffers.at(navigator->getTracks().at(i)->getOutputChannels()[0]);
-                AudioSampleBuffer* outR = outputBuffers.at(navigator->getTracks().at(i)->getOutputChannels()[1]);
+                if (t->getType() == Track::Type::AUDIO) {
                 
-                if (t->isRecording()) {
-                    float pan = 0;
+                    AudioSampleBuffer* outL = outputBuffers.at(navigator->getTracks().at(i)->getOutputChannels()[0]);
+                    AudioSampleBuffer* outR = outputBuffers.at(navigator->getTracks().at(i)->getOutputChannels()[1]);
                     
-                    float gainLeft  = cos((M_PI*(pan + 1) / 4));
-                    float gainRight = sin((M_PI*(pan + 1) / 4));
-                    
-                    for (int j = 0; j < this->buffersize;j++) {
-                        outL->addSample(0, j,inputChannelData[t->getInputChannels()[0]][j] * leftVolume * gainLeft);
-                        outR->addSample(0, j,inputChannelData[t->getInputChannels()[1]][j] * rightVolume * gainRight);
+                    if (t->isRecording()) {
+                        float pan = 0;
+                        
+                        float gainLeft  = cos((M_PI*(pan + 1) / 4));
+                        float gainRight = sin((M_PI*(pan + 1) / 4));
+                        
+                        for (int j = 0; j < this->buffersize;j++) {
+                            outL->addSample(0, j,inputChannelData[t->getInputChannels()[0]][j] * leftVolume * gainLeft);
+                            outR->addSample(0, j,inputChannelData[t->getInputChannels()[1]][j] * rightVolume * gainRight);
+                        }
+                        
+                        float magLeftIn  = outL->getMagnitude(0, 0, _numSamples);
+                        float magRightIn = outR->getMagnitude(0, 0, _numSamples);
+                        
+                        navigator->getTracks().at(i)->setMagnitude(0, magLeftIn);
+                        navigator->getTracks().at(i)->setMagnitude(1, magRightIn);
+                        
+                        /*
+                         for (int i = 0; i < navigator->getTracks().size();i++) {
+                         navigator->getTracks().at(i)->setMagnitude(0, 0);
+                         navigator->getTracks().at(i)->setMagnitude(1, 0);
+                         }
+                         */
+                        
                     }
-                    
-                    float magLeftIn  = outL->getMagnitude(0, 0, _numSamples);
-                    float magRightIn = outR->getMagnitude(0, 0, _numSamples);
-                    
-                    navigator->getTracks().at(i)->setMagnitude(0, magLeftIn);
-                    navigator->getTracks().at(i)->setMagnitude(1, magRightIn);
-                    
-                    /*
-                     for (int i = 0; i < navigator->getTracks().size();i++) {
-                     navigator->getTracks().at(i)->setMagnitude(0, 0);
-                     navigator->getTracks().at(i)->setMagnitude(1, 0);
-                     }
-                     */
-                    
+                    else {
+                        navigator->getTracks().at(i)->setMagnitude(0, 0);
+                        navigator->getTracks().at(i)->setMagnitude(1, 0);
+                    }
                 }
-                else {
-                    navigator->getTracks().at(i)->setMagnitude(0, 0);
-                    navigator->getTracks().at(i)->setMagnitude(1, 0);
-                }
-                
             }
             
         }
@@ -580,14 +587,14 @@ public:
             deviceManager.getDefaultMidiOutput()->sendMessageNow(*messageToSend);
         }
         
-        /*
-        if(win->isVisible()) {
+        
+        if(plugin != NULL && win->isVisible()) {
             getMidiMessageCollector().addMessageToQueue(message);
         }        
         else {
-            deviceManager.getDefaultMidiOutput()->sendMessageNow(message);
+            // deviceManager.getDefaultMidiOutput()->sendMessageNow(message);
         }
-         */
+        
         
     }
     
@@ -891,6 +898,14 @@ public:
         launchOptions.content.setOwned(selector);
         launchOptions.content->setSize(600, 580);
         launchOptions.runModal();
+    
+        AudioDeviceManager::AudioDeviceSetup setup;
+        deviceManager.getAudioDeviceSetup(setup);
+        
+        XmlElement* config = deviceManager.createStateXml();
+        
+        File configFile = File("/Users/mpue/.WaveX/config.xml");
+        config->writeToFile(configFile,"");
         
         // setupIO();
     }
@@ -1025,6 +1040,7 @@ private:
         if (index == 0) {
             menu.addItem(11, "New project", true, false, nullptr);
             menu.addItem(9, "Load project", true, false, nullptr);
+            menu.addItem(101, "Save project", true, false, nullptr);
             menu.addItem(10, "Save project as", true, false, nullptr);
             menu.addItem(1, "Add track", true, false, nullptr);
             menu.addItem(12, "Remove track", true, false, nullptr);
@@ -1193,6 +1209,16 @@ private:
             }
             
         }
+        else if (menuItemID == 101) {
+            FileChooser chooser("Select target file...", File::nonexistent, "*");
+            
+            if (chooser.browseForFileToSave(true)) {
+                File file = chooser.getResult();
+                Project::getInstance()->saveCurrent(file);
+            }
+            
+        }
+        
         else if (menuItemID == 11) {
             Project::getInstance()->getConfig()->getTracks().clear();
             navigator->clearTracks();

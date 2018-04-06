@@ -96,6 +96,26 @@ public:
         this->tempo = tempo;
     }
     
+    void saveCurrent(File output) {
+        ValueTree v = config->getConfig();
+        
+        std::map<String, String>::iterator it;
+        
+        ValueTree audioFiles = ValueTree("AudioFiles");
+        
+        for (it = projectAudio.begin(); it != projectAudio.end(); ++it) {
+            ValueTree file = ValueTree("File");
+            file.setProperty("refId", it->first, nullptr);
+            file.setProperty("path", it->second, nullptr);
+            audioFiles.addChild(file, -1, nullptr);
+        }
+        
+        
+        XmlElement* xml = v.createXml();
+        xml->writeToFile(output, "");
+        delete xml;
+    }
+    
     void save(File output) {
  
         setName(output.getFileNameWithoutExtension());

@@ -124,7 +124,9 @@ void Track::duplicateRegion(Region *region) {
         //duplicate->setSelected(true);
         duplicate->setSampleOffset(region->getSampleOffset() + region->getNumSamples(), false, false);
         duplicate->setOffset(region->getOffset() + region->getWidth());
+        duplicate->setClipRefId(_region->getClipRefid());
         duplicate->addChangeListener(this);
+        
         
         if (zoom > 0)
             duplicate->setZoom(zoom);
