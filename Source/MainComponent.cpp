@@ -792,6 +792,63 @@ public:
         trackProperties->addTrack(t);
     }
     
+    void exportAudio(){
+        
+        long maxLength = 0;
+        
+        for (int i = 0; i < navigator->getTracks().size();i++) {
+            Track* t = navigator->getTracks().at(i);
+            
+            if (t->getBuffer()->getNumSamples() > maxLength) {
+                maxLength = t->getBuffer()->getNumSamples();
+            }
+            
+        }
+        
+        
+        AudioSampleBuffer out = AudioSampleBuffer(2,maxLength);
+        
+        
+        for (int i = 0; i < navigator->getTracks().size();i++) {
+            
+            Track* t = navigator->getTracks().at(i);
+            
+            double pan = t->getPan();
+            
+            float gainLeft = cos((M_PI*(pan + 1) / 4));
+            float gainRight = sin((M_PI*(pan + 1) / 4));
+            
+            t->getBuffer()->applyGain(0, 0, t->getBuffer()->getNumSamples(), gainLeft);
+            t->getBuffer()->applyGain(1, 0, t->getBuffer()->getNumSamples(), gainRight);
+            
+            
+            /*
+             void addFrom (int destChannel,
+             int destStartSample,
+             const AudioBuffer& source,
+             int sourceChannel,
+             int sourceStartSample,
+             int numSamples,
+             Type gainToApplyToSource = Type (1)) noexcept
+             */
+            
+            out.addFrom(0, 0,*t->getBuffer(), 0,0, t->getBuffer()->getNumSamples());
+            out.addFrom(1, 0,*t->getBuffer(), 1,0, t->getBuffer()->getNumSamples());
+            
+        }
+        
+        
+        WavAudioFormat* test = new WavAudioFormat();
+        
+        File outputFile = File("/Users/mpue/Desktop/test.wav");
+        FileOutputStream* outputTo = outputFile.createOutputStream();
+        
+        AudioFormatWriter* writer = test->createWriterFor(outputTo, 44100, 2, 16,NULL, 0);
+        writer->writeFromAudioSampleBuffer(out, 0,maxLength);
+        delete writer;
+        
+    }
+    
     void openStepSequencer() {
         
         SequenceEditor* sequenceEditor = new SequenceEditor();
@@ -972,6 +1029,7 @@ private:
             menu.addItem(1, "Add track", true, false, nullptr);
             menu.addItem(12, "Remove track", true, false, nullptr);
             menu.addItem(2, "Play/Stop", true, false, nullptr);
+            menu.addItem(14, "Export audio", true, false, nullptr);
             menu.addItem(7, "Settings", true, false, nullptr);
             menu.addItem(3, "Exit", true, false, nullptr);
         }
@@ -1151,6 +1209,9 @@ private:
         }
         else if (menuItemID == 13) {
             openStepSequencer();
+        }
+        else if (menuItemID == 14) {
+            exportAudio();
         }
 
         else if (menuItemID >= 100) {
