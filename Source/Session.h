@@ -61,7 +61,7 @@ public:
     }
     
     inline double getCurrentTime() {
-        return Time::getMillisecondCounterHiRes() * 0.001;
+        return Time::getMillisecondCounterHiRes()  * 0.001;
     }
     
     void setRecordingStartTime() {

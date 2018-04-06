@@ -11,6 +11,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include <iostream>
+#include <queue>
 #include "TrackNavigator.h"
 #include "TrackPropertyView.h"
 #include "PositionMarker.h"
@@ -32,7 +33,6 @@ public AudioProcessorPlayer,
 public MenuBarModel,
 public ChangeListener,
 public ChangeBroadcaster,
-public TimeSliceClient,
 public Timer {
 public:
     //============================================================================
@@ -64,9 +64,7 @@ public:
         addKeyListener(navigator);
         addMouseListener(navigator,true);
         
-        this->navigator->repaint();
-        thread.startThread(3);
-        // thread.addTimeSliceClient(this);
+
         
         this->leftShiftPressed = false;
         this->ctrlPressed = false;
@@ -88,10 +86,18 @@ public:
         
         this->numSamples = 0;
         
-        setupIO(2,2);
+        // setupIO(2,2);
         
         startTimer(50);
+        this->navigator->repaint();
+
+        for (int i = 0; i <  2;i++) { // Only Stereo channels for the moment
+            AudioSampleBuffer* buffer = new AudioSampleBuffer(1,this->buffersize);
+            buffer->clear(0, this->buffersize);
+            outputBuffers.push_back(buffer);
+        }
         
+      
     }
     
     ~MainContentComponent()
@@ -101,6 +107,8 @@ public:
          navigator->getTracks().at(i)->getBuffer()->clear();
          }
          */
+        
+        deviceManager.getDefaultMidiOutput()->stopBackgroundThread();
         
         for (std::vector<AudioSampleBuffer*>::iterator it = outputBuffers.begin(); it != outputBuffers.end(); ++it) {
             delete *it;
@@ -118,6 +126,7 @@ public:
     }
     
     void setupIO() {
+        
         juce::BigInteger activeInputChannels = deviceManager.getCurrentAudioDevice()->getActiveInputChannels();
         juce::BigInteger activeOutputChannels = deviceManager.getCurrentAudioDevice()->getActiveOutputChannels();
         
@@ -250,10 +259,7 @@ public:
         
         repaint();
     }
-    
-    int useTimeSlice() override {
-        return 1000;
-    }
+
     
     //==============================================================================
     void prepareToPlay (int samplesPerBlockExpected, double sampleRate) override {
@@ -364,20 +370,27 @@ public:
                 }
                 else if (t->getType() == Track::Type::MIDI) {
                     
-                    double seconds = Time::getMillisecondCounterHiRes() * 0.001 ;
+                    double seconds = Time::getMillisecondCounterHiRes() * 0.001;
                     double time = seconds - Session::getInstance()->getRecordingStartTime();
 
-                    MidiMessage* m = t->getMessage(time, numSamples);
+                    // Logger::writeToLog(String(time));
                     
+                    MidiMessage* m = t->getMessage(time, numSamples);
+
                     
                     if (m != NULL) {
+                       
                         deviceManager.getDefaultMidiOutput()->sendMessageNow(*m);
+                       
+                        // Logger::writeToLog("Playing message "+m->getDescription());s
+                        
                     }
                     else {
                         m = new MidiMessage();
                         m->allNotesOff(t->getMidiChannel());
                         deviceManager.getDefaultMidiOutput()->sendMessageNow(*m);
                     }
+        
                 }
 
                 
@@ -427,6 +440,7 @@ public:
                     t->updateMagnitude(numSamples, _numSamples, gainLeft, gainRight);
                     t->setOffset(numSamples);
                 }
+                /*
                 else if (t->getType() == Track::Type::MIDI) {
                     
                     double seconds = Time::getMillisecondCounterHiRes() * 0.001 ;
@@ -443,6 +457,7 @@ public:
                         deviceManager.getDefaultMidiOutput()->sendMessageNow(*m);
                     }
                 }
+                 */
                 
             }
             
@@ -557,6 +572,8 @@ public:
         
         double seconds = Time::getMillisecondCounterHiRes() * 0.001;
         double currentTime = seconds - Session::getInstance()->getRecordingStartTime();
+    
+        // Logger::writeToLog(String(numSamples));
         
         if (navigator->getTracks().size() == 0) {
             return;
@@ -575,7 +592,9 @@ public:
                     messageToSend->setChannel(t->getMidiChannel());
                     messageToSend->setTimeStamp(currentTime);
                     // add the message to the track, which will pass the message to the current recording region
-                    t->addMessage(messageToSend, currentTime, numSamples);
+                    
+                    // Logger::writeToLog("Sending message "+String(messageToSend->getTimeStamp()));
+                    t->addMessage(messageToSend , currentTime, numSamples);
                     deviceManager.getDefaultMidiOutput()->sendMessageNow(*messageToSend);
                 }
             }
@@ -827,17 +846,7 @@ public:
             
             t->getBuffer()->applyGain(0, 0, t->getBuffer()->getNumSamples(), gainLeft);
             t->getBuffer()->applyGain(1, 0, t->getBuffer()->getNumSamples(), gainRight);
-            
-            
-            /*
-             void addFrom (int destChannel,
-             int destStartSample,
-             const AudioBuffer& source,
-             int sourceChannel,
-             int sourceStartSample,
-             int numSamples,
-             Type gainToApplyToSource = Type (1)) noexcept
-             */
+        
             
             out.addFrom(0, 0,*t->getBuffer(), 0,0, t->getBuffer()->getNumSamples());
             out.addFrom(1, 0,*t->getBuffer(), 1,0, t->getBuffer()->getNumSamples());
@@ -994,7 +1003,9 @@ private:
     
     float zoom;
     
+    std::queue<MidiMessage*> pendingMessages;
     
+    MidiBuffer midiBuffer;
     
     vector<String> availableInstruments;
     
@@ -1281,7 +1292,7 @@ private:
             this->marker->setSize(navigator->getWidth(), getHeight());
             
             repaint();
-            
+            /*
             if (!navigator->isPlaying()) {
                 for (int i = 0; i < navigator->getTracks().size();i++) {
                     
@@ -1304,6 +1315,7 @@ private:
                     }
                 }
             }
+             */
         }
     }
     

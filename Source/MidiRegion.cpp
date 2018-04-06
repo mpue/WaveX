@@ -140,14 +140,19 @@ void MidiRegion::setLoop(bool loop) {
 // the timer is needed to updat the thumbnail during record
 void MidiRegion::timerCallback() {
     updateThumb();
+    timeElapsed += 50;
 }
 
 void MidiRegion::startRecording() {
-    startTimer(100);
+    startTimer(50);
+    midiMessageList.clear();
+
 }
 
 void MidiRegion::stopRecording() {
-
+    MidiMessage m = MidiMessage::allNotesOff(1);
+    midiMessageList.push_back(&m);
+    timeElapsed = 0;
     stopTimer();    
     MidiMessage message;
     int sampleNumber;
@@ -156,6 +161,7 @@ void MidiRegion::stopRecording() {
         iterator = new MidiBuffer::Iterator(*midiBuffer);
     }
     
+    /*
     while(iterator->getNextEvent(message, sampleNumber)) {
         
         MidiMessage* m = new MidiMessage(message);
@@ -166,7 +172,8 @@ void MidiRegion::stopRecording() {
             midiMessages.insert(std::make_pair(sampleNumber,m ));        
         
     }
-
+    sequence->updateMatchedPairs();
+     */
 }
 
 void MidiRegion::setDragger(MultiComponentDragger* dragger) {
@@ -211,43 +218,45 @@ void MidiRegion::clear() {
 
 void MidiRegion::addMessage(MidiMessage* m, double time, int sampleNum) {
     Logger::getCurrentLogger()->writeToLog("Adding message at time "+String(time));
-    // midiMessages.insert(std::make_pair(time,m));
-    sequence->addEvent(*m);
-    if (m->isNoteOn()) {
-        sequence->updateMatchedPairs();
-    }
+    // midiMessages.insert(std::make_pair(timeElapsed,m));
+    //sequence->addEvent(*m);
+
+    // mSamples = sampleNum;
+    m->setTimeStamp(time);
+    // midiBuffer->addEvent(*m, sampleNum);
+    
+    midiMessageList.push_back(m);
     numSamples = sampleNum;
-    this->midiThumbnail->addMessage(time * Project::getInstance()->getSampleRate(),m);
+    this->midiThumbnail->addMessage(time  * Project::getInstance()->getSampleRate(),m);
 }
 
-MidiMessage* MidiRegion::getMessage(double time) {
-
-    int index = sequence->getNextIndexAtTime(time);
+MidiMessage* MidiRegion::getMessage(double time, int sampleNum) {
     
-    // if (index > lastIndex) {
-
-        lastIndex = index;
-        
-        juce::MidiMessageSequence::MidiEventHolder* current = sequence->getEventPointer(index);
-        
-        if (current != NULL) {
-            MidiMessage* m = new MidiMessage(current->message);
-            return m;
-        }
-        
-        
-    // }
+    MidiMessage* m = NULL;
     
-    return NULL;
+    Logger::writeToLog(String(time));
     
-    /*
-    std::map<double,MidiMessage*>::iterator it;
-    it = midiMessages.find(time);
-    if (it != midiMessages.end()) {
-        return it->second;
+    for (int i = currentMessageNum; i < midiMessageList.size();i++) {
+         Logger::writeToLog(String(currentMessageNum)+" "+ midiMessageList.at(i)->getDescription()+" "+String(midiMessageList.at(i)->getTimeStamp()));
+         if (midiMessageList.at(i) != NULL && midiMessageList.at(i)->getTimeStamp() <= time) {
+              m = new MidiMessage(*midiMessageList.at(i));
+             
+             break;
+         }
     }
-     return 0;
-     */
-
-     
+    
+    
+    if (m != NULL) {
+        if (currentMessageNum < midiMessageList.size() - 1) {
+            currentMessageNum++;
+        }
+        else {
+            currentMessageNum = 0;
+        }
+       
+    }
+    
+    
+    
+    return m;
 }

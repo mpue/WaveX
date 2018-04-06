@@ -460,7 +460,7 @@ MidiMessage* Track::getMessage(double time,int sampleNum) {
     }
     
     MidiRegion* midiRegion = static_cast<MidiRegion*>(r);
-    return midiRegion->getMessage(time);
+    return midiRegion->getMessage(time, sampleNum);
     
 }
 

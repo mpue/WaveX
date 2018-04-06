@@ -48,7 +48,7 @@ public:
     virtual void startRecording() override;
     
     void clear();
-    MidiMessage* getMessage(double time);
+    MidiMessage* getMessage(double time, int sampleNum);
     void addMessage(MidiMessage* m, double time, int sampleNum);
     
     // component dragger used to drag and drop regions
@@ -62,12 +62,15 @@ private:
     Rectangle<int>* thumbnailBounds = NULL;
     virtual void changeListenerCallback(ChangeBroadcaster * source) override;
     MidiThumbnail* midiThumbnail;
-    int numSamples;
+    int numSamples = 0;
     MidiBuffer::Iterator* iterator = NULL;
     MidiMessage message;
     std::map<double, MidiMessage*> midiMessages;
+    std::vector<MidiMessage*> midiMessageList;
     MidiMessageSequence* sequence;
     int lastIndex = -1;
+    long timeElapsed = 0;
+    int currentMessageNum = 0;
 };
 
 
