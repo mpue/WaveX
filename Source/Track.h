@@ -165,8 +165,19 @@ public:
     MidiMessage* getMessage(double time, int sampleNum);
     void addMessage(MidiMessage* message, double time, int sampleNUm);
     
+    
+    inline void setPlugin(AudioPluginInstance* instance) {
+        this->plugin = instance;
+    }
+    
+    inline AudioPluginInstance* getPlugin() {
+        return plugin;
+    }
+    
 private:
 
+    AudioPluginInstance* plugin = nullptr;
+    
 	float zoom = 30;
 	String name;
 	float volume;

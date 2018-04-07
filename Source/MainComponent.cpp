@@ -22,6 +22,7 @@
 #include "Session.h"
 #include "Mixer.h"
 #include "SequenceEditor.h"
+#include "Plugins/PluginManager.h"
 
 //==============================================================================
 /*
@@ -81,8 +82,7 @@ public:
             deviceManager.initialise(2,2, xml, true);
         }
         
-        apfm = new AudioPluginFormatManager();
-        apfm->addDefaultFormats();
+
         
         this->numSamples = 0;
         
@@ -120,8 +120,7 @@ public:
         navigator = nullptr;
         marker = nullptr;
         timeLine = nullptr;
-        buffer = nullptr;
-        apfm = nullptr;
+
         
     }
     
@@ -296,6 +295,29 @@ public:
             Mixer::getInstance()->addMidiOutput(midiOutputDevices.getReference(i));
         }
 
+        this->processorGraph = new AudioProcessorGraph();
+        setProcessor(this->processorGraph);
+        
+        this->processorGraph->prepareToPlay(samplesPerBlockExpected, sampleRate);
+  
+        AudioProcessorGraph::AudioGraphIOProcessor* input = new AudioProcessorGraph::AudioGraphIOProcessor(AudioProcessorGraph::AudioGraphIOProcessor::audioInputNode);
+        AudioProcessorGraph::AudioGraphIOProcessor* output = new AudioProcessorGraph::AudioGraphIOProcessor(AudioProcessorGraph::AudioGraphIOProcessor::audioOutputNode);
+        
+        processorGraph->addNode(input, 1);
+        processorGraph->addNode(output, 2);
+
+        AudioProcessorGraph::AudioGraphIOProcessor*  midiIn      = new AudioProcessorGraph::AudioGraphIOProcessor (AudioProcessorGraph::AudioGraphIOProcessor::midiInputNode);
+        AudioProcessorGraph::AudioGraphIOProcessor*  midOut      = new AudioProcessorGraph::AudioGraphIOProcessor (AudioProcessorGraph::AudioGraphIOProcessor::midiOutputNode);
+        
+
+        processorGraph->addNode (midiIn,5);
+        processorGraph->addNode (midOut,6);
+        
+        AudioProcessorGraph::Connection midiCon { { 5, juce::AudioProcessorGraph::midiChannelIndex }, { 6, juce::AudioProcessorGraph::midiChannelIndex } };
+        
+        processorGraph->addConnection (midiCon);
+        
+        
     }
     
     virtual void audioDeviceIOCallback (const float** inputChannelData,
@@ -303,41 +325,7 @@ public:
                                         float** outputChannelData,
                                         int numOutputChannels,
                                         int _numSamples) override {
-        
-        
-        if (plugin != NULL) {
-            
-            if (navigator->getTracks().size() == 1) {
-                
-                MidiBuffer midiBuffer;
-                getMidiMessageCollector().removeNextBlockOfMessages(midiBuffer, _numSamples);
-                
-                plugin->processBlock(*buffer,midiBuffer);
-                
-                AudioSampleBuffer* outL = outputBuffers.at(navigator->getTracks().at(0)->getOutputChannels()[0]);
-                AudioSampleBuffer* outR = outputBuffers.at(navigator->getTracks().at(0)->getOutputChannels()[1]);
-                
-                double pan = navigator->getTracks().at(0)->getPan();
-                
-                float gainLeft = cos((M_PI*(pan + 1) / 4));
-                float gainRight = sin((M_PI*(pan + 1) / 4));
-                
-                for (int j = 0; j <  _numSamples;j++) {
-                    
-                    float sampleL = buffer->getSample(0, j) * navigator->getTracks().at(0)->getVolume() * gainLeft;
-                    float sampleR = buffer->getSample(1, j) * navigator->getTracks().at(0)->getVolume() * gainRight;
-                    
-                    outL->addSample(0, j, sampleL);
-                    outR->addSample(0, j, sampleR);
-                    
-                }
 
-                navigator->getTracks().at(0)->updateMagnitude(0, _numSamples, gainLeft, gainRight);
-            }
-            
-            buffer->clear();
-            
-        }
         
         if (navigator->isPlaying()) {
             
@@ -501,6 +489,36 @@ public:
                         
                     }
                     else {
+                        
+                        if (t->getPlugin() != NULL) {
+                            MidiBuffer midiBuffer;
+                            getMidiMessageCollector().removeNextBlockOfMessages(midiBuffer, _numSamples);
+                            
+                            processorGraph->processBlock(*buffer,midiBuffer);
+                            
+                            // t->getPlugin()->processBlock(*buffer,midiBuffer);
+                            
+                            AudioSampleBuffer* outL = outputBuffers.at(navigator->getTracks().at(0)->getOutputChannels()[0]);
+                            AudioSampleBuffer* outR = outputBuffers.at(navigator->getTracks().at(0)->getOutputChannels()[1]);
+                            
+                            double pan = navigator->getTracks().at(0)->getPan();
+                            
+                            float gainLeft = cos((M_PI*(pan + 1) / 4));
+                            float gainRight = sin((M_PI*(pan + 1) / 4));
+                            
+                            for (int j = 0; j <  _numSamples;j++) {
+                                
+                                float sampleL = buffer->getSample(0, j) * navigator->getTracks().at(0)->getVolume() * gainLeft;
+                                float sampleR = buffer->getSample(1, j) * navigator->getTracks().at(0)->getVolume() * gainRight;
+                                
+                                outL->addSample(0, j, sampleL);
+                                outR->addSample(0, j, sampleR);
+                                
+                            }
+                            
+                            navigator->getTracks().at(0)->updateMagnitude(0, _numSamples, gainLeft, gainRight);
+                        }
+                        
                         navigator->getTracks().at(i)->setMagnitude(0, 0);
                         navigator->getTracks().at(i)->setMagnitude(1, 0);
                     }
@@ -601,19 +619,25 @@ public:
             
         }
         else {
+            /*
             MidiMessage* messageToSend = new MidiMessage(message);
             messageToSend->setChannel(navigator->getCurrentTrack()->getMidiChannel());
             deviceManager.getDefaultMidiOutput()->sendMessageNow(*messageToSend);
+             */
         }
         
-        
-        if(plugin != NULL && win->isVisible()) {
+        if (navigator->getCurrentTrack() != NULL) {
             getMidiMessageCollector().addMessageToQueue(message);
-        }        
+        }
+        
+        /*
+        if(plugin != NULL && win->isVisible()) {
+         
+        }
         else {
             // deviceManager.getDefaultMidiOutput()->sendMessageNow(message);
         }
-        
+        */
         
     }
     
@@ -673,62 +697,7 @@ public:
         return this->marker;
     }
     
-    void addPlugin(String name) {
-        
-        if (plugin == nullptr) {
-            String error = String("Error");
-            PluginDescription pd;
-            
-            File preset = File("/Users/mpue/plugins/"+name);
-            ScopedPointer<XmlElement> xml = XmlDocument(preset).getDocumentElement();
-            pd.loadFromXml(*xml.get());
-            
-            plugin = apfm->createPluginInstance(pd, sampleRate, buffersize,error);
-            plugin->prepareToPlay(sampleRate, buffersize);
-            AudioProcessorEditor* editor = plugin->createEditorIfNeeded();
-            
-            juce::AudioProcessor::BusesLayout layout =  plugin->getBusesLayout();
-            
-            int numPluginInputs = plugin->getBusCount(true) * 2;
-            int numPluginOutputs = plugin->getBusCount(false) * 2;
-            
-            // check input and output bus configuration
-            
-            juce::BigInteger activeInputChannels = deviceManager.getCurrentAudioDevice()->getActiveInputChannels();
-            juce::BigInteger activeOutputChannels = deviceManager.getCurrentAudioDevice()->getActiveOutputChannels();
-            
-            int numInputChannels = deviceManager.getCurrentAudioDevice()->getInputChannelNames().size();
-            int numOutputChannels = deviceManager.getCurrentAudioDevice()->getOutputChannelNames().size();
-            
-            int numActiveHostInputs = getNumActiveChannels(activeInputChannels.toInteger());
-            int numActiveHostOutputs = getNumActiveChannels(activeOutputChannels.toInteger());
-            
-            int requestedInputChannelSize = numActiveHostInputs;
-            int requestedOutputChannelSize = numActiveHostOutputs;
-            
-            // we have a problem if a plugin has more inputs and outputs that are active
-            // try to set the num of inputs/ouputs accordingly, if this fails we are fucked anyway
-            
-            if (numPluginInputs > numActiveHostInputs) {
-                requestedInputChannelSize = numPluginInputs;
-            }
-            if (numPluginOutputs > numActiveHostOutputs) {
-                requestedOutputChannelSize = numPluginOutputs;
-            }
-            
-            setAudioChannels(requestedInputChannelSize, requestedOutputChannelSize);
-            
-            Logger::getCurrentLogger()->writeToLog("Active output channels "+String(numActiveHostOutputs));
-            Logger::getCurrentLogger()->writeToLog("Active input channels "+String(numActiveHostInputs));
-            
-            setProcessor(plugin);
-            
-            win = new PluginWindow(name,editor);
-        }
-        
-        
-        win->setVisible(true);
-    }
+
     
     int getNumActiveChannels(int i) {
         i = i - ((i >> 1) & 0x55555555);
@@ -736,61 +705,7 @@ public:
         return (((i + (i >> 4)) & 0x0F0F0F0F) * 0x01010101) >> 24;
     }
     
-    void scanPlugins() {
-        /*
-         AudioPluginFormatManager apfm;
-         apfm.addDefaultFormats();
-         
-         for (int i = 0; i < apfm.getNumFormats();i++) {
-         AudioPluginFormat* format = apfm.getFormat(i);
-         Logger::getCurrentLogger()->writeToLog(format->getName());
-         
-         KnownPluginList *pluginList = new KnownPluginList();
-         
-         FileSearchPath* path = new FileSearchPath("/Users/mpue/Library/Audio/Plug-Ins/Components/");
-         
-         PluginDirectoryScanner* scanner = new PluginDirectoryScanner(*pluginList,*apfm.getFormat(0),*path,false,File(),false);
-         
-         String name;
-         
-         while(scanner->scanNextFile(false, name) != false) {
-         Logger::getCurrentLogger()->writeToLog("Found plugin : "+name);
-         }
-         
-         
-         delete scanner;
-         delete path;
-         delete pluginList;
-         
-         }
-         */
-        
-        AudioPluginFormatManager* apfm = new AudioPluginFormatManager();
-        apfm->addDefaultFormats();
-        
-        KnownPluginList *pluginList = new KnownPluginList();
-        PropertiesFile::Options options;
-        File file = File("/Users/mpue/plugin.properties");
-        PropertiesFile* props = new PropertiesFile(file,options);
-        
-        PluginListComponent* pluginListComponent = new PluginListComponent(*apfm,*pluginList,File(), props);
-        
-        DialogWindow::LaunchOptions launchOptions;
-        launchOptions.dialogTitle = ("Manage Plugins");
-        launchOptions.escapeKeyTriggersCloseButton = true;
-        launchOptions.resizable = true;
-        launchOptions.useNativeTitleBar = true;
-        launchOptions.useBottomRightCornerResizer = true;
-        launchOptions.componentToCentreAround = this->getParentComponent()->getParentComponent()->getParentComponent();
-        launchOptions.content.setOwned(pluginListComponent);
-        launchOptions.content->setSize(600, 580);
-        launchOptions.runModal();
-        
-        for (int i = 0; i < pluginList->getNumTypes();i++) {
-            pluginList->getType(i)->createXml()->writeToFile(File("/Users/mpue/plugins/"+pluginList->getType(i)->name),"");
-        }
-        
-    }
+
     
     void importAudio() {
         
@@ -930,51 +845,18 @@ public:
 private:
     //==============================================================================
     
-    class PluginWindow    : public DocumentWindow
-    {
-    public:
-        PluginWindow (String name, AudioProcessorEditor* editor)  : DocumentWindow (name,
-                                                                                    Colours::lightgrey,
-                                                                                    DocumentWindow::allButtons)
-        {
-            setUsingNativeTitleBar(true);
-            this->plugin = editor;
-            setContentOwned (editor, true);
-            setAlwaysOnTop(true);
-            setResizable (true, true);
-            centreWithSize(editor->getWidth(),editor->getHeight()+25);
-            setVisible (true);
-            
-        }
-        
-        ~PluginWindow() {
-            plugin = nullptr;
-        }
-        
-        void closeButtonPressed() override
-        {
-            this->setVisible(false);
-        }
-        
-    private:
-        ScopedPointer<AudioProcessorEditor> plugin;
-    };
+
     
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainContentComponent)
     
-    ScopedPointer<AudioPluginFormatManager> apfm;
-    ScopedPointer<AudioPluginInstance> plugin = nullptr;
+    AudioProcessorGraph* processorGraph;
+
     AudioProcessorPlayer* player;
-    
     MidiMessageSequence midiSequence;
-    
     vector<AudioSampleBuffer*> outputBuffers;
-    
     ScopedPointer<AudioSampleBuffer> buffer;
-    ScopedPointer<PluginWindow> win = nullptr;
-    
-    
+
     TimeSliceThread thread;
     ScopedPointer<TrackNavigator> navigator;
     ScopedPointer<PositionMarker> marker;
@@ -1004,9 +886,7 @@ private:
     float zoom;
     
     std::queue<MidiMessage*> pendingMessages;
-    
     MidiBuffer midiBuffer;
-    
     vector<String> availableInstruments;
     
     virtual StringArray getMenuBarNames() override
@@ -1122,7 +1002,7 @@ private:
             openSettings();
         }
         else if (menuItemID == 8) {
-            scanPlugins();
+            PluginManager::getInstance()->scanPlugins();
         }
         else if (menuItemID == 9) {
             FileChooser chooser("Select project file...", File::nonexistent, "*.xml");
@@ -1252,7 +1132,39 @@ private:
         }
 
         else if (menuItemID >= 100) {
-            addPlugin(availableInstruments.at(menuItemID - 100));
+            
+            String pluginName = availableInstruments.at(menuItemID - 100);
+            
+            PluginManager::getInstance()->addPlugin(pluginName,&deviceManager, this);
+            
+            AudioPluginInstance* plugin = PluginManager::getInstance()->getPlugin(pluginName);
+            navigator->getCurrentTrack()->setPlugin(plugin);
+            navigator->getCurrentTrack()->setName(pluginName);
+            
+            PluginManager::getInstance()->getPluginWindow(pluginName)->setVisible(true);
+         
+            processorGraph->addNode(plugin,3);
+            
+            
+            AudioProcessorGraph::Connection connection1 { { 1, 0 }, { 3, 0 } };
+            AudioProcessorGraph::Connection connection2 { { 1, 1 }, { 3, 1 } };
+            AudioProcessorGraph::Connection connection3 { { 3, 0 }, { 2, 0 } };
+            AudioProcessorGraph::Connection connection4 { { 3, 1 }, { 2, 1 } };
+            AudioProcessorGraph::Connection connection5 { { 5, juce::AudioProcessorGraph::midiChannelIndex }, { 3, juce::AudioProcessorGraph::midiChannelIndex } };
+            
+            processorGraph->addConnection(connection1);
+            processorGraph->addConnection(connection2);
+            processorGraph->addConnection(connection3);
+            processorGraph->addConnection(connection4);
+            processorGraph->addConnection(connection5);
+   
+            
+             
+            for (int i = 0; i < processorGraph->getNumNodes();i++) {
+                Logger::writeToLog("Added node with id"+String(processorGraph->getNodes().getObjectPointer(i)->nodeID));
+            }
+            
+        
         }
         
     }

@@ -217,7 +217,7 @@ void ToolbarPanel::buttonClicked (Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == pluginsButton)
     {
         //[UserButtonCode_pluginsButton] -- add your button handler code here..
-        mcc->addPlugin("Trio");
+     
         //[/UserButtonCode_pluginsButton]
     }
     else if (buttonThatWasClicked == addMidiTrackButton)
