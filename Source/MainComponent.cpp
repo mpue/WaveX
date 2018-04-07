@@ -23,6 +23,7 @@
 #include "Mixer.h"
 #include "SequenceEditor.h"
 #include "Plugins/PluginManager.h"
+#include "MidiRecorder/MidiRecorderPanel.h"
 
 //==============================================================================
 /*
@@ -65,8 +66,6 @@ public:
         addKeyListener(navigator);
         addMouseListener(navigator,true);
         
-
-        
         this->leftShiftPressed = false;
         this->ctrlPressed = false;
         this->masterVisible = true;
@@ -81,12 +80,8 @@ public:
             ScopedPointer<XmlElement> xml = XmlDocument(configFile).getDocumentElement();
             deviceManager.initialise(2,2, xml, true);
         }
-        
 
-        
         this->numSamples = 0;
-        
-        // setupIO(2,2);
         
         startTimer(50);
         this->navigator->repaint();
@@ -100,27 +95,18 @@ public:
       
     }
     
-    ~MainContentComponent()
-    {
-        /*
-         for (int i = 0; i < navigator->getTracks().size();i++) {
-         navigator->getTracks().at(i)->getBuffer()->clear();
-         }
-         */
-        
+    ~MainContentComponent() {
         deviceManager.getDefaultMidiOutput()->stopBackgroundThread();
         
         for (std::vector<AudioSampleBuffer*>::iterator it = outputBuffers.begin(); it != outputBuffers.end(); ++it) {
             delete *it;
         }
         
-        
         shutdownAudio();
         // readerSource = nullptr;
         navigator = nullptr;
         marker = nullptr;
         timeLine = nullptr;
-
         
     }
     
@@ -137,13 +123,7 @@ public:
         
         int requestedInputChannelSize = numActiveHostInputs;
         int requestedOutputChannelSize = numActiveHostOutputs;
-        
-        /*
-         for (std::vector<AudioSampleBuffer*>::iterator it = outputBuffers.begin(); it != outputBuffers.end(); ++it) {
-         delete *it;
-         }
-         */
-        
+
         AudioDeviceManager::AudioDeviceSetup config;
         deviceManager.getAudioDeviceSetup (config);
         
@@ -320,6 +300,116 @@ public:
         
     }
     
+    void handlePlayBack(int _numSamples, Track* t) {
+
+        
+        if (t->getType() == Track::Type::AUDIO) {
+            
+            AudioSampleBuffer* outL = outputBuffers.at(t->getOutputChannels()[0]);
+            AudioSampleBuffer* outR = outputBuffers.at(t->getOutputChannels()[1]);
+            
+            double pan = t->getPan();
+            
+            float gainLeft = cos((M_PI*(pan + 1) / 4));
+            float gainRight = sin((M_PI*(pan + 1) / 4));
+            
+            for (int j = numSamples; j < numSamples + _numSamples;j++) {
+                
+                float sampleL = t->getSample(0, j) * t->getVolume() * gainLeft;
+                float sampleR = t->getSample(1, j) * t->getVolume() * gainRight;
+                
+                outL->addSample(0, j%this->buffersize, sampleL);
+                outR->addSample(0, j%this->buffersize, sampleR);
+                
+            }
+            
+            t->setOffset(numSamples);
+            t->updateMagnitude(numSamples, _numSamples, gainLeft, gainRight);
+            
+        }
+        if (t->getType() == Track::Type::MIDI) {
+            
+            double seconds = Time::getMillisecondCounterHiRes() * 0.001;
+            double time = seconds - Session::getInstance()->getRecordingStartTime();
+            
+            MidiMessage* m = t->getMessage(time, numSamples);
+            
+            if (t->getPlugin() != NULL) {
+                if (m != NULL) {
+                    getMidiMessageCollector().addMessageToQueue(*m);
+                }
+                /*
+                else {
+                    m = new MidiMessage();
+                    m->allNotesOff(t->getMidiChannel());
+                    deviceManager.getDefaultMidiOutput()->sendMessageNow(*m);
+                }
+                 */
+                /*
+                MidiBuffer midiBuffer;
+                getMidiMessageCollector().removeNextBlockOfMessages(midiBuffer, _numSamples);
+                processorGraph->processBlock(*buffer,midiBuffer);
+                 */
+            }
+            else {
+                deviceManager.getDefaultMidiOutput()->sendMessageNow(*m);
+            }
+            
+        }
+    
+    }
+    
+    void handleRecording(int _numSamples, const float** inputChannelData, float** outputChannelData) {
+        for (int i = 0; i < navigator->getTracks().size();i++) {
+            
+            Track* t = navigator->getTracks().at(i);
+        
+            if (t->getType() == Track::Type::AUDIO) {
+                
+                AudioSampleBuffer* outL = outputBuffers.at(navigator->getTracks().at(i)->getOutputChannels()[0]);
+                AudioSampleBuffer* outR = outputBuffers.at(navigator->getTracks().at(i)->getOutputChannels()[1]);
+                
+                double pan = navigator->getTracks().at(i)->getPan();
+                
+                float gainLeft = cos((M_PI*(pan + 1) / 4));
+                float gainRight = sin((M_PI*(pan + 1) / 4));
+                
+                for (int j = numSamples; j < numSamples + _numSamples;j++) {
+                    
+                    if (t->isRecording()) {
+                        t->getRecordingBuffer()->addSample(0, j,inputChannelData[t->getInputChannels()[0]][j%this->buffersize] * leftVolume * gainLeft);
+                        t->getRecordingBuffer()->addSample(1, j,inputChannelData[t->getInputChannels()[1]][j%this->buffersize] * rightVolume * gainRight);
+                    }
+                }
+                
+                for (int j = 0; j < _numSamples;j++) {
+                    outL->copyFrom(0, numSamples % this->buffersize, *t->getRecordingBuffer(), 0, numSamples , _numSamples);
+                    outR->copyFrom(0, numSamples % this->buffersize, *t->getRecordingBuffer(), 1, numSamples , _numSamples);
+                    
+                }
+                
+                if (t->isRecording()) {
+                    AudioRegion* region = static_cast<AudioRegion*>(t->getCurrentRecorder());
+                    region->getThumbnail()->addBlock(numSamples,  *t->getRecordingBuffer(),numSamples,_numSamples);
+                }
+                
+                t->updateMagnitude(numSamples, _numSamples, gainLeft, gainRight);
+                t->setOffset(numSamples);
+            }/*
+            
+            if (t->getType() == Track::Type::MIDI) {
+                 if (t->getPlugin() != NULL) {
+                     MidiBuffer midiBuffer;
+                     getMidiMessageCollector().removeNextBlockOfMessages(midiBuffer, _numSamples);
+                     processorGraph->processBlock(*buffer,midiBuffer);
+                 }
+             }
+            
+              */
+        
+        }
+    }
+    
     virtual void audioDeviceIOCallback (const float** inputChannelData,
                                         int numInputChannels,
                                         float** outputChannelData,
@@ -329,62 +419,12 @@ public:
         
         if (navigator->isPlaying()) {
             
+            
+            
             for (int i = 0; i < navigator->getTracks().size();i++) {
+                handlePlayBack(_numSamples, navigator->getTracks().at(i));
             
-                Track* t = navigator->getTracks().at(i);
-                
-                if (t->getType() == Track::Type::AUDIO) {
-                    AudioSampleBuffer* outL = outputBuffers.at(t->getOutputChannels()[0]);
-                    AudioSampleBuffer* outR = outputBuffers.at(t->getOutputChannels()[1]);
-                    
-                    double pan = t->getPan();
-                    
-                    float gainLeft = cos((M_PI*(pan + 1) / 4));
-                    float gainRight = sin((M_PI*(pan + 1) / 4));
-                    
-                    for (int j = numSamples; j < numSamples + _numSamples;j++) {
-                        
-                        float sampleL = t->getSample(0, j) * t->getVolume() * gainLeft;
-                        float sampleR = t->getSample(1, j) * t->getVolume() * gainRight;
-                        
-                        outL->addSample(0, j%this->buffersize, sampleL);
-                        outR->addSample(0, j%this->buffersize, sampleR);
-                        
-                    }
-                    
-                    t->setOffset(numSamples);
-                    t->updateMagnitude(numSamples, _numSamples, gainLeft, gainRight);
-                    
-                }
-                else if (t->getType() == Track::Type::MIDI) {
-                    
-                    double seconds = Time::getMillisecondCounterHiRes() * 0.001;
-                    double time = seconds - Session::getInstance()->getRecordingStartTime();
-
-                    // Logger::writeToLog(String(time));
-                    
-                    MidiMessage* m = t->getMessage(time, numSamples);
-
-                    
-                    if (m != NULL) {
-                       
-                        deviceManager.getDefaultMidiOutput()->sendMessageNow(*m);
-                       
-                        // Logger::writeToLog("Playing message "+m->getDescription());s
-                        
-                    }
-                    else {
-                        m = new MidiMessage();
-                        m->allNotesOff(t->getMidiChannel());
-                        deviceManager.getDefaultMidiOutput()->sendMessageNow(*m);
-                    }
-        
-                }
-
-                
             }
-            
-            
             numSamples += _numSamples;
             navigator->setPosition(numSamples / this->sampleRate);
             
@@ -392,176 +432,71 @@ public:
         }
         else if (navigator->isRecording()){
             
+            
+            
             for (int i = 0; i < navigator->getTracks().size();i++) {
-                
-                Track* t = navigator->getTracks().at(i);
-                
-                if (t->getType() == Track::Type::AUDIO) {
-                    
-                    AudioSampleBuffer* outL = outputBuffers.at(navigator->getTracks().at(i)->getOutputChannels()[0]);
-                    AudioSampleBuffer* outR = outputBuffers.at(navigator->getTracks().at(i)->getOutputChannels()[1]);
-                    
-                    double pan = navigator->getTracks().at(i)->getPan();
-                    
-                    float gainLeft = cos((M_PI*(pan + 1) / 4));
-                    float gainRight = sin((M_PI*(pan + 1) / 4));
-                    
-                    for (int j = numSamples; j < numSamples + _numSamples;j++) {
-                        
-                        if (t->isRecording()) {
-                            t->getRecordingBuffer()->addSample(0, j,inputChannelData[t->getInputChannels()[0]][j%this->buffersize] * leftVolume * gainLeft);
-                            t->getRecordingBuffer()->addSample(1, j,inputChannelData[t->getInputChannels()[1]][j%this->buffersize] * rightVolume * gainRight);
-                        }
-                    }
-                    
-                    for (int j = 0; j < _numSamples;j++) {
-                        outL->copyFrom(0, numSamples % this->buffersize, *t->getRecordingBuffer(), 0, numSamples , _numSamples);
-                        outR->copyFrom(0, numSamples % this->buffersize, *t->getRecordingBuffer(), 1, numSamples , _numSamples);
-                        
-                    }
-                    
-                    if (t->isRecording()) {
-                        AudioRegion* region = static_cast<AudioRegion*>(t->getCurrentRecorder());
-                        region->getThumbnail()->addBlock(numSamples,  *t->getRecordingBuffer(),numSamples,_numSamples);
-                    }
-                    
-                    t->updateMagnitude(numSamples, _numSamples, gainLeft, gainRight);
-                    t->setOffset(numSamples);
-                }
-                /*
-                else if (t->getType() == Track::Type::MIDI) {
-                    
-                    double seconds = Time::getMillisecondCounterHiRes() * 0.001 ;
-                    double time = seconds - Session::getInstance()->getRecordingStartTime();
-                    
-                    MidiMessage* m = t->getMessage(time, numSamples);
-                    
-                    if (m != NULL) {
-                        deviceManager.getDefaultMidiOutput()->sendMessageNow(*m);
-                    }
-                    else {
-                        m = new MidiMessage();
-                        m->allNotesOff(t->getMidiChannel());
-                        deviceManager.getDefaultMidiOutput()->sendMessageNow(*m);
-                    }
-                }
-                 */
-                
+                handleRecording(_numSamples, inputChannelData,outputChannelData);
             }
             
             numSamples += _numSamples;
             navigator->setPosition(numSamples / this->sampleRate);
         }
-        else {
-            
-            for (int i = 0; i < navigator->getTracks().size();i++) {
-                
-                Track* t = navigator->getTracks().at(i);
-                
-                if (t->getType() == Track::Type::AUDIO) {
-                
-                    AudioSampleBuffer* outL = outputBuffers.at(navigator->getTracks().at(i)->getOutputChannels()[0]);
-                    AudioSampleBuffer* outR = outputBuffers.at(navigator->getTracks().at(i)->getOutputChannels()[1]);
-                    
-                    if (t->isRecording()) {
-                        float pan = 0;
-                        
-                        float gainLeft  = cos((M_PI*(pan + 1) / 4));
-                        float gainRight = sin((M_PI*(pan + 1) / 4));
-                        
-                        for (int j = 0; j < this->buffersize;j++) {
-                            outL->addSample(0, j,inputChannelData[t->getInputChannels()[0]][j] * leftVolume * gainLeft);
-                            outR->addSample(0, j,inputChannelData[t->getInputChannels()[1]][j] * rightVolume * gainRight);
-                        }
-                        
-                        float magLeftIn  = outL->getMagnitude(0, 0, _numSamples);
-                        float magRightIn = outR->getMagnitude(0, 0, _numSamples);
-                        
-                        navigator->getTracks().at(i)->setMagnitude(0, magLeftIn);
-                        navigator->getTracks().at(i)->setMagnitude(1, magRightIn);
-                        
-                        /*
-                         for (int i = 0; i < navigator->getTracks().size();i++) {
-                         navigator->getTracks().at(i)->setMagnitude(0, 0);
-                         navigator->getTracks().at(i)->setMagnitude(1, 0);
-                         }
-                         */
-                        
-                    }
-                    else {
-                        
-                        if (t->getPlugin() != NULL) {
-                            MidiBuffer midiBuffer;
-                            getMidiMessageCollector().removeNextBlockOfMessages(midiBuffer, _numSamples);
-                            
-                            processorGraph->processBlock(*buffer,midiBuffer);
-                            
-                            // t->getPlugin()->processBlock(*buffer,midiBuffer);
-                            
-                            AudioSampleBuffer* outL = outputBuffers.at(navigator->getTracks().at(0)->getOutputChannels()[0]);
-                            AudioSampleBuffer* outR = outputBuffers.at(navigator->getTracks().at(0)->getOutputChannels()[1]);
-                            
-                            double pan = navigator->getTracks().at(0)->getPan();
-                            
-                            float gainLeft = cos((M_PI*(pan + 1) / 4));
-                            float gainRight = sin((M_PI*(pan + 1) / 4));
-                            
-                            for (int j = 0; j <  _numSamples;j++) {
-                                
-                                float sampleL = buffer->getSample(0, j) * navigator->getTracks().at(0)->getVolume() * gainLeft;
-                                float sampleR = buffer->getSample(1, j) * navigator->getTracks().at(0)->getVolume() * gainRight;
-                                
-                                outL->addSample(0, j, sampleL);
-                                outR->addSample(0, j, sampleR);
-                                
-                            }
-                            
-                            navigator->getTracks().at(0)->updateMagnitude(0, _numSamples, gainLeft, gainRight);
-                        }
-                        
-                        navigator->getTracks().at(i)->setMagnitude(0, 0);
-                        navigator->getTracks().at(i)->setMagnitude(1, 0);
-                    }
-                }
-            }
-            
-        }
-        
+
+      
+        processOutputMerge(outputChannelData, numOutputChannels, _numSamples);
+       
+
+    }
+    
+
+    
+    
+    void processOutputMerge(float** outputChannelData, int numOutputChannels, int _numSamples) {
         for (int i = 0; i < navigator->getTracks().size();i++) {
             
             Track* t = navigator->getTracks().at(i);
             
-            AudioSampleBuffer* outL = outputBuffers.at(navigator->getTracks().at(i)->getOutputChannels()[0]);
-            AudioSampleBuffer* outR = outputBuffers.at(navigator->getTracks().at(i)->getOutputChannels()[1]);
-            
-            const float* left = outL->getReadPointer(0);
-            const float* right = outR->getReadPointer(0);
-            
-            for (int sample = 0; sample < outL->getNumSamples(); ++sample) {
-                outputChannelData[t->getOutputChannels()[0]][sample] = left[sample] * leftVolume;
-                outputChannelData[t->getOutputChannels()[1]][sample] = right[sample] * rightVolume;
+            if (t->getType() == Track::Type::MIDI) {
+                if (t->getPlugin() != NULL) {
+                    
+                        MidiBuffer midiBuffer;
+                        getMidiMessageCollector().removeNextBlockOfMessages(midiBuffer, _numSamples);
+                        processorGraph->processBlock(*buffer,midiBuffer);
+                    
+                    const float* left = buffer->getReadPointer(0);
+                    const float* right = buffer->getReadPointer(1);
+                    
+                    this->magnitudeLeft = buffer->getMagnitude(0, 0, _numSamples);
+                    this->magnitudeRight = buffer->getMagnitude(1, 0, _numSamples);
+                    
+                    this->rmsLeft = buffer->getRMSLevel(0, 0,_numSamples);
+                    this->rmsRight = buffer->getRMSLevel(1, 0,_numSamples);
+                    
+                    for (int sample = 0; sample < buffer->getNumSamples(); ++sample) {
+                        outputChannelData[t->getOutputChannels()[0]][sample] = left[sample] * leftVolume;
+                        outputChannelData[t->getOutputChannels()[1]][sample] = right[sample] * rightVolume;
+                    }
+                    
+                }
             }
-            
-            this->magnitudeLeft = outL->getMagnitude(0, 0, _numSamples);
-            this->magnitudeRight = outR->getMagnitude(0, 0, _numSamples);
-            
-            this->rmsLeft = outL->getRMSLevel(0, 0,_numSamples);
-            this->rmsRight = outR->getRMSLevel(0, 0,_numSamples);
-        
-            
-            // Maybe we can use this later to display the peak at a specific sample point
-            /*
-             for (int i = 0; i < navigator->getTracks().size();i++) {
-             navigator->getTracks().at(i)->updateMagnitude(numSamples, _numSamples);
-             }
-             */
-            
-            /*
-             if (i == navigator->getTracks().size() - 1) {
-             outL->clear();
-             outR->clear();
-             }
-             */
+            else {
+                AudioSampleBuffer* outL = outputBuffers.at(navigator->getTracks().at(i)->getOutputChannels()[0]);
+                AudioSampleBuffer* outR = outputBuffers.at(navigator->getTracks().at(i)->getOutputChannels()[1]);
+                
+                const float* left = outL->getReadPointer(0);
+                const float* right = outR->getReadPointer(0);
+                
+                this->magnitudeLeft = outL->getMagnitude(0, 0, _numSamples);
+                this->magnitudeRight = outR->getMagnitude(0, 0, _numSamples);
+                
+                this->rmsLeft = outL->getRMSLevel(0, 0,_numSamples);
+                this->rmsRight = outR->getRMSLevel(0, 0,_numSamples);
+                
+                for (int sample = 0; sample < outL->getNumSamples(); ++sample) {
+                    outputChannelData[t->getOutputChannels()[0]][sample] = left[sample] * leftVolume;
+                    outputChannelData[t->getOutputChannels()[1]][sample] = right[sample] * rightVolume;
+                }
+            }
             
         }
         
@@ -576,9 +511,8 @@ public:
             for (int i = 0; i < outputBuffers.size();i++) {
                 outputBuffers.at(i)->clear();
             }
-            
+            buffer->clear();
         }
-
     }
     
     void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill) override
@@ -590,8 +524,6 @@ public:
         
         double seconds = Time::getMillisecondCounterHiRes() * 0.001;
         double currentTime = seconds - Session::getInstance()->getRecordingStartTime();
-    
-        // Logger::writeToLog(String(numSamples));
         
         if (navigator->getTracks().size() == 0) {
             return;
@@ -630,14 +562,6 @@ public:
             getMidiMessageCollector().addMessageToQueue(message);
         }
         
-        /*
-        if(plugin != NULL && win->isVisible()) {
-         
-        }
-        else {
-            // deviceManager.getDefaultMidiOutput()->sendMessageNow(message);
-        }
-        */
         
     }
     
@@ -805,6 +729,26 @@ public:
         launchOptions.content.setOwned(view);
         launchOptions.content->setSize(500, 280);
         launchOptions.runModal();
+    }
+    
+    void openEventRecorder() {
+        
+        MidiRecorderPanel* eventRecorder = new MidiRecorderPanel();
+        eventRecorder->setMouseClickGrabsKeyboardFocus(true);
+        eventRecorder->setDeviceManager(&deviceManager);
+        
+        
+        DialogWindow::LaunchOptions launchOptions;
+        launchOptions.dialogTitle = ("Event recorder");
+        launchOptions.escapeKeyTriggersCloseButton = true;
+        launchOptions.resizable = true;
+        launchOptions.useNativeTitleBar = false;
+        launchOptions.useBottomRightCornerResizer = true;
+        launchOptions.componentToCentreAround = this->getParentComponent()->getParentComponent()->getParentComponent();
+        launchOptions.content.setOwned(eventRecorder);
+        launchOptions.content->setSize(800, 600);
+        launchOptions.runModal();
+        
         
     }
     
@@ -946,6 +890,7 @@ private:
             menu.addItem(6, "Zoom out", true, false, nullptr);
             menu.addItem(8, "Manage Plugins", true, false, nullptr);
             menu.addItem(13, "Step sequencer", true, false, nullptr);
+            menu.addItem(15, "Event recorder", true, false, nullptr);
         }
         else if (index == 2) {
             buildPluginMenu(menu);
@@ -1130,7 +1075,9 @@ private:
         else if (menuItemID == 14) {
             exportAudio();
         }
-
+        else if (menuItemID == 15) {
+            openEventRecorder();
+        }
         else if (menuItemID >= 100) {
             
             String pluginName = availableInstruments.at(menuItemID - 100);

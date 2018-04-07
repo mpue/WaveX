@@ -1,0 +1,214 @@
+diff --git a/Source/MainComponent.cpp b/Source/MainComponent.cpp
+index 9ee7254..c02d97a 100644
+--- a/Source/MainComponent.cpp
++++ b/Source/MainComponent.cpp
+@@ -265,13 +265,13 @@ public:
+         
+         this->sampleRate = sampleRate;
+         this->buffersize = samplesPerBlockExpected;
++        
++        this->buffer = new AudioSampleBuffer(2,this->buffersize);
++        this->buffer->clear(0, this->buffersize);
+         
+         deviceManager.addAudioCallback (this);
+         deviceManager.addMidiInputCallback (String(),this);
+-        
+-        this->buffer = new AudioSampleBuffer(2,this->buffersize);
+-        this->buffer->clear(0, this->buffersize);
+-        
++               
+         Project::getInstance()->setSampleRate(sampleRate);
+         Project::getInstance()->setBufferSize(buffersize);
+         
+@@ -299,16 +299,19 @@ public:
+         setProcessor(this->processorGraph);
+         
+         this->processorGraph->prepareToPlay(samplesPerBlockExpected, sampleRate);
++        this->processorGraph->setProcessingPrecision(AudioProcessor::doublePrecision);
+   
+-        AudioProcessorGraph::AudioGraphIOProcessor* input = new AudioProcessorGraph::AudioGraphIOProcessor(AudioProcessorGraph::AudioGraphIOProcessor::audioInputNode);
+-        AudioProcessorGraph::AudioGraphIOProcessor* output = new AudioProcessorGraph::AudioGraphIOProcessor(AudioProcessorGraph::AudioGraphIOProcessor::audioOutputNode);
+-        
+-        processorGraph->addNode(input, 1);
+-        processorGraph->addNode(output, 2);
++        Process::setPriority (Process::HighPriority);
+ 
++        
+         AudioProcessorGraph::AudioGraphIOProcessor*  midiIn      = new AudioProcessorGraph::AudioGraphIOProcessor (AudioProcessorGraph::AudioGraphIOProcessor::midiInputNode);
+         AudioProcessorGraph::AudioGraphIOProcessor*  midOut      = new AudioProcessorGraph::AudioGraphIOProcessor (AudioProcessorGraph::AudioGraphIOProcessor::midiOutputNode);
+         
++        AudioProcessorGraph::AudioGraphIOProcessor* input1 = new AudioProcessorGraph::AudioGraphIOProcessor(AudioProcessorGraph::AudioGraphIOProcessor::audioInputNode);
++        AudioProcessorGraph::AudioGraphIOProcessor* output1 = new AudioProcessorGraph::AudioGraphIOProcessor(AudioProcessorGraph::AudioGraphIOProcessor::audioOutputNode);
++        
++        processorGraph->addNode(input1, inputId);
++        processorGraph->addNode(output1, outputId);
+ 
+         processorGraph->addNode (midiIn,5);
+         processorGraph->addNode (midOut,6);
+@@ -452,8 +455,30 @@ public:
+             numSamples += _numSamples;
+             navigator->setPosition(numSamples / this->sampleRate);
+         }
+-        else {
++        else {
++            MidiBuffer midiBuffer;
++            getMidiMessageCollector().removeNextBlockOfMessages(midiBuffer, _numSamples);
++           
++            MidiMessage msg;
++            int samplePosition;
++            MidiBuffer output;
++            
++            for (MidiBuffer::Iterator it (midiBuffer); it.getNextEvent (msg, samplePosition);)
++                if (msg.getChannel() == navigator->getCurrentTrack()->getMidiChannel()) output.addEvent (msg, samplePosition);
++            
++            processorGraph->processBlock(*buffer,output);
++            
++            
++            const float* left = buffer->getReadPointer(0);
++            const float* right = buffer->getReadPointer(1);
++            
++            for (int sample = 0; sample < _numSamples; ++sample) {
++                outputChannelData[0][sample] = left[sample] * leftVolume;
++                outputChannelData[1][sample] = right[sample] * rightVolume;
++            }
++            
+             
++         /*
+             for (int i = 0; i < navigator->getTracks().size();i++) {
+                 
+                 Track* t = navigator->getTracks().at(i);
+@@ -480,13 +505,6 @@ public:
+                         navigator->getTracks().at(i)->setMagnitude(0, magLeftIn);
+                         navigator->getTracks().at(i)->setMagnitude(1, magRightIn);
+                         
+-                        /*
+-                         for (int i = 0; i < navigator->getTracks().size();i++) {
+-                         navigator->getTracks().at(i)->setMagnitude(0, 0);
+-                         navigator->getTracks().at(i)->setMagnitude(1, 0);
+-                         }
+-                         */
+-                        
+                     }
+                     else {
+                         
+@@ -523,10 +541,11 @@ public:
+                         navigator->getTracks().at(i)->setMagnitude(1, 0);
+                     }
+                 }
+-            }
++            }
++          */
+             
+         }
+-        
++        /*
+         for (int i = 0; i < navigator->getTracks().size();i++) {
+             
+             Track* t = navigator->getTracks().at(i);
+@@ -547,24 +566,9 @@ public:
+             
+             this->rmsLeft = outL->getRMSLevel(0, 0,_numSamples);
+             this->rmsRight = outR->getRMSLevel(0, 0,_numSamples);
+-        
+-            
+-            // Maybe we can use this later to display the peak at a specific sample point
+-            /*
+-             for (int i = 0; i < navigator->getTracks().size();i++) {
+-             navigator->getTracks().at(i)->updateMagnitude(numSamples, _numSamples);
+-             }
+-             */
+-            
+-            /*
+-             if (i == navigator->getTracks().size() - 1) {
+-             outL->clear();
+-             outR->clear();
+-             }
+-             */
+-            
++
+         }
+-        
++        */
+         if (navigator->getTracks().size() == 0) {
+             for (int i = 0; i < numOutputChannels;i++) {
+                 for (int sample = 0; sample < _numSamples; ++sample) {
+@@ -627,7 +631,11 @@ public:
+         }
+         
+         if (navigator->getCurrentTrack() != NULL) {
+-            getMidiMessageCollector().addMessageToQueue(message);
++            MidiMessage* messageToSend = new MidiMessage(message);
++            // adjust channel according to track
++            messageToSend->setChannel(navigator->getCurrentTrack()->getMidiChannel());
++            messageToSend->setTimeStamp(currentTime);
++            getMidiMessageCollector().addMessageToQueue(*messageToSend);
+         }
+         
+         /*
+@@ -855,7 +863,7 @@ private:
+     AudioProcessorPlayer* player;
+     MidiMessageSequence midiSequence;
+     vector<AudioSampleBuffer*> outputBuffers;
+-    ScopedPointer<AudioSampleBuffer> buffer;
++    AudioSampleBuffer* buffer;
+ 
+     TimeSliceThread thread;
+     ScopedPointer<TrackNavigator> navigator;
+@@ -885,6 +893,9 @@ private:
+     
+     float zoom;
+     
++    unsigned int inputId ;
++    unsigned int outputId;
++    
+     std::queue<MidiMessage*> pendingMessages;
+     MidiBuffer midiBuffer;
+     vector<String> availableInstruments;
+@@ -1134,6 +1145,8 @@ private:
+         else if (menuItemID >= 100) {
+             
+             String pluginName = availableInstruments.at(menuItemID - 100);
++            
++            unsigned int id = PluginManager::getInstance()->getNextPluginId();
+             
+             PluginManager::getInstance()->addPlugin(pluginName,&deviceManager, this);
+             
+@@ -1142,28 +1155,24 @@ private:
+             navigator->getCurrentTrack()->setName(pluginName);
+             
+             PluginManager::getInstance()->getPluginWindow(pluginName)->setVisible(true);
+-         
+-            processorGraph->addNode(plugin,3);
+             
++            processorGraph->addNode(plugin,id);
++            
++
++            
++            AudioProcessorGraph::Connection connection1 { { inputId, 0 }, { id, 0 } };
++            AudioProcessorGraph::Connection connection2 { { inputId, 1 }, { id, 1 } };
+             
+-            AudioProcessorGraph::Connection connection1 { { 1, 0 }, { 3, 0 } };
+-            AudioProcessorGraph::Connection connection2 { { 1, 1 }, { 3, 1 } };
+-            AudioProcessorGraph::Connection connection3 { { 3, 0 }, { 2, 0 } };
+-            AudioProcessorGraph::Connection connection4 { { 3, 1 }, { 2, 1 } };
+-            AudioProcessorGraph::Connection connection5 { { 5, juce::AudioProcessorGraph::midiChannelIndex }, { 3, juce::AudioProcessorGraph::midiChannelIndex } };
++            AudioProcessorGraph::Connection connection3 { { id, 0 }, { outputId, 0 } };
++            AudioProcessorGraph::Connection connection4 { { id, 1 }, { outputId, 1 } };
++            AudioProcessorGraph::Connection connection5 { { 5, juce::AudioProcessorGraph::midiChannelIndex }, { id, juce::AudioProcessorGraph::midiChannelIndex } };
+             
+             processorGraph->addConnection(connection1);
+             processorGraph->addConnection(connection2);
+             processorGraph->addConnection(connection3);
+             processorGraph->addConnection(connection4);
+             processorGraph->addConnection(connection5);
+-   
+-            
+-             
+-            for (int i = 0; i < processorGraph->getNumNodes();i++) {
+-                Logger::writeToLog("Added node with id"+String(processorGraph->getNodes().getObjectPointer(i)->nodeID));
+-            }
+-            
++        
+         
+         }
+         

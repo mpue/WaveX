@@ -59,7 +59,10 @@
 		B9FAD13C5CC93B414961EF08 /* PositionMarker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6A9BBBEEF95DDCFA99DB6FA4 /* PositionMarker.cpp */; };
 		BA8D5E98595E03678F58722F /* MasterChannelPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2F7FC43F8E04FF62B5244D7C /* MasterChannelPanel.cpp */; };
 		BCB4226DFC4421661B86398E /* TrackNavigator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2AE678DAB83ACFEC347CA06A /* TrackNavigator.cpp */; };
-		BF96F3AA20781BCA00B48A27 /* PluginManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF96F3A920781BCA00B48A27 /* PluginManager.cpp */; };
+		BF5096512079544E00CC6B12 /* MidiEventEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF50964B2079544D00CC6B12 /* MidiEventEditor.cpp */; };
+		BF5096522079544E00CC6B12 /* MidiRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF50964C2079544D00CC6B12 /* MidiRecorder.cpp */; };
+		BF5096532079544E00CC6B12 /* MidiRecorderPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF50964D2079544D00CC6B12 /* MidiRecorderPanel.cpp */; };
+		BFA3380A2078DD41005E8069 /* PluginManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BFA338092078DD41005E8069 /* PluginManager.cpp */; };
 		C193B4F4129EF239BF672EE6 /* MixerConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81F3671EC7A05AE7FBB29B5B /* MixerConfig.cpp */; };
 		C6DC8B4E43FCE25E72F211BC /* AppWindowComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE0EC70E1BCA349E74169727 /* AppWindowComponent.cpp */; };
 		C96C2D86A64120FEB42C0CA5 /* RegionConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 54778988085BADEEF55F2686 /* RegionConfig.cpp */; };
@@ -182,8 +185,16 @@
 		BC020354B0BCC0696099AF34 /* RegionConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RegionConfig.h; path = ../../Source/RegionConfig.h; sourceTree = SOURCE_ROOT; };
 		BC701F8EA3EB30EF954836B4 /* WaveSelector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WaveSelector.h; path = ../../Source/WaveSelector.h; sourceTree = SOURCE_ROOT; };
 		BE0EC70E1BCA349E74169727 /* AppWindowComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppWindowComponent.cpp; path = ../../Source/AppWindowComponent.cpp; sourceTree = SOURCE_ROOT; };
-		BF96F3A820781BCA00B48A27 /* PluginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluginManager.h; path = ../../../Source/Plugins/PluginManager.h; sourceTree = "<group>"; };
-		BF96F3A920781BCA00B48A27 /* PluginManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginManager.cpp; path = ../../../Source/Plugins/PluginManager.cpp; sourceTree = "<group>"; };
+		BF5096492079544D00CC6B12 /* Logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Logger.h; path = ../../Source/MidiRecorder/Logger.h; sourceTree = "<group>"; };
+		BF50964A2079544D00CC6B12 /* MidiEventEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MidiEventEditor.h; path = ../../Source/MidiRecorder/MidiEventEditor.h; sourceTree = "<group>"; };
+		BF50964B2079544D00CC6B12 /* MidiEventEditor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MidiEventEditor.cpp; path = ../../Source/MidiRecorder/MidiEventEditor.cpp; sourceTree = "<group>"; };
+		BF50964C2079544D00CC6B12 /* MidiRecorder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MidiRecorder.cpp; path = ../../Source/MidiRecorder/MidiRecorder.cpp; sourceTree = "<group>"; };
+		BF50964D2079544D00CC6B12 /* MidiRecorderPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MidiRecorderPanel.cpp; path = ../../Source/MidiRecorder/MidiRecorderPanel.cpp; sourceTree = "<group>"; };
+		BF50964E2079544E00CC6B12 /* MidiRecorderPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MidiRecorderPanel.h; path = ../../Source/MidiRecorder/MidiRecorderPanel.h; sourceTree = "<group>"; };
+		BF50964F2079544E00CC6B12 /* RecordListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RecordListener.h; path = ../../Source/MidiRecorder/RecordListener.h; sourceTree = "<group>"; };
+		BF5096502079544E00CC6B12 /* MidiRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MidiRecorder.h; path = ../../Source/MidiRecorder/MidiRecorder.h; sourceTree = "<group>"; };
+		BFA338082078DD41005E8069 /* PluginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluginManager.h; path = ../../Source/Plugins/PluginManager.h; sourceTree = "<group>"; };
+		BFA338092078DD41005E8069 /* PluginManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginManager.cpp; path = ../../Source/Plugins/PluginManager.cpp; sourceTree = "<group>"; };
 		C262CF7AEADD44EC11E88B4F /* font-awesome_4-7-0_pencil_24_0_000000_none.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "font-awesome_4-7-0_pencil_24_0_000000_none.png"; path = "../../Resources/font-awesome_4-7-0_pencil_24_0_000000_none.png"; sourceTree = SOURCE_ROOT; };
 		C28A7A64C15BCF7B54C5E333 /* AudioRegion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AudioRegion.h; path = ../../Source/AudioRegion.h; sourceTree = SOURCE_ROOT; };
 		C3D8C3028D42317B101BC6C9 /* ionicons_2-0-1_android-add-circle_24_0_000000_none.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ionicons_2-0-1_android-add-circle_24_0_000000_none.png"; path = "../../Resources/ionicons_2-0-1_android-add-circle_24_0_000000_none.png"; sourceTree = SOURCE_ROOT; };
@@ -422,7 +433,8 @@
 		AF51C8453630B695B49B468D /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				BF96F3A4207817B800B48A27 /* Plugins */,
+				BF50963B2079529B00CC6B12 /* MidiRecorder */,
+				BFA3380B2078DD46005E8069 /* Plugins */,
 				454AF3C96D2B7DA257B2B0D9 /* Project */,
 				1220AF2613E1C2476C0F856E /* MainUI */,
 				67E43175E5B439407C967F31 /* Mixer */,
@@ -434,13 +446,28 @@
 			name = Source;
 			sourceTree = "<group>";
 		};
-		BF96F3A4207817B800B48A27 /* Plugins */ = {
+		BF50963B2079529B00CC6B12 /* MidiRecorder */ = {
 			isa = PBXGroup;
 			children = (
-				BF96F3A920781BCA00B48A27 /* PluginManager.cpp */,
-				BF96F3A820781BCA00B48A27 /* PluginManager.h */,
+				BF5096492079544D00CC6B12 /* Logger.h */,
+				BF50964B2079544D00CC6B12 /* MidiEventEditor.cpp */,
+				BF50964A2079544D00CC6B12 /* MidiEventEditor.h */,
+				BF50964C2079544D00CC6B12 /* MidiRecorder.cpp */,
+				BF5096502079544E00CC6B12 /* MidiRecorder.h */,
+				BF50964D2079544D00CC6B12 /* MidiRecorderPanel.cpp */,
+				BF50964E2079544E00CC6B12 /* MidiRecorderPanel.h */,
+				BF50964F2079544E00CC6B12 /* RecordListener.h */,
 			);
-			path = Plugins;
+			name = MidiRecorder;
+			sourceTree = "<group>";
+		};
+		BFA3380B2078DD46005E8069 /* Plugins */ = {
+			isa = PBXGroup;
+			children = (
+				BFA338092078DD41005E8069 /* PluginManager.cpp */,
+				BFA338082078DD41005E8069 /* PluginManager.h */,
+			);
+			name = Plugins;
 			sourceTree = "<group>";
 		};
 		CE159C102A1551760BCD2963 /* Resources */ = {
@@ -621,14 +648,17 @@
 				F75376B4B45B65AA63FDF30E /* Region.cpp in Sources */,
 				271D3FF797DEB97208719954 /* TimeLine.cpp in Sources */,
 				136102FF1A369D3CB09DA8D8 /* Track.cpp in Sources */,
+				BF5096522079544E00CC6B12 /* MidiRecorder.cpp in Sources */,
 				BCB4226DFC4421661B86398E /* TrackNavigator.cpp in Sources */,
 				1873080025E860B924A9F9CE /* TrackPropertyPanel.cpp in Sources */,
 				E6BB1AD521E4F94EB8B67B1B /* TrackPropertyView.cpp in Sources */,
+				BF5096512079544E00CC6B12 /* MidiEventEditor.cpp in Sources */,
 				625AF5BDA3B798392E7FADD7 /* WaveSelector.cpp in Sources */,
 				67B8A259D8E30B44D1D1587A /* Main.cpp in Sources */,
 				581F38A2DEC90793C784EF64 /* Session.cpp in Sources */,
-				BF96F3AA20781BCA00B48A27 /* PluginManager.cpp in Sources */,
+				BFA3380A2078DD41005E8069 /* PluginManager.cpp in Sources */,
 				0C536E159E5D6E15BE515425 /* BinaryData.cpp in Sources */,
+				BF5096532079544E00CC6B12 /* MidiRecorderPanel.cpp in Sources */,
 				05653B7277A835EED9A2F57F /* include_juce_audio_basics.mm in Sources */,
 				1B69E626CFADB5D68D380A1A /* include_juce_audio_devices.mm in Sources */,
 				72F1670750DABD10496F231F /* include_juce_audio_formats.mm in Sources */,

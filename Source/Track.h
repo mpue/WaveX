@@ -208,7 +208,7 @@ private:
     double magnitudeRight = 0;
     
     int inputChannels[2] = { 0 };
-    int outputChannels[2] = { 0 };
+    int outputChannels[2] = { 0, 1 };
     
     String midiInputDevice;
     String midiOutputDevice;
