@@ -73,6 +73,8 @@ public:
         this->leftVolume = 1.0;
         this->rightVolume = 1.0;
         
+        
+        
         setAudioChannels(2,2);
         
         File configFile = File("/Users/mpue/.WaveX/config.xml");
@@ -279,7 +281,10 @@ public:
         setProcessor(this->processorGraph);
         
         this->processorGraph->prepareToPlay(samplesPerBlockExpected, sampleRate);
+        this->processorGraph->setProcessingPrecision(AudioProcessor::doublePrecision);
   
+        Process::setPriority (Process::HighPriority);
+        
         AudioProcessorGraph::AudioGraphIOProcessor* input = new AudioProcessorGraph::AudioGraphIOProcessor(AudioProcessorGraph::AudioGraphIOProcessor::audioInputNode);
         AudioProcessorGraph::AudioGraphIOProcessor* output = new AudioProcessorGraph::AudioGraphIOProcessor(AudioProcessorGraph::AudioGraphIOProcessor::audioOutputNode);
         
@@ -459,9 +464,8 @@ public:
             if (t->getType() == Track::Type::MIDI) {
                 if (t->getPlugin() != NULL) {
                     
-                        MidiBuffer midiBuffer;
-                        getMidiMessageCollector().removeNextBlockOfMessages(midiBuffer, _numSamples);
-                        processorGraph->processBlock(*buffer,midiBuffer);
+                    getMidiMessageCollector().removeNextBlockOfMessages(midiBuffer, _numSamples);
+                    processorGraph->processBlock(*buffer,midiBuffer);
                     
                     const float* left = buffer->getReadPointer(0);
                     const float* right = buffer->getReadPointer(1);
@@ -472,7 +476,7 @@ public:
                     this->rmsLeft = buffer->getRMSLevel(0, 0,_numSamples);
                     this->rmsRight = buffer->getRMSLevel(1, 0,_numSamples);
                     
-                    for (int sample = 0; sample < buffer->getNumSamples(); ++sample) {
+                    for (int sample = 0; sample < _numSamples; ++sample) {
                         outputChannelData[t->getOutputChannels()[0]][sample] = left[sample] * leftVolume;
                         outputChannelData[t->getOutputChannels()[1]][sample] = right[sample] * rightVolume;
                     }
@@ -512,6 +516,7 @@ public:
                 outputBuffers.at(i)->clear();
             }
             buffer->clear();
+            midiBuffer.clear();
         }
     }
     
@@ -550,14 +555,7 @@ public:
             }
             
         }
-        else {
-            /*
-            MidiMessage* messageToSend = new MidiMessage(message);
-            messageToSend->setChannel(navigator->getCurrentTrack()->getMidiChannel());
-            deviceManager.getDefaultMidiOutput()->sendMessageNow(*messageToSend);
-             */
-        }
-        
+ 
         if (navigator->getCurrentTrack() != NULL) {
             getMidiMessageCollector().addMessageToQueue(message);
         }

@@ -140,11 +140,11 @@ void MidiRegion::setLoop(bool loop) {
 // the timer is needed to updat the thumbnail during record
 void MidiRegion::timerCallback() {
     updateThumb();
-    timeElapsed += 50;
+    timeElapsed += 100;
 }
 
 void MidiRegion::startRecording() {
-    startTimer(50);
+    startTimer(100);
     midiMessageList.clear();
 
 }
@@ -234,10 +234,10 @@ MidiMessage* MidiRegion::getMessage(double time, int sampleNum) {
     
     MidiMessage* m = NULL;
     
-    Logger::writeToLog(String(time));
+    // Logger::writeToLog(String(time));
     
     for (int i = currentMessageNum; i < midiMessageList.size();i++) {
-         Logger::writeToLog(String(currentMessageNum)+" "+ midiMessageList.at(i)->getDescription()+" "+String(midiMessageList.at(i)->getTimeStamp()));
+         // Logger::writeToLog(String(currentMessageNum)+" "+ midiMessageList.at(i)->getDescription()+" "+String(midiMessageList.at(i)->getTimeStamp()));
          if (midiMessageList.at(i) != NULL && midiMessageList.at(i)->getTimeStamp() <= time) {
               m = new MidiMessage(*midiMessageList.at(i));
              
