@@ -58,6 +58,7 @@ public:
         Project::getInstance()->destroy();
         Mixer::getInstance()->destroy();
         Session::getInstance()->destroy();
+        PluginManager::getInstance()->cleanup();
     }
 
     //==============================================================================

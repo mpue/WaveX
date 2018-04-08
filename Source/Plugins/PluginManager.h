@@ -45,7 +45,7 @@ public:
         }
         
         ~PluginWindow() {
-            plugin = nullptr;
+            // plugin = nullptr;
         }
         
         void closeButtonPressed() override
@@ -70,6 +70,8 @@ public:
         i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
         return (((i + (i >> 4)) & 0x0F0F0F0F) * 0x01010101) >> 24;
     }
+    
+    void cleanup();
     
 private:
     

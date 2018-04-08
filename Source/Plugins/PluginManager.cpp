@@ -148,3 +148,15 @@ long PluginManager::getNextPluginId() {
     return pluginMap.size() + 10;
 }
 
+void PluginManager::cleanup() {
+    
+    for(std::map<String, PluginWindow*>::iterator itr = pluginWindowMap.begin(); itr != pluginWindowMap.end(); itr++)
+    {
+        if (itr->second->isVisible()) {
+            itr->second->setVisible(false);
+        }
+        delete (itr->second);
+    }
+    
+}
+

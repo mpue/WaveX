@@ -98,7 +98,7 @@ public:
     }
     
     ~MainContentComponent() {
-        deviceManager.getDefaultMidiOutput()->stopBackgroundThread();
+        // deviceManager.getDefaultMidiOutput()->stopBackgroundThread();
         
         for (std::vector<AudioSampleBuffer*>::iterator it = outputBuffers.begin(); it != outputBuffers.end(); ++it) {
             delete *it;
