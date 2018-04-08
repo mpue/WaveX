@@ -240,8 +240,7 @@ void MainContentComponent::prepareToPlay (int samplesPerBlockExpected, double sa
     this->sampleRate = sampleRate;
     this->buffersize = samplesPerBlockExpected;
     
-    deviceManager.addAudioCallback (this);
-    deviceManager.addMidiInputCallback (String(),this);
+
     
     this->buffer = new AudioSampleBuffer(2,this->buffersize);
     this->buffer->clear(0, this->buffersize);
@@ -293,6 +292,8 @@ void MainContentComponent::prepareToPlay (int samplesPerBlockExpected, double sa
     this->processorGraph->prepareToPlay(samplesPerBlockExpected, sampleRate);
     this->processorGraph->setProcessingPrecision(AudioProcessor::doublePrecision);
     
+    deviceManager.addAudioCallback (this);
+    deviceManager.addMidiInputCallback (String(),this);
 }
 
 void MainContentComponent::handlePlayBack(int _numSamples, Track* t) {

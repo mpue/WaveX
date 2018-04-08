@@ -2,4 +2,320 @@
 <Bucket
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../../JUCE/modules/juce_audio_processors/processors/juce_AudioProcessor.cpp"
+            timestampString = "544896979.113885"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "174"
+            endingLineNumber = "174"
+            landmarkName = "AudioProcessor::getBusesLayout()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Source/MainComponent.cpp"
+            timestampString = "544896979.11411"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
+            landmarkName = "MainContentComponent::MainContentComponent(TimeLine* timeLine, TrackPropertyView* trackProperties, MixerPanel* mixer)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Source/MainComponent.cpp"
+            timestampString = "544896979.114756"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
+            landmarkName = "MainContentComponent::MainContentComponent(TimeLine* timeLine, TrackPropertyView* trackProperties, MixerPanel* mixer)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MainContentComponent::MainContentComponent(TimeLine*, TrackPropertyView*, MixerPanel*)"
+                  moduleName = "WaveX"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mpue/Documents/devel/WaveX/Source/MainComponent.cpp"
+                  timestampString = "544894105.324567"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "92"
+                  endingLineNumber = "92"
+                  offsetFromSymbolStart = "2812">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MainContentComponent::MainContentComponent(TimeLine*, TrackPropertyView*, MixerPanel*)"
+                  moduleName = "WaveX"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mpue/Documents/devel/WaveX/Source/MainComponent.cpp"
+                  timestampString = "544894105.3265181"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "92"
+                  endingLineNumber = "92"
+                  offsetFromSymbolStart = "2904">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MainContentComponent::MainContentComponent(TimeLine*, TrackPropertyView*, MixerPanel*)"
+                  moduleName = "WaveX"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mpue/Documents/devel/WaveX/Source/MainComponent.cpp"
+                  timestampString = "544894105.32883"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "92"
+                  endingLineNumber = "92"
+                  offsetFromSymbolStart = "3571">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MainContentComponent::MainContentComponent(TimeLine*, TrackPropertyView*, MixerPanel*)"
+                  moduleName = "WaveX"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mpue/Documents/devel/WaveX/Source/MainComponent.cpp"
+                  timestampString = "544894105.331304"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "92"
+                  endingLineNumber = "92"
+                  offsetFromSymbolStart = "4275">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MainContentComponent::MainContentComponent(TimeLine*, TrackPropertyView*, MixerPanel*)"
+                  moduleName = "WaveX"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mpue/Documents/devel/WaveX/Source/MainComponent.cpp"
+                  timestampString = "544894105.334872"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "92"
+                  endingLineNumber = "92"
+                  offsetFromSymbolStart = "45">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../../JUCE/modules/juce_audio_processors/processors/juce_AudioProcessor.cpp"
+            timestampString = "544896979.115306"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "175"
+            endingLineNumber = "175"
+            landmarkName = "AudioProcessor::getBusesLayout()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "juce::AudioProcessor::getBusesLayout() const"
+                  moduleName = "WaveX"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mpue/Documents/devel/WaveX/Builds/MacOSX/../../../JUCE/modules/juce_audio_processors/processors/juce_AudioProcessor.cpp"
+                  timestampString = "544893932.890514"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "175"
+                  endingLineNumber = "175"
+                  offsetFromSymbolStart = "156">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "juce::AudioProcessor::getBusesLayout() const"
+                  moduleName = "WaveX"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mpue/Documents/devel/WaveX/Builds/MacOSX/../../../JUCE/modules/juce_audio_processors/processors/juce_AudioProcessor.cpp"
+                  timestampString = "544893932.8920569"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "175"
+                  endingLineNumber = "175"
+                  offsetFromSymbolStart = "165">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Source/MainComponent.cpp"
+            timestampString = "544896979.1154571"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "90"
+            endingLineNumber = "90"
+            landmarkName = "MainContentComponent::MainContentComponent(TimeLine* timeLine, TrackPropertyView* trackProperties, MixerPanel* mixer)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MainContentComponent::MainContentComponent(TimeLine*, TrackPropertyView*, MixerPanel*)"
+                  moduleName = "WaveX"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mpue/Documents/devel/WaveX/Source/MainComponent.cpp"
+                  timestampString = "544894113.1950459"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "92"
+                  endingLineNumber = "92"
+                  offsetFromSymbolStart = "2812">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MainContentComponent::MainContentComponent(TimeLine*, TrackPropertyView*, MixerPanel*)"
+                  moduleName = "WaveX"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mpue/Documents/devel/WaveX/Source/MainComponent.cpp"
+                  timestampString = "544894113.196607"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "92"
+                  endingLineNumber = "92"
+                  offsetFromSymbolStart = "2904">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MainContentComponent::MainContentComponent(TimeLine*, TrackPropertyView*, MixerPanel*)"
+                  moduleName = "WaveX"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mpue/Documents/devel/WaveX/Source/MainComponent.cpp"
+                  timestampString = "544894113.1980619"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "92"
+                  endingLineNumber = "92"
+                  offsetFromSymbolStart = "3571">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MainContentComponent::MainContentComponent(TimeLine*, TrackPropertyView*, MixerPanel*)"
+                  moduleName = "WaveX"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mpue/Documents/devel/WaveX/Source/MainComponent.cpp"
+                  timestampString = "544894113.199559"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "92"
+                  endingLineNumber = "92"
+                  offsetFromSymbolStart = "4275">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MainContentComponent::MainContentComponent(TimeLine*, TrackPropertyView*, MixerPanel*)"
+                  moduleName = "WaveX"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mpue/Documents/devel/WaveX/Source/MainComponent.cpp"
+                  timestampString = "544894113.200948"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "92"
+                  endingLineNumber = "92"
+                  offsetFromSymbolStart = "45">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Source/MainComponent.cpp"
+            timestampString = "544896979.115971"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1109"
+            endingLineNumber = "1109"
+            landmarkName = "MainContentComponent::changeListenerCallback(ChangeBroadcaster * source)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Source/MainComponent.cpp"
+            timestampString = "544896979.1165251"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "292"
+            endingLineNumber = "292"
+            landmarkName = "MainContentComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Source/MainComponent.cpp"
+            timestampString = "544896979.117044"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "442"
+            endingLineNumber = "442"
+            landmarkName = "MainContentComponent::processOutputMerge(float** outputChannelData, int numOutputChannels, int _numSamples)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
