@@ -271,9 +271,6 @@ void MainContentComponent::prepareToPlay (int samplesPerBlockExpected, double sa
 
     this->processorGraph = new AudioProcessorGraph();
     setProcessor(this->processorGraph);
-    
-    this->processorGraph->prepareToPlay(samplesPerBlockExpected, sampleRate);
-    this->processorGraph->setProcessingPrecision(AudioProcessor::doublePrecision);
 
     Process::setPriority (Process::HighPriority);
     
@@ -286,7 +283,6 @@ void MainContentComponent::prepareToPlay (int samplesPerBlockExpected, double sa
     AudioProcessorGraph::AudioGraphIOProcessor*  midiIn      = new AudioProcessorGraph::AudioGraphIOProcessor (AudioProcessorGraph::AudioGraphIOProcessor::midiInputNode);
     AudioProcessorGraph::AudioGraphIOProcessor*  midOut      = new AudioProcessorGraph::AudioGraphIOProcessor (AudioProcessorGraph::AudioGraphIOProcessor::midiOutputNode);
     
-
     processorGraph->addNode (midiIn,5);
     processorGraph->addNode (midOut,6);
     
@@ -294,6 +290,8 @@ void MainContentComponent::prepareToPlay (int samplesPerBlockExpected, double sa
     
     processorGraph->addConnection (midiCon);
     
+    this->processorGraph->prepareToPlay(samplesPerBlockExpected, sampleRate);
+    this->processorGraph->setProcessingPrecision(AudioProcessor::doublePrecision);
     
 }
 
@@ -439,15 +437,16 @@ void MainContentComponent::audioDeviceIOCallback (const float** inputChannelData
 }
 
 void MainContentComponent::processOutputMerge(float** outputChannelData, int numOutputChannels, int _numSamples) {
+    
+    getMidiMessageCollector().removeNextBlockOfMessages(midiBuffer, _numSamples);
+    processorGraph->processBlock(*buffer,midiBuffer);
+    
     for (int i = 0; i < navigator->getTracks().size();i++) {
         
         Track* t = navigator->getTracks().at(i);
         
         if (t->getType() == Track::Type::MIDI) {
-            if (t->getPlugin() != NULL) {
-                
-                getMidiMessageCollector().removeNextBlockOfMessages(midiBuffer, _numSamples);
-                processorGraph->processBlock(*buffer,midiBuffer);
+            if (t->getPlugin() != NULL && navigator->getCurrentTrack()->getConnectionId() == t->getConnectionId()) {
                 
                 const float* left = buffer->getReadPointer(0);
                 const float* right = buffer->getReadPointer(1);
@@ -1050,17 +1049,20 @@ void MainContentComponent::menuItemSelected(int menuItemID, int topLevelMenuInde
         AudioPluginInstance* plugin = PluginManager::getInstance()->getPlugin(pluginName);
         navigator->getCurrentTrack()->setPlugin(plugin);
         navigator->getCurrentTrack()->setName(pluginName);
-        
+
         PluginManager::getInstance()->getPluginWindow(pluginName)->setVisible(true);
      
-        processorGraph->addNode(plugin,3);
+        const unsigned int pluginId = PluginManager::getInstance()->getNextPluginId();
+
+        navigator->getCurrentTrack()->setConnectionId(pluginId);
         
+        processorGraph->addNode(plugin,pluginId);
         
-        AudioProcessorGraph::Connection connection1 { { 1, 0 }, { 3, 0 } };
-        AudioProcessorGraph::Connection connection2 { { 1, 1 }, { 3, 1 } };
-        AudioProcessorGraph::Connection connection3 { { 3, 0 }, { 2, 0 } };
-        AudioProcessorGraph::Connection connection4 { { 3, 1 }, { 2, 1 } };
-        AudioProcessorGraph::Connection connection5 { { 5, juce::AudioProcessorGraph::midiChannelIndex }, { 3, juce::AudioProcessorGraph::midiChannelIndex } };
+        AudioProcessorGraph::Connection connection1 { { 1, 0 }, { pluginId, 0 } };
+        AudioProcessorGraph::Connection connection2 { { 1, 1 }, { pluginId, 1 } };
+        AudioProcessorGraph::Connection connection3 { { pluginId, 0 }, { 2, 0 } };
+        AudioProcessorGraph::Connection connection4 { { pluginId, 1 }, { 2, 1 } };
+        AudioProcessorGraph::Connection connection5 { { 5, juce::AudioProcessorGraph::midiChannelIndex }, { pluginId, juce::AudioProcessorGraph::midiChannelIndex } };
         
         processorGraph->addConnection(connection1);
         processorGraph->addConnection(connection2);
@@ -1087,6 +1089,15 @@ void MainContentComponent::changeListenerCallback(ChangeBroadcaster * source) {
         this->numSamples = navigator->getPosition() * this->sampleRate - ((long)(navigator->getPosition() * this->sampleRate) % this->buffersize) ;
         
         // marker->setPosition(navigator->getPosition());
+        
+        if (navigator->getCurrentTrack()->getPlugin() != nullptr) {
+           
+            
+            
+            
+        }
+        
+        
         
         this->zoom = navigator->getZoom();
         int newWidth = trackLength * this->zoom;

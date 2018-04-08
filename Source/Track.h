@@ -174,6 +174,14 @@ public:
         return plugin;
     }
     
+    inline int getConnectionId() {
+        return connectionId;
+    }
+    
+    inline void setConnectionId(unsigned int connectionId) {
+        this->connectionId = connectionId;
+    }
+    
 private:
 
     AudioPluginInstance* plugin = nullptr;
@@ -216,6 +224,9 @@ private:
     Type type = AUDIO;
     
     int height = Project::DEFAULT_TRACK_HEIGHT;
+    
+    // plugin connection id
+    unsigned int connectionId;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Track)
 };
