@@ -10,7 +10,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "AppWindowComponent.h"
-#include "MainComponent.cpp"
+#include "MainComponent.h"
 #include "Project.h"
 
 //==============================================================================

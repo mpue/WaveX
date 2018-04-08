@@ -10,7 +10,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PositionMarker.h"
-#include "MainComponent.cpp"
+#include "MainComponent.h"
 
 //==============================================================================
 PositionMarker::PositionMarker(double lengthInSeconds)

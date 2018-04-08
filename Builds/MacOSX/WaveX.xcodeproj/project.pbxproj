@@ -193,6 +193,7 @@
 		BF50964E2079544E00CC6B12 /* MidiRecorderPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MidiRecorderPanel.h; path = ../../Source/MidiRecorder/MidiRecorderPanel.h; sourceTree = "<group>"; };
 		BF50964F2079544E00CC6B12 /* RecordListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RecordListener.h; path = ../../Source/MidiRecorder/RecordListener.h; sourceTree = "<group>"; };
 		BF5096502079544E00CC6B12 /* MidiRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MidiRecorder.h; path = ../../Source/MidiRecorder/MidiRecorder.h; sourceTree = "<group>"; };
+		BF5F436C207A00F700834BCF /* MainComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MainComponent.h; path = ../../Source/MainComponent.h; sourceTree = "<group>"; };
 		BFA338082078DD41005E8069 /* PluginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluginManager.h; path = ../../Source/Plugins/PluginManager.h; sourceTree = "<group>"; };
 		BFA338092078DD41005E8069 /* PluginManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginManager.cpp; path = ../../Source/Plugins/PluginManager.cpp; sourceTree = "<group>"; };
 		C262CF7AEADD44EC11E88B4F /* font-awesome_4-7-0_pencil_24_0_000000_none.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "font-awesome_4-7-0_pencil_24_0_000000_none.png"; path = "../../Resources/font-awesome_4-7-0_pencil_24_0_000000_none.png"; sourceTree = SOURCE_ROOT; };
@@ -292,6 +293,7 @@
 				C8910D96FFC8AC1BA5946B51 /* ToolbarPanel.h */,
 				1713050FBD2FADD02E00311A /* TransportPanel.cpp */,
 				880DFFAB32ED5DA53AFC986C /* TransportPanel.h */,
+				BF5F436C207A00F700834BCF /* MainComponent.h */,
 			);
 			name = MainUI;
 			sourceTree = "<group>";

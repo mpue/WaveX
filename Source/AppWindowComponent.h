@@ -12,7 +12,7 @@
 #define APPWINDOWCOMPONENT_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "MainComponent.cpp"
+#include "MainComponent.h"
 #include "TransportPanel.h"
 #include "MasterChannelPanel.h"
 #include "TimeLine.h"
@@ -21,6 +21,7 @@
 #include "ToolbarPanel.h"
 #include "InfoPanel.h"
 #include "MixerPanel.h"
+#include "TransportPanel.h"
 
 //==============================================================================
 /*
