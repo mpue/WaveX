@@ -62,7 +62,16 @@ MainContentComponent::MainContentComponent(TimeLine* timeLine, TrackPropertyView
 
     setAudioChannels(2,2);
     
-    File configFile = File("/Users/mpue/.WaveX/config.xml");
+    String userHome = File::getSpecialLocation(File::userHomeDirectory).getFullPathName();
+    
+    File appDir = File(userHome+"/.WaveX");
+    
+    if (!appDir.exists()) {
+        appDir.createDirectory();
+    }
+    
+    File configFile = File(userHome+"/.WaveX/config.xml");
+    
     if (configFile.exists()) {
         ScopedPointer<XmlElement> xml = XmlDocument(configFile).getDocumentElement();
         deviceManager.initialise(2,2, xml, true);
@@ -657,12 +666,17 @@ void MainContentComponent::exportAudio(){
     
     WavAudioFormat* test = new WavAudioFormat();
     
-    File outputFile = File("/Users/mpue/Desktop/test.wav");
-    FileOutputStream* outputTo = outputFile.createOutputStream();
+    FileChooser chooser("Select the output ", File::nonexistent, "*");
     
-    AudioFormatWriter* writer = test->createWriterFor(outputTo, 44100, 2, 16,NULL, 0);
-    writer->writeFromAudioSampleBuffer(out, 0,maxLength);
-    delete writer;
+    if (chooser.browseForFileToSave(true)) {
+        File outputFile = chooser.getResult();
+        
+        FileOutputStream* outputTo = outputFile.createOutputStream();
+        
+        AudioFormatWriter* writer = test->createWriterFor(outputTo, 44100, 2, 16,NULL, 0);
+        writer->writeFromAudioSampleBuffer(out, 0,maxLength);
+        delete writer;
+    }
     
 }
 
@@ -732,7 +746,15 @@ void MainContentComponent::openSettings() {
     
     XmlElement* config = deviceManager.createStateXml();
     
-    File configFile = File("/Users/mpue/.WaveX/config.xml");
+    String userHome = File::getSpecialLocation(File::userHomeDirectory).getFullPathName();
+  
+    File appDir = File(userHome+"/.WaveX");
+    
+    if (!appDir.exists()) {
+        appDir.createDirectory();
+    }
+    
+    File configFile = File(userHome+"/.WaveX/config.xml");
     config->writeToFile(configFile,"");
     
     // setupIO();
@@ -754,15 +776,52 @@ StringArray MainContentComponent::getMenuBarNames() {
 }
 
 void MainContentComponent::buildPluginMenu(PopupMenu &menu) {
-    String appDataPath = File::getSpecialLocation(File::userApplicationDataDirectory).getFullPathName();
-    String presetPath = "/Users/mpue/plugins";
     
+    String appDataPath = File::getSpecialLocation(File::userApplicationDataDirectory).getFullPathName();
+    String userHome = File::getSpecialLocation(File::userHomeDirectory).getFullPathName();
+    
+    String presetPath = userHome+"/.WaveX/plugins";
     File presets = File(presetPath);
     
+    if (!presets.exists()) {
+        presets.createDirectory();
+    }
+
     int index = 100;
     
+    StringArray manufacturers = StringArray();
+    
     if(presets.exists() && presets.isDirectory()) {
+        
         ScopedPointer<DirectoryIterator> iter = new DirectoryIterator(presets, false);
+        
+        while(iter->next()) {
+            ScopedPointer<XmlElement> xml = XmlDocument(iter->getFile()).getDocumentElement();
+            PluginDescription pd;
+            pd.loadFromXml(*xml.get());
+            
+            if (pd.isInstrument) {
+                if (!manufacturers.contains(pd.manufacturerName)) {
+                    manufacturers.add(pd.manufacturerName);
+                }
+            }
+            
+        }
+        iter = nullptr;
+        
+    }
+    
+    std::map<std::string,PopupMenu> menuMap;
+
+    for (int i = 0; i < manufacturers.size();i++) {
+        PopupMenu sub = PopupMenu();
+        menuMap[manufacturers.getReference(i).toStdString()] = sub;
+    }
+    
+    if(presets.exists() && presets.isDirectory()) {
+        
+        ScopedPointer<DirectoryIterator> iter = new DirectoryIterator(presets, false);
+        
         while(iter->next()) {
             ScopedPointer<XmlElement> xml = XmlDocument(iter->getFile()).getDocumentElement();
             PluginDescription pd;
@@ -770,12 +829,16 @@ void MainContentComponent::buildPluginMenu(PopupMenu &menu) {
             
             if (pd.isInstrument) {
                 availableInstruments.push_back(pd.name);
-                menu.addItem(index, pd.name, true, false,nullptr);
+                menuMap[pd.manufacturerName.toStdString()].addItem(index, pd.name, true, false,nullptr);
                 index++;
             }
             
         }
         iter = nullptr;
+     
+        for (int i = 0; i < manufacturers.size();i++) {
+            menu.addSubMenu(manufacturers.getReference(i),menuMap[manufacturers.getReference(i).toStdString()]);
+        }
         
     }
 }

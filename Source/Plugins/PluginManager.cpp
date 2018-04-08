@@ -16,40 +16,22 @@ PluginManager::PluginManager() {
 }
 
 void PluginManager::scanPlugins() {
-    /*
-     AudioPluginFormatManager apfm;
-     apfm.addDefaultFormats();
-     
-     for (int i = 0; i < apfm.getNumFormats();i++) {
-     AudioPluginFormat* format = apfm.getFormat(i);
-     Logger::getCurrentLogger()->writeToLog(format->getName());
-     
-     KnownPluginList *pluginList = new KnownPluginList();
-     
-     FileSearchPath* path = new FileSearchPath("/Users/mpue/Library/Audio/Plug-Ins/Components/");
-     
-     PluginDirectoryScanner* scanner = new PluginDirectoryScanner(*pluginList,*apfm.getFormat(0),*path,false,File(),false);
-     
-     String name;
-     
-     while(scanner->scanNextFile(false, name) != false) {
-     Logger::getCurrentLogger()->writeToLog("Found plugin : "+name);
-     }
-     
-     
-     delete scanner;
-     delete path;
-     delete pluginList;
-     
-     }
-     */
     
     AudioPluginFormatManager* apfm = new AudioPluginFormatManager();
     apfm->addDefaultFormats();
     
     KnownPluginList *pluginList = new KnownPluginList();
     PropertiesFile::Options options;
-    File file = File("/Users/mpue/plugin.properties");
+    
+    String userHome = File::getSpecialLocation(File::userHomeDirectory).getFullPathName();
+    
+    File appDir = File(userHome+"/.WaveX");
+    
+    if (!appDir.exists()) {
+        appDir.createDirectory();
+    }
+    
+    File file = File(userHome+"/.WaveX/plugin.properties");
     PropertiesFile* props = new PropertiesFile(file,options);
     
     PluginListComponent* pluginListComponent = new PluginListComponent(*apfm,*pluginList,File(), props);
@@ -65,8 +47,14 @@ void PluginManager::scanPlugins() {
     launchOptions.content->setSize(600, 580);
     launchOptions.runModal();
     
+    File pluginDir = File(userHome+"/.WaveX/plugins");
+    
+    if (!pluginDir.exists()) {
+        pluginDir.createDirectory();
+    }
+    
     for (int i = 0; i < pluginList->getNumTypes();i++) {
-        pluginList->getType(i)->createXml()->writeToFile(File("/Users/mpue/plugins/"+pluginList->getType(i)->name),"");
+        pluginList->getType(i)->createXml()->writeToFile(File(userHome+"/.WaveX/plugins/"+pluginList->getType(i)->name),"");
     }
 
 }
@@ -117,7 +105,9 @@ void PluginManager::addPlugin(String name, AudioDeviceManager* deviceManager, Au
     String error = String("Error");
     PluginDescription pd;
     
-    File preset = File("/Users/mpue/plugins/"+name);
+    String userHome = File::getSpecialLocation(File::userHomeDirectory).getFullPathName();
+    
+    File preset = File(userHome+"/.WaveX/plugins/"+name);
     ScopedPointer<XmlElement> xml = XmlDocument(preset).getDocumentElement();
     pd.loadFromXml(*xml.get());
     
